@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wotou", "Wotou\Wotou.csproj", "{8FEC22FD-E148-4947-8A7D-534E26EF2A94}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8FEC22FD-E148-4947-8A7D-534E26EF2A94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FEC22FD-E148-4947-8A7D-534E26EF2A94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FEC22FD-E148-4947-8A7D-534E26EF2A94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FEC22FD-E148-4947-8A7D-534E26EF2A94}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
