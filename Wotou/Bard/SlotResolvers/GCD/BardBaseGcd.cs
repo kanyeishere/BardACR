@@ -3,12 +3,21 @@ using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
+using AEAssist.MemoryApi;
 using Wotou.Bard.Data;
 
 namespace Wotou.Bard.SlotResolvers.GCD;
 
 public class BardBaseGcd : ISlotResolver
 {
+    private const uint BurstShot = BardDefinesData.Spells.BurstShot;
+    private const uint RefulgentArrow = BardDefinesData.Spells.RefulgentArrow;
+    
+    private const uint Ladonsbite = BardDefinesData.Spells.Ladonsbite;
+    private const uint Shadowbite = BardDefinesData.Spells.Shadowbite;
+    
+    private const uint HawkEyeBuff = BardDefinesData.Buffs.HawksEye;
+    private const uint BarrageBuff = BardDefinesData.Buffs.Barrage;
     
     // 返回>=0表示检测通过 即将调用Build方法
     public int Check()
@@ -20,37 +29,20 @@ public class BardBaseGcd : ISlotResolver
     // 将指定技能加入技能队列中
     public void Build(Slot slot)
     {
-        slot.Add(GetBaseGCD());
+        slot.Add(GetBaseGcd());
     }
-    
-    public static Spell GetHeavyShot()
+
+    private static Spell GetBaseGcd()
     {
-        // 如果burstShot没解锁 再使用HeavyShot
-        var targetSpellId = BardDefinesData.Spells.BurstShot;
-        if (!targetSpellId.IsUnlock())
+        if (Core.Me.HasAura(HawkEyeBuff) || Core.Me.HasAura(BarrageBuff))
         {
-            targetSpellId = BardDefinesData.Spells.HeavyShot;
+            if (TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget(), 25,5) > 1)
+                return Core.Resolve<MemApiSpell>().CheckActionChange(Shadowbite).GetSpell();
+            return Core.Resolve<MemApiSpell>().CheckActionChange(RefulgentArrow).GetSpell();
         }
-        return targetSpellId.GetSpell();
-    }
-    
-    // 获取辉煌/直线射击
-    public static Spell GetStraightShot()
-    {
-        var targetSpellId = BardDefinesData.Spells.RefulgentArrow;
-        if (!targetSpellId.IsUnlock())
-        {
-            targetSpellId = BardDefinesData.Spells.StraightShot;
-        }
-        return targetSpellId.GetSpell();
-    }
-    
-    public static Spell GetBaseGCD()
-    {
-        if (Core.Me.HasAura(BardDefinesData.Buffs.HawksEye) || Core.Me.HasAura(BardDefinesData.Buffs.Barrage))
-        {
-            return GetStraightShot();
-        }
-        return GetHeavyShot();
+        
+        if (TargetHelper.GetEnemyCountInsideSector(Core.Me, Core.Me.GetCurrTarget(), 12, 90) > 1)
+            return Core.Resolve<MemApiSpell>().CheckActionChange(Ladonsbite).GetSpell();
+        return Core.Resolve<MemApiSpell>().CheckActionChange(BurstShot).GetSpell();
     }
 }

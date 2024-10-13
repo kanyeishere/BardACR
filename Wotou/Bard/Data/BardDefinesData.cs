@@ -7,7 +7,7 @@ public class BardDefinesData
   public static class Buffs
   {
     public const ushort HawksEye = 3861;
-    public const ushort RagineStrikes = 125;
+    public const ushort RagingStrikes = 125;
     public const ushort VenomousBite = 124;
     public const ushort Windbite = 129;
     public const ushort Barrage = 128;

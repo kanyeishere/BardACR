@@ -3,6 +3,7 @@ using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
+using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.Objects.Types;
 using Wotou.Bard.Data;
 
@@ -28,7 +29,7 @@ public class BardDotGcd : ISlotResolver
             return -1;
         if (DotBlacklistHelper.IsBlackList(target))
             return -1;
-        return 0;
+        return 1;
     }
     
     public void Build(Slot slot)
@@ -44,6 +45,8 @@ public class BardDotGcd : ISlotResolver
     private Spell GetSpell()
     {
         var target = Core.Me.GetCurrTarget();
-        return !HasAnyDot(target, 风dotBuffs) ? WindBite.GetSpell() : VenomousBite.GetSpell();
+        return !HasAnyDot(target, 风dotBuffs) ? 
+            Core.Resolve<MemApiSpell>().CheckActionChange(WindBite).GetSpell() : 
+            Core.Resolve<MemApiSpell>().CheckActionChange(VenomousBite).GetSpell();
     }
 }

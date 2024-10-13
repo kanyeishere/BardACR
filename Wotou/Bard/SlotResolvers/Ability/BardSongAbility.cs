@@ -16,10 +16,12 @@ public class BardSongAbility : ISlotResolver
     private const uint FirstSong = BardDefinesData.Spells.TheWanderersMinuet;
     private const uint SecondSong = BardDefinesData.Spells.MagesBallad;
     private const uint ThirdSong = BardDefinesData.Spells.ArmysPaeon;
+    private const uint Peloton = BardDefinesData.Spells.Peloton;
+    private const uint PerfectPitch = BardDefinesData.Spells.PitchPerfect;
 
-    private static readonly int FirstSongDuration = BardSettings.Instance.WandererSongDuration * 10000;
-    private static readonly int SecondSongDuration = BardSettings.Instance.MageSongDuration * 10000;
-    private static readonly int ThirdSongDuration = BardSettings.Instance.ArmySongDuration * 10000;
+    private static readonly float FirstSongDuration = BardSettings.Instance.WandererSongDuration * 1000;
+    private static readonly float SecondSongDuration = BardSettings.Instance.MageSongDuration * 1000;
+    private static readonly float ThirdSongDuration = BardSettings.Instance.ArmySongDuration * 1000;
 
 
     public int Check()
@@ -30,81 +32,52 @@ public class BardSongAbility : ISlotResolver
             return -1;
         if (FirstSong.RecentlyUsed() || SecondSong.RecentlyUsed() || ThirdSong.RecentlyUsed())
             return -1;
-        
-        
-        if (Core.Resolve<JobApi_Bard>().ActiveSong == Song.NONE && (FirstSong.IsReady() || SecondSong.IsReady() || ThirdSong.IsReady()))
-            return FirstSong.RecentlyUsed(5500) || SecondSong.RecentlyUsed(5500) || ThirdSong.RecentlyUsed(5500) ? -1 : 1;
-        
+
+
+        if (FirstSong.IsReady() && GCDHelper.GetGCDCooldown() <= 530 && BardRotationEntry.QT.GetQt("爆发"))
+            return 1;
         
         if (Core.Resolve<JobApi_Bard>().ActiveSong == GetSongBySpell(FirstSong) &&
-            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45500.0 - FirstSongDuration && SecondSong.IsReady())
-        {
+            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45000.0 - FirstSongDuration && SecondSong.IsReady() &&
+            GCDHelper.GetGCDCooldown() > 530)
             return 1;
-        }
+
         if (Core.Resolve<JobApi_Bard>().ActiveSong == GetSongBySpell(SecondSong) &&
-            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45500.0 - SecondSongDuration && ThirdSong.IsReady())
-        {
+            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45000.0 - SecondSongDuration && ThirdSong.IsReady()&&
+            (GCDHelper.GetGCDCooldown() > 530))
             return 1;
-        }
-        if (Core.Resolve<JobApi_Bard>().ActiveSong == GetSongBySpell(ThirdSong) &&
-            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45500.0 - ThirdSongDuration && FirstSong.IsReady())
-        {
+
+        if (Core.Resolve<JobApi_Bard>().ActiveSong == GetSongBySpell(ThirdSong) && 
+            GCDHelper.GetGCDCooldown() <= 550 &&
+            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45000.0 - ThirdSongDuration && FirstSong.IsReady())
             return 1;
-        }
+        
+        if (Core.Resolve<JobApi_Bard>().ActiveSong == Song.NONE && GCDHelper.GetGCDCooldown() > 530)
+            return 1;
+        
         return -1;
     }
 
     public void Build(Slot slot)
     {
         var spell = this.GetSpell();
-        if (spell == null) return;
-        
-        //非第一次唱旅神，gcd后半插入
-        if (Core.Resolve<JobApi_Bard>().ActiveSong != Song.NONE)
-        {
-            if (spell.Id == FirstSong)
-            {
-                slot.Add2NdWindowAbility(spell);
-                return;
-            }
-        }
+        LogHelper.Print("Timer", $"ActiveSong: {Core.Resolve<JobApi_Bard>().ActiveSong}, SongTimer: {Core.Resolve<JobApi_Bard>().SongTimer}");
+        if (spell.Id == SecondSong && Core.Resolve<JobApi_Bard>().Repertoire >= 1)
+            slot.Add(PerfectPitch.GetSpell());
         slot.Add(spell);
     }
     
-    private Spell? GetSpell()
+    private Spell GetSpell()
     {
-        if (Core.Resolve<JobApi_Bard>().ActiveSong == Song.NONE )
-        {
-            if (FirstSong.IsReady())
-                return FirstSong.GetSpell(SpellTargetType.Target);
-            if (SecondSong.IsReady())
-                return SecondSong.GetSpell(SpellTargetType.Target);
-            if (ThirdSong.IsReady())
-                return ThirdSong.GetSpell(SpellTargetType.Target);
-        }
         if ((Core.Resolve<JobApi_Bard>().ActiveSong == GetSongBySpell(ThirdSong) || BardBattleData.Instance.LastSong == GetSongBySpell(ThirdSong)) && FirstSong.IsReady())
-        {
-            if (FirstSong.IsReady())
-                return FirstSong.GetSpell(SpellTargetType.Target);
-            if (SecondSong.IsReady())
-                return SecondSong.GetSpell(SpellTargetType.Target);
-        }
+            return FirstSong.GetSpell();
         if ((Core.Resolve<JobApi_Bard>().ActiveSong == GetSongBySpell(FirstSong) || BardBattleData.Instance.LastSong == GetSongBySpell(FirstSong)) && SecondSong.IsReady())
-        {
-            if (SecondSong.IsReady())
-                return SecondSong.GetSpell(SpellTargetType.Target);
-            if (ThirdSong.IsReady())
-                return ThirdSong.GetSpell(SpellTargetType.Target);
-        }
+            return SecondSong.GetSpell();
         if ((Core.Resolve<JobApi_Bard>().ActiveSong == GetSongBySpell(SecondSong) || BardBattleData.Instance.LastSong == GetSongBySpell(SecondSong)) && ThirdSong.IsReady())
-        {
-            if (ThirdSong.IsReady())
-                return ThirdSong.GetSpell(SpellTargetType.Target);
-            if (FirstSong.IsReady())
-                return FirstSong.GetSpell(SpellTargetType.Target);
-        }
-        
-        return null;
+            return ThirdSong.GetSpell();
+        if (Core.Resolve<JobApi_Bard>().ActiveSong == Song.NONE )
+            return FirstSong.GetSpell();
+        return FirstSong.GetSpell();
     }
     private static Song GetSongBySpell(uint song)
     {

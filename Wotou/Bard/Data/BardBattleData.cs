@@ -9,4 +9,8 @@ public class BardBattleData
     public static BardBattleData Instance = new();
     
     public Song LastSong = Song.NONE;
+    
+    public int WandererTimes = 0;
+    
+    public bool HasUseIronJawsInCurrentBursting = false;
 }

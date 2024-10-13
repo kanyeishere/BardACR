@@ -10,12 +10,13 @@ public class BardSettingUI
     
     public void Draw()
     {
-        ImGui.Checkbox("使用速行", ref BardSettings.Instance.UsePeloton);
-        ImGuiHelper.LeftInputInt("非爆发期Apex值达到多少时才使用", ref BardSettings.ApexArrowValue);
-        
+        /*ImGuiHelper.LeftInputFloat("旅神歌持续时间", ref BardSettings.WandererSongDuration);
+        ImGuiHelper.LeftInputFloat("贤者歌持续时间", ref BardSettings.MageSongDuration);
+        ImGuiHelper.LeftInputFloat("军神歌持续时间", ref BardSettings.ArmySongDuration);
+        ImGui.Checkbox("是否赌两分钟三次绝峰", ref BardSettings.GambleTripleApex);
         if (ImGui.Button("Save"))
         {
             BardSettings.Instance.Save();
-        }
+        }*/
     }
 }

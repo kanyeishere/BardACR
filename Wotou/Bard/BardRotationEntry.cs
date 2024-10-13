@@ -4,12 +4,15 @@ using Wotou.Bard.SlotResolvers.Ability;
 using Wotou.Bard.Triggers;
 using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
+using AEAssist.CombatRoutine.Module.Opener;
 using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.CombatRoutine.View.JobView.HotkeyResolver;
+using AEAssist.GUI;
 using AEAssist.Helper;
 using ImGuiNET;
 using Dalamud.Game.ClientState.JobGauge.Enums;
 using Wotou.Bard.Data;
+using Wotou.Bard.Opener;
 
 namespace Wotou.Bard;
 
@@ -30,16 +33,26 @@ public class BardRotationEntry : IRotationEntry
         //new(new XXXXXXXX(),SlotMode.Always),
         
         // gcd队列
+        new SlotResolverData(new BardDotGcd(),SlotMode.Gcd),
+        new SlotResolverData(new BardRadiantEncoreGcd(),SlotMode.Gcd),
+        new SlotResolverData(new BardResonantArrowGcd(),SlotMode.Gcd),
+        new SlotResolverData(new BardIronJawsGcd(),SlotMode.Gcd),
+        new SlotResolverData(new BardApexGcd(),SlotMode.Gcd),
+        new SlotResolverData(new BardBlastArrowGcd(),SlotMode.Gcd),
+        new SlotResolverData(new BardBaseGcd(),SlotMode.Gcd),
         
-        // Dots
-        new(new BardDotGcd(),SlotMode.Gcd),
-        new (new BardIronJawsGcd(),SlotMode.Gcd),
-        // 1与触发1
-        new(new BardBaseGcd(),SlotMode.Gcd),
         
         // offGcd队列
-        new(new BardSongAbility(),SlotMode.OffGcd),
-        new (new SlotResolver_OffGCD_Bloodletter(),SlotMode.OffGcd),
+        new SlotResolverData(new BardRagingStrikesAbility(),SlotMode.OffGcd),
+        new SlotResolverData(new BardBattleVoiceAndRadiantFinaleAbility(),SlotMode.OffGcd),
+        new SlotResolverData(new BardEmpyrealArrowAbility(),SlotMode.OffGcd),
+        new SlotResolverData(new BardHeartBreakMaxChargeAbility(),SlotMode.OffGcd),
+        new SlotResolverData(new BardPitchPerfectAbility(),SlotMode.OffGcd),
+        new SlotResolverData(new BardBarrageAbility(),SlotMode.OffGcd),
+        new SlotResolverData(new BardSideWinderAbility(),SlotMode.OffGcd),
+        new SlotResolverData(new BardHeartBreakAbility(),SlotMode.OffGcd),
+        new SlotResolverData(new BardSongAbility(),SlotMode.OffGcd),
+        new SlotResolverData(new BardPotionAbility(),SlotMode.OffGcd),
     };
     
 
@@ -49,26 +62,33 @@ public class BardRotationEntry : IRotationEntry
         BardSettings.Build(settingFolder);
         // 初始化QT （依赖了设置的数据）
         BuildQT();
-        if (!25785U.IsReady())
-        {
-            LogHelper.Print("25785U is not ready");
-        }
         
         var rot = new Rotation(SlotResolvers)
         {
             TargetJob = Jobs.Bard,
-            AcrType = AcrType.Normal,
-            MinLevel = 0,
-            MaxLevel = 90,
-            Description = "这是一个测试描述\n123123123123",
+            AcrType = AcrType.HighEnd,
+            MinLevel = 70,
+            MaxLevel = 100,
+            Description = "诗人ACR\n适配技速2.47-2.5\n请在fuck插件中修改动画锁至530ms！！（重要）\n并且关闭全局能力技不卡GCD！！（重要）\n这样设置爆发应该能打满警察网8G，光明神9G和强者猛击9G" ,
         };
         
         // 添加各种事件回调
         rot.SetRotationEventHandler(new BardRotationEventHandler());
+        rot.AddOpener(GetOpener);
         // 添加QT开关的时间轴行为
         rot.AddTriggerAction(new TriggerAction_QT());
 
         return rot; 
+    }
+
+    private IOpener? GetOpener(uint level)
+    {
+        switch (BardSettings.Instance.Opener)
+        {
+            case 0:
+                return new BardOpener100();
+        }
+        return new BardOpener100();
     }
     
     // 声明当前要使用的UI的实例 示例里使用QT
@@ -85,7 +105,7 @@ public class BardRotationEntry : IRotationEntry
     {
         // JobViewSave是AE底层提供的QT设置存档类 在你自己的设置里定义即可
         // 第二个参数是你设置文件的Save类 第三个参数是QT窗口标题
-        QT = new JobViewWindow(BardSettings.Instance.JobViewSave, BardSettings.Instance.Save, "AE BRD [仅作为开发示范]");
+        QT = new JobViewWindow(BardSettings.Instance.JobViewSave, BardSettings.Instance.Save, "Wotou Bard 诗人]");
         QT.SetUpdateAction(OnUIUpdate); // 设置QT中的Update回调 不需要就不设置
 
         //添加QT分页 第一个参数是分页标题 第二个是分页里的内容
@@ -93,16 +113,22 @@ public class BardRotationEntry : IRotationEntry
         QT.AddTab("Dev", DrawQtDev);
 
         // 添加QT开关 第二个参数是默认值 (开or关) 第三个参数是鼠标悬浮时的tips
-        QT.AddQt(QTKey.UseBaseGcd, true, "是否使用基础的Gcd");
-        QT.AddQt(QTKey.DOT, true);
-        QT.AddQt(QTKey.Song, true);
-        QT.AddQt(QTKey.UsePotion,false);
+        QT.AddQt(QTKey.Burst, true, "是否使用爆发");
+        QT.AddQt(QTKey.Apex, true, "是否使用绝峰箭");
+        QT.AddQt(QTKey.HeartBreak, true, "是否攒碎心箭进团辅");
+        QT.AddQt(QTKey.DOT, true, "是否使用DoT");
+        QT.AddQt(QTKey.Song, true, "是否使用歌曲");
+        QT.AddQt(QTKey.UsePotion,false,"是否使用爆发药水");
+        //QT.AddQt(QTKey.UsePotionAsap,false,"是否在CD好了就吃爆发药水");
 
         // 添加快捷按钮 (带技能图标)
-        QT.AddHotkey("战斗之声",
-            new HotKeyResolver_NormalSpell(BardDefinesData.Spells.BattleVoice, SpellTargetType.Self));
-        QT.AddHotkey("失血",
-            new HotKeyResolver_NormalSpell(BardDefinesData.Spells.HeartBreak, SpellTargetType.Target));
+        QT.AddHotkey("防击退", new HotKeyResolver_NormalSpell(BardDefinesData.Spells.ArmsLength, SpellTargetType.Target));
+        QT.AddHotkey("内丹",
+            new HotKeyResolver_NormalSpell(BardDefinesData.Spells.SecondWind, SpellTargetType.Target));
+        QT.AddHotkey("行吟",new HotKeyResolver_NormalSpell(BardDefinesData.Spells.Troubadour, SpellTargetType.Target));
+        QT.AddHotkey("大地神",new HotKeyResolver_NormalSpell(BardDefinesData.Spells.NaturesMinne, SpellTargetType.Target));
+        QT.AddHotkey("冲刺",new HotKeyResolver_NormalSpell(3, SpellTargetType.Target));
+        QT.AddHotkey("后跳",new HotKeyResolver_NormalSpell(BardDefinesData.Spells.RepellingShot, SpellTargetType.Target));
         QT.AddHotkey("爆发药", new HotKeyResolver_Potion());
         QT.AddHotkey("极限技", new HotKeyResolver_LB());
         
@@ -131,7 +157,26 @@ public class BardRotationEntry : IRotationEntry
     
     public void DrawQtGeneral(JobViewWindow jobViewWindow)
     {
-        ImGui.Text("画通用信息");
+        ImGui.Text("诗人ACR\n适配技速2.47-2.5\n精细调整过能力技插入窗口，所以\n请在fuck插件中修改动画锁至530ms！！（重要）\n并且关闭全局能力技不卡GCD！！（重要）");
+        ImGuiHelper.LeftInputFloat("旅神歌时长", ref BardSettings.Instance.WandererSongDuration, 5f, 45f);
+        ImGuiHelper.LeftInputFloat("贤者歌时长", ref BardSettings.Instance.MageSongDuration, 5f, 45f);
+        ImGuiHelper.LeftInputFloat("军神歌时长", ref BardSettings.Instance.ArmySongDuration, 5f, 45f);
+        ImGui.Checkbox("是否赌每120秒三根绝峰箭（建议关闭）", ref BardSettings.Instance.GambleTripleApex);
+        var opener = "";
+        switch (BardSettings.Instance.Opener)
+        {
+            case 0:
+                opener = "70-100级 3G团辅起手";
+                break;
+        }
+        if (ImGui.BeginCombo("起手选择", opener))
+        {
+            if (ImGui.Selectable("70-100级 3G团辅起手"))
+                BardSettings.Instance.Opener = 0;
+            ImGui.EndCombo();
+        }
+        if (ImGui.Button("Save"))
+            BardSettings.Instance.Save();
     }
 
     public void DrawQtDev(JobViewWindow jobViewWindow)

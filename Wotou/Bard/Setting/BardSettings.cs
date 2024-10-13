@@ -42,12 +42,11 @@ public class BardSettings
     }
     #endregion
     
-    public int WandererSongDuration = 43; // 第一首歌的持续时间
-    public int MageSongDuration = 43; // 第二首歌的持续时间
-    public int ArmySongDuration = 34; // 第三首歌的持续时间
-    
-    public int ApexArrowValue = 100; // 非爆发期绝峰多少能量再用
-    public bool UsePeloton = true; // 使用速行 默认开启
+    public float WandererSongDuration = (float)42.4; // 第一首歌的持续时间
+    public float MageSongDuration = (float)42.4; // 第二首歌的持续时间
+    public float ArmySongDuration = (float)35.2; // 第三首歌的持续时间
+    public bool GambleTripleApex = false; // 是否赌两分钟三次绝峰
+    public int Opener = 0; // 起手选择
     
     public JobViewSave JobViewSave = new(); // QT设置存档
     

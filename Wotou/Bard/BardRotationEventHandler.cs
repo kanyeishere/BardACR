@@ -25,7 +25,7 @@ public class BardRotationEventHandler : IRotationEventHandler
         BardRotationEntry.QT.Reset();
         
         // 重置战斗中缓存的数据
-        BardBattleData.Instance = new();
+        BardBattleData.Instance = new BardBattleData();
     }
 
     public async Task OnNoTarget()
@@ -47,6 +47,14 @@ public class BardRotationEventHandler : IRotationEventHandler
             BardDefinesData.Spells.ArmysPaeon => Song.ARMY,
             _ => BardBattleData.Instance.LastSong
         };
+        if (spell.Id == BardDefinesData.Spells.TheWanderersMinuet)
+        {
+            BardBattleData.Instance.WandererTimes++;
+        }
+        if (spell.Id == BardDefinesData.Spells.RagingStrikes)
+        {
+            BardBattleData.Instance.HasUseIronJawsInCurrentBursting = false;
+        }
     }
 
     public void OnBattleUpdate(int currTimeInMs)
