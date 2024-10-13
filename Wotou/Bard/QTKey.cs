@@ -3,6 +3,7 @@ namespace Wotou.Bard;
 // 直接定义好 方便编码
 public static class QTKey
 {
+    public const string Aoe = "AOE";
     public const string Burst = "爆发";
     public const string Apex = "绝峰箭";
     public const string DOT = "DOT";

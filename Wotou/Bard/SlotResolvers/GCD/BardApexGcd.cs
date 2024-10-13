@@ -13,21 +13,12 @@ public class BardApexGcd : ISlotResolver
 {
     private const uint ApexArrow = BardDefinesData.Spells.ApexArrow;
     private const uint BattleVoice = BardDefinesData.Spells.BattleVoice;
-    private const uint RagingStrikes = BardDefinesData.Spells.RagingStrikes;
-    private const uint RadiantFinale = BardDefinesData.Spells.RadiantFinale;
     
     private const uint BattleVoiceBuff = BardDefinesData.Buffs.BattleVoice;
     private const uint RagingStrikesBuff = BardDefinesData.Buffs.RagingStrikes;
     private const uint RadiantFinaleBuff = BardDefinesData.Buffs.RadiantFinale;
 
     private static readonly bool GambleTripleApex = BardSettings.Instance.GambleTripleApex;
-
-
-    private static bool IsRadiantFinaleConditionMet()
-    {
-        // 检查技能是否已解锁：如果未解锁，直接返回true。如果已解锁，检查是否有Radiant Finale的Buff效果
-        return !RadiantFinale.IsUnlock() || Core.Me.HasLocalPlayerAura(RadiantFinaleBuff);
-    }
     
     public int Check()
     {
@@ -48,9 +39,9 @@ public class BardApexGcd : ISlotResolver
             }
             else
             {
-                if (Core.Resolve<JobApi_Bard>().SoulVoice == 100 && partyBuffCountdown > 50)
+                if (Core.Resolve<JobApi_Bard>().SoulVoice == 100 && partyBuffCountdown > 55 )
                     return 1;
-                if (Core.Resolve<JobApi_Bard>().SoulVoice >= 80 && partyBuffCountdown is > 40 and <= 50 )
+                if (Core.Resolve<JobApi_Bard>().SoulVoice >= 80 && partyBuffCountdown is > 45 and <= 55 )
                     return 1;
             }
         }

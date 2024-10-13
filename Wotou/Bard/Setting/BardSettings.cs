@@ -42,9 +42,9 @@ public class BardSettings
     }
     #endregion
     
-    public float WandererSongDuration = (float)42.4; // 第一首歌的持续时间
-    public float MageSongDuration = (float)42.4; // 第二首歌的持续时间
-    public float ArmySongDuration = (float)35.2; // 第三首歌的持续时间
+    public float WandererSongDuration = (float)43; // 第一首歌的持续时间
+    public float MageSongDuration = (float)39.2; // 第二首歌的持续时间
+    public float ArmySongDuration = (float)39; // 第三首歌的持续时间
     public bool GambleTripleApex = false; // 是否赌两分钟三次绝峰
     public int Opener = 0; // 起手选择
     

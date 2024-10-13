@@ -36,12 +36,12 @@ public class BardBaseGcd : ISlotResolver
     {
         if (Core.Me.HasAura(HawkEyeBuff) || Core.Me.HasAura(BarrageBuff))
         {
-            if (TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget(), 25,5) > 1)
+            if (TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget(), 25,5) > 1 && BardRotationEntry.QT.GetQt("AOE"))
                 return Core.Resolve<MemApiSpell>().CheckActionChange(Shadowbite).GetSpell();
             return Core.Resolve<MemApiSpell>().CheckActionChange(RefulgentArrow).GetSpell();
         }
         
-        if (TargetHelper.GetEnemyCountInsideSector(Core.Me, Core.Me.GetCurrTarget(), 12, 90) > 1)
+        if (TargetHelper.GetEnemyCountInsideSector(Core.Me, Core.Me.GetCurrTarget(), 12, 90) > 1  && BardRotationEntry.QT.GetQt("AOE"))
             return Core.Resolve<MemApiSpell>().CheckActionChange(Ladonsbite).GetSpell();
         return Core.Resolve<MemApiSpell>().CheckActionChange(BurstShot).GetSpell();
     }

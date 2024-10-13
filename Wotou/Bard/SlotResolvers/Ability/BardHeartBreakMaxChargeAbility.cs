@@ -35,8 +35,11 @@ public class BardHeartBreakMaxChargeAbility : ISlotResolver
 
     public void Build(Slot slot)
     {
-        if (TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget(), 25, 8) > 1)
+        if (TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget(), 25, 8) > 1  && BardRotationEntry.QT.GetQt("AOE"))
+        {
             slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(RainOfDeath).GetSpell());
+            return;
+        }
         slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(HeartBreak).GetSpell());
     }
 }

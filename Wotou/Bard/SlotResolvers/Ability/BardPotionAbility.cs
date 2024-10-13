@@ -17,7 +17,7 @@ public class BardPotionAbility : ISlotResolver
             return -1;
         if (!BardRotationEntry.QT.GetQt("爆发药"))
             return -1;
-        if (!Potion.IsReady()) 
+        if (!ItemHelper.CheckCurrJobPotion())
             return -1;
         if (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds <1500)
             return 1;

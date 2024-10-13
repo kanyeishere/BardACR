@@ -34,6 +34,9 @@ public class BardRotationEntry : IRotationEntry
         
         // gcd队列
         new SlotResolverData(new BardDotGcd(),SlotMode.Gcd),
+        new SlotResolverData(new BardApexMaxGcd(),SlotMode.Gcd),
+        new SlotResolverData(new BardBlastArrowMaxGcd(),SlotMode.Gcd),
+        new SlotResolverData(new BardRefulgentArrowMaxGcd(),SlotMode.Gcd),
         new SlotResolverData(new BardRadiantEncoreGcd(),SlotMode.Gcd),
         new SlotResolverData(new BardResonantArrowGcd(),SlotMode.Gcd),
         new SlotResolverData(new BardIronJawsGcd(),SlotMode.Gcd),
@@ -69,7 +72,7 @@ public class BardRotationEntry : IRotationEntry
             AcrType = AcrType.HighEnd,
             MinLevel = 70,
             MaxLevel = 100,
-            Description = "诗人ACR\n适配技速2.47-2.5\n请在fuck插件中修改动画锁至530ms！！（重要）\n并且关闭全局能力技不卡GCD！！（重要）\n这样设置爆发应该能打满警察网8G，光明神9G和强者猛击9G" ,
+            Description = "诗人ACR\n适配技速2.48-2.5\n请在fuck插件中修改动画锁至530ms！！（重要）\n并且关闭全局能力技不卡GCD！！（重要）\n这样设置爆发应该能打满警察网8G，光明神9G和强者猛击9G" ,
         };
         
         // 添加各种事件回调
@@ -77,6 +80,9 @@ public class BardRotationEntry : IRotationEntry
         rot.AddOpener(GetOpener);
         // 添加QT开关的时间轴行为
         rot.AddTriggerAction(new TriggerAction_QT());
+        
+        // 添加时间轴控制
+        rot.AddTriggerCondition(new BardSongTimerCondition());
 
         return rot; 
     }
@@ -113,6 +119,7 @@ public class BardRotationEntry : IRotationEntry
         QT.AddTab("Dev", DrawQtDev);
 
         // 添加QT开关 第二个参数是默认值 (开or关) 第三个参数是鼠标悬浮时的tips
+        QT.AddQt(QTKey.Aoe, true, "是否使用AoE");
         QT.AddQt(QTKey.Burst, true, "是否使用爆发");
         QT.AddQt(QTKey.Apex, true, "是否使用绝峰箭");
         QT.AddQt(QTKey.HeartBreak, true, "是否攒碎心箭进团辅");
@@ -157,7 +164,7 @@ public class BardRotationEntry : IRotationEntry
     
     public void DrawQtGeneral(JobViewWindow jobViewWindow)
     {
-        ImGui.Text("诗人ACR\n适配技速2.47-2.5\n精细调整过能力技插入窗口，所以\n请在fuck插件中修改动画锁至530ms！！（重要）\n并且关闭全局能力技不卡GCD！！（重要）");
+        ImGui.Text("诗人ACR\n适配技速2.48-2.5\n精细调整过能力技插入窗口，\n所以请在fuck插件中修改动画锁至530ms！！（重要）\n并且关闭全局能力技不卡GCD！！（重要）\n打零式建议军神歌时间设置略长一些，爆发QT开启的情况下会120s自动切旅神");
         ImGuiHelper.LeftInputFloat("旅神歌时长", ref BardSettings.Instance.WandererSongDuration, 5f, 45f);
         ImGuiHelper.LeftInputFloat("贤者歌时长", ref BardSettings.Instance.MageSongDuration, 5f, 45f);
         ImGuiHelper.LeftInputFloat("军神歌时长", ref BardSettings.Instance.ArmySongDuration, 5f, 45f);

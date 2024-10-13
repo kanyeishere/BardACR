@@ -8,10 +8,13 @@ namespace Wotou.Bard.SlotResolvers.Ability;
 public class BardSideWinderAbility: ISlotResolver
 {
     private const uint SideWinder = BardDefinesData.Spells.Sidewinder;
+    private const uint EmpyrealArrow = BardDefinesData.Spells.EmpyrealArrow;
     
     public int Check()
     {
         if (GCDHelper.GetGCDCooldown() <= 650)
+            return -1;
+        if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 1200)
             return -1;
         if (!SideWinder.IsReady())
             return -1;
