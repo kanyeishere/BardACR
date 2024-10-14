@@ -229,9 +229,10 @@ public class BardRotationEntry : IRotationEntry
         ImGui.Separator();
         if (ImGui.CollapsingHeader("   高级设置"))
         {
-            ImGui.TextColored(new Vector4(1, 0.7f, 0, 1),"除非你明白你要做什么，不然请别动这三项\n建议仅在受网络延迟或动画锁影响打不出能力技时，再做调整");
-            ImGuiHelper.LeftInputInt("猛者强击在下个GCD前多久使用                (毫秒)", ref BardSettings.Instance.RagingStrikeGcdTime, 500, 2000);
+            ImGui.TextColored(new Vector4(1, 0.7f, 0, 1),"除非你明白你要做什么，不然请别动这四项\n建议仅在受网络延迟与动画锁影响，打不出能力技或者卡GCD时，再做调整");
             ImGuiHelper.LeftInputInt("非起手的旅神歌在下个GCD前多久使用     (毫秒)", ref BardSettings.Instance.WandererGcdTime, 500, 2000);
+            ImGuiHelper.LeftInputInt("爆发药水的动画持续时间                           (毫秒)", ref BardSettings.Instance.PotionGcdTime, 500, 2000);
+            ImGuiHelper.LeftInputInt("猛者强击在下个GCD前多久使用                (毫秒)", ref BardSettings.Instance.RagingStrikeGcdTime, 500, 2000);
             ImGuiHelper.LeftInputInt("战斗之声和光明神在下个GCD前多久使用  (毫秒)", ref BardSettings.Instance.BattleVoiceGcdTime, 500, 2000);
             ImGui.Separator();
             if (ImGui.Button("保存设置"))

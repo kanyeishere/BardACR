@@ -20,7 +20,10 @@ public class BardRagingStrikesAbility : ISlotResolver
             return -1;
         if (RagingStrikes.IsReady() && GCDHelper.GetGCDCooldown() <= BardSettings.Instance.RagingStrikeGcdTime)
             return 1;
-        if (RagingStrikes.IsReady() && BardRotationEntry.QT.GetQt("爆发药") && ItemHelper.CheckCurrJobPotion() && GCDHelper.GetGCDCooldown() <= 1400)
+        if (RagingStrikes.IsReady() && 
+            BardRotationEntry.QT.GetQt("爆发药") &&
+            ItemHelper.CheckCurrJobPotion() &&
+            GCDHelper.GetGCDCooldown() <= BardSettings.Instance.RagingStrikeGcdTime + BardSettings.Instance.PotionGcdTime)
             return 1;
         return -1;
     }

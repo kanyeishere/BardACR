@@ -59,6 +59,7 @@ public class BardSettings
     public int BattleVoiceGcdTime = 1280; //战斗之声和光明神在下个GCD前多久使用（毫秒）
     public int RagingStrikeGcdTime = 530; //猛者强击在下个GCD前多久使用（毫秒）
     public int WandererGcdTime = 530; //非起手的贤者歌在下个GCD有多久使用（毫秒）
+    public int PotionGcdTime = 870; // 爆发药水的动画持续时间（毫秒）
     
     public JobViewSave JobViewSave = new JobViewSave()
     {
