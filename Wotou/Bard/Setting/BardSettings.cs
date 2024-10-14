@@ -61,6 +61,10 @@ public class BardSettings
     public int WandererGcdTime = 530; //非起手的贤者歌在下个GCD有多久使用（毫秒）
     public int PotionGcdTime = 870; // 爆发药水的动画持续时间（毫秒）
     
+    public bool NaturesMinneWithRecitation = true; // 大地神对齐秘策
+    public bool NaturesMinneWithZoe = true; // 大地神对齐活化
+    public bool NaturesMinneWithNeutralSect = true; // 大地神对齐中间学派
+    
     public JobViewSave JobViewSave = new JobViewSave()
     {
         MainColor = new(0f, 0.3012f, 0.2306f, 1f),

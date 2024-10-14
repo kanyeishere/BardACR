@@ -196,19 +196,6 @@ public class BardRotationEntry : IRotationEntry
             ImGuiHelper.LeftInputFloat("贤者歌时长", ref BardSettings.Instance.MageSongDuration, 3f, 45f);
             ImGuiHelper.LeftInputFloat("军神歌时长", ref BardSettings.Instance.ArmySongDuration, 3f, 45f);
             ImGui.Separator();
-            ImGui.Text("爆发药设置：" + (BardSettings.Instance.UsePotionInOpener ? "起手吃" : "2分钟爆发吃"));
-            if (!QT.GetQt("爆发药"))
-                ImGui.TextColored(new Vector4(0.7f, 0.8f, 0.0f, 1.0000f),"如果你希望使用爆发药，请记得在QT面板中开启爆发药开关");
-            ImGui.Checkbox("起手吃爆发药", ref BardSettings.Instance.UsePotionInOpener);
-            ImGui.Separator();
-            if (BardSettings.Instance.GambleTripleApex)
-                ImGui.TextColored(new Vector4(1, 0.7f, 0, 1),"警告，你选择赌每120秒三根绝峰箭，可能会导致爆发期灵魂之声能量不足");
-            ImGui.Checkbox("是否赌每120秒三根绝峰箭", ref BardSettings.Instance.GambleTripleApex);
-            ImGui.Separator();
-            if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3)
-                ImGui.TextColored(new Vector4(1, 0.7f, 0, 1),"警告，你开启了全局能力技能不卡GCD，可能导致本ACR产生能力技插入问题，建议关闭");
-            ImGui.Checkbox("全局能力技能不卡GCD", ref SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3);
-            ImGui.Separator();
             var opener = "";
             switch (BardSettings.Instance.Opener)
             {
@@ -222,6 +209,29 @@ public class BardRotationEntry : IRotationEntry
                     BardSettings.Instance.Opener = 0;
                 ImGui.EndCombo();
             }
+            ImGui.Separator();
+            ImGui.Text("爆发药设置：" + (BardSettings.Instance.UsePotionInOpener ? "起手吃" : "2分钟爆发吃"));
+            if (!QT.GetQt("爆发药"))
+                ImGui.TextColored(new Vector4(0.7f, 0.8f, 0.0f, 1.0000f),"如果你希望使用爆发药，请在QT面板中开启爆发药开关");
+            ImGui.Checkbox("起手吃爆发药", ref BardSettings.Instance.UsePotionInOpener);
+            ImGui.Separator();
+            if (BardSettings.Instance.GambleTripleApex)
+                ImGui.TextColored(new Vector4(1, 0.7f, 0, 1),"警告，你选择赌每120秒三根绝峰箭，可能会导致爆发期灵魂之声能量不足");
+            ImGui.Checkbox("是否赌每120秒三根绝峰箭", ref BardSettings.Instance.GambleTripleApex);
+            ImGui.Separator();
+            if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3)
+                ImGui.TextColored(new Vector4(1, 0.7f, 0, 1),"警告，你开启了全局能力技能不卡GCD，可能导致本ACR产生能力技插入问题，建议关闭");
+            ImGui.Checkbox("全局能力技能不卡GCD", ref SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3);
+            ImGui.Separator();
+            ImGui.Text("大地神自动对齐：");
+            if ((BardSettings.Instance.NaturesMinneWithRecitation || BardSettings.Instance.NaturesMinneWithZoe ||
+                 BardSettings.Instance.NaturesMinneWithNeutralSect) && !QT.GetQt("大地神"))
+                ImGui.TextColored(new Vector4(0.7f, 0.8f, 0.0f, 1.0000f),"如果你希望使用自动大地神，请在QT面板中开启大地神开关");
+            ImGui.Checkbox("秘策", ref BardSettings.Instance.NaturesMinneWithRecitation);
+            ImGui.SameLine();
+            ImGui.Checkbox("活化", ref BardSettings.Instance.NaturesMinneWithZoe);
+            ImGui.SameLine();
+            ImGui.Checkbox("中间学派", ref BardSettings.Instance.NaturesMinneWithNeutralSect);
             ImGui.Separator();
             if (ImGui.Button("保存设置"))
                 BardSettings.Instance.Save();
