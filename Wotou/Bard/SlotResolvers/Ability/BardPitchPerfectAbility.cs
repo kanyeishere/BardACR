@@ -25,8 +25,8 @@ public class BardPitchPerfectAbility : ISlotResolver
             return -1;
         /*if (PitchPerfect.RecentlyUsed())
             return -1;*/
-        /*if (EmpyrealArrow.RecentlyUsed())
-            return -1;*/
+        if (EmpyrealArrow.RecentlyUsed() && GCDHelper.GetGCDCooldown() <= 750)
+            return -1;
         if (Core.Resolve<JobApi_Bard>().Repertoire == 3)
             return 1;
         // 旅神歌最后一跳诗心

@@ -53,9 +53,9 @@ public class BardRotationEntry : IRotationEntry
         new SlotResolverData(new BardEmpyrealArrowAbility(),SlotMode.OffGcd),
         new SlotResolverData(new BardPitchPerfectMaxAbility(),SlotMode.OffGcd),
         new SlotResolverData(new BardHeartBreakMaxChargeAbility(),SlotMode.OffGcd),
-        new SlotResolverData(new BardPitchPerfectAbility(),SlotMode.OffGcd),
         new SlotResolverData(new BardBarrageAbility(),SlotMode.OffGcd),
         new SlotResolverData(new BardSideWinderAbility(),SlotMode.OffGcd),
+        new SlotResolverData(new BardPitchPerfectAbility(),SlotMode.OffGcd),
         new SlotResolverData(new BardHeartBreakAbility(),SlotMode.OffGcd),
         new SlotResolverData(new BardSongAbility(),SlotMode.OffGcd),
         new SlotResolverData(new BardPotionAbility(),SlotMode.OffGcd),
@@ -181,7 +181,7 @@ public class BardRotationEntry : IRotationEntry
         {
             ImGui.Text("诗人ACR\n适配技速2.48-2.5\n精细调整过能力技插入窗口，所以请在fuck插件中修改动画锁至530ms（重要）\n并且关闭全局能力技不卡GCD（重要）");
             ImGui.Separator();
-            ImGui.Text("如果你希望打满警察网上要求的爆发8G，光明神9G，战斗之声9G和强者猛击9G\n那你需要根据你的网络延迟，精细调节fuck中的动画锁数值\n直到你连续两个能力技插入间隔在620ms以下（这个数字可以在Logs网站上查看）\n但也别让间隔低于520ms，会被Logs网站标红。");
+            ImGui.Text("如果你希望打满警察网上要求的爆发8G，光明神9G，战斗之声9G和猛者强击9G\n那你需要根据你的网络延迟，精细调节fuck中的动画锁数值\n直到你连续两个能力技插入间隔在620ms以下（这个数字可以在Logs网站上查看）\n但也别让间隔低于520ms，会被Logs网站标红。");
 
         }
         ImGui.Separator();
@@ -191,10 +191,10 @@ public class BardRotationEntry : IRotationEntry
             if (BardSettings.Instance.WandererSongDuration + BardSettings.Instance.MageSongDuration +
                 BardSettings.Instance.ArmySongDuration < 120)
                 ImGui.TextColored(new Vector4(1, 0.7f, 0, 1),"警告，你设置的三首歌累计时长小于120秒，建议设置略长于120秒\n如果你明白你要做什么，请无视这条警告");
-            
+            ImGui.Separator();
             ImGuiHelper.LeftInputFloat("旅神歌时长", ref BardSettings.Instance.WandererSongDuration, 3f, 45f);
             ImGuiHelper.LeftInputFloat("贤者歌时长", ref BardSettings.Instance.MageSongDuration, 3f, 45f);
-            ImGuiHelper.LeftInputFloat("军神歌时长", ref BardSettings.Instance.ArmySongDuration, 3, 45f);
+            ImGuiHelper.LeftInputFloat("军神歌时长", ref BardSettings.Instance.ArmySongDuration, 3f, 45f);
             ImGui.Separator();
             ImGui.Text("爆发药设置：" + (BardSettings.Instance.UsePotionInOpener ? "起手吃" : "2分钟爆发吃"));
             if (!QT.GetQt("爆发药"))
@@ -226,7 +226,18 @@ public class BardRotationEntry : IRotationEntry
             if (ImGui.Button("保存设置"))
                 BardSettings.Instance.Save();
         }
-        ImGui.Separator();        
+        ImGui.Separator();
+        if (ImGui.CollapsingHeader("   高级设置"))
+        {
+            ImGui.TextColored(new Vector4(1, 0.7f, 0, 1),"除非你明白你要做什么，不然请别动这三项\n建议仅在受网络延迟或动画锁影响打不出能力技时，再做调整");
+            ImGuiHelper.LeftInputInt("猛者强击在下个GCD前多久使用                (毫秒)", ref BardSettings.Instance.RagingStrikeGcdTime, 500, 2000);
+            ImGuiHelper.LeftInputInt("非起手的旅神歌在下个GCD前多久使用     (毫秒)", ref BardSettings.Instance.WandererGcdTime, 500, 2000);
+            ImGuiHelper.LeftInputInt("战斗之声和光明神在下个GCD前多久使用  (毫秒)", ref BardSettings.Instance.BattleVoiceGcdTime, 500, 2000);
+            ImGui.Separator();
+            if (ImGui.Button("保存设置"))
+                BardSettings.Instance.Save();
+        }
+        ImGui.Separator(); 
         if (ImGui.CollapsingHeader("   技能队列"))
         {
             ImGui.Separator();

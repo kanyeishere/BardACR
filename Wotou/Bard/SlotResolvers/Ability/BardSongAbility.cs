@@ -39,7 +39,7 @@ public class BardSongAbility : ISlotResolver
 
 
         if (WanderersMinuet.IsReady() && 
-            GCDHelper.GetGCDCooldown() <= 550 && 
+            GCDHelper.GetGCDCooldown() <= BardSettings.Instance.WandererGcdTime && 
             BardRotationEntry.QT.GetQt("爆发") && 
             RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < GCDHelper.GetGCDDuration())
             return 1;
@@ -64,7 +64,7 @@ public class BardSongAbility : ISlotResolver
             return 1;
 
         if (Core.Resolve<JobApi_Bard>().ActiveSong == GetSongBySpell(ArmysPaeon) && 
-            GCDHelper.GetGCDCooldown() <= 550 &&
+            GCDHelper.GetGCDCooldown() <= BardSettings.Instance.WandererGcdTime &&
             (double)Core.Resolve<JobApi_Bard>().SongTimer < 45000.0 - ArmySongDuration &&
             WanderersMinuet.IsReady() && 
             RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < GCDHelper.GetGCDDuration())

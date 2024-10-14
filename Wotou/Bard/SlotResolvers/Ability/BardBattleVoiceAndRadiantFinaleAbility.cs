@@ -1,6 +1,7 @@
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Helper;
 using Wotou.Bard.Data;
+using Wotou.Bard.Setting;
 
 namespace Wotou.Bard.SlotResolvers.Ability;
 
@@ -12,7 +13,7 @@ public class BardBattleVoiceAndRadiantFinaleAbility: ISlotResolver
     
     public int Check()
     {
-        if (GCDHelper.GetGCDCooldown() >= 1350)
+        if (GCDHelper.GetGCDCooldown() >= BardSettings.Instance.BattleVoiceGcdTime)
             return -1;
         if(RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < 2000)
             return -1;

@@ -1,6 +1,7 @@
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Helper;
 using Wotou.Bard.Data;
+using Wotou.Bard.Setting;
 
 namespace Wotou.Bard.SlotResolvers.Ability;
 
@@ -16,7 +17,7 @@ public class BardRagingStrikesAbility : ISlotResolver
             return -1;
         if (RagingStrikes.RecentlyUsed())
             return -1;
-        if (RagingStrikes.IsReady() && GCDHelper.GetGCDCooldown() <= 530)
+        if (RagingStrikes.IsReady() && GCDHelper.GetGCDCooldown() <= BardSettings.Instance.RagingStrikeGcdTime)
             return 1;
         if (RagingStrikes.IsReady() && BardRotationEntry.QT.GetQt("爆发药") && Potion.IsReady() && GCDHelper.GetGCDCooldown() <= 1400)
             return 1;

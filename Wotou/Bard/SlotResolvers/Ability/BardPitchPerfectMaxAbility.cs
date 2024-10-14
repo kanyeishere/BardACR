@@ -12,6 +12,7 @@ namespace Wotou.Bard.SlotResolvers.Ability;
 public class BardPitchPerfectMaxAbility : ISlotResolver
 {
     private const uint PitchPerfect = BardDefinesData.Spells.PitchPerfect;
+    private const uint EmpyrealArrow = BardDefinesData.Spells.EmpyrealArrow;
 
     private const Song Wanderer = Song.WANDERER;
     
@@ -20,6 +21,8 @@ public class BardPitchPerfectMaxAbility : ISlotResolver
         if (GCDHelper.GetGCDCooldown() <= 650)
             return -1;
         if (Core.Resolve<JobApi_Bard>().ActiveSong != Wanderer)
+            return -1;
+        if (EmpyrealArrow.RecentlyUsed() && GCDHelper.GetGCDCooldown() <= 750)
             return -1;
         if (Core.Resolve<JobApi_Bard>().Repertoire == 3  && Core.Resolve<JobApi_Bard>().SongTimer % 3000 < 900)
             return 1;
