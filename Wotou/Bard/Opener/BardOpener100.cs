@@ -9,6 +9,7 @@ using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.Objects.Types;
+using Wotou.Bard.Setting;
 
 #nullable enable
 namespace Wotou.Bard.Opener;
@@ -48,6 +49,7 @@ namespace Wotou.Bard.Opener;
 
     private static void Step0(Slot slot)
     {
+      
       if (!Core.Me.GetCurrTarget().HasLocalPlayerAura(129U) && !Core.Me.GetCurrTarget().HasLocalPlayerAura(1201U) && !113U.RecentlyUsed() && !7407U.RecentlyUsed())
         slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(7407U.GetSpell().Id).GetSpell());
       slot.Add(3559U.GetSpell());
@@ -65,7 +67,7 @@ namespace Wotou.Bard.Opener;
       }
       else
         slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(7406U.GetSpell().Id).GetSpell());
-      if (BardRotationEntry.QT.GetQt("爆发药"))
+      if (BardRotationEntry.QT.GetQt("爆发药") && BardSettings.Instance.UsePotionInOpener)
         slot.Add(Spell.CreatePotion());
       slot.Add2NdWindowAbility(101U.GetSpell());
     }
@@ -89,7 +91,7 @@ namespace Wotou.Bard.Opener;
       else
         slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(97U).GetSpell());
       slot.Add(3558U.GetSpell());
-      slot.Add(107U.GetSpell());
+      // slot.Add(107U.GetSpell());
     }
   }
 

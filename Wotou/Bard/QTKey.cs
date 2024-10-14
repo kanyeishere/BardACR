@@ -10,5 +10,6 @@ public static class QTKey
     public const string Song = "唱歌";
     public const string HeartBreak = "攒碎心箭";
     public const string UsePotion = "爆发药";
+    public const string NatureMinne = "大地神";
     public const string UsePotionAsap = "爆发药CD好了就吃";
 }

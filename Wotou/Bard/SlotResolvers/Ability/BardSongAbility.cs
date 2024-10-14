@@ -13,17 +13,17 @@ namespace Wotou.Bard.SlotResolvers.Ability;
 
 public class BardSongAbility : ISlotResolver
 {
-    private const uint FirstSong = BardDefinesData.Spells.TheWanderersMinuet;
-    private const uint SecondSong = BardDefinesData.Spells.MagesBallad;
-    private const uint ThirdSong = BardDefinesData.Spells.ArmysPaeon;
+    private const uint WanderersMinuet = BardDefinesData.Spells.TheWanderersMinuet;
+    private const uint MagesBallad = BardDefinesData.Spells.MagesBallad;
+    private const uint ArmysPaeon = BardDefinesData.Spells.ArmysPaeon;
     private const uint Peloton = BardDefinesData.Spells.Peloton;
     private const uint PerfectPitch = BardDefinesData.Spells.PitchPerfect;
     private const uint RagingStrikes = BardDefinesData.Spells.RagingStrikes;
     private const uint EmpyrealArrow = BardDefinesData.Spells.EmpyrealArrow;
 
-    private static readonly float FirstSongDuration = BardSettings.Instance.WandererSongDuration * 1000;
-    private static readonly float SecondSongDuration = BardSettings.Instance.MageSongDuration * 1000;
-    private static readonly float ThirdSongDuration = BardSettings.Instance.ArmySongDuration * 1000;
+    private static readonly float WandererSongDuration = BardSettings.Instance.WandererSongDuration * 1000;
+    private static readonly float MageSongDuration = BardSettings.Instance.MageSongDuration * 1000;
+    private static readonly float ArmySongDuration = BardSettings.Instance.ArmySongDuration * 1000;
 
 
     public int Check()
@@ -32,17 +32,21 @@ public class BardSongAbility : ISlotResolver
             return -1;
         if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 1200)
             return -1;
-        if (!FirstSong.IsReady() && !SecondSong.IsReady() && !ThirdSong.IsReady())
+        if (!WanderersMinuet.IsReady() && !MagesBallad.IsReady() && !ArmysPaeon.IsReady())
             return -1;
-        if (FirstSong.RecentlyUsed() || SecondSong.RecentlyUsed() || ThirdSong.RecentlyUsed())
+        if (WanderersMinuet.RecentlyUsed() || MagesBallad.RecentlyUsed() || ArmysPaeon.RecentlyUsed())
             return -1;
 
 
-        if (FirstSong.IsReady() && GCDHelper.GetGCDCooldown() <= 530 && BardRotationEntry.QT.GetQt("爆发") && RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < GCDHelper.GetGCDDuration())
+        if (WanderersMinuet.IsReady() && 
+            GCDHelper.GetGCDCooldown() <= 550 && 
+            BardRotationEntry.QT.GetQt("爆发") && 
+            RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < GCDHelper.GetGCDDuration())
             return 1;
         
-        if (Core.Resolve<JobApi_Bard>().ActiveSong == GetSongBySpell(FirstSong) &&
-            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45000.0 - FirstSongDuration && SecondSong.IsReady() && 
+        if (Core.Resolve<JobApi_Bard>().ActiveSong == GetSongBySpell(WanderersMinuet) &&
+            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45000.0 - WandererSongDuration &&
+            MagesBallad.IsReady() && 
             //Core.Resolve<JobApi_Bard>().Repertoire == 0 &&
             GCDHelper.GetGCDCooldown() > 530)
             return 1;
@@ -53,15 +57,17 @@ public class BardSongAbility : ISlotResolver
             GCDHelper.GetGCDCooldown() > 1200)
             return 1;*/
 
-        if (Core.Resolve<JobApi_Bard>().ActiveSong == GetSongBySpell(SecondSong) &&
-            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45000.0 - SecondSongDuration && ThirdSong.IsReady()&&
+        if (Core.Resolve<JobApi_Bard>().ActiveSong == GetSongBySpell(MagesBallad) &&
+            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45000.0 - MageSongDuration &&
+            ArmysPaeon.IsReady()&&
             (GCDHelper.GetGCDCooldown() > 530))
             return 1;
 
-        if (Core.Resolve<JobApi_Bard>().ActiveSong == GetSongBySpell(ThirdSong) && 
+        if (Core.Resolve<JobApi_Bard>().ActiveSong == GetSongBySpell(ArmysPaeon) && 
             GCDHelper.GetGCDCooldown() <= 550 &&
-            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45000.0 - ThirdSongDuration && FirstSong.IsReady()
-            && RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < GCDHelper.GetGCDDuration())
+            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45000.0 - ArmySongDuration &&
+            WanderersMinuet.IsReady() && 
+            RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < GCDHelper.GetGCDDuration())
             return 1;
         
         if (Core.Resolve<JobApi_Bard>().ActiveSong == Song.NONE && GCDHelper.GetGCDCooldown() > 530)
@@ -81,20 +87,20 @@ public class BardSongAbility : ISlotResolver
     
     private Spell GetSpell()
     {
-        if ((Core.Resolve<JobApi_Bard>().ActiveSong == GetSongBySpell(ThirdSong) || BardBattleData.Instance.LastSong == GetSongBySpell(ThirdSong)) && FirstSong.IsReady())
-            return FirstSong.GetSpell();
-        if ((Core.Resolve<JobApi_Bard>().ActiveSong == GetSongBySpell(FirstSong) || BardBattleData.Instance.LastSong == GetSongBySpell(FirstSong)) && SecondSong.IsReady())
-            return SecondSong.GetSpell();
-        if ((Core.Resolve<JobApi_Bard>().ActiveSong == GetSongBySpell(SecondSong) || BardBattleData.Instance.LastSong == GetSongBySpell(SecondSong)) && ThirdSong.IsReady())
-            return ThirdSong.GetSpell();
+        if ((Core.Resolve<JobApi_Bard>().ActiveSong == GetSongBySpell(ArmysPaeon) || BardBattleData.Instance.LastSong == GetSongBySpell(ArmysPaeon)) && WanderersMinuet.IsReady())
+            return WanderersMinuet.GetSpell();
+        if ((Core.Resolve<JobApi_Bard>().ActiveSong == GetSongBySpell(WanderersMinuet) || BardBattleData.Instance.LastSong == GetSongBySpell(WanderersMinuet)) && MagesBallad.IsReady())
+            return MagesBallad.GetSpell();
+        if ((Core.Resolve<JobApi_Bard>().ActiveSong == GetSongBySpell(MagesBallad) || BardBattleData.Instance.LastSong == GetSongBySpell(MagesBallad)) && ArmysPaeon.IsReady())
+            return ArmysPaeon.GetSpell();
         if (Core.Resolve<JobApi_Bard>().ActiveSong == Song.NONE )
-            if (FirstSong.IsReady())
-                return FirstSong.GetSpell();
-            else if (SecondSong.IsReady())
-                return SecondSong.GetSpell();
-            else if (ThirdSong.IsReady())
-                return ThirdSong.GetSpell();
-        return FirstSong.GetSpell();
+            if (WanderersMinuet.IsReady())
+                return WanderersMinuet.GetSpell();
+            else if (MagesBallad.IsReady())
+                return MagesBallad.GetSpell();
+            else if (ArmysPaeon.IsReady())
+                return ArmysPaeon.GetSpell();
+        return WanderersMinuet.GetSpell();
     }
     private static Song GetSongBySpell(uint song)
     {

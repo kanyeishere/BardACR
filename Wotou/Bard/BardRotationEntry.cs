@@ -1,3 +1,4 @@
+using System.Numerics;
 using Wotou.Bard.Setting;
 using Wotou.Bard.SlotResolvers.GCD;
 using Wotou.Bard.SlotResolvers.Ability;
@@ -13,6 +14,7 @@ using ImGuiNET;
 using Dalamud.Game.ClientState.JobGauge.Enums;
 using Wotou.Bard.Data;
 using Wotou.Bard.Opener;
+using Wotou.Bard.Trigger;
 
 namespace Wotou.Bard;
 
@@ -49,6 +51,7 @@ public class BardRotationEntry : IRotationEntry
         new SlotResolverData(new BardRagingStrikesAbility(),SlotMode.OffGcd),
         new SlotResolverData(new BardBattleVoiceAndRadiantFinaleAbility(),SlotMode.OffGcd),
         new SlotResolverData(new BardEmpyrealArrowAbility(),SlotMode.OffGcd),
+        new SlotResolverData(new BardPitchPerfectMaxAbility(),SlotMode.OffGcd),
         new SlotResolverData(new BardHeartBreakMaxChargeAbility(),SlotMode.OffGcd),
         new SlotResolverData(new BardPitchPerfectAbility(),SlotMode.OffGcd),
         new SlotResolverData(new BardBarrageAbility(),SlotMode.OffGcd),
@@ -56,6 +59,7 @@ public class BardRotationEntry : IRotationEntry
         new SlotResolverData(new BardHeartBreakAbility(),SlotMode.OffGcd),
         new SlotResolverData(new BardSongAbility(),SlotMode.OffGcd),
         new SlotResolverData(new BardPotionAbility(),SlotMode.OffGcd),
+        new SlotResolverData(new BardNaturesMinneAbility(),SlotMode.OffGcd),
     };
     
 
@@ -72,18 +76,23 @@ public class BardRotationEntry : IRotationEntry
             AcrType = AcrType.HighEnd,
             MinLevel = 70,
             MaxLevel = 100,
-            Description = "诗人ACR\n适配技速2.48-2.5\n请在fuck插件中修改动画锁至530ms！！（重要）\n并且关闭全局能力技不卡GCD！！（重要）\n这样设置爆发应该能打满警察网8G，光明神9G和强者猛击9G" ,
+            Description = "诗人ACR\n适配技速2.48-2.5\n请在fuck插件中修改动画锁至530ms！（重要）\n并且关闭全局能力技不卡GCD！！（重要）\n如果你希望打满警察网上要求的爆发8G，光明神9G，战斗之声9G和强者猛击9G，那你需要根据你的网络延迟，精细调节fuck中的动画锁数值，直到你连续两个能力技插入间隔在620ms以下（这个数字可以在logs上查看），但也别低于520ms，会被标红。" ,
         };
         
         // 添加各种事件回调
         rot.SetRotationEventHandler(new BardRotationEventHandler());
         rot.AddOpener(GetOpener);
-        // 添加QT开关的时间轴行为
-        rot.AddTriggerAction(new TriggerAction_QT());
+        
+        // 添加时间轴行为
+        rot.AddTriggerAction(new BardTriggerActionQt());
+        rot.AddTriggerAction(new BardSongDurationAction());
         
         // 添加时间轴控制
         rot.AddTriggerCondition(new BardSongTimerCondition());
-
+        rot.AddTriggerCondition(new BardActiveSongCondition());
+        rot.AddTriggerCondition(new BardSoulVoiceCondition());
+        rot.AddTriggerCondition(new BardRepertoireCondition());
+        
         return rot; 
     }
 
@@ -119,12 +128,13 @@ public class BardRotationEntry : IRotationEntry
         QT.AddTab("Dev", DrawQtDev);
 
         // 添加QT开关 第二个参数是默认值 (开or关) 第三个参数是鼠标悬浮时的tips
-        QT.AddQt(QTKey.Aoe, true, "是否使用AoE");
+        QT.AddQt(QTKey.Aoe, true, "是否使用AOE");
         QT.AddQt(QTKey.Burst, true, "是否使用爆发");
         QT.AddQt(QTKey.Apex, true, "是否使用绝峰箭");
         QT.AddQt(QTKey.HeartBreak, true, "是否攒碎心箭进团辅");
-        QT.AddQt(QTKey.DOT, true, "是否使用DoT");
+        QT.AddQt(QTKey.DOT, true, "是否使用DOT");
         QT.AddQt(QTKey.Song, true, "是否使用歌曲");
+        QT.AddQt(QTKey.NatureMinne,true,"大地神自动对齐秘策/活化/中间学派");
         QT.AddQt(QTKey.UsePotion,false,"是否使用爆发药水");
         //QT.AddQt(QTKey.UsePotionAsap,false,"是否在CD好了就吃爆发药水");
 
@@ -134,7 +144,7 @@ public class BardRotationEntry : IRotationEntry
             new HotKeyResolver_NormalSpell(BardDefinesData.Spells.SecondWind, SpellTargetType.Target));
         QT.AddHotkey("行吟",new HotKeyResolver_NormalSpell(BardDefinesData.Spells.Troubadour, SpellTargetType.Target));
         QT.AddHotkey("大地神",new HotKeyResolver_NormalSpell(BardDefinesData.Spells.NaturesMinne, SpellTargetType.Target));
-        QT.AddHotkey("冲刺",new HotKeyResolver_NormalSpell(3, SpellTargetType.Target));
+        QT.AddHotkey("疾跑", (IHotkeyResolver) new HotKeyResolver_疾跑());
         QT.AddHotkey("后跳",new HotKeyResolver_NormalSpell(BardDefinesData.Spells.RepellingShot, SpellTargetType.Target));
         QT.AddHotkey("爆发药", new HotKeyResolver_Potion());
         QT.AddHotkey("极限技", new HotKeyResolver_LB());
@@ -164,31 +174,90 @@ public class BardRotationEntry : IRotationEntry
     
     public void DrawQtGeneral(JobViewWindow jobViewWindow)
     {
-        ImGui.Text("诗人ACR\n适配技速2.48-2.5\n精细调整过能力技插入窗口，\n所以请在fuck插件中修改动画锁至530ms！！（重要）\n并且关闭全局能力技不卡GCD！！（重要）\n打零式建议军神歌时间设置略长一些，爆发QT开启的情况下会120s自动切旅神");
-        ImGuiHelper.LeftInputFloat("旅神歌时长", ref BardSettings.Instance.WandererSongDuration, 5f, 45f);
-        ImGuiHelper.LeftInputFloat("贤者歌时长", ref BardSettings.Instance.MageSongDuration, 5f, 45f);
-        ImGuiHelper.LeftInputFloat("军神歌时长", ref BardSettings.Instance.ArmySongDuration, 5f, 45f);
-        ImGui.Checkbox("是否赌每120秒三根绝峰箭（建议关闭）", ref BardSettings.Instance.GambleTripleApex);
-        var opener = "";
-        switch (BardSettings.Instance.Opener)
+        ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0.0f, 0.0f, 0.0f, 0.0f));
+        ImGui.PushStyleColor(ImGuiCol.Border, new Vector4(0.4314f, 0.6667f, 0.5569f, 1));
+
+        if (ImGui.CollapsingHeader("   重要说明"))
         {
-            case 0:
-                opener = "70-100级 3G团辅起手";
-                break;
+            ImGui.Text("诗人ACR\n适配技速2.48-2.5\n精细调整过能力技插入窗口，所以请在fuck插件中修改动画锁至530ms（重要）\n并且关闭全局能力技不卡GCD（重要）");
+            ImGui.Separator();
+            ImGui.Text("如果你希望打满警察网上要求的爆发8G，光明神9G，战斗之声9G和强者猛击9G\n那你需要根据你的网络延迟，精细调节fuck中的动画锁数值\n直到你连续两个能力技插入间隔在620ms以下（这个数字可以在Logs网站上查看）\n但也别让间隔低于520ms，会被Logs网站标红。");
+
         }
-        if (ImGui.BeginCombo("起手选择", opener))
+        ImGui.Separator();
+        if (ImGui.CollapsingHeader("   参数设置"))
         {
-            if (ImGui.Selectable("70-100级 3G团辅起手"))
-                BardSettings.Instance.Opener = 0;
-            ImGui.EndCombo();
+            ImGui.Text("木桩Boss建议军神歌时长设置略长些，在开启爆发QT的情况下，120秒时ACR会自动切旅神");
+            if (BardSettings.Instance.WandererSongDuration + BardSettings.Instance.MageSongDuration +
+                BardSettings.Instance.ArmySongDuration < 120)
+                ImGui.TextColored(new Vector4(1, 0.7f, 0, 1),"警告，你设置的三首歌累计时长小于120秒，建议设置略长于120秒\n如果你明白你要做什么，请无视这条警告");
+            
+            ImGuiHelper.LeftInputFloat("旅神歌时长", ref BardSettings.Instance.WandererSongDuration, 3f, 45f);
+            ImGuiHelper.LeftInputFloat("贤者歌时长", ref BardSettings.Instance.MageSongDuration, 3f, 45f);
+            ImGuiHelper.LeftInputFloat("军神歌时长", ref BardSettings.Instance.ArmySongDuration, 3, 45f);
+            ImGui.Separator();
+            ImGui.Text("爆发药设置：" + (BardSettings.Instance.UsePotionInOpener ? "起手吃" : "2分钟爆发吃"));
+            if (!QT.GetQt("爆发药"))
+                ImGui.TextColored(new Vector4(0.7f, 0.8f, 0.0f, 1.0000f),"如果你希望使用爆发药，请记得在QT面板中开启爆发药开关");
+            ImGui.Checkbox("起手吃爆发药", ref BardSettings.Instance.UsePotionInOpener);
+            ImGui.Separator();
+            if (BardSettings.Instance.GambleTripleApex)
+                ImGui.TextColored(new Vector4(1, 0.7f, 0, 1),"警告，你选择赌每120秒三根绝峰箭，可能会导致爆发期灵魂之声能量不足");
+            ImGui.Checkbox("是否赌每120秒三根绝峰箭", ref BardSettings.Instance.GambleTripleApex);
+            ImGui.Separator();
+            if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3)
+                ImGui.TextColored(new Vector4(1, 0.7f, 0, 1),"警告，你开启了全局能力技能不卡GCD，可能导致本ACR产生能力技插入问题，建议关闭");
+            ImGui.Checkbox("全局能力技能不卡GCD", ref SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3);
+            ImGui.Separator();
+            var opener = "";
+            switch (BardSettings.Instance.Opener)
+            {
+                case 0:
+                    opener = "70-100级 3G团辅起手";
+                    break;
+            }
+            if (ImGui.BeginCombo("起手选择", opener))
+            {
+                if (ImGui.Selectable("70-100级 3G团辅起手"))
+                    BardSettings.Instance.Opener = 0;
+                ImGui.EndCombo();
+            }
+            ImGui.Separator();
+            if (ImGui.Button("保存设置"))
+                BardSettings.Instance.Save();
         }
-        if (ImGui.Button("Save"))
-            BardSettings.Instance.Save();
+        ImGui.Separator();        
+        if (ImGui.CollapsingHeader("   技能队列"))
+        {
+            ImGui.Separator();
+            if (ImGui.Button("清除队列"))
+            {
+                AI.Instance.BattleData.HighPrioritySlots_OffGCD.Clear();
+                AI.Instance.BattleData.HighPrioritySlots_GCD.Clear();
+            }
+            ImGui.SameLine();
+            if (ImGui.Button("清除一个"))
+            {
+                AI.Instance.BattleData.HighPrioritySlots_OffGCD.Dequeue();
+                AI.Instance.BattleData.HighPrioritySlots_GCD.Dequeue();
+            }
+            if (AI.Instance.BattleData.HighPrioritySlots_GCD.Count > 0)
+            {
+                foreach (object obj in AI.Instance.BattleData.HighPrioritySlots_GCD)
+                    ImGui.Text(" ==" + obj?.ToString());
+            }
+            if (AI.Instance.BattleData.HighPrioritySlots_OffGCD.Count > 0)
+            {
+                foreach (object obj in AI.Instance.BattleData.HighPrioritySlots_OffGCD)
+                    ImGui.Text(" --" + obj?.ToString());
+            }
+            ImGui.Separator();
+        }
     }
 
     public void DrawQtDev(JobViewWindow jobViewWindow)
     {
-        ImGui.Text("画Dev信息");
+        ImGui.Text("Dev信息");
         foreach (var v in jobViewWindow.GetQtArray())
         {
             ImGui.Text($"Qt按钮: {v}");

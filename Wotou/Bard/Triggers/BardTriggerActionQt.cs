@@ -5,7 +5,7 @@ using ImGuiNET;
 namespace Wotou.Bard.Triggers;
 
 //这个类也可以完全复制 改一下上面的namespace和对QT的引用就行
-public class TriggerAction_QT : ITriggerAction
+public class BardTriggerActionQt : ITriggerAction
 {
     public string DisplayName { get; } = "Bard/QT";
     public string Remark { get; set; }
@@ -17,7 +17,7 @@ public class TriggerAction_QT : ITriggerAction
     private int _selectIndex;
     private string[] _qtArray;
 
-    public TriggerAction_QT()
+    public BardTriggerActionQt()
     {
         _qtArray = BardRotationEntry.QT.GetQtArray();
     }

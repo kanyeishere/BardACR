@@ -1,6 +1,7 @@
 ﻿using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.Helper;
 using AEAssist.IO;
+using Dalamud.Interface.Utility.Raii;
 
 namespace Wotou.Bard.Setting;
 
@@ -45,9 +46,22 @@ public class BardSettings
     public float WandererSongDuration = (float)43; // 第一首歌的持续时间
     public float MageSongDuration = (float)39.2; // 第二首歌的持续时间
     public float ArmySongDuration = (float)39; // 第三首歌的持续时间
+    
+    public float WandererSongDefaultDuration = (float)43; // 第一首歌的持续时间
+    public float MageSongDefaultDuration = (float)39.2; // 第二首歌的持续时间
+    public float ArmySongDefaultDuration = (float)39; // 第三首歌的持续时间
+    
+    
     public bool GambleTripleApex = false; // 是否赌两分钟三次绝峰
+    public bool UsePotionInOpener = false; // 是否在开场使用药水
     public int Opener = 0; // 起手选择
     
-    public JobViewSave JobViewSave = new(); // QT设置存档
+    public JobViewSave JobViewSave = new JobViewSave()
+    {
+        MainColor = new(0f, 0.3012f, 0.2306f, 1f),
+        QtLineCount = 2,
+        QtWindowBgAlpha = 0.1f,
+    }; // QT设置存档
+    
     
 }
