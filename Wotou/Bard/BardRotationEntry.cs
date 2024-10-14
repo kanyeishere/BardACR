@@ -56,8 +56,8 @@ public class BardRotationEntry : IRotationEntry
         new SlotResolverData(new BardBarrageAbility(),SlotMode.OffGcd),
         new SlotResolverData(new BardSideWinderAbility(),SlotMode.OffGcd),
         new SlotResolverData(new BardPitchPerfectAbility(),SlotMode.OffGcd),
-        new SlotResolverData(new BardHeartBreakAbility(),SlotMode.OffGcd),
         new SlotResolverData(new BardSongAbility(),SlotMode.OffGcd),
+        new SlotResolverData(new BardHeartBreakAbility(),SlotMode.OffGcd),
         new SlotResolverData(new BardPotionAbility(),SlotMode.OffGcd),
         new SlotResolverData(new BardNaturesMinneAbility(),SlotMode.OffGcd),
     };
@@ -181,7 +181,7 @@ public class BardRotationEntry : IRotationEntry
         {
             ImGui.Text("诗人ACR\n适配技速2.48-2.5\n精细调整过能力技插入窗口，所以请在fuck插件中修改动画锁至530ms（重要）\n并且关闭全局能力技不卡GCD（重要）");
             ImGui.Separator();
-            ImGui.Text("如果你希望打满警察网上要求的爆发8G，光明神9G，战斗之声9G和猛者强击9G\n那你需要根据你的网络延迟，精细调节fuck中的动画锁数值\n直到你连续两个能力技插入间隔在620ms以下（这个数字可以在Logs网站上查看）\n但也别让间隔低于520ms，会被Logs网站标红。");
+            ImGui.Text("如果你希望打满警察网上要求的爆发8G，光明神9G，战斗之声9G和猛者强击9G\n那你需要根据你的网络延迟，精细调节fuck中的动画锁数值\n直到你连续两个能力技插入间隔在620ms以下（这个数字可以在Logs网站上查看）\n但也别让间隔低于520ms，会被Logs网站标红");
 
         }
         ImGui.Separator();
