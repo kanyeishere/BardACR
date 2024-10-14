@@ -1,3 +1,4 @@
+using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Helper;
 using Wotou.Bard.Data;
@@ -20,7 +21,7 @@ public class BardPotionAbility : ISlotResolver
         if (!ItemHelper.CheckCurrJobPotion())
             return -1;
         if (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds <1500)
-            return 1;
+            return -1;
         if (BardRotationEntry.QT.GetQt("好了就吃"))
             return 1;
         return -1;
@@ -28,6 +29,6 @@ public class BardPotionAbility : ISlotResolver
 
     public void Build(Slot slot)
     {
-        slot.Add(Potion.GetSpell());
+        slot.Add(Spell.CreatePotion());
     }
 }

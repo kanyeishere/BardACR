@@ -1,3 +1,4 @@
+using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Helper;
 using Wotou.Bard.Data;
@@ -19,15 +20,15 @@ public class BardRagingStrikesAbility : ISlotResolver
             return -1;
         if (RagingStrikes.IsReady() && GCDHelper.GetGCDCooldown() <= BardSettings.Instance.RagingStrikeGcdTime)
             return 1;
-        if (RagingStrikes.IsReady() && BardRotationEntry.QT.GetQt("爆发药") && Potion.IsReady() && GCDHelper.GetGCDCooldown() <= 1400)
+        if (RagingStrikes.IsReady() && BardRotationEntry.QT.GetQt("爆发药") && ItemHelper.CheckCurrJobPotion() && GCDHelper.GetGCDCooldown() <= 1400)
             return 1;
         return -1;
     }
 
     public void Build(Slot slot)
     {
-        if (BardRotationEntry.QT.GetQt("爆发药") && Potion.IsReady())
-            slot.Add(Potion.GetSpell());
+        if (BardRotationEntry.QT.GetQt("爆发药") && ItemHelper.CheckCurrJobPotion())
+            slot.Add(Spell.CreatePotion());
         slot.Add(RagingStrikes.GetSpell());
     }
 }

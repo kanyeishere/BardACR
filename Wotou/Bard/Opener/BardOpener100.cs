@@ -68,7 +68,11 @@ namespace Wotou.Bard.Opener;
       else
         slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(7406U.GetSpell().Id).GetSpell());
       if (BardRotationEntry.QT.GetQt("爆发药") && BardSettings.Instance.UsePotionInOpener)
+      {
         slot.Add(Spell.CreatePotion());
+        slot.Add(101U.GetSpell());
+        return;
+      }
       slot.Add2NdWindowAbility(101U.GetSpell());
     }
 

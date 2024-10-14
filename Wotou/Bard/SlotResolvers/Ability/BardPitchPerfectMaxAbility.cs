@@ -24,7 +24,7 @@ public class BardPitchPerfectMaxAbility : ISlotResolver
             return -1;
         if (EmpyrealArrow.RecentlyUsed() && GCDHelper.GetGCDCooldown() <= 750)
             return -1;
-        if (Core.Resolve<JobApi_Bard>().Repertoire == 3  && Core.Resolve<JobApi_Bard>().SongTimer % 3000 < 900)
+        if (Core.Resolve<JobApi_Bard>().Repertoire == 3  && Core.Resolve<JobApi_Bard>().SongTimer % 3000 < 1600)
             return 1;
         
         return -1;
