@@ -78,7 +78,7 @@ public class BardRotationEntry : IRotationEntry
             MinLevel = 70,
             MaxLevel = 100,
             Description = "诗人ACR" +
-                          "\n 更新日志：10.16.3 " +
+                          "\n 更新日志：10.16.4 " +
                           "\n- 优化旅神歌的插入时机" +
                           "\n- 优化猛者强击的插入时机" +
                           "\n- 优化战斗之声和光明神的插入时机" +
@@ -86,8 +86,9 @@ public class BardRotationEntry : IRotationEntry
                           "\n- 添加预设歌轴选择" +
                           "\n- 添加防呆设计，如果你没关全局能力技不卡GCD，聊天框内会有提示" +
                           "\n- 修改续毒逻辑，现在鹰眼buff更不容易被覆盖了" +
-                          "\n- 修复高级设置的保存功能"  +
-                          "\n- 修改高级设置的描述",
+                          "\n- 修复高级设置的保存功能" +
+                          "\n- 修改高级设置的描述" +
+                          "\n- 添加重置高级设置",
         };
         
         // 添加各种事件回调
@@ -200,7 +201,7 @@ public class BardRotationEntry : IRotationEntry
             ImGui.Separator();
             ImGui.Text("如果你希望打满警察网上要求的爆发8G，光明神9G，战斗之声9G和猛者强击9G\n那你需要根据你的网络延迟，精细调节fuck中的动画锁数值\n直到你连续两个能力技插入间隔在620ms以下（这个数字可以在Logs网站上查看）\n但也别让间隔低于520ms，会有概率被Logs网站标红");
             ImGui.Separator();
-            ImGui.Text("更新日志：10.16.3 " +
+            ImGui.Text("更新日志：10.16.4 " +
                        "\n- 优化旅神歌的插入时机" +
                        "\n- 优化猛者强击的插入时机" +
                        "\n- 优化战斗之声和光明神的插入时机" +
@@ -209,7 +210,8 @@ public class BardRotationEntry : IRotationEntry
                        "\n- 添加防呆设计，如果你没关全局能力技不卡GCD，聊天框内会有提示" +
                        "\n- 修改续毒逻辑，现在鹰眼buff更不容易被覆盖了" +
                        "\n- 修复高级设置的保存功能" +
-                       "\n- 修改高级设置的描述") ;
+                       "\n- 修改高级设置的描述" +
+                       "\n- 添加重置高级设置") ;
 
         }
         ImGui.Separator();
@@ -349,10 +351,20 @@ public class BardRotationEntry : IRotationEntry
             ImGuiHelper.LeftInputInt("非起手的旅神歌在下个GCD前多久使用     (毫秒)", ref BardSettings.Instance.WandererBeforeGcdTime, 500, 2000);
             ImGuiHelper.LeftInputInt("爆发药水的动画持续时间                           (毫秒)", ref BardSettings.Instance.PotionBeforeGcdTime, 500, 2000);
             ImGuiHelper.LeftInputInt("猛者强击在下个GCD前多久使用                (毫秒)", ref BardSettings.Instance.RagingStrikeBeforeGcdTime, 500, 2000);
-            ImGuiHelper.LeftInputInt("战斗之声和光明神在下个GCD前多久使用  (毫秒)", ref BardSettings.Instance.UseBattleVoiceBeforeGcdTime, 500, 2000);
+            ImGuiHelper.LeftInputInt("战斗之声和光明神在下个GCD前多久使用  (毫秒)", ref BardSettings.Instance.UseBattleVoiceBeforeGcdTimeInMs, 500, 2000);
             ImGui.Separator();
             if (ImGui.Button("保存高级设置"))
                 BardSettings.Instance.Save();
+            ImGui.SameLine();  
+            if (ImGui.Button("重置高级设置"))
+            {
+                BardSettings.Instance.WandererBeforeGcdTime = 600;
+                BardSettings.Instance.PotionBeforeGcdTime = 800;
+                BardSettings.Instance.RagingStrikeBeforeGcdTime = 600;
+                BardSettings.Instance.UseBattleVoiceBeforeGcdTimeInMs = 1350;
+                BardSettings.Instance.Save();
+            }
+            
         }
         ImGui.Separator(); 
         if (ImGui.CollapsingHeader("   技能队列"))

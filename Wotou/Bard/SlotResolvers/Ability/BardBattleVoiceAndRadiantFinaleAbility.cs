@@ -16,7 +16,7 @@ public class BardBattleVoiceAndRadiantFinaleAbility: ISlotResolver
     
     public int Check()
     {
-        if (GCDHelper.GetGCDCooldown() >= BardSettings.Instance.UseBattleVoiceBeforeGcdTime)
+        if (GCDHelper.GetGCDCooldown() >= BardSettings.Instance.UseBattleVoiceBeforeGcdTimeInMs)
             return -1;
         if (BardRotationEntry.QT.GetQt("对齐旅神") && Core.Resolve<JobApi_Bard>().ActiveSong != Song.WANDERER)
             return -1;
@@ -30,7 +30,7 @@ public class BardBattleVoiceAndRadiantFinaleAbility: ISlotResolver
         if (BardBattleData.Instance.First120SBuffSpellId == BattleVoice &&
             BardBattleData.Instance.Third120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds > 
             GCDHelper.GetGCDDuration() 
-            + BardSettings.Instance.UseBattleVoiceBeforeGcdTime 
+            + BardSettings.Instance.UseBattleVoiceBeforeGcdTimeInMs 
             - BardSettings.Instance.RagingStrikeBeforeGcdTime)
             return -1;
         return 1;
