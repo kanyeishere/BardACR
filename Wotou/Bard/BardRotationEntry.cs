@@ -77,7 +77,16 @@ public class BardRotationEntry : IRotationEntry
             AcrType = AcrType.HighEnd,
             MinLevel = 70,
             MaxLevel = 100,
-            Description = "诗人ACR\n 更新日志：10.16 \n- 优化旅神歌的插入时机\n- 优化猛者强击的插入时机\n- 优化战斗之声和光明神的插入时机\n- 添加2G团辅起手（零式4层特化起手）\n- 添加预设歌轴选择\n- 增加防呆设计，如果你没关全局能力技不卡GCD，聊天框内会有提示\n- 修改续毒逻辑，现在鹰眼buff更不容易被覆盖了" ,
+            Description = "诗人ACR" +
+                          "\n 更新日志：10.16.2 " +
+                          "\n- 优化旅神歌的插入时机" +
+                          "\n- 优化猛者强击的插入时机" +
+                          "\n- 优化战斗之声和光明神的插入时机" +
+                          "\n- 添加2G团辅起手（零式4层特化起手）" +
+                          "\n- 添加预设歌轴选择" +
+                          "\n- 增加防呆设计，如果你没关全局能力技不卡GCD，聊天框内会有提示" +
+                          "\n- 修改续毒逻辑，现在鹰眼buff更不容易被覆盖了" +
+                          "\n- 修复高级设置的保存功能" ,
         };
         
         // 添加各种事件回调
@@ -190,7 +199,15 @@ public class BardRotationEntry : IRotationEntry
             ImGui.Separator();
             ImGui.Text("如果你希望打满警察网上要求的爆发8G，光明神9G，战斗之声9G和猛者强击9G\n那你需要根据你的网络延迟，精细调节fuck中的动画锁数值\n直到你连续两个能力技插入间隔在620ms以下（这个数字可以在Logs网站上查看）\n但也别让间隔低于520ms，会有概率被Logs网站标红");
             ImGui.Separator();
-            ImGui.Text("更新日志：10.16 \n- 优化旅神歌的插入时机\n- 优化猛者强击的插入时机\n- 优化战斗之声和光明神的插入时机\n- 添加2G团辅起手（零式4层特化起手）\n- 添加预设歌轴选择\n- 增加防呆设计，如果你没关全局能力技不卡GCD，聊天框内会有提示\n- 修改续毒逻辑，现在鹰眼buff更不容易被覆盖了") ;
+            ImGui.Text("更新日志：10.16.2 " +
+                       "\n- 优化旅神歌的插入时机" +
+                       "\n- 优化猛者强击的插入时机" +
+                       "\n- 优化战斗之声和光明神的插入时机" +
+                       "\n- 添加2G团辅起手（零式4层特化起手）" +
+                       "\n- 添加预设歌轴选择" +
+                       "\n- 增加防呆设计，如果你没关全局能力技不卡GCD，聊天框内会有提示" +
+                       "\n- 修改续毒逻辑，现在鹰眼buff更不容易被覆盖了" +
+                       "\n- 修复高级设置的保存功能" ) ;
 
         }
         ImGui.Separator();
@@ -332,7 +349,7 @@ public class BardRotationEntry : IRotationEntry
             ImGuiHelper.LeftInputInt("猛者强击在下个GCD前多久使用                (毫秒)", ref BardSettings.Instance.RagingStrikeBeforeGcdTime, 500, 2000);
             ImGuiHelper.LeftInputInt("战斗之声和光明神在下个GCD前多久使用  (毫秒)", ref BardSettings.Instance.UseBattleVoiceBeforeGcdTime, 500, 2000);
             ImGui.Separator();
-            if (ImGui.Button("保存设置"))
+            if (ImGui.Button("保存高级设置"))
                 BardSettings.Instance.Save();
         }
         ImGui.Separator(); 
