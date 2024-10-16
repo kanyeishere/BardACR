@@ -19,9 +19,11 @@
       </Reference>
       <Reference Include="Dalamud">
         <HintPath>..\..\..\Games\XIVLauncherCN\Roaming\addon\Hooks\10.0.0.14-15-g46eb784c\Dalamud.dll</HintPath>
+        <Private>False</Private>
       </Reference>
       <Reference Include="ImGui.NET">
         <HintPath>..\..\..\Games\XIVLauncherCN\Roaming\addon\Hooks\10.0.0.14-15-g46eb784c\ImGui.NET.dll</HintPath>
+        <Private>False</Private>
       </Reference>
     </ItemGroup>
 
