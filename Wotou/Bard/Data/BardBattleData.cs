@@ -12,5 +12,20 @@ public class BardBattleData
     
     public int WandererTimes = 0;
     
+    public bool HasFirst120SBuff = false;
+    
+    public bool HasSecond120SBuff = false;
+    
+    public bool HasThird120SBuff = false;
+    
+    public uint First120SBuffSpellId = BardDefinesData.Spells.RagingStrikes;
+    public uint First120SBuffId = BardDefinesData.Buffs.RagingStrikes;
+    
+    public uint Second120SBuffSpellId = BardDefinesData.Spells.BattleVoice;
+    public uint Second120SBuffId = BardDefinesData.Buffs.BattleVoice;
+    
+    public uint Third120SBuffSpellId = BardDefinesData.Spells.RadiantFinale;
+    public uint Third120SBuffId = BardDefinesData.Buffs.RadiantFinale;
+    
     public bool HasUseIronJawsInCurrentBursting = false;
 }

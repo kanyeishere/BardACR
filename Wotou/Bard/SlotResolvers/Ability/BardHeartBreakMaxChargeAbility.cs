@@ -1,4 +1,5 @@
 using AEAssist;
+using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
@@ -33,13 +34,15 @@ public class BardHeartBreakMaxChargeAbility : ISlotResolver
         return -1;
     }
 
-    public void Build(Slot slot)
+    private static Spell GetHeartBreakSpell()
     {
         if (TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget(), 25, 8) > 1  && BardRotationEntry.QT.GetQt("AOE"))
-        {
-            slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(RainOfDeath).GetSpell());
-            return;
-        }
-        slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(HeartBreak).GetSpell());
+            return Core.Resolve<MemApiSpell>().CheckActionChange(RainOfDeath).GetSpell();
+        return Core.Resolve<MemApiSpell>().CheckActionChange(HeartBreak).GetSpell();
+    }
+
+    public void Build(Slot slot)
+    {
+        slot.Add(GetHeartBreakSpell());
     }
 }

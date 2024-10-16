@@ -51,10 +51,10 @@ public class BardIronJawsGcd : ISlotResolver
                 return 1;
             }
             
-            //  如果还剩10秒，且没有鹰眼，且没有纷乱箭buff，截毒           
+            //  如果还剩10秒，且没有鹰眼buff，截毒           
             if (!Core.Me.HasMyAuraWithTimeleft(BattleVoiceBuff, 10000) || !Core.Me.HasMyAuraWithTimeleft(RagingStrikesBuff, 10000) || !Core.Me.HasMyAuraWithTimeleft(RadiantFinaleBuff, 10000))
             {
-                if (Core.Me.HasLocalPlayerAura(HawksEyeBuff) || Core.Me.HasLocalPlayerAura(BarrageBuff))
+                if (Core.Me.HasLocalPlayerAura(HawksEyeBuff))
                     return -1;
                 BardBattleData.Instance.HasUseIronJawsInCurrentBursting = true;
                 return 1;
@@ -63,6 +63,11 @@ public class BardIronJawsGcd : ISlotResolver
         }
         
         // 非爆发期截毒
+        if (target.HasMyAuraWithTimeleft(CausticBiteDot, 5500) && target.HasMyAuraWithTimeleft(StormBiteDot, 5500))
+            return -1;
+        else if (!Core.Me.HasLocalPlayerAura(HawksEyeBuff))
+            return 1;
+        
         if (target.HasMyAuraWithTimeleft(CausticBiteDot, 3000) && target.HasMyAuraWithTimeleft(StormBiteDot, 3000))
             return -1;
         return 1;

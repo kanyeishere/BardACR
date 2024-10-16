@@ -10,14 +10,15 @@ public class BardEmpyrealArrowAbility : ISlotResolver
 {
     private const uint EmpyrealArrow = BardDefinesData.Spells.EmpyrealArrow;
     private const uint BattleVoice = BardDefinesData.Spells.BattleVoice;
+    private const uint RagingStrikes = BardDefinesData.Spells.RagingStrikes;
     
     public int Check()
     {
         if (!EmpyrealArrow.IsReady())
             return -1;
-        if (BattleVoice.GetSpell().Cooldown.TotalMilliseconds < 1000)
+        if (BattleVoice.GetSpell().Cooldown.TotalMilliseconds < 1200)
             return -1;
-        if (EmpyrealArrow.RecentlyUsed())
+        if (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < 1200)
             return -1;
         return 1;
     }

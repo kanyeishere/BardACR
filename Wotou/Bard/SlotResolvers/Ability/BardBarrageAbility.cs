@@ -8,12 +8,14 @@ namespace Wotou.Bard.SlotResolvers.Ability;
 public class BardBarrageAbility : ISlotResolver
 {
     private const uint Barrage = BardDefinesData.Spells.Barrage;
-    
+    private const uint EmpyrealArrow = BardDefinesData.Spells.EmpyrealArrow;    
     public int Check()
     {
         if (GCDHelper.GetGCDCooldown() <= 650)
             return -1;
         if (!BardRotationEntry.QT.GetQt("爆发"))
+            return -1;
+        if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 1200)
             return -1;
         if (!Barrage.IsReady())
             return -1;

@@ -47,19 +47,15 @@ public class BardSettings
     public float MageSongDuration = (float)39.2; // 第二首歌的持续时间
     public float ArmySongDuration = (float)39; // 第三首歌的持续时间
     
-    public float WandererSongDefaultDuration = (float)42.6; // 第一首歌的持续时间
-    public float MageSongDefaultDuration = (float)39.2; // 第二首歌的持续时间
-    public float ArmySongDefaultDuration = (float)39; // 第三首歌的持续时间
-    
-    
     public bool GambleTripleApex = false; // 是否赌两分钟三次绝峰
     public bool UsePotionInOpener = false; // 是否在开场使用药水
     public int Opener = 0; // 起手选择
+    public int OpenerTime = 300; // 起手提前多少时间 （毫秒）
 
-    public int BattleVoiceGcdTime = 1280; //战斗之声和光明神在下个GCD前多久使用（毫秒）
-    public int RagingStrikeGcdTime = 530; //猛者强击在下个GCD前多久使用（毫秒）
-    public int WandererGcdTime = 530; //非起手的贤者歌在下个GCD有多久使用（毫秒）
-    public int PotionGcdTime = 870; // 爆发药水的动画持续时间（毫秒）
+    public int UseBattleVoiceBeforeGcdTime = 1380; //战斗之声和光明神在下个GCD前多久使用（毫秒）
+    public int RagingStrikeBeforeGcdTime = 600; //猛者强击在下个GCD前多久使用（毫秒）
+    public int WandererBeforeGcdTime = 600; //非起手的贤者歌在下个GCD有多久使用（毫秒）
+    public int PotionBeforeGcdTime = 800; // 爆发药水的动画持续时间（毫秒）
     
     public bool NaturesMinneWithRecitation = true; // 大地神对齐秘策
     public bool NaturesMinneWithZoe = true; // 大地神对齐活化

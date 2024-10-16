@@ -19,8 +19,9 @@ public class BardSongAbility : ISlotResolver
     private const uint Peloton = BardDefinesData.Spells.Peloton;
     private const uint PerfectPitch = BardDefinesData.Spells.PitchPerfect;
     private const uint RagingStrikes = BardDefinesData.Spells.RagingStrikes;
+    private const uint BattleVoice = BardDefinesData.Spells.BattleVoice;
     private const uint EmpyrealArrow = BardDefinesData.Spells.EmpyrealArrow;
-
+    
     private static readonly float WandererSongDuration = BardSettings.Instance.WandererSongDuration * 1000;
     private static readonly float MageSongDuration = BardSettings.Instance.MageSongDuration * 1000;
     private static readonly float ArmySongDuration = BardSettings.Instance.ArmySongDuration * 1000;
@@ -39,10 +40,30 @@ public class BardSongAbility : ISlotResolver
 
 
         if (WanderersMinuet.IsReady() && 
-            GCDHelper.GetGCDCooldown() <= BardSettings.Instance.WandererGcdTime && 
+            GCDHelper.GetGCDCooldown() <= BardSettings.Instance.WandererBeforeGcdTime && 
             BardRotationEntry.QT.GetQt("爆发") && 
-            RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < GCDHelper.GetGCDDuration())
-            return 1;
+            BardRotationEntry.QT.GetQt("对齐旅神") &&
+            BardBattleData.Instance.First120SBuffSpellId == BattleVoice &&
+            BardBattleData.Instance.First120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds <= 2200 &&
+            BardBattleData.Instance.Third120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds <= 2200 * 2)
+        {
+            if (BardRotationEntry.QT.GetQt("Debug"))
+                LogHelper.Print("切歌", "第一个开的120秒buff是战斗之声，爆发切歌条件满足");
+            return 120;
+        }
+        
+        if (WanderersMinuet.IsReady() && 
+            GCDHelper.GetGCDCooldown() <= BardSettings.Instance.WandererBeforeGcdTime && 
+            BardRotationEntry.QT.GetQt("爆发") && 
+            BardRotationEntry.QT.GetQt("对齐旅神") &&
+            BardBattleData.Instance.First120SBuffSpellId == RagingStrikes &&
+            BardBattleData.Instance.First120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds <= 2200
+            )
+        {
+            if (BardRotationEntry.QT.GetQt("Debug"))
+                LogHelper.Print("切歌", "第一个开的120秒buff是猛者强击，爆发切歌条件满足");
+            return 120;
+        }
         
         if (Core.Resolve<JobApi_Bard>().ActiveSong == GetSongBySpell(WanderersMinuet) &&
             (double)Core.Resolve<JobApi_Bard>().SongTimer < 45000.0 - WandererSongDuration &&
@@ -64,10 +85,9 @@ public class BardSongAbility : ISlotResolver
             return 1;
 
         if (Core.Resolve<JobApi_Bard>().ActiveSong == GetSongBySpell(ArmysPaeon) && 
-            GCDHelper.GetGCDCooldown() <= BardSettings.Instance.WandererGcdTime &&
+            GCDHelper.GetGCDCooldown() <= BardSettings.Instance.WandererBeforeGcdTime &&
             (double)Core.Resolve<JobApi_Bard>().SongTimer < 45000.0 - ArmySongDuration &&
-            WanderersMinuet.IsReady() && 
-            RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < GCDHelper.GetGCDDuration())
+            WanderersMinuet.IsReady())
             return 1;
         
         if (Core.Resolve<JobApi_Bard>().ActiveSong == Song.NONE && GCDHelper.GetGCDCooldown() > 530)
@@ -79,9 +99,8 @@ public class BardSongAbility : ISlotResolver
     public void Build(Slot slot)
     {
         var spell = this.GetSpell();
-        LogHelper.Print("Timer", $"ActiveSong: {Core.Resolve<JobApi_Bard>().ActiveSong}, SongTimer: {Core.Resolve<JobApi_Bard>().SongTimer}");
-        /*if (spell.Id == SecondSong && Core.Resolve<JobApi_Bard>().Repertoire >= 1)
-            slot.Add(PerfectPitch.GetSpell());*/
+        if (BardRotationEntry.QT.GetQt("Debug"))
+            LogHelper.Print("切歌", $"当前歌曲：{Core.Resolve<JobApi_Bard>().ActiveSong}, 下一首歌曲：{GetSongBySpell(spell.Id)}, 当前歌曲剩余时间：{Core.Resolve<JobApi_Bard>().SongTimer}");
         slot.Add(spell);
     }
     

@@ -3,6 +3,7 @@ using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.JobApi;
+using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.JobGauge.Enums;
 using Wotou.Bard.Data;
 using Wotou.Bard.Setting;
@@ -15,6 +16,8 @@ public class BardPitchPerfectAbility : ISlotResolver
     private const uint EmpyrealArrow = BardDefinesData.Spells.EmpyrealArrow;
     
     private const uint BattleVoiceBuff = BardDefinesData.Buffs.BattleVoice;
+    private const uint RagingStrikesBuff = BardDefinesData.Spells.RagingStrikes;
+    private static readonly uint Fist120SBuffId = BardBattleData.Instance.First120SBuffId;
     private const Song Wanderer = Song.WANDERER;
     
     public int Check()
@@ -27,13 +30,15 @@ public class BardPitchPerfectAbility : ISlotResolver
             return -1;*/
         if (EmpyrealArrow.RecentlyUsed() && GCDHelper.GetGCDCooldown() <= 750)
             return -1;
+        if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 700)
+            return -1;
         if (Core.Resolve<JobApi_Bard>().Repertoire == 3)
             return 1;
         // 旅神歌最后一跳诗心
         if ((double) Core.Resolve<JobApi_Bard>().SongTimer <= 45600.0 - (double) BardSettings.Instance.WandererSongDuration * 1000.0 && Core.Resolve<JobApi_Bard>().Repertoire >= 1)
             return 1;
         // 团辅最后一个技能
-        if (!Core.Me.HasMyAuraWithTimeleft(BattleVoiceBuff, 700) && Core.Me.HasMyAuraWithTimeleft(BattleVoiceBuff, 100) && Core.Resolve<JobApi_Bard>().Repertoire >= 1)
+        if (!Core.Me.HasMyAuraWithTimeleft(Fist120SBuffId, 1000) && Core.Me.HasMyAuraWithTimeleft(Fist120SBuffId, 100) && Core.Resolve<JobApi_Bard>().Repertoire >= 1)
             return 1;
         if (Core.Resolve<JobApi_Bard>().Repertoire >= 1 && Core.Resolve<JobApi_Bard>().SongTimer < 1000)
             return 1;

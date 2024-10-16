@@ -1,5 +1,8 @@
+using AEAssist;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Helper;
+using AEAssist.JobApi;
+using Dalamud.Game.ClientState.JobGauge.Enums;
 using Wotou.Bard.Data;
 using Wotou.Bard.Setting;
 
@@ -13,15 +16,22 @@ public class BardBattleVoiceAndRadiantFinaleAbility: ISlotResolver
     
     public int Check()
     {
-        if (GCDHelper.GetGCDCooldown() >= BardSettings.Instance.BattleVoiceGcdTime)
+        if (GCDHelper.GetGCDCooldown() >= BardSettings.Instance.UseBattleVoiceBeforeGcdTime)
             return -1;
-        if(RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < 2000)
+        if (BardRotationEntry.QT.GetQt("对齐旅神") && Core.Resolve<JobApi_Bard>().ActiveSong != Song.WANDERER)
+            return -1;
+        if (BardBattleData.Instance.First120SBuffSpellId == RagingStrikes &&
+            RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < 2000)
             return -1;
         if (!BardRotationEntry.QT.GetQt("爆发"))
             return -1;
-        if (BattleVoice.RecentlyUsed())
-            return -1;
         if (!BattleVoice.IsReady())
+            return -1;
+        if (BardBattleData.Instance.First120SBuffSpellId == BattleVoice &&
+            BardBattleData.Instance.Third120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds > 
+            GCDHelper.GetGCDDuration() 
+            + BardSettings.Instance.UseBattleVoiceBeforeGcdTime 
+            - BardSettings.Instance.RagingStrikeBeforeGcdTime)
             return -1;
         return 1;
     }

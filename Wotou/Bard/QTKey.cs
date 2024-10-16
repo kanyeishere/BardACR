@@ -11,5 +11,10 @@ public static class QTKey
     public const string HeartBreak = "攒碎心箭";
     public const string UsePotion = "爆发药";
     public const string NatureMinne = "大地神";
+    public const string Debug = "Debug";
+    
+    // 爆发对齐旅神歌
+    public const string BurstWithWanderer = "对齐旅神";
+    
     public const string UsePotionAsap = "爆发药CD好了就吃";
 }
