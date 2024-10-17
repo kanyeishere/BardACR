@@ -3,6 +3,7 @@ using AEAssist.CombatRoutine.Module;
 using AEAssist.Helper;
 using AEAssist.JobApi;
 using Wotou.Bard.Data;
+using Wotou.Bard.Setting;
 
 namespace Wotou.Bard.SlotResolvers.Ability;
 
@@ -19,6 +20,8 @@ public class BardEmpyrealArrowAbility : ISlotResolver
         if (BattleVoice.GetSpell().Cooldown.TotalMilliseconds < 1200)
             return -1;
         if (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < 1200)
+            return -1;
+        if (GCDHelper.GetGCDCooldown() < BardSettings.Instance.EmpyrealArrowNotBeforeGcdTime)
             return -1;
         return 1;
     }
