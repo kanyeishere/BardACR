@@ -29,13 +29,13 @@ public class BardTriggerActionQt : ITriggerAction
         {
             _selectIndex = 0;
         }
-        ImGuiHelper.LeftCombo("选择Key",ref _selectIndex,_qtArray);
-        Key = _qtArray[_selectIndex];
+        ImGuiHelper.LeftCombo("选择QT", ref this._selectIndex, this._qtArray);
+        this.Key = this._qtArray[this._selectIndex];
+        ImGui.Text("勾选为开启QT，不勾选则关闭");
+        ImGui.Text("开/关  ");
         ImGui.SameLine();
         using (new GroupWrapper())
-        {
-            ImGui.Checkbox("",ref Value);   
-        }
+            ImGui.Checkbox("", ref this.Value);
         return true;
     }
 

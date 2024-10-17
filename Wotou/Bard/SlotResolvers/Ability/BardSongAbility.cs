@@ -87,7 +87,8 @@ public class BardSongAbility : ISlotResolver
         if (Core.Resolve<JobApi_Bard>().ActiveSong == GetSongBySpell(ArmysPaeon) && 
             GCDHelper.GetGCDCooldown() <= BardSettings.Instance.WandererBeforeGcdTime &&
             (double)Core.Resolve<JobApi_Bard>().SongTimer < 45000.0 - ArmySongDuration &&
-            WanderersMinuet.IsReady())
+            WanderersMinuet.IsReady() && 
+            !BardRotationEntry.QT.GetQt("对齐旅神"))
             return 1;
         
         if (Core.Resolve<JobApi_Bard>().ActiveSong == Song.NONE && GCDHelper.GetGCDCooldown() > 530)
