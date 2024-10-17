@@ -78,8 +78,9 @@ public class BardRotationEntry : IRotationEntry
             MinLevel = 70,
             MaxLevel = 100,
             Description = "诗人ACR" +
-                          "\n 更新日志：10.17.1 " +
-                          "\n- 添加高级设置-九天连箭最晚在下个GCD前多久使用\n" +
+                          "\n 更新日志：10.17.2 " +
+                          "\n- 添加高级设置-九天连箭最晚在下个GCD前多久使用" +
+                          "\n- 修复了一些非对齐旅神的特殊循环中的切歌问题" +
                           "\n 更新日志：10.16.4 " +
                           "\n- 优化旅神歌的插入时机" +
                           "\n- 优化猛者强击的插入时机" +
@@ -203,8 +204,9 @@ public class BardRotationEntry : IRotationEntry
             ImGui.Separator();
             ImGui.Text("如果你希望打满警察网上要求的爆发8G，光明神9G，战斗之声9G和猛者强击9G\n那你需要根据你的网络延迟，精细调节fuck中的动画锁数值\n直到你连续两个能力技插入间隔在620ms以下（这个数字可以在Logs网站上查看）\n但也别让间隔低于520ms，会有概率被Logs网站标红");
             ImGui.Separator();
-            ImGui.Text("更新日志：10.17.1 " +
-                       "\n- 添加高级设置-九天连箭最晚在下个GCD前多久使用\n" +
+            ImGui.Text("更新日志：10.17.2 " +
+                       "\n- 添加高级设置-九天连箭最晚在下个GCD前多久使用" +
+                       "\n- 修复了一些非对齐旅神的特殊循环中的切歌问题" +
                        "\n更新日志：10.16.4 " +
                        "\n- 优化旅神歌的插入时机" +
                        "\n- 优化猛者强击的插入时机" +
