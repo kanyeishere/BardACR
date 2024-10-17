@@ -28,4 +28,5 @@ public class BardBattleData
     public uint Third120SBuffId = BardDefinesData.Buffs.RadiantFinale;
     
     public bool HasUseIronJawsInCurrentBursting = false;
+    public bool HasUseApexArrowInCurrentNonBurstingPeriod = false;
 }

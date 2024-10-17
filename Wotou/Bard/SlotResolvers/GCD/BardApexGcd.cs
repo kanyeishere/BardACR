@@ -26,7 +26,7 @@ public class BardApexGcd : ISlotResolver
             return -1;
         
         // 非爆发期绝峰箭处理
-        var partyBuffCountdown  = BattleVoice.GetSpell().Cooldown.TotalSeconds;
+        var partyBuffCountdown  = BardBattleData.Instance.First120SBuffSpellId.GetSpell().Cooldown.TotalSeconds;
         if (!Core.Me.HasLocalPlayerAura(BattleVoiceBuff) && !Core.Me.HasLocalPlayerAura(RagingStrikesBuff) &&
             !Core.Me.HasLocalPlayerAura(RadiantFinaleBuff))
         {
@@ -34,21 +34,41 @@ public class BardApexGcd : ISlotResolver
             {
                 if (Core.Resolve<JobApi_Bard>().SoulVoice >= 80 && partyBuffCountdown > 83)
                     return 1;
-                if (Core.Resolve<JobApi_Bard>().SoulVoice >= 80 && partyBuffCountdown > 45)
+                if (Core.Resolve<JobApi_Bard>().SoulVoice >= 80 && partyBuffCountdown > 43)
                     return 1;
             }
             else
             {
-                if (Core.Resolve<JobApi_Bard>().SoulVoice == 100 && partyBuffCountdown > 55 )
+                if (Core.Resolve<JobApi_Bard>().SoulVoice == 100 && 
+                    partyBuffCountdown > 53 && 
+                    !BardBattleData.Instance.HasUseApexArrowInCurrentNonBurstingPeriod)
+                {
+                    BardBattleData.Instance.HasUseApexArrowInCurrentNonBurstingPeriod = true;
                     return 1;
-                if (Core.Resolve<JobApi_Bard>().SoulVoice >= 80 && partyBuffCountdown is > 45 and <= 55 )
+                }
+                    
+                if (Core.Resolve<JobApi_Bard>().SoulVoice >= 80 && 
+                    partyBuffCountdown is > 43 and <= 53 &&
+                    !BardBattleData.Instance.HasUseApexArrowInCurrentNonBurstingPeriod)
+                {
+                    BardBattleData.Instance.HasUseApexArrowInCurrentNonBurstingPeriod = true;
                     return 1;
+                }
+                // 非团辅期间，绝峰箭能量不足时的处理
+                if (Core.Resolve<JobApi_Bard>().SoulVoice >= 40 && 
+                    partyBuffCountdown is <= 43 and >= 39 &&
+                    !BardBattleData.Instance.HasUseApexArrowInCurrentNonBurstingPeriod)
+                {
+                    BardBattleData.Instance.HasUseApexArrowInCurrentNonBurstingPeriod = true;
+                    return 1;
+                }
             }
         }
         
         // 爆发期绝峰箭处理
         if (Util.HasAllPartyBuff())
         {
+            BardBattleData.Instance.HasUseApexArrowInCurrentNonBurstingPeriod = false;
             if (Core.Resolve<JobApi_Bard>().SoulVoice == 100)
                 return 1;
             if (Core.Resolve<JobApi_Bard>().SoulVoice >= 80)
