@@ -124,13 +124,6 @@ public class BardRotationEventHandler : IRotationEventHandler
         
         if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3)
             ChatHelper.SendMessage("/e 警告，严重错误，你开启了全局能力技能不卡GCD，可能导致本ACR产生能力技插入问题，建议关闭 <se.1>");
-        
-        if (BardDefinesData.Spells.TheWanderersMinuet.IsReady() && BardRotationEntry.QT.GetQt("Debug"))
-        {
-            LogHelper.Print("第一个使用的120秒buff:" + BardBattleData.Instance.HasFirst120SBuff + ", " + BardBattleData.Instance.First120SBuffSpellId.GetSpell().Name);
-            LogHelper.Print("战斗之声CD:" + BardDefinesData.Spells.BattleVoice.GetSpell().Cooldown.TotalMilliseconds);
-            LogHelper.Print("猛者强击CD:" + BardDefinesData.Spells.RagingStrikes.GetSpell().Cooldown.TotalMilliseconds);
-        }
     }
 
     public void OnBattleUpdate(int currTimeInMs)

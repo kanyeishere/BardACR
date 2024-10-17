@@ -16,19 +16,16 @@ public class BardSongAbility : ISlotResolver
     private const uint WanderersMinuet = BardDefinesData.Spells.TheWanderersMinuet;
     private const uint MagesBallad = BardDefinesData.Spells.MagesBallad;
     private const uint ArmysPaeon = BardDefinesData.Spells.ArmysPaeon;
-    private const uint Peloton = BardDefinesData.Spells.Peloton;
     private const uint PerfectPitch = BardDefinesData.Spells.PitchPerfect;
     private const uint RagingStrikes = BardDefinesData.Spells.RagingStrikes;
     private const uint BattleVoice = BardDefinesData.Spells.BattleVoice;
     private const uint EmpyrealArrow = BardDefinesData.Spells.EmpyrealArrow;
-    
-    private static readonly float WandererSongDuration = BardSettings.Instance.WandererSongDuration * 1000;
-    private static readonly float MageSongDuration = BardSettings.Instance.MageSongDuration * 1000;
-    private static readonly float ArmySongDuration = BardSettings.Instance.ArmySongDuration * 1000;
-
-
     public int Check()
     {
+        var wandererSongDuration = BardSettings.Instance.WandererSongDuration * 1000;
+        var mageSongDuration = BardSettings.Instance.MageSongDuration * 1000;
+        var armySongDuration = BardSettings.Instance.ArmySongDuration * 1000;
+        
         if (!BardRotationEntry.QT.GetQt("唱歌"))
             return -1;
         if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 1200)
@@ -37,8 +34,7 @@ public class BardSongAbility : ISlotResolver
             return -1;
         if (WanderersMinuet.RecentlyUsed() || MagesBallad.RecentlyUsed() || ArmysPaeon.RecentlyUsed())
             return -1;
-
-
+        
         if (WanderersMinuet.IsReady() && 
             GCDHelper.GetGCDCooldown() <= BardSettings.Instance.WandererBeforeGcdTime && 
             BardRotationEntry.QT.GetQt("爆发") && 
@@ -66,7 +62,7 @@ public class BardSongAbility : ISlotResolver
         }
         
         if (Core.Resolve<JobApi_Bard>().ActiveSong == GetSongBySpell(WanderersMinuet) &&
-            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45000.0 - WandererSongDuration &&
+            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45000.0 - wandererSongDuration &&
             MagesBallad.IsReady() && 
             //Core.Resolve<JobApi_Bard>().Repertoire == 0 &&
             GCDHelper.GetGCDCooldown() > 530)
@@ -79,14 +75,14 @@ public class BardSongAbility : ISlotResolver
             return 1;*/
 
         if (Core.Resolve<JobApi_Bard>().ActiveSong == GetSongBySpell(MagesBallad) &&
-            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45000.0 - MageSongDuration &&
+            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45000.0 - mageSongDuration &&
             ArmysPaeon.IsReady()&&
             (GCDHelper.GetGCDCooldown() > 530))
             return 1;
 
         if (Core.Resolve<JobApi_Bard>().ActiveSong == GetSongBySpell(ArmysPaeon) && 
             GCDHelper.GetGCDCooldown() <= BardSettings.Instance.WandererBeforeGcdTime &&
-            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45000.0 - ArmySongDuration &&
+            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45000.0 - armySongDuration &&
             WanderersMinuet.IsReady() && 
             !BardRotationEntry.QT.GetQt("对齐旅神"))
             return 1;
