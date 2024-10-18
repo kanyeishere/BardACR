@@ -3,8 +3,11 @@ using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
+using AEAssist.JobApi;
 using AEAssist.MemoryApi;
+using Dalamud.Game.ClientState.JobGauge.Enums;
 using Wotou.Bard.Data;
+using Wotou.Bard.Setting;
 
 namespace Wotou.Bard.SlotResolvers.GCD;
 
@@ -12,16 +15,61 @@ public class BardBaseGcd : ISlotResolver
 {
     private const uint BurstShot = BardDefinesData.Spells.BurstShot;
     private const uint RefulgentArrow = BardDefinesData.Spells.RefulgentArrow;
-    
     private const uint Ladonsbite = BardDefinesData.Spells.Ladonsbite;
     private const uint Shadowbite = BardDefinesData.Spells.Shadowbite;
+    private const uint EmpyrealArrow = BardDefinesData.Spells.EmpyrealArrow;
+    private const uint RadiantFinale = BardDefinesData.Spells.RadiantFinale;
     
     private const uint HawkEyeBuff = BardDefinesData.Buffs.HawksEye;
     private const uint BarrageBuff = BardDefinesData.Buffs.Barrage;
+    private const uint RagingStrikesBuff = BardDefinesData.Buffs.RagingStrikes;
+    private const uint BattleVoiceBuff = BardDefinesData.Buffs.BattleVoice;
+    private const uint RadiantFinaleBuff = BardDefinesData.Buffs.RadiantFinale;
     
     // 返回>=0表示检测通过 即将调用Build方法
     public int Check()
     {
+        const int gcdAnimationTime = 650;
+        // 强对齐时，非团辅期间，九天不延后，延后gcd
+        if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < gcdAnimationTime &&
+            BardRotationEntry.QT.GetQt("强对齐") &&
+            !Core.Me.HasAura(RagingStrikesBuff) &&
+            !Core.Me.HasAura(BattleVoiceBuff) &&
+            (RadiantFinale.IsUnlock() && !Core.Me.HasAura(RadiantFinaleBuff)))
+        {
+            if (EmpyrealArrow.IsReady())
+            {
+                if (BardRotationEntry.QT.GetQt("Debug"))
+                    LogHelper.Print("基础GCD", "九天技能准备好了，使用九天，延后gcd");
+                EmpyrealArrow.GetSpell().Cast();
+            }
+            return -1;
+        }
+        
+        // 当前歌曲为军神 且开启爆发 且开启爆发对齐旅神 且强对齐 且第一个开的120秒buffCD时间小于2200 + 2020 * 3  + GCD动画时间
+        if (BardRotationEntry.QT.GetQt("爆发") && 
+            BardRotationEntry.QT.GetQt("对齐旅神") && 
+            BardRotationEntry.QT.GetQt("强对齐") &&
+            Core.Resolve<JobApi_Bard>().ActiveSong == Song.ARMY &&
+            BardBattleData.Instance.First120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds <
+            2200 + 2020 * 3  + gcdAnimationTime )
+        {
+            if (BardRotationEntry.QT.GetQt("Debug"))
+            {
+                LogHelper.Print("基础GCD", "-------------------------------------------------------");
+                LogHelper.Print("基础GCD", "九天技能CD时间：" + EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds);
+            }
+            if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds >= 2200 * 2 + 2100 + gcdAnimationTime &&
+                EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 2200 * 2 + 2080 * 2 + gcdAnimationTime )
+            {
+                if (BardRotationEntry.QT.GetQt("Debug"))
+                {
+                    LogHelper.Print("基础GCD", "第一个开的120秒buff是猛者强击，为了强对齐而停手!");
+                    LogHelper.Print("基础GCD", "九天技能CD时间：" + EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds);
+                }
+                return -1;
+            }
+        }
         return 0;
     }
     

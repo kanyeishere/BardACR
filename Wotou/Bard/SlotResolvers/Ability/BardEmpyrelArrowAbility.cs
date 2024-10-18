@@ -21,6 +21,8 @@ public class BardEmpyrealArrowAbility : ISlotResolver
             return -1;
         if (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < 1200)
             return -1;
+        if (BardRotationEntry.QT.GetQt("强对齐"))
+            return 1;
         if (GCDHelper.GetGCDCooldown() < BardSettings.Instance.EmpyrealArrowNotBeforeGcdTime)
             return -1;
         return 1;

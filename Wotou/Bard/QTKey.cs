@@ -12,6 +12,7 @@ public static class QTKey
     public const string UsePotion = "爆发药";
     public const string NatureMinne = "大地神";
     public const string Debug = "Debug";
+    public const string StrongAlign = "强对齐";
     
     // 爆发对齐旅神歌
     public const string BurstWithWanderer = "对齐旅神";

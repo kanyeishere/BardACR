@@ -17,8 +17,9 @@ public class BardHeartBreakAbility : ISlotResolver
     private const uint Bloodletter = BardDefinesData.Spells.Bloodletter;
     private const uint HeartBreak = BardDefinesData.Spells.HeartBreak;
     private const uint RainOfDeath = BardDefinesData.Spells.RainofDeath;
-
     private const uint SecondSong = BardDefinesData.Spells.MagesBallad;
+    private const uint Sidewinder = BardDefinesData.Spells.Sidewinder;
+    private const uint Barrage = BardDefinesData.Spells.Barrage;
     
     private static readonly float FirstSongDuration = BardSettings.Instance.WandererSongDuration * 1000;
 
@@ -44,6 +45,10 @@ public class BardHeartBreakAbility : ISlotResolver
         if (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < 1200)
             return -1;
         if (BattleVoice.GetSpell().Cooldown.TotalMilliseconds < 1200)
+            return -1;
+        if (Sidewinder.GetSpell().Cooldown.TotalMilliseconds < 1200)
+            return -1;
+        if (Barrage.GetSpell().Cooldown.TotalMilliseconds < 1200)
             return -1;
         if (Core.Resolve<JobApi_Bard>().ActiveSong == Song.WANDERER &&
             (double)Core.Resolve<JobApi_Bard>().SongTimer < 45000.0 - FirstSongDuration && SecondSong.IsReady())

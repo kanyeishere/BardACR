@@ -35,6 +35,7 @@ public class BardRotationEntry : IRotationEntry
         //new(new XXXXXXXX(),SlotMode.Always),
         
         // gcd队列
+        new SlotResolverData(new BardEmpyrealArrowGcd(),SlotMode.Gcd),
         new SlotResolverData(new BardDotGcd(),SlotMode.Gcd),
         new SlotResolverData(new BardApexMaxGcd(),SlotMode.Gcd),
         new SlotResolverData(new BardBlastArrowMaxGcd(),SlotMode.Gcd),
@@ -78,9 +79,13 @@ public class BardRotationEntry : IRotationEntry
             MinLevel = 70,
             MaxLevel = 100,
             Description = "诗人ACR" +
-                          "\n更新日志：10.18.2 " +
+                          "\n更新日志：10.18.6 " +
                           "\n- 现在可以在战斗中动态修改歌轴了 " +
                           "\n- 现在无目标时也可以自动切歌了 " +
+                          "\n- 增加强对齐模式（不会因为GCD时间变化而延后爆发） " +
+                          "\n- 战声和光明神在下个GCD前多久使用的默认值修改为1300（点击重置后并保存启用） " + 
+                          "\n- 修改强对齐QT的作用机制，避免用户在开启强对齐的同时关闭爆发和对齐旅神" +
+                          "\n- 修复2.48技速下，开启强对齐后九天延后的问题" +
                           "\n更新日志：10.17.3 " +
                           "\n- 添加高级设置-九天连箭最晚在下个GCD前多久使用" +
                           "\n- 修复了一些非对齐旅神的特殊循环中的切歌问题" +
@@ -136,6 +141,37 @@ public class BardRotationEntry : IRotationEntry
         return QT;
     }
     
+    private void OnClickStrongAlign(bool value)
+    {
+        if (value)
+        {
+            QT.SetQt("爆发",true);
+            QT.SetQt("对齐旅神",true);
+            LogHelper.Print("你已启用强对齐，强制开启爆发");
+            LogHelper.Print("你已启用强对齐，强制开启对齐旅神");
+        }
+        else
+            LogHelper.Print("强对齐已关闭");
+    }
+    
+    private void OnClickBurstQT()
+    {
+        if (QT.GetQt("强对齐"))
+        {
+            QT.SetQt("爆发", true);
+            LogHelper.Print("你已启用强对齐，强制开启爆发");
+        }
+    }
+    
+    private void OnClickBurstWithWandererQT()
+    {
+        if (QT.GetQt("强对齐"))
+        {
+            QT.SetQt("对齐旅神", true);
+            LogHelper.Print("你已启用强对齐，强制开启对齐旅神");
+        }
+    }
+
     // 构造函数里初始化QT
     public void BuildQT()
     {
@@ -150,8 +186,12 @@ public class BardRotationEntry : IRotationEntry
 
         // 添加QT开关 第二个参数是默认值 (开or关) 第三个参数是鼠标悬浮时的tips
         QT.AddQt(QTKey.Aoe, true, "是否使用AOE");
-        QT.AddQt(QTKey.Burst, true, "是否使用爆发");
-        QT.AddQt(QTKey.BurstWithWanderer, true, "爆发是否对齐旅神");
+        QT.AddQt(QTKey.Burst, true, (value) => { OnClickBurstQT(); });
+        QT.SetQtToolTip("是否使用爆发");
+        QT.AddQt(QTKey.BurstWithWanderer, true, (value) => { OnClickBurstWithWandererQT(); });
+        QT.SetQtToolTip("爆发是否强对齐");
+        QT.AddQt(QTKey.StrongAlign, true, (value) => { OnClickStrongAlign(value); });
+        QT.SetQtToolTip("不会因为GCD时间变化而延后爆发");
         QT.AddQt(QTKey.Apex, true, "是否使用绝峰箭");
         QT.AddQt(QTKey.HeartBreak, true, "是否攒碎心箭进团辅");
         QT.AddQt(QTKey.DOT, true, "是否使用DOT");
@@ -208,9 +248,13 @@ public class BardRotationEntry : IRotationEntry
             ImGui.Separator();
             ImGui.Text("如果你希望打满警察网上要求的爆发8G，光明神9G，战斗之声9G和猛者强击9G\n那你需要根据你的网络延迟，精细调节fuck中的动画锁数值\n直到你连续两个能力技插入间隔在620ms以下（这个数字可以在Logs网站上查看）\n但也别让间隔低于520ms，会有概率被Logs网站标红");
             ImGui.Separator();
-            ImGui.Text("更新日志：10.18.2 " +
+            ImGui.Text("更新日志：10.18.6 " +
                        "\n- 现在可以在战斗中动态修改歌轴了 " +
                        "\n- 现在无目标时也可以自动切歌了 " +
+                       "\n- 增加强对齐模式（不会因为GCD时间变化而延后爆发） " +
+                       "\n- 战声和光明神在下个GCD前多久使用的默认值修改为1300（点击重置后并保存启用） " + 
+                       "\n- 修改强对齐QT的作用机制，避免用户在开启强对齐的同时关闭爆发和对齐旅神" +
+                       "\n- 修复2.48技速下，开启强对齐后九天延后的问题" +
                        "\n更新日志：10.17.3 " +
                        "\n- 添加高级设置-九天连箭最晚在下个GCD前多久使用" +
                        "\n- 修复了一些非对齐旅神的特殊循环中的切歌问题" +
@@ -365,7 +409,7 @@ public class BardRotationEntry : IRotationEntry
                 BardSettings.Instance.WandererBeforeGcdTime = 600;
                 BardSettings.Instance.PotionBeforeGcdTime = 800;
                 BardSettings.Instance.RagingStrikeBeforeGcdTime = 600;
-                BardSettings.Instance.UseBattleVoiceBeforeGcdTimeInMs = 1350;
+                BardSettings.Instance.UseBattleVoiceBeforeGcdTimeInMs = 1300;
                 BardSettings.Instance.EmpyrealArrowNotBeforeGcdTime = 500;
                 BardSettings.Instance.Save();
             }
