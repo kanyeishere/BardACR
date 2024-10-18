@@ -1,5 +1,6 @@
 using Wotou.Bard.Setting;
 using Wotou.Bard.Data;
+using Wotou.Bard.SlotResolvers.Ability;
 using AEAssist;
 using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
@@ -31,6 +32,42 @@ public class BardRotationEventHandler : IRotationEventHandler
 
     public async Task OnNoTarget()
     {
+        var wanderersMinuet = BardDefinesData.Spells.TheWanderersMinuet;
+        var magesBallad = BardDefinesData.Spells.MagesBallad;
+        var armysPaeon = BardDefinesData.Spells.ArmysPaeon;
+        var wandererSongDuration = BardSettings.Instance.WandererSongDuration * 1000;
+        var mageSongDuration = BardSettings.Instance.MageSongDuration * 1000;
+        var armySongDuration = BardSettings.Instance.ArmySongDuration * 1000;
+        
+        if (Core.Resolve<JobApi_Bard>().ActiveSong == BardSongAbility.GetSongBySpell(wanderersMinuet) &&
+            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45080.0 - wandererSongDuration &&
+            magesBallad.IsReady() )
+        {
+            if (BardRotationEntry.QT.GetQt("Debug"))
+                LogHelper.Print("无目标切歌", $"当前歌曲：{Core.Resolve<JobApi_Bard>().ActiveSong}, 下一首歌曲：{BardSongAbility.GetSongBySpell(wanderersMinuet)}, 当前歌曲剩余时间：{Core.Resolve<JobApi_Bard>().SongTimer}");
+            await magesBallad.GetSpell().Cast();
+        }
+
+        if (Core.Resolve<JobApi_Bard>().ActiveSong == BardSongAbility.GetSongBySpell(magesBallad) &&
+            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45080.0 - mageSongDuration &&
+            armysPaeon.IsReady())
+        {
+            if (BardRotationEntry.QT.GetQt("Debug"))
+                LogHelper.Print("无目标切歌", $"当前歌曲：{Core.Resolve<JobApi_Bard>().ActiveSong}, 下一首歌曲：{BardSongAbility.GetSongBySpell(magesBallad)}, 当前歌曲剩余时间：{Core.Resolve<JobApi_Bard>().SongTimer}");
+            await armysPaeon.GetSpell().Cast();
+        }
+
+        if (Core.Resolve<JobApi_Bard>().ActiveSong == BardSongAbility.GetSongBySpell(armysPaeon) &&
+            GCDHelper.GetGCDCooldown() <= BardSettings.Instance.WandererBeforeGcdTime &&
+            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45080.0 - armySongDuration &&
+            wanderersMinuet.IsReady() &&
+            !BardRotationEntry.QT.GetQt("对齐旅神"))
+        {
+            if (BardRotationEntry.QT.GetQt("Debug"))
+                LogHelper.Print("无目标切歌", $"当前歌曲：{Core.Resolve<JobApi_Bard>().ActiveSong}, 下一首歌曲：{BardSongAbility.GetSongBySpell(armysPaeon)}, 当前歌曲剩余时间：{Core.Resolve<JobApi_Bard>().SongTimer}");
+            await wanderersMinuet.GetSpell().Cast();
+        }
+        
         await Task.CompletedTask;
     }
 

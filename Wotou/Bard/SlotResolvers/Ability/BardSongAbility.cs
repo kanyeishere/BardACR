@@ -118,7 +118,7 @@ public class BardSongAbility : ISlotResolver
                 return ArmysPaeon.GetSpell();
         return WanderersMinuet.GetSpell();
     }
-    private static Song GetSongBySpell(uint song)
+    public static Song GetSongBySpell(uint song)
     {
         return song switch
         {
