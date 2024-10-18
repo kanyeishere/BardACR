@@ -13,7 +13,7 @@ namespace Wotou.Bard.Trigger
 {
     public class BardActiveSongCondition : ITriggerBase, ITriggerCond, ITriggerlineCheck
     {
-        private int _songType = 0;
+        
         private readonly string[] label = new string[4]
         {
             "无歌曲",
@@ -25,35 +25,29 @@ namespace Wotou.Bard.Trigger
         public string DisplayName { get; } = "Bard/判断歌曲类型";
 
         public string Remark { get; set; }
+        
+        public int SongType = 0;
 
         public bool Draw()
         {
             ImGui.Text("正在唱的歌曲与所选歌曲相同时，为Ture");
-            ImGuiHelper.LeftCombo("歌", ref this._songType, this.label);
+            ImGuiHelper.LeftCombo("歌", ref this.SongType, this.label);
             return false;
         }
 
         public bool Handle(ITriggerCondParams condParams)
         {
-            return Core.Resolve<JobApi_Bard>().ActiveSong == BardActiveSongCondition.GetSong(this._songType);
+            if (SongType == 0)
+                return Core.Resolve<JobApi_Bard>().ActiveSong == Song.NONE;
+            if (SongType == 1)
+                return Core.Resolve<JobApi_Bard>().ActiveSong == Song.WANDERER;
+            if (SongType == 2)
+                return Core.Resolve<JobApi_Bard>().ActiveSong == Song.MAGE;
+            if (SongType == 3)
+                return Core.Resolve<JobApi_Bard>().ActiveSong == Song.ARMY;
+            return false;
         }
-
-        private static Song GetSong(int index)
-        {
-            switch (index)
-            {
-                case 0:
-                    return Song.NONE;
-                case 1:
-                    return Song.WANDERER;
-                case 2:
-                    return Song.MAGE;
-                case 3:
-                    return Song.ARMY;
-                default:
-                    return Song.NONE;
-            }
-        }
+        
 
         public void Check(
             TreeCompBase parent,
@@ -62,7 +56,7 @@ namespace Wotou.Bard.Trigger
             Env env,
             TriggerlineCheckResult checkResult)
         {
-            if (this._songType is >= 0 and <= 3)
+            if (this.SongType is >= 0 and <= 3)
                 return;
             checkResult.AddError(currNode, "选择的歌有误");
         }

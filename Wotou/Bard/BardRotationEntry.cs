@@ -79,6 +79,8 @@ public class BardRotationEntry : IRotationEntry
             MinLevel = 70,
             MaxLevel = 100,
             Description = "诗人ACR" +
+                          "\n更新日志：10.19.1 " +
+                          "\n- 修复时间轴控制与时间轴行动 " +
                           "\n更新日志：10.18.6 " +
                           "\n- 现在可以在战斗中动态修改歌轴了 " +
                           "\n- 现在无目标时也可以自动切歌了 " +
@@ -189,7 +191,7 @@ public class BardRotationEntry : IRotationEntry
         QT.AddQt(QTKey.Burst, true, (value) => { OnClickBurstQT(); });
         QT.SetQtToolTip("是否使用爆发");
         QT.AddQt(QTKey.BurstWithWanderer, true, (value) => { OnClickBurstWithWandererQT(); });
-        QT.SetQtToolTip("爆发是否强对齐");
+        QT.SetQtToolTip("爆发是否对齐旅神");
         QT.AddQt(QTKey.StrongAlign, true, (value) => { OnClickStrongAlign(value); });
         QT.SetQtToolTip("不会因为GCD时间变化而延后爆发");
         QT.AddQt(QTKey.Apex, true, "是否使用绝峰箭");
@@ -248,17 +250,15 @@ public class BardRotationEntry : IRotationEntry
             ImGui.Separator();
             ImGui.Text("如果你希望打满警察网上要求的爆发8G，光明神9G，战斗之声9G和猛者强击9G\n那你需要根据你的网络延迟，精细调节fuck中的动画锁数值\n直到你连续两个能力技插入间隔在620ms以下（这个数字可以在Logs网站上查看）\n但也别让间隔低于520ms，会有概率被Logs网站标红");
             ImGui.Separator();
-            ImGui.Text("更新日志：10.18.6 " +
+            ImGui.Text("更新日志：10.19.1 " +
+                       "\n- 修复时间轴控制与时间轴行动 " +
+                       "\n更新日志：10.18.6 " +
                        "\n- 现在可以在战斗中动态修改歌轴了 " +
                        "\n- 现在无目标时也可以自动切歌了 " +
                        "\n- 增加强对齐模式（不会因为GCD时间变化而延后爆发） " +
-                       "\n- 战声和光明神在下个GCD前多久使用的默认值修改为1300（点击重置后并保存启用） " + 
+                       "\n- 战声和光明神在下个GCD前多久使用的默认值修改为1300（点击重置后并保存启用） " +
                        "\n- 修改强对齐QT的作用机制，避免用户在开启强对齐的同时关闭爆发和对齐旅神" +
-                       "\n- 修复2.48技速下，开启强对齐后九天延后的问题" +
-                       "\n更新日志：10.17.3 " +
-                       "\n- 添加高级设置-九天连箭最晚在下个GCD前多久使用" +
-                       "\n- 修复了一些非对齐旅神的特殊循环中的切歌问题" +
-                       "\n- 添加非团辅期灵魂之声不足80的处理逻辑（脸黑...这都给我碰上了）") ;
+                       "\n- 修复2.48技速下，开启强对齐后九天延后的问题");
 
         }
         ImGui.Separator();

@@ -20,13 +20,13 @@ public class BardHeartBreakAbility : ISlotResolver
     private const uint SecondSong = BardDefinesData.Spells.MagesBallad;
     private const uint Sidewinder = BardDefinesData.Spells.Sidewinder;
     private const uint Barrage = BardDefinesData.Spells.Barrage;
-    
-    private static readonly float FirstSongDuration = BardSettings.Instance.WandererSongDuration * 1000;
-
-    
     private const uint RagingStrikes = BardDefinesData.Spells.RagingStrikes;
     private const uint BattleVoice = BardDefinesData.Spells.BattleVoice;
     private const uint EmpyrealArrow = BardDefinesData.Spells.EmpyrealArrow;
+    
+    private static readonly float FirstSongDuration = BardSettings.Instance.WandererSongDuration * 1000;
+    
+    private static readonly uint Fist120SBuffId = BardBattleData.Instance.First120SBuffId;
     
     public int Check()
     {
@@ -49,6 +49,8 @@ public class BardHeartBreakAbility : ISlotResolver
         if (Sidewinder.GetSpell().Cooldown.TotalMilliseconds < 1200)
             return -1;
         if (Barrage.GetSpell().Cooldown.TotalMilliseconds < 1200)
+            return -1;
+        if (!Core.Me.HasMyAuraWithTimeleft(Fist120SBuffId, 1200) && Core.Me.HasMyAuraWithTimeleft(Fist120SBuffId, 100) && Core.Resolve<JobApi_Bard>().Repertoire >= 2)
             return -1;
         if (Core.Resolve<JobApi_Bard>().ActiveSong == Song.WANDERER &&
             (double)Core.Resolve<JobApi_Bard>().SongTimer < 45000.0 - FirstSongDuration && SecondSong.IsReady())

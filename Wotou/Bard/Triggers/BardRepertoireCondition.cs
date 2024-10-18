@@ -15,7 +15,7 @@ public class BardRepertoireCondition : ITriggerBase, ITriggerCond, ITriggerlineC
 {
     public string DisplayName { get; } = "Bard/判断诗心层数";
     
-    private int _operatorIndex = 0;
+    public int OperatorIndex = 0;
     
     private readonly string[] _label = new string[5]
     {
@@ -25,8 +25,7 @@ public class BardRepertoireCondition : ITriggerBase, ITriggerCond, ITriggerlineC
         ">=",
         "=="
     };
-
-    private int _repertoire = 0;
+    public int Repertoire; 
 
     public string Remark { get; set; }
 
@@ -34,25 +33,25 @@ public class BardRepertoireCondition : ITriggerBase, ITriggerCond, ITriggerlineC
     {
         ImGui.Text("诗心层数满足设定条件时，为True");
         ImGui.Text("数值应为0-4之间");
-        ImGuiHelper.LeftCombo("条件", ref this._operatorIndex, this._label);
-        ImGuiHelper.LeftInputInt("层数", ref this._repertoire, 0, 4);
+        ImGuiHelper.LeftCombo("条件", ref this.OperatorIndex, this._label);
+        ImGuiHelper.LeftInputInt("层数", ref Repertoire, 0, 4);
         return false;
     }
 
     public bool Handle(ITriggerCondParams condParams)
     {
-        switch (this._operatorIndex)
+        switch (this.OperatorIndex)
         {
             case 0:
-                return Core.Resolve<JobApi_Bard>().SongTimer < (long) this._repertoire;
+                return Core.Resolve<JobApi_Bard>().Repertoire < (long) this.Repertoire;
             case 1:
-                return Core.Resolve<JobApi_Bard>().SongTimer > (long) this._repertoire;
+                return Core.Resolve<JobApi_Bard>().Repertoire > (long) this.Repertoire;
             case 2:
-                return Core.Resolve<JobApi_Bard>().SongTimer <= (long) this._repertoire;
+                return Core.Resolve<JobApi_Bard>().Repertoire <= (long) this.Repertoire;
             case 3:
-                return Core.Resolve<JobApi_Bard>().SongTimer >= (long) this._repertoire;
+                return Core.Resolve<JobApi_Bard>().Repertoire >= (long) this.Repertoire;
             case 4:
-                return Core.Resolve<JobApi_Bard>().SongTimer == (long) this._repertoire;
+                return Core.Resolve<JobApi_Bard>().Repertoire == (long) this.Repertoire;
             default:
                 return true;
         }
@@ -65,7 +64,7 @@ public class BardRepertoireCondition : ITriggerBase, ITriggerCond, ITriggerlineC
         Env env,
         TriggerlineCheckResult checkResult)
     {
-        if (this._repertoire >= 0 && this._repertoire <= 4)
+        if (this.Repertoire >= 0 && this.Repertoire <= 4)
             return;
         checkResult.AddError(currNode, "歌曲时长应在在0-45000之间");
     }

@@ -14,7 +14,7 @@ public class BardSoulVoiceCondition : ITriggerBase, ITriggerCond, ITriggerlineCh
 {
     public string DisplayName { get; } = "Bard/判断灵魂之声";
     
-    private int _operatorIndex = 0;
+    public int OperatorIndex = 0;
     
     private readonly string[] _label = new string[5]
     {
@@ -25,7 +25,7 @@ public class BardSoulVoiceCondition : ITriggerBase, ITriggerCond, ITriggerlineCh
         "=="
     };
 
-    private int _soulVoice = 0;
+    public int SoulVoice = 0;
 
     public string Remark { get; set; }
 
@@ -33,26 +33,26 @@ public class BardSoulVoiceCondition : ITriggerBase, ITriggerCond, ITriggerlineCh
     {
         ImGui.Text("灵魂之声量谱满足设定条件时，为True");
         ImGui.Text("数值应为0-100之间");
-        ImGuiHelper.LeftCombo("条件", ref this._operatorIndex, this._label);
-        ImGuiHelper.LeftInputInt("数值", ref this._soulVoice, 0, 100);
+        ImGuiHelper.LeftCombo("条件", ref this.OperatorIndex, this._label);
+        ImGuiHelper.LeftInputInt("数值", ref this.SoulVoice, 0, 100);
 
         return false;
     }
 
     public bool Handle(ITriggerCondParams condParams)
     {
-        switch (this._operatorIndex)
+        switch (this.OperatorIndex)
         {
             case 0:
-                return Core.Resolve<JobApi_Bard>().SoulVoice <  this._soulVoice;
+                return Core.Resolve<JobApi_Bard>().SoulVoice <  this.SoulVoice;
             case 1:
-                return Core.Resolve<JobApi_Bard>().SoulVoice > this._soulVoice;
+                return Core.Resolve<JobApi_Bard>().SoulVoice > this.SoulVoice;
             case 2:
-                return Core.Resolve<JobApi_Bard>().SoulVoice <= this._soulVoice;
+                return Core.Resolve<JobApi_Bard>().SoulVoice <= this.SoulVoice;
             case 3:
-                return Core.Resolve<JobApi_Bard>().SoulVoice >=  this._soulVoice;
+                return Core.Resolve<JobApi_Bard>().SoulVoice >=  this.SoulVoice;
             case 4:
-                return Core.Resolve<JobApi_Bard>().SoulVoice == this._soulVoice;
+                return Core.Resolve<JobApi_Bard>().SoulVoice == this.SoulVoice;
             default:
                 return true;
         }
@@ -65,7 +65,7 @@ public class BardSoulVoiceCondition : ITriggerBase, ITriggerCond, ITriggerlineCh
         Env env,
         TriggerlineCheckResult checkResult)
     {
-        if (this._soulVoice >= 0 && this._soulVoice <= 100)
+        if (this.SoulVoice >= 0 && this.SoulVoice <= 100)
             return;
         checkResult.AddError(currNode, "灵魂之声应在0-100之间");
     }
