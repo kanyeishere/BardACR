@@ -26,6 +26,9 @@ public class BardSongAbility : ISlotResolver
         var mageSongDuration = BardSettings.Instance.MageSongDuration * 1000;
         var armySongDuration = BardSettings.Instance.ArmySongDuration * 1000;
         
+        // 此文件只处理歌曲顺序为 旅神-贤者-军神 的正常循环情况
+        if (!BardSettings.Instance.IsSongOrderNormal())
+            return -999;
         if (!BardRotationEntry.QT.GetQt("唱歌"))
             return -1;
         if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 1200)

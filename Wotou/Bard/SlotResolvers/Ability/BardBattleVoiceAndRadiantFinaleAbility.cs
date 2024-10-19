@@ -27,18 +27,23 @@ public class BardBattleVoiceAndRadiantFinaleAbility: ISlotResolver
             return -1;
         if (!BattleVoice.IsReady())
             return -1;
+        // 第一个120s技能是BattleVoice，且剩下的两个120s技能中有一个技能的CD大于当前GCDDuration + UseBattleVoiceBeforeGcdTimeInMs - RagingStrikeBeforeGcdTime
         if (BardBattleData.Instance.First120SBuffSpellId == BattleVoice &&
-            BardBattleData.Instance.Third120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds > 
-            GCDHelper.GetGCDDuration() 
-            + BardSettings.Instance.UseBattleVoiceBeforeGcdTimeInMs 
-            - BardSettings.Instance.RagingStrikeBeforeGcdTime)
+            (BardBattleData.Instance.Third120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds >
+             GCDHelper.GetGCDDuration()
+             + BardSettings.Instance.UseBattleVoiceBeforeGcdTimeInMs
+             - BardSettings.Instance.RagingStrikeBeforeGcdTime || 
+             BardBattleData.Instance.Second120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds >
+             GCDHelper.GetGCDDuration() 
+             + BardSettings.Instance.UseBattleVoiceBeforeGcdTimeInMs
+             - BardSettings.Instance.RagingStrikeBeforeGcdTime)
+            )
             return -1;
         return 1;
     }
 
     public void Build(Slot slot)
     {
-        
         slot.Add(BattleVoice.GetSpell());
         if (RadiantFinale.IsUnlock())
             slot.Add(RadiantFinale.GetSpell());

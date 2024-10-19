@@ -19,6 +19,11 @@ public class BardRotationEventHandler : IRotationEventHandler
 
     public async Task OnPreCombat()
     {
+        if (!BardSettings.Instance.IsSongOrderNormal())
+        {
+            BardRotationEntry.QT.SetQt("对齐旅神", false);
+            BardRotationEntry.QT.SetQt("强对齐", false);
+        }
     }
 
     public void OnResetBattle()
@@ -28,6 +33,12 @@ public class BardRotationEventHandler : IRotationEventHandler
         
         // 重置战斗中缓存的数据
         BardBattleData.Instance = new BardBattleData();
+        
+        if (!BardSettings.Instance.IsSongOrderNormal())
+        {
+            BardRotationEntry.QT.SetQt("对齐旅神", false);
+            BardRotationEntry.QT.SetQt("强对齐", false);
+        }
     }
 
     public async Task OnNoTarget()

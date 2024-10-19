@@ -5,6 +5,7 @@ using AEAssist.Helper;
 using AEAssist.JobApi;
 using Dalamud.Game.ClientState.JobGauge.Enums;
 using Wotou.Bard.Data;
+using Wotou.Bard.Setting;
 
 namespace Wotou.Bard.SlotResolvers.Ability;
 
@@ -17,6 +18,9 @@ public class BardSongMaxAbility : ISlotResolver
     // 仅当身上没有歌时，且GCD大于530ms时，才会唱歌
     public int Check()
     {
+        // 此文件只处理歌曲顺序为 旅神-贤者-军神 的正常循环情况
+        if (!BardSettings.Instance.IsSongOrderNormal())
+            return -999;
         if (!BardRotationEntry.QT.GetQt("唱歌"))
             return -1;
         if (!WanderersMinuet.IsReady() && !MagesBallad.IsReady() && !ArmysPaeon.IsReady())
@@ -31,7 +35,8 @@ public class BardSongMaxAbility : ISlotResolver
     public void Build(Slot slot)
     {
         var spell = this.GetSpell();
-        LogHelper.Print("Timer", $"ActiveSong: {Core.Resolve<JobApi_Bard>().ActiveSong}, SongTimer: {Core.Resolve<JobApi_Bard>().SongTimer}");
+        if (BardRotationEntry.QT.GetQt("Debug"))
+            LogHelper.Print("没歌时切歌", $"LastSong: {BardBattleData.Instance.LastSong}, SongTimer: {Core.Resolve<JobApi_Bard>().SongTimer}");
         slot.Add(spell);
     }
     
