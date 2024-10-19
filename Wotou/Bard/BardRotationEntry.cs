@@ -461,6 +461,10 @@ public class BardRotationEntry : IRotationEntry
                                         LogHelper.Print("第二首：" + BardSettings.Instance.SecondSong);
                                         LogHelper.Print("第三首：" + BardSettings.Instance.ThirdSong);
                                     }
+                                } 
+                                else
+                                {
+                                    LogHelper.Print("正常歌轴顺序，可以启用强对齐和对齐旅神");
                                 }
                             }
                         }
