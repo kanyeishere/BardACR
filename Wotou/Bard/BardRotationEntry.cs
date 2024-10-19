@@ -455,9 +455,12 @@ public class BardRotationEntry : IRotationEntry
                                     LogHelper.Print("特殊歌轴顺序，将禁用强对齐和对齐旅神");
                                     QT.SetQt("强对齐", false);
                                     QT.SetQt("对齐旅神", false);
-                                    LogHelper.Print("第一首："+ BardSettings.Instance.FirstSong);
-                                    LogHelper.Print("第二首："+ BardSettings.Instance.SecondSong);
-                                    LogHelper.Print("第三首：" + BardSettings.Instance.ThirdSong);
+                                    if (QT.GetQt("Debug"))
+                                    {
+                                        LogHelper.Print("第一首：" + BardSettings.Instance.FirstSong);
+                                        LogHelper.Print("第二首：" + BardSettings.Instance.SecondSong);
+                                        LogHelper.Print("第三首：" + BardSettings.Instance.ThirdSong);
+                                    }
                                 }
                             }
                         }
