@@ -112,12 +112,8 @@ public class Bard3GOpener100 : IOpener
 
   private static void Step0(Slot slot)
   {
-
-    if (!Core.Me.GetCurrTarget().HasLocalPlayerAura(WindBiteDot) &&
-        !Core.Me.GetCurrTarget().HasLocalPlayerAura(StormBiteDot) &&
-        !WindBite.RecentlyUsed() &&
-        !StormBite.RecentlyUsed())
-      slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(WindBite.GetSpell().Id).GetSpell());
+    if (Core.Resolve<MemApiSpell>().GetLastComboSpellId() != Core.Resolve<MemApiSpell>().CheckActionChange(WindBite))
+      slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(WindBite).GetSpell());
     slot.Add(GetSpellBySong(BardSettings.Instance.FirstSong).GetSpell());
     slot.Add(GetHeartBreakSpell());
   }
