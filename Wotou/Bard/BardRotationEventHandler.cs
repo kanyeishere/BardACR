@@ -17,6 +17,8 @@ namespace Wotou.Bard;
 public class BardRotationEventHandler : IRotationEventHandler
 {
 
+    private bool _originalValueForNoClipGCD3;
+    
     public async Task OnPreCombat()
     {
         if (!BardSettings.Instance.IsSongOrderNormal())
@@ -183,12 +185,17 @@ public class BardRotationEventHandler : IRotationEventHandler
 
     public void OnEnterRotation()
     {
-        
+        // 处理全局能力技不卡GCD
+        _originalValueForNoClipGCD3 = SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3;
+        if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3)
+        {
+            SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3 = false;
+        }
     }
 
     public void OnExitRotation()
     {
-        
+        SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3 = _originalValueForNoClipGCD3;
     }
 
     public void OnTerritoryChanged()

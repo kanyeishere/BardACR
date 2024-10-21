@@ -599,10 +599,10 @@ public class BardRotationEntry : IRotationEntry
                 ImGui.TextColored(new Vector4(1, 0.7f, 0, 1), "警告，你选择赌每120秒三根绝峰箭，可能会导致爆发期灵魂之声能量不足");
             ImGui.Checkbox("是否赌每120秒三根绝峰箭", ref BardSettings.Instance.GambleTripleApex);
             ImGui.Separator();
-            if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3)
+            /*if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3)
                 ImGui.TextColored(new Vector4(1, 0.7f, 0, 1), "警告，你开启了全局能力技能不卡GCD，可能导致本ACR产生能力技插入问题，建议关闭");
             ImGui.Checkbox("全局能力技能不卡GCD", ref SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3);
-            ImGui.Separator();
+            ImGui.Separator();*/
             ImGui.Text("大地神自动对齐：");
             if ((BardSettings.Instance.NaturesMinneWithRecitation || BardSettings.Instance.NaturesMinneWithZoe ||
                  BardSettings.Instance.NaturesMinneWithNeutralSect) && !QT.GetQt("大地神"))
