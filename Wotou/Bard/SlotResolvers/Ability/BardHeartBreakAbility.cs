@@ -63,6 +63,8 @@ public class BardHeartBreakAbility : ISlotResolver
             return -1;
         if (Core.Resolve<JobApi_Bard>().Repertoire == 3 && Core.Resolve<JobApi_Bard>().ActiveSong == Song.WANDERER)
             return -1;
+        if (Core.Resolve<MemApiSpell>().GetCharges(Core.Resolve<MemApiSpell>().CheckActionChange(HeartBreak)) <= BardSettings.Instance.HeartBreakSaveStack)
+            return -1;
         return 1;
     }
     

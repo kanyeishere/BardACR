@@ -86,7 +86,7 @@ public class Bard3GOpener100 : IOpener
 
   private Spell PreCastSpell()
   {
-    return Core.Resolve<MemApiSpell>().CheckActionChange(WindBite.GetSpell().Id).GetSpell();
+    return Core.Resolve<MemApiSpell>().CheckActionChange(WindBite).GetSpell();
   }
 
   private static Spell GetBaseGcd()
@@ -126,7 +126,7 @@ public class Bard3GOpener100 : IOpener
       slot.Add(GetBaseGcd());
     }
     else
-      slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(VenomousBite.GetSpell().Id).GetSpell());
+      slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(VenomousBite).GetSpell());
     
     if (BardRotationEntry.QT.GetQt("爆发药") && BardSettings.Instance.UsePotionInOpener)
     {

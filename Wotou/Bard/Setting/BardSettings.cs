@@ -56,6 +56,7 @@ public class BardSettings
     public bool UsePotionInOpener = false; // 是否在开场使用药水
     public int Opener = 0; // 起手选择
     public int OpenerTime = 300; // 起手提前多少时间 （毫秒）
+    public float HeartBreakSaveStack = 0f;     //碎心箭保留层数
 
     public int UseBattleVoiceBeforeGcdTimeInMs = 1350; //战斗之声和光明神在下个GCD前多久使用（毫秒）
     public int RagingStrikeBeforeGcdTime = 600; //猛者强击在下个GCD前多久使用（毫秒）

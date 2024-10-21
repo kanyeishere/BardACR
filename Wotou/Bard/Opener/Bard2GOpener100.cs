@@ -80,7 +80,7 @@ public class Bard2GOpener100 : IOpener
 
   private Spell PreCastSpell()
   {
-    return Core.Resolve<MemApiSpell>().CheckActionChange(WindBite.GetSpell().Id).GetSpell();
+    return Core.Resolve<MemApiSpell>().CheckActionChange(WindBite).GetSpell();
   }
 
   private static Spell GetBaseGcd()
@@ -118,7 +118,7 @@ public class Bard2GOpener100 : IOpener
         Core.Me.GetCurrTarget().HasLocalPlayerAura(VenomousBiteDot))
       slot.Add(GetBaseGcd());
     else
-      slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(VenomousBite.GetSpell().Id).GetSpell());
+      slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(VenomousBite).GetSpell());
     
     slot.Add(BattleVoice.GetSpell());
     

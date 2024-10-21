@@ -34,6 +34,9 @@ public class BardRotationEventHandler : IRotationEventHandler
         // 重置战斗中缓存的数据
         BardBattleData.Instance = new BardBattleData();
         
+        // 重置碎心箭保留层数
+        BardSettings.Instance.HeartBreakSaveStack = 0;
+        
         if (!BardSettings.Instance.IsSongOrderNormal())
         {
             BardRotationEntry.QT.SetQt("对齐旅神", false);
