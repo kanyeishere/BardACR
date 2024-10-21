@@ -81,7 +81,7 @@ public class BardRotationEntry : IRotationEntry
             MinLevel = 70,
             MaxLevel = 100,
             Description = "诗人ACR" +
-                          "\n更新日志：10.21.4 " +
+                          "\n更新日志：10.21.5 " +
                           "\n- 添加时间轴设置：碎心箭保留层数 " +
                           "\n- 允许双插碎心箭" +
                           "\n- 修复未开启爆发时，碎心九天和侧风不会使用的bug，感谢@Delete" +
@@ -269,7 +269,7 @@ public class BardRotationEntry : IRotationEntry
             ImGui.Text(
                 "如果你希望打满警察网上要求的爆发8G，光明神9G，战斗之声9G和猛者强击9G\n那你需要根据你的网络延迟，精细调节fuck中的动画锁数值\n直到你连续两个能力技插入间隔在620ms以下（这个数字可以在Logs网站上查看）\n但也别让间隔低于520ms，会有概率被Logs网站标红");
             ImGui.Separator();
-            ImGui.Text("更新日志：10.21.4" +
+            ImGui.Text("更新日志：10.21.5" +
                        "\n- 添加时间轴设置：碎心箭保留层数 " +
                        "\n- 允许双插碎心箭" +
                        "\n- 修复未开启爆发时，碎心九天和侧风不会使用的bug，感谢@Delete" +
