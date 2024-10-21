@@ -42,13 +42,13 @@ public class BardHeartBreakAbility : ISlotResolver
             return -1;*/
         if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 1200)
             return -1;
-        if (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < 1200)
+        if (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt("爆发"))
             return -1;
-        if (BattleVoice.GetSpell().Cooldown.TotalMilliseconds < 1200)
+        if (BattleVoice.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt("爆发"))
             return -1;
         if (Sidewinder.GetSpell().Cooldown.TotalMilliseconds < 1200)
             return -1;
-        if (Barrage.GetSpell().Cooldown.TotalMilliseconds < 1200)
+        if (Barrage.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt("爆发"))
             return -1;
         if (!Core.Me.HasMyAuraWithTimeleft(Fist120SBuffId, 1200) && Core.Me.HasMyAuraWithTimeleft(Fist120SBuffId, 100) && Core.Resolve<JobApi_Bard>().Repertoire >= 2)
             return -1;

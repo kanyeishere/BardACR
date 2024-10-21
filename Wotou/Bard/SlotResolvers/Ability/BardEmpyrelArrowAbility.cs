@@ -17,9 +17,9 @@ public class BardEmpyrealArrowAbility : ISlotResolver
     {
         if (!EmpyrealArrow.IsReady())
             return -1;
-        if (BattleVoice.GetSpell().Cooldown.TotalMilliseconds < 1200)
+        if (BattleVoice.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt("爆发"))
             return -1;
-        if (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < 1200)
+        if (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt("爆发"))
             return -1;
         if (BardRotationEntry.QT.GetQt("强对齐"))
             return 1;

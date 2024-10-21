@@ -5,7 +5,7 @@ using AEAssist.JobApi;
 using Wotou.Bard.Data;
 using Wotou.Bard.Setting;
 
-namespace Wotou.Bard.SlotResolvers.Ability;
+namespace Wotou.Bard.SlotResolvers.GCD;
 
 public class BardEmpyrealArrowGcd : ISlotResolver
 {

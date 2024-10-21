@@ -25,9 +25,9 @@ public class BardHeartBreakMaxChargeAbility : ISlotResolver
             return -1;
         if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 1200)
             return -1;
-        if (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < 1200)
+        if (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt("爆发"))
             return -1;
-        if (BattleVoice.GetSpell().Cooldown.TotalMilliseconds < 1200)
+        if (BattleVoice.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt("爆发"))
             return -1;
         if (Core.Resolve<MemApiSpell>().GetCharges(Core.Resolve<MemApiSpell>().CheckActionChange(HeartBreak)) >= Core.Resolve<MemApiSpell>().GetMaxCharges(Core.Resolve<MemApiSpell>().CheckActionChange(HeartBreak)) - 0.1)
             return 1;
