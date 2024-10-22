@@ -151,7 +151,7 @@ public class BardRotationEntry : IRotationEntry
         // 添加QT开关 第二个参数是默认值 (开or关) 第三个参数是鼠标悬浮时的tips
         QT.AddQt(QTKey.Aoe, true, "是否使用AOE");
         QT.AddQt(QTKey.Burst, true, value => { OnClickBurstQT(); });
-        QT.SetQtToolTip("是否使用爆发");
+        QT.SetQtToolTip("控制猛者，双团辅及纷乱箭的使用");
         QT.AddQt(QTKey.BurstWithWanderer, true, value => { OnClickBurstWithWandererQT(); });
         QT.SetQtToolTip("爆发是否对齐旅神");
         QT.AddQt(QTKey.StrongAlign, true, value => { OnClickStrongAlign(value); });
@@ -163,8 +163,12 @@ public class BardRotationEntry : IRotationEntry
         QT.AddQt(QTKey.NatureMinne, true, "大地神自动对齐秘策/活化/中间学派");
         QT.AddQt(QTKey.UsePotion, false, "是否使用爆发药水");
         QT.AddQt(QTKey.Debug, false, "是否打印调试信息");
+        QT.AddQt(QTKey.EmpyrealArrow, true, "是否使用九天");
+        QT.AddQt(QTKey.Sidewinder, true, "是否使用侧风");
         BardSettings.Instance.JobViewSave.QtUnVisibleList.Clear();
         BardSettings.Instance.JobViewSave.QtUnVisibleList.Add("Debug");
+        BardSettings.Instance.JobViewSave.QtUnVisibleList.Add(QTKey.EmpyrealArrow);
+        BardSettings.Instance.JobViewSave.QtUnVisibleList.Add(QTKey.Sidewinder);
 
         // 添加快捷按钮 (带技能图标)
         QT.AddHotkey("防击退", new HotKeyResolver_NormalSpell(BardDefinesData.Spells.ArmsLength, SpellTargetType.Target));

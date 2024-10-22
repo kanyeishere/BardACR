@@ -25,6 +25,10 @@ public class BardApexGcd : ISlotResolver
         if (!BardRotationEntry.QT.GetQt("绝峰箭"))
             return -1;
         
+        // 本文件只处理开启爆发QT时，正常120s循环的绝峰箭
+        if (!BardRotationEntry.QT.GetQt("爆发"))
+            return -1;
+        
         // 非爆发期绝峰箭处理
         var partyBuffCountdown  = BardBattleData.Instance.First120SBuffSpellId.GetSpell().Cooldown.TotalSeconds;
         if (!Core.Me.HasLocalPlayerAura(BattleVoiceBuff) && !Core.Me.HasLocalPlayerAura(RagingStrikesBuff) &&

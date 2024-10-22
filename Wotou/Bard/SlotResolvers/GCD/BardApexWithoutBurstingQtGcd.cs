@@ -7,7 +7,7 @@ using Wotou.Bard.Utility;
 
 namespace Wotou.Bard.SlotResolvers.GCD;
 
-public class BardApexMaxGcd : ISlotResolver
+public class BardApexWithoutBurstingQtGcd : ISlotResolver
 {
     private const uint ApexArrow = BardDefinesData.Spells.ApexArrow;
     
@@ -15,12 +15,10 @@ public class BardApexMaxGcd : ISlotResolver
     {
         if (!BardRotationEntry.QT.GetQt("绝峰箭"))
             return -1;
-        if (!BardRotationEntry.QT.GetQt("爆发"))
+        // 本文件只处理未开启爆发QT时，满能量的绝峰箭
+        if (BardRotationEntry.QT.GetQt("爆发"))
             return -1;
-        
-        // 本文件只处理爆发期满能量的绝峰箭
-        if (BardUtil.HasAllPartyBuff() &&
-            (Core.Resolve<JobApi_Bard>().SoulVoice == 100))
+        if (Core.Resolve<JobApi_Bard>().SoulVoice == 100)
             return 1;
         return -1;
     }

@@ -35,9 +35,9 @@ public class BardHeartBreakAbility : ISlotResolver
             return -1;
         /*if (Core.Resolve<MemApiSpell>().CheckActionChange(HeartBreak).RecentlyUsed(2300))
             return -1;*/
-        if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 1200)
+        if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow))
             return -1;
-        if (Sidewinder.GetSpell().Cooldown.TotalMilliseconds < 1200)
+        if (Sidewinder.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt(QTKey.Sidewinder))
             return -1;
         if (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt("爆发"))
             return -1;

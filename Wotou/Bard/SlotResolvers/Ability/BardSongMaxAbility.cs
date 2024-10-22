@@ -14,6 +14,7 @@ public class BardSongMaxAbility : ISlotResolver
     private const uint WanderersMinuet = BardDefinesData.Spells.TheWanderersMinuet;
     private const uint MagesBallad = BardDefinesData.Spells.MagesBallad;
     private const uint ArmysPaeon = BardDefinesData.Spells.ArmysPaeon;
+    private const uint EmpyrealArrow = BardDefinesData.Spells.EmpyrealArrow;
     
     // 仅当身上没有歌时，且GCD大于530ms时，才会唱歌
     public int Check()
@@ -22,6 +23,8 @@ public class BardSongMaxAbility : ISlotResolver
         if (!BardUtil.IsSongOrderNormal())
             return -999;
         if (!BardRotationEntry.QT.GetQt("唱歌"))
+            return -1;
+        if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow))
             return -1;
         if (!WanderersMinuet.IsReady() && !MagesBallad.IsReady() && !ArmysPaeon.IsReady())
             return -1;

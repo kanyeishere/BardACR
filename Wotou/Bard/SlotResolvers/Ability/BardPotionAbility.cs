@@ -8,7 +8,6 @@ namespace Wotou.Bard.SlotResolvers.Ability;
 public class BardPotionAbility : ISlotResolver
 {
     private const uint RagingStrikes = BardDefinesData.Spells.RagingStrikes;
-    private const uint Potion = BardDefinesData.Spells.Potion;
     
     public int Check()
     {
@@ -20,7 +19,7 @@ public class BardPotionAbility : ISlotResolver
             return -1;
         if (!ItemHelper.CheckCurrJobPotion())
             return -1;
-        if (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds <1500)
+        if (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < 5000 && BardRotationEntry.QT.GetQt("爆发"))
             return -1;
         if (BardRotationEntry.QT.GetQt("好了就吃"))
             return 1;

@@ -31,7 +31,7 @@ public class BardSongAbility : ISlotResolver
             return -999;
         if (!BardRotationEntry.QT.GetQt("唱歌"))
             return -1;
-        if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 1200)
+        if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow))
             return -1;
         if (!WanderersMinuet.IsReady() && !MagesBallad.IsReady() && !ArmysPaeon.IsReady())
             return -1;

@@ -14,7 +14,7 @@ public class BardSideWinderAbility: ISlotResolver
     {
         if (GCDHelper.GetGCDCooldown() <= 650)
             return -1;
-        if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 1200)
+        if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow))
             return -1;
         if (!SideWinder.IsReady())
             return -1;
