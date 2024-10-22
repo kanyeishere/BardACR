@@ -9,9 +9,15 @@ namespace Wotou.Bard.SlotResolvers.GCD;
 public class BardEmpyrealArrowGcd : ISlotResolver
 {
     private const uint EmpyrealArrow = BardDefinesData.Spells.EmpyrealArrow;
-    
+    private const uint BattleVoice = BardDefinesData.Spells.BattleVoice;
+    private const uint RagingStrikes = BardDefinesData.Spells.RagingStrikes;
+
     public int Check()
     {
+        if (BattleVoice.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt("爆发"))
+            return -1;
+        if (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt("爆发"))
+            return -1;
         // 仅在开启强对齐时才启用, 且当前无团辅buff
         if (BardRotationEntry.QT.GetQt("强对齐") && 
             EmpyrealArrow.IsReady() &&
