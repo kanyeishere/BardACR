@@ -25,9 +25,11 @@ public class BardRotationEntry : IRotationEntry
     public static JobViewWindow QT { get; private set; }
     public string AuthorName { get; set; } = "Wotou";
     //  更新日志
-    private const string UpdateLog = "更新日志：10.22.2 " +
+    private const string UpdateLog = "更新日志：10.22.3 " +
                                      "\n- 重构了部分代码，希望彻底解决特殊歌轴时遇到的各种问题" +
-                                     "\n- 更新了高级设置的UI";
+                                     "\n- 更新了高级设置的UI" + 
+                                     "\n- 解耦了绝峰箭与爆发QT的绑定 \n  现在爆发QT只控制猛者强击，光明神，战斗之声和纷乱箭"  + 
+                                     "\n- 增加九天和侧风的QT控制（轴用，已隐藏）" ;
     
     public Rotation Build(string settingFolder)
     {
