@@ -15,6 +15,8 @@ public class BardEmpyrealArrowAbility : ISlotResolver
     
     public int Check()
     {
+        if (!BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow))
+            return -1;
         if (!EmpyrealArrow.IsReady())
             return -1;
         if (BattleVoice.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt("爆发"))
