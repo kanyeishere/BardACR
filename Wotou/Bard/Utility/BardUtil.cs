@@ -7,7 +7,7 @@ using Wotou.Bard.Setting;
 
 namespace Wotou.Bard.Utility;
 
-public abstract class BardUtil
+public static class BardUtil
 {
     private const uint BattleVoiceBuff = BardDefinesData.Buffs.BattleVoice;
     private const uint RagingStrikesBuff = BardDefinesData.Buffs.RagingStrikes;

@@ -49,42 +49,31 @@ public class BardRotationEventHandler : IRotationEventHandler
     public async Task OnNoTarget()
     {
         // 无目标切歌
-        
-        if (Core.Resolve<JobApi_Bard>().ActiveSong == BardSettings.Instance.FirstSong &&
-            BardRotationEntry.QT.GetQt(QTKey.Song) &&
-            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45000.0 - BardUtil.GetSongDuration(BardSettings.Instance.FirstSong) * 1000 &&
-            BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).IsReady())
+        if (BardSongSwitchUtil.CanSwitchFromFirstToSecond())
             await BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).GetSpell().Cast();
 
-        if (Core.Resolve<JobApi_Bard>().ActiveSong == BardSettings.Instance.SecondSong &&
-            BardRotationEntry.QT.GetQt(QTKey.Song) &&
-            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45000.0 - BardUtil.GetSongDuration(BardSettings.Instance.SecondSong) * 1000 &&
-            BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).IsReady())
+        if (BardSongSwitchUtil.CanSwitchFromSecondToThird())
             await BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).GetSpell().Cast();
 
-        if (Core.Resolve<JobApi_Bard>().ActiveSong == BardSettings.Instance.ThirdSong && 
-            BardRotationEntry.QT.GetQt(QTKey.Song) &&
-            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45000.0 - BardUtil.GetSongDuration(BardSettings.Instance.ThirdSong) * 1000 &&
-            BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).IsReady() )
+        if (BardSongSwitchUtil.CanSwitchFromThirdToFirst())
             await BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).GetSpell().Cast();
 
-        if (Core.Resolve<JobApi_Bard>().ActiveSong == Song.NONE &&
-            BardRotationEntry.QT.GetQt(QTKey.Song) &&
-            (BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).IsReady() ||
-             BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).IsReady() ||
-             BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).IsReady()))
+        if (BardSongSwitchUtil.CanSwitchFromNone())
         {
-            if (BardBattleData.Instance.LastSong == BardSettings.Instance.FirstSong && BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).IsReady())
+            if (BardBattleData.Instance.LastSong == BardSettings.Instance.FirstSong && 
+                BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).IsReady())
             {
                 await BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).GetSpell().Cast();
                 return;
             }
-            if (BardBattleData.Instance.LastSong == BardSettings.Instance.SecondSong && BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).IsReady())
+            if (BardBattleData.Instance.LastSong == BardSettings.Instance.SecondSong && 
+                BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).IsReady())
             {
                 await BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).GetSpell().Cast();
                 return;
             }
-            if (BardBattleData.Instance.LastSong == BardSettings.Instance.ThirdSong && BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).IsReady())
+            if (BardBattleData.Instance.LastSong == BardSettings.Instance.ThirdSong && 
+                BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).IsReady())
             {
                 await BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).GetSpell().Cast();
                 return;

@@ -25,9 +25,6 @@ public class BardSongSpecialOrderAbility : ISlotResolver
         // 此文件只处理歌曲顺序不为 旅神-贤者-军神 的特殊循环情况。 只要有一首歌不是默认的顺序，就不会执行这个文件
         if (BardUtil.IsSongOrderNormal())
             return -999;
-
-        if (Core.Resolve<JobApi_Bard>().ActiveSong == Song.NONE && GCDHelper.GetGCDCooldown() > 530)
-            return 1;
         
         if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 1200)
             return -1;
@@ -36,32 +33,19 @@ public class BardSongSpecialOrderAbility : ISlotResolver
         if (WanderersMinuet.RecentlyUsed() || MagesBallad.RecentlyUsed() || ArmysPaeon.RecentlyUsed())
             return -1;
         
-        if (Core.Resolve<JobApi_Bard>().ActiveSong == BardSettings.Instance.FirstSong &&
-            BardRotationEntry.QT.GetQt(QTKey.Song) &&
-            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45000.0 - BardUtil.GetSongDuration(BardSettings.Instance.FirstSong) * 1000 &&
-            BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).IsReady() && 
+        if (BardSongSwitchUtil.CanSwitchFromFirstToSecond() && 
             GCDHelper.GetGCDCooldown() > 530)
             return 1;
 
-        if (Core.Resolve<JobApi_Bard>().ActiveSong == BardSettings.Instance.SecondSong &&
-            BardRotationEntry.QT.GetQt(QTKey.Song) &&
-            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45000.0 - BardUtil.GetSongDuration(BardSettings.Instance.SecondSong) * 1000 &&
-            BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).IsReady() &&
+        if (BardSongSwitchUtil.CanSwitchFromSecondToThird() &&
             (GCDHelper.GetGCDCooldown() > 530))
             return 1;
 
-        if (Core.Resolve<JobApi_Bard>().ActiveSong == BardSettings.Instance.ThirdSong && 
-            BardRotationEntry.QT.GetQt(QTKey.Song) &&
-            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45000.0 - BardUtil.GetSongDuration(BardSettings.Instance.ThirdSong) * 1000 &&
-            BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).IsReady() &&
+        if (BardSongSwitchUtil.CanSwitchFromThirdToFirst() &&
             GCDHelper.GetGCDCooldown() > 530)
             return 1;
 
-        if (Core.Resolve<JobApi_Bard>().ActiveSong == Song.NONE &&
-            BardRotationEntry.QT.GetQt(QTKey.Song) &&
-            (BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).IsReady() ||
-             BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).IsReady() ||
-             BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).IsReady()) &&
+        if (BardSongSwitchUtil.CanSwitchFromNone() &&
             GCDHelper.GetGCDCooldown() > 530)
             return 1;
         return -1;

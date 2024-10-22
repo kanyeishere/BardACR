@@ -25,7 +25,7 @@ public class BardRotationEntry : IRotationEntry
     public static JobViewWindow QT { get; private set; }
     public string AuthorName { get; set; } = "Wotou";
     //  更新日志
-    private const string UpdateLog = "更新日志：10.22 " +
+    private const string UpdateLog = "更新日志：10.22.1 " +
                                      "\n- 重构了部分代码，希望彻底解决特殊歌轴时遇到的各种问题";
     
     public Rotation Build(string settingFolder)
@@ -200,14 +200,14 @@ public class BardRotationEntry : IRotationEntry
         ImGui.PushStyleColor(ImGuiCol.Border, new Vector4(0.4314f, 0.6667f, 0.5569f, 1));
         if (ImGui.CollapsingHeader("   重要说明"))
         {
-            ImGui.Text("诗人ACR\n适配技速2.48-2.5\n精细调整过能力技插入窗口，所以请在fuck插件中适当降低动画锁\n直到你连续两个能力技插入间隔在620ms以下（这个数字可以在Logs网站上查看）\n但也别让间隔低于520ms，会有概率被Logs网站标红");
+            ImGui.Text("诗人ACR\n适配技速2.48-2.5\n精细调整过能力技插入窗口，所以请在fuck插件中适当降低动画锁\n直到你连续两个能力技插入间隔在620ms以下（此数字可在FFLogs上查）\n但也别让间隔低于520ms，有概率你的Logs会被标红");
             ImGui.Separator();
             ImGui.Text(UpdateLog);
         }
         ImGui.Separator();
         if (ImGui.CollapsingHeader("   基础设置"))
         {
-            ImGui.Text("木桩Boss建议军神歌设置略长些，开启爆发和对齐旅神时，120秒会自动切旅神");
+            ImGui.Text("木桩本建议军神歌设置略长些，开启爆发和对齐旅神时，会自动切旅神");
             if (BardSettings.Instance.WandererSongDuration + BardSettings.Instance.MageSongDuration +
                 BardSettings.Instance.ArmySongDuration < 120)
                 ImGui.TextColored(new Vector4(1, 0.7f, 0, 1), "警告，你设置的三首歌累计时长小于120秒，建议设置略长于120秒");
