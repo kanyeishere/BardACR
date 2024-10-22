@@ -25,8 +25,9 @@ public class BardRotationEntry : IRotationEntry
     public static JobViewWindow QT { get; private set; }
     public string AuthorName { get; set; } = "Wotou";
     //  更新日志
-    private const string UpdateLog = "更新日志：10.22.1 " +
-                                     "\n- 重构了部分代码，希望彻底解决特殊歌轴时遇到的各种问题";
+    private const string UpdateLog = "更新日志：10.22.2 " +
+                                     "\n- 重构了部分代码，希望彻底解决特殊歌轴时遇到的各种问题" +
+                                     "\n- 更新了高级设置的UI";
     
     public Rotation Build(string settingFolder)
     {
@@ -522,16 +523,16 @@ public class BardRotationEntry : IRotationEntry
         if (ImGui.CollapsingHeader("   高级设置"))
         {
             ImGui.TextColored(new Vector4(1, 0.7f, 0, 1), "除非你明白你要做什么，不然请别动这几项\n建议仅在受网络延迟与动画锁影响，爆发期打不满或者卡GCD时，再做调整");
-            ImGuiHelper.LeftInputInt("非起手的旅神歌在下个GCD前多久使用     (毫秒)", ref BardSettings.Instance.WandererBeforeGcdTime,
-                500, 2000);
-            ImGuiHelper.LeftInputInt("爆发药水的动画持续时间                           (毫秒)",
-                ref BardSettings.Instance.PotionBeforeGcdTime, 500, 2000);
-            ImGuiHelper.LeftInputInt("猛者强击在下个GCD前多久使用                (毫秒)",
-                ref BardSettings.Instance.RagingStrikeBeforeGcdTime, 500, 2000);
-            ImGuiHelper.LeftInputInt("战斗之声和光明神在下个GCD前多久使用  (毫秒)",
-                ref BardSettings.Instance.UseBattleVoiceBeforeGcdTimeInMs, 500, 2000);
-            ImGuiHelper.LeftInputInt("九天连箭最晚在下个GCD前多久使用         (毫秒)",
-                ref BardSettings.Instance.EmpyrealArrowNotBeforeGcdTime, 0, 2000);
+            BardUtil.RightInputInt("非起手的旅神歌在下个GCD前多久使用", ref BardSettings.Instance.WandererBeforeGcdTime,
+                500, 2000, "(毫秒)");
+            BardUtil.RightInputInt("爆发药水的动画持续时间",
+                ref BardSettings.Instance.PotionBeforeGcdTime, 500, 2000, "(毫秒)");
+            BardUtil.RightInputInt("猛者强击在下个GCD前多久使用",
+                ref BardSettings.Instance.RagingStrikeBeforeGcdTime, 500, 2000, "(毫秒)");
+            BardUtil.RightInputInt("战斗之声和光明神在下个GCD前多久使用",
+                ref BardSettings.Instance.UseBattleVoiceBeforeGcdTimeInMs, 500, 2000, "(毫秒)");
+            BardUtil.RightInputInt("九天连箭最晚在下个GCD前多久使用",
+                ref BardSettings.Instance.EmpyrealArrowNotBeforeGcdTime, 0, 2000, "(毫秒)");
             ImGui.Separator();
             if (ImGui.Button("保存高级设置"))
                 BardSettings.Instance.Save();
