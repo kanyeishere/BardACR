@@ -1,10 +1,8 @@
 using AEAssist;
 using AEAssist.CombatRoutine.Module;
-using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.JobApi;
 using Wotou.Bard.Data;
-using Wotou.Bard.Setting;
 using Wotou.Bard.Utility;
 
 namespace Wotou.Bard.SlotResolvers.GCD;
@@ -18,7 +16,7 @@ public class BardApexMaxGcd : ISlotResolver
         if (!BardRotationEntry.QT.GetQt("绝峰箭"))
             return -1;
         // 爆发期绝峰箭处理
-        if (Util.HasAllPartyBuff() &&(Core.Resolve<JobApi_Bard>().SoulVoice == 100))
+        if (BardUtil.HasAllPartyBuff() &&(Core.Resolve<JobApi_Bard>().SoulVoice == 100))
             return 1;
         return -1;
     }

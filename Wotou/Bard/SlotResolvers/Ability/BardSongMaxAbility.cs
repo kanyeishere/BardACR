@@ -5,7 +5,7 @@ using AEAssist.Helper;
 using AEAssist.JobApi;
 using Dalamud.Game.ClientState.JobGauge.Enums;
 using Wotou.Bard.Data;
-using Wotou.Bard.Setting;
+using Wotou.Bard.Utility;
 
 namespace Wotou.Bard.SlotResolvers.Ability;
 
@@ -19,7 +19,7 @@ public class BardSongMaxAbility : ISlotResolver
     public int Check()
     {
         // 此文件只处理歌曲顺序为 旅神-贤者-军神 的正常循环情况
-        if (!BardSettings.Instance.IsSongOrderNormal())
+        if (!BardUtil.IsSongOrderNormal())
             return -999;
         if (!BardRotationEntry.QT.GetQt("唱歌"))
             return -1;
@@ -35,18 +35,17 @@ public class BardSongMaxAbility : ISlotResolver
     public void Build(Slot slot)
     {
         var spell = this.GetSpell();
-        if (BardRotationEntry.QT.GetQt("Debug"))
-            LogHelper.Print("没歌时切歌", $"LastSong: {BardBattleData.Instance.LastSong}, SongTimer: {Core.Resolve<JobApi_Bard>().SongTimer}");
+        BardUtil.LogDebug("没歌时切歌", $"LastSong: {BardBattleData.Instance.LastSong}, SongTimer: {Core.Resolve<JobApi_Bard>().SongTimer}");
         slot.Add(spell);
     }
     
     private Spell GetSpell()
     {
-        if ((Core.Resolve<JobApi_Bard>().ActiveSong == GetSongBySpell(ArmysPaeon) || BardBattleData.Instance.LastSong == GetSongBySpell(ArmysPaeon)) && WanderersMinuet.IsReady())
+        if ((Core.Resolve<JobApi_Bard>().ActiveSong == BardUtil.GetSongBySpell(ArmysPaeon) || BardBattleData.Instance.LastSong == BardUtil.GetSongBySpell(ArmysPaeon)) && WanderersMinuet.IsReady())
             return WanderersMinuet.GetSpell();
-        if ((Core.Resolve<JobApi_Bard>().ActiveSong == GetSongBySpell(WanderersMinuet) || BardBattleData.Instance.LastSong == GetSongBySpell(WanderersMinuet)) && MagesBallad.IsReady())
+        if ((Core.Resolve<JobApi_Bard>().ActiveSong == BardUtil.GetSongBySpell(WanderersMinuet) || BardBattleData.Instance.LastSong == BardUtil.GetSongBySpell(WanderersMinuet)) && MagesBallad.IsReady())
             return MagesBallad.GetSpell();
-        if ((Core.Resolve<JobApi_Bard>().ActiveSong == GetSongBySpell(MagesBallad) || BardBattleData.Instance.LastSong == GetSongBySpell(MagesBallad)) && ArmysPaeon.IsReady())
+        if ((Core.Resolve<JobApi_Bard>().ActiveSong == BardUtil.GetSongBySpell(MagesBallad) || BardBattleData.Instance.LastSong == BardUtil.GetSongBySpell(MagesBallad)) && ArmysPaeon.IsReady())
             return ArmysPaeon.GetSpell();
         if (Core.Resolve<JobApi_Bard>().ActiveSong == Song.NONE )
             if (WanderersMinuet.IsReady())
@@ -56,15 +55,5 @@ public class BardSongMaxAbility : ISlotResolver
             else if (ArmysPaeon.IsReady())
                 return ArmysPaeon.GetSpell();
         return WanderersMinuet.GetSpell();
-    }
-    private static Song GetSongBySpell(uint song)
-    {
-        return song switch
-        {
-            BardDefinesData.Spells.TheWanderersMinuet => Song.WANDERER,
-            BardDefinesData.Spells.MagesBallad => Song.MAGE,
-            BardDefinesData.Spells.ArmysPaeon => Song.ARMY,
-            _ => throw new ArgumentOutOfRangeException(nameof(song), song, null)
-        };
     }
 }

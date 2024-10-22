@@ -25,7 +25,6 @@ public class BardIronJawsGcd : ISlotResolver
     private const uint RagingStrikesBuff = BardDefinesData.Buffs.RagingStrikes;
     private const uint RadiantFinaleBuff = BardDefinesData.Buffs.RadiantFinale;
     private const uint HawksEyeBuff = BardDefinesData.Buffs.HawksEye;
-    private const uint BarrageBuff = BardDefinesData.Buffs.Barrage;
     
     public int Check()
     {
@@ -40,7 +39,7 @@ public class BardIronJawsGcd : ISlotResolver
             return -1;
         
         // 爆发期截毒
-        if (Util.HasAllPartyBuff() && !BardBattleData.Instance.HasUseIronJawsInCurrentBursting)
+        if (BardUtil.HasAllPartyBuff() && !BardBattleData.Instance.HasUseIronJawsInCurrentBursting)
         {
             // 只剩3秒的时，强制截
             if (!Core.Me.HasMyAuraWithTimeleft(BattleVoiceBuff, 3000) ||
@@ -62,10 +61,10 @@ public class BardIronJawsGcd : ISlotResolver
             return -1;
         }
         
-        // 非爆发期截毒
+        // 非爆发期续毒
         if (target.HasMyAuraWithTimeleft(CausticBiteDot, 5500) && target.HasMyAuraWithTimeleft(StormBiteDot, 5500))
             return -1;
-        else if (!Core.Me.HasLocalPlayerAura(HawksEyeBuff))
+        if (!Core.Me.HasLocalPlayerAura(HawksEyeBuff))
             return 1;
         
         if (target.HasMyAuraWithTimeleft(CausticBiteDot, 3000) && target.HasMyAuraWithTimeleft(StormBiteDot, 3000))

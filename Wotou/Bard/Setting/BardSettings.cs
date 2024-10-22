@@ -44,9 +44,9 @@ public class BardSettings
     }
     #endregion
     
-    public float WandererSongDuration = (float)42.6; // 第一首歌的持续时间
-    public float MageSongDuration = (float)39.2; // 第二首歌的持续时间
-    public float ArmySongDuration = (float)39; // 第三首歌的持续时间
+    public float WandererSongDuration = 42.6f; // 第一首歌的持续时间
+    public float MageSongDuration = 39.2f; // 第二首歌的持续时间
+    public float ArmySongDuration = 39f; // 第三首歌的持续时间
     
     public Song FirstSong = Song.WANDERER; // 第一首歌
     public Song SecondSong = Song.MAGE; // 第二首歌
@@ -68,25 +68,10 @@ public class BardSettings
     public bool NaturesMinneWithZoe = true; // 大地神对齐活化
     public bool NaturesMinneWithNeutralSect = true; // 大地神对齐中间学派
     
-    public bool IsSongOrderNormal() => FirstSong == Song.WANDERER && SecondSong == Song.MAGE && ThirdSong == Song.ARMY;
-    
     public JobViewSave JobViewSave = new JobViewSave()
     {
         MainColor = new(0f, 0.3012f, 0.2306f, 1f),
         QtLineCount = 2,
         QtWindowBgAlpha = 0.1f,
     }; // QT设置存档
-    
-    public float GetSongDuration(Song song)
-    {
-        return song switch
-        {
-            Song.WANDERER => WandererSongDuration,
-            Song.MAGE => MageSongDuration,
-            Song.ARMY => ArmySongDuration,
-            _ => 0
-        };
-    }
-    
-    
 }

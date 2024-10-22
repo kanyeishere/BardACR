@@ -66,7 +66,7 @@ public class BardApexGcd : ISlotResolver
         }
         
         // 爆发期绝峰箭处理
-        if (Util.HasAllPartyBuff())
+        if (BardUtil.HasAllPartyBuff())
         {
             BardBattleData.Instance.HasUseApexArrowInCurrentNonBurstingPeriod = false;
             if (Core.Resolve<JobApi_Bard>().SoulVoice == 100)

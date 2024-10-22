@@ -9,7 +9,7 @@ using Dalamud.Game.ClientState.JobGauge.Enums;
 using ImGuiNET;
 
 #nullable enable
-namespace Wotou.Bard.Trigger
+namespace Wotou.Bard.Triggers
 {
     public class BardActiveSongCondition : ITriggerBase, ITriggerCond, ITriggerlineCheck
     {

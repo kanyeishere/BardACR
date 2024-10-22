@@ -1,11 +1,13 @@
 using AEAssist;
 using AEAssist.Extension;
 using AEAssist.Helper;
+using Dalamud.Game.ClientState.JobGauge.Enums;
 using Wotou.Bard.Data;
+using Wotou.Bard.Setting;
 
 namespace Wotou.Bard.Utility;
 
-public class Util
+public abstract class BardUtil
 {
     private const uint BattleVoiceBuff = BardDefinesData.Buffs.BattleVoice;
     private const uint RagingStrikesBuff = BardDefinesData.Buffs.RagingStrikes;
@@ -41,4 +43,44 @@ public class Util
         return BattleVoice.GetSpell().Cooldown.TotalMilliseconds <= ms || RagingStrikes.GetSpell().Cooldown.TotalMilliseconds <= ms;
     }
     
+    public static Song GetSongBySpell(uint song)
+    {
+        return song switch
+        {
+            BardDefinesData.Spells.TheWanderersMinuet => Song.WANDERER,
+            BardDefinesData.Spells.MagesBallad => Song.MAGE,
+            BardDefinesData.Spells.ArmysPaeon => Song.ARMY,
+            _ => Song.NONE
+        };
+    }
+    
+    public static uint GetSpellBySong(Song song)
+    {
+        return song switch
+        {
+            Song.WANDERER => BardDefinesData.Spells.TheWanderersMinuet,
+            Song.MAGE => BardDefinesData.Spells.MagesBallad,
+            Song.ARMY => BardDefinesData.Spells.ArmysPaeon,
+            _ => 0
+        };
+    }
+    
+    public static float GetSongDuration(Song song)
+    {
+        return song switch
+        {
+            Song.WANDERER => BardSettings.Instance.WandererSongDuration,
+            Song.MAGE => BardSettings.Instance.MageSongDuration,
+            Song.ARMY => BardSettings.Instance.ArmySongDuration,
+            _ => 0
+        };
+    }
+
+    public static void LogDebug(string title, string message)
+    {
+        if (BardRotationEntry.QT.GetQt("Debug"))
+            LogHelper.Print(title, message); 
+    }
+    
+    public static bool IsSongOrderNormal() => BardSettings.Instance.FirstSong == Song.WANDERER && BardSettings.Instance.SecondSong == Song.MAGE && BardSettings.Instance.ThirdSong == Song.ARMY;
 }

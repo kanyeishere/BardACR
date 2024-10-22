@@ -18,8 +18,6 @@ public class BardSideWinderAbility: ISlotResolver
             return -1;
         if (!SideWinder.IsReady())
             return -1;
-        if (SideWinder.RecentlyUsed())
-            return -1;
         return 1;
     }
 

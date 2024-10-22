@@ -7,7 +7,7 @@ using AEAssist.JobApi;
 using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.JobGauge.Enums;
 using Wotou.Bard.Data;
-using Wotou.Bard.Setting;
+using Wotou.Bard.Utility;
 
 namespace Wotou.Bard.SlotResolvers.GCD;
 
@@ -39,14 +39,14 @@ public class BardBaseGcd : ISlotResolver
         {
             if (EmpyrealArrow.IsReady())
             {
-                if (BardRotationEntry.QT.GetQt("Debug"))
-                    LogHelper.Print("基础GCD", "九天技能准备好了，使用九天，延后gcd");
+                BardUtil.LogDebug("基础GCD", "九天技能准备好了，使用九天，延后gcd");
                 EmpyrealArrow.GetSpell().Cast();
             }
             return -1;
         }
         
-        // 当前歌曲为军神 且开启爆发 且开启爆发对齐旅神 且强对齐 且第一个开的120秒buffCD时间小于2200 + 2020 * 3  + GCD动画时间
+        // 当前歌曲为军神 且开启爆发 且开启爆发对齐旅神 且强对齐 且第一个开的120秒buffCD时间小于2200 + 2020 * 3  + GCD动画时间，
+        // 且九天CD时间大于约7秒，停手
         if (BardRotationEntry.QT.GetQt("爆发") && 
             BardRotationEntry.QT.GetQt("对齐旅神") && 
             BardRotationEntry.QT.GetQt("强对齐") &&
@@ -54,23 +54,11 @@ public class BardBaseGcd : ISlotResolver
             BardBattleData.Instance.First120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds <
             2200 + 2020 * 3  + gcdAnimationTime )
         {
-            if (BardRotationEntry.QT.GetQt("Debug"))
-            {
-                LogHelper.Print("基础GCD", "-------------------------------------------------------");
-                LogHelper.Print("基础GCD", "九天技能CD时间：" + EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds);
-            }
             if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds >= 2200 * 2 + 2100 + gcdAnimationTime &&
                 EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 2200 * 2 + 2080 * 2 + gcdAnimationTime )
-            {
-                if (BardRotationEntry.QT.GetQt("Debug"))
-                {
-                    LogHelper.Print("基础GCD", "第一个开的120秒buff是猛者强击，为了强对齐而停手!");
-                    LogHelper.Print("基础GCD", "九天技能CD时间：" + EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds);
-                }
                 return -1;
-            }
         }
-        return 0;
+        return 1;
     }
     
     

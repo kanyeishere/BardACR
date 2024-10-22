@@ -4,14 +4,12 @@ using AEAssist;
 using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.CombatRoutine.Module.Opener;
-using AEAssist.CombatRoutine.Module.Target;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
-using Dalamud.Game.ClientState.JobGauge.Enums;
-using Dalamud.Game.ClientState.Objects.Types;
 using Wotou.Bard.Data;
 using Wotou.Bard.Setting;
+using Wotou.Bard.Utility;
 
 #nullable enable
 namespace Wotou.Bard.Opener;
@@ -20,12 +18,8 @@ public class Bard3GOpener100 : IOpener
 {
   
   private const uint Barrage = BardDefinesData.Spells.Barrage;
-  private const uint WanderersMinuet = BardDefinesData.Spells.TheWanderersMinuet;
   private const uint VenomousBite = BardDefinesData.Spells.VenomousBite;
   private const uint WindBite = BardDefinesData.Spells.Windbite;
-  private const uint StormBite = BardDefinesData.Spells.Stormbite;
-  private const uint HeavyShot = BardDefinesData.Spells.HeavyShot;
-  private const uint StraightShot = BardDefinesData.Spells.StraightShot;
   private const uint RagingStrikes = BardDefinesData.Spells.RagingStrikes;
   private const uint BattleVoice = BardDefinesData.Spells.BattleVoice;
   private const uint RadiantFinale = BardDefinesData.Spells.RadiantFinale;
@@ -39,22 +33,8 @@ public class Bard3GOpener100 : IOpener
   
   
   private const uint HawkEyeBuff = BardDefinesData.Buffs.HawksEye;
-  
-  private const uint StormBiteDot = BardDefinesData.Buffs.Stormbite;
-  private const uint WindBiteDot = BardDefinesData.Buffs.Windbite;
   private const uint CausticBiteDot = BardDefinesData.Buffs.CausticBite;
   private const uint VenomousBiteDot = BardDefinesData.Buffs.VenomousBite;
-  
-  private static uint GetSpellBySong(Song song)
-  {
-    return song switch
-    {
-      Song.WANDERER => BardDefinesData.Spells.TheWanderersMinuet,
-      Song.MAGE => BardDefinesData.Spells.MagesBallad,
-      Song.ARMY => BardDefinesData.Spells.ArmysPaeon,
-      _ => throw new ArgumentOutOfRangeException(nameof(song), song, null)
-    };
-  }
   
   public int StartCheck()
   {
@@ -64,7 +44,7 @@ public class Bard3GOpener100 : IOpener
         !RagingStrikes.IsReady() || 
         !BattleVoice.IsReady() ||
         (RadiantFinale.IsUnlock() && Core.Resolve<MemApiSpell>().GetCooldown(RadiantFinale).TotalSeconds > 0.0) ||
-        Core.Resolve<MemApiSpell>().GetCooldown(GetSpellBySong(BardSettings.Instance.FirstSong)).TotalSeconds > 0.0)
+        Core.Resolve<MemApiSpell>().GetCooldown(BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong)).TotalSeconds > 0.0)
       return -4;
     return !BardRotationEntry.QT.GetQt("爆发") || !BardRotationEntry.QT.GetQt("唱歌") ? -10 : 0;
   }
@@ -114,7 +94,7 @@ public class Bard3GOpener100 : IOpener
   {
     if (Core.Resolve<MemApiSpell>().GetLastComboSpellId() != Core.Resolve<MemApiSpell>().CheckActionChange(WindBite))
       slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(WindBite).GetSpell());
-    slot.Add(GetSpellBySong(BardSettings.Instance.FirstSong).GetSpell());
+    slot.Add(BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).GetSpell());
     slot.Add(GetHeartBreakSpell());
   }
 

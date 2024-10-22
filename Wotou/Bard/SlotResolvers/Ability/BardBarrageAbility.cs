@@ -19,7 +19,7 @@ public class BardBarrageAbility : ISlotResolver
             return -1;
         if (!Barrage.IsReady())
             return -1;
-        if (Util.HasAllPartyBuff())
+        if (BardUtil.HasAllPartyBuff())
             return 1;
         return -1;
     }

@@ -13,8 +13,6 @@ public class BardRagingStrikesAbility : ISlotResolver
 {
     private const uint RagingStrikes = BardDefinesData.Spells.RagingStrikes;
     private const uint BattleVoice = BardDefinesData.Spells.BattleVoice;
-    private const uint Peloton = BardDefinesData.Spells.Peloton;
-    private const uint Potion = BardDefinesData.Spells.Potion;
     
     public int Check()
     {
@@ -29,27 +27,23 @@ public class BardRagingStrikesAbility : ISlotResolver
              BardBattleData.Instance.Third120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds > GCDHelper.GetGCDDuration())
             )
             return -1;
+        
+        // 第一个120s技能是BattleVoice，且BattleVoice的CD小于2s，不使用RagingStrikes以免抢占BattleVoice的CD
         if (BardBattleData.Instance.First120SBuffSpellId == BattleVoice &&
             BattleVoice.GetSpell().Cooldown.TotalMilliseconds < 2000)
             return -1;
         
+        // 使用爆发药
         if (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds <= BardSettings.Instance.PotionBeforeGcdTime && 
             BardRotationEntry.QT.GetQt("爆发药") &&
             ItemHelper.CheckCurrJobPotion() &&
             GCDHelper.GetGCDCooldown() <= BardSettings.Instance.RagingStrikeBeforeGcdTime + BardSettings.Instance.PotionBeforeGcdTime
            )
-        {
-            if (BardRotationEntry.QT.GetQt("Debug"))
-            {
-                LogHelper.Print("爆发药", "准备使用爆发药");
-                LogHelper.Print("当前时间", GCDHelper.GetGCDCooldown().ToString());
-                LogHelper.Print("RagingStrikeBeforeGcdTime", BardSettings.Instance.RagingStrikeBeforeGcdTime.ToString());
-                LogHelper.Print("PotionBeforeGcdTime", BardSettings.Instance.PotionBeforeGcdTime.ToString());
-            }
-            return 1; 
-        }
+            return 1;
         
-        if (RagingStrikes.IsReady() && GCDHelper.GetGCDCooldown() <= BardSettings.Instance.RagingStrikeBeforeGcdTime)
+        // 不使用爆发药
+        if (RagingStrikes.IsReady() && 
+            GCDHelper.GetGCDCooldown() <= BardSettings.Instance.RagingStrikeBeforeGcdTime)
             return 1;
         
         return -1;

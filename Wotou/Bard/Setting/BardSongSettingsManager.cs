@@ -44,7 +44,8 @@ public class BardSongSettingsManager
                         Label = "旅神歌时长",
                         Value = BardSettings.Instance.WandererSongDuration,
                         Min = 3f,
-                        Max = 45f
+                        Max = 45f,
+                        Song = Song.WANDERER
                     });
                     break;
                 case Song.MAGE:
@@ -53,7 +54,8 @@ public class BardSongSettingsManager
                         Label = "贤者歌时长",
                         Value = BardSettings.Instance.MageSongDuration,
                         Min = 3f,
-                        Max = 45f
+                        Max = 45f,
+                        Song = Song.MAGE
                     });
                     break;
                 case Song.ARMY:
@@ -62,7 +64,8 @@ public class BardSongSettingsManager
                         Label = "军神歌时长",
                         Value = BardSettings.Instance.ArmySongDuration,
                         Min = 3f,
-                        Max = 45f
+                        Max = 45f,
+                        Song = Song.ARMY
                     });
                     break;
             }
@@ -77,4 +80,5 @@ public class SongSetting
     public float Max;
     public float Min;
     public float Value;
+    public Song Song; 
 }

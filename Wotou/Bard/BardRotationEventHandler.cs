@@ -1,6 +1,5 @@
 using Wotou.Bard.Setting;
 using Wotou.Bard.Data;
-using Wotou.Bard.SlotResolvers.Ability;
 using AEAssist;
 using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
@@ -8,6 +7,7 @@ using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.JobApi;
 using Dalamud.Game.ClientState.JobGauge.Enums;
+using Wotou.Bard.Utility;
 
 namespace Wotou.Bard;
 
@@ -21,7 +21,7 @@ public class BardRotationEventHandler : IRotationEventHandler
     
     public async Task OnPreCombat()
     {
-        if (!BardSettings.Instance.IsSongOrderNormal())
+        if (!BardUtil.IsSongOrderNormal())
         {
             BardRotationEntry.QT.SetQt("对齐旅神", false);
             BardRotationEntry.QT.SetQt("强对齐", false);
@@ -39,7 +39,7 @@ public class BardRotationEventHandler : IRotationEventHandler
         // 重置碎心箭保留层数
         BardSettings.Instance.HeartBreakSaveStack = 0;
         
-        if (!BardSettings.Instance.IsSongOrderNormal())
+        if (!BardUtil.IsSongOrderNormal())
         {
             BardRotationEntry.QT.SetQt("对齐旅神", false);
             BardRotationEntry.QT.SetQt("强对齐", false);
@@ -48,40 +48,63 @@ public class BardRotationEventHandler : IRotationEventHandler
 
     public async Task OnNoTarget()
     {
-        var wanderersMinuet = BardDefinesData.Spells.TheWanderersMinuet;
-        var magesBallad = BardDefinesData.Spells.MagesBallad;
-        var armysPaeon = BardDefinesData.Spells.ArmysPaeon;
-        var wandererSongDuration = BardSettings.Instance.WandererSongDuration * 1000;
-        var mageSongDuration = BardSettings.Instance.MageSongDuration * 1000;
-        var armySongDuration = BardSettings.Instance.ArmySongDuration * 1000;
+        // 无目标切歌
         
-        if (Core.Resolve<JobApi_Bard>().ActiveSong == BardSongAbility.GetSongBySpell(wanderersMinuet) &&
-            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45080.0 - wandererSongDuration &&
-            magesBallad.IsReady() )
-        {
-            if (BardRotationEntry.QT.GetQt("Debug"))
-                LogHelper.Print("无目标切歌", $"当前歌曲：{Core.Resolve<JobApi_Bard>().ActiveSong}, 下一首歌曲：{BardSongAbility.GetSongBySpell(wanderersMinuet)}, 当前歌曲剩余时间：{Core.Resolve<JobApi_Bard>().SongTimer}");
-            await magesBallad.GetSpell().Cast();
-        }
+        if (Core.Resolve<JobApi_Bard>().ActiveSong == BardSettings.Instance.FirstSong &&
+            BardRotationEntry.QT.GetQt(QTKey.Song) &&
+            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45000.0 - BardUtil.GetSongDuration(BardSettings.Instance.FirstSong) * 1000 &&
+            BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).IsReady())
+            await BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).GetSpell().Cast();
 
-        if (Core.Resolve<JobApi_Bard>().ActiveSong == BardSongAbility.GetSongBySpell(magesBallad) &&
-            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45080.0 - mageSongDuration &&
-            armysPaeon.IsReady())
-        {
-            if (BardRotationEntry.QT.GetQt("Debug"))
-                LogHelper.Print("无目标切歌", $"当前歌曲：{Core.Resolve<JobApi_Bard>().ActiveSong}, 下一首歌曲：{BardSongAbility.GetSongBySpell(magesBallad)}, 当前歌曲剩余时间：{Core.Resolve<JobApi_Bard>().SongTimer}");
-            await armysPaeon.GetSpell().Cast();
-        }
+        if (Core.Resolve<JobApi_Bard>().ActiveSong == BardSettings.Instance.SecondSong &&
+            BardRotationEntry.QT.GetQt(QTKey.Song) &&
+            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45000.0 - BardUtil.GetSongDuration(BardSettings.Instance.SecondSong) * 1000 &&
+            BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).IsReady())
+            await BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).GetSpell().Cast();
 
-        if (Core.Resolve<JobApi_Bard>().ActiveSong == BardSongAbility.GetSongBySpell(armysPaeon) &&
-            GCDHelper.GetGCDCooldown() <= BardSettings.Instance.WandererBeforeGcdTime &&
-            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45080.0 - armySongDuration &&
-            wanderersMinuet.IsReady() &&
-            !BardRotationEntry.QT.GetQt("对齐旅神"))
+        if (Core.Resolve<JobApi_Bard>().ActiveSong == BardSettings.Instance.ThirdSong && 
+            BardRotationEntry.QT.GetQt(QTKey.Song) &&
+            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45000.0 - BardUtil.GetSongDuration(BardSettings.Instance.ThirdSong) * 1000 &&
+            BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).IsReady() )
+            await BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).GetSpell().Cast();
+
+        if (Core.Resolve<JobApi_Bard>().ActiveSong == Song.NONE &&
+            BardRotationEntry.QT.GetQt(QTKey.Song) &&
+            (BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).IsReady() ||
+             BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).IsReady() ||
+             BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).IsReady()))
         {
-            if (BardRotationEntry.QT.GetQt("Debug"))
-                LogHelper.Print("无目标切歌", $"当前歌曲：{Core.Resolve<JobApi_Bard>().ActiveSong}, 下一首歌曲：{BardSongAbility.GetSongBySpell(armysPaeon)}, 当前歌曲剩余时间：{Core.Resolve<JobApi_Bard>().SongTimer}");
-            await wanderersMinuet.GetSpell().Cast();
+            if (BardBattleData.Instance.LastSong == BardSettings.Instance.FirstSong && BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).IsReady())
+            {
+                await BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).GetSpell().Cast();
+                return;
+            }
+            if (BardBattleData.Instance.LastSong == BardSettings.Instance.SecondSong && BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).IsReady())
+            {
+                await BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).GetSpell().Cast();
+                return;
+            }
+            if (BardBattleData.Instance.LastSong == BardSettings.Instance.ThirdSong && BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).IsReady())
+            {
+                await BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).GetSpell().Cast();
+                return;
+            }
+            
+            if (BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).IsReady())
+            {
+                await BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).GetSpell().Cast();
+                return;
+            }
+            if (BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).IsReady())
+            {
+                await BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).GetSpell().Cast();
+                return;
+            }
+            if (BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).IsReady())
+            {
+                await BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).GetSpell().Cast();
+                return;
+            }
         }
         
         await Task.CompletedTask;

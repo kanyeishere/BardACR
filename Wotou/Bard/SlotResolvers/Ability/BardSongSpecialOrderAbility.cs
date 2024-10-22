@@ -8,6 +8,7 @@ using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.ClientState.JobGauge.Enums;
 using Wotou.Bard.Data;
 using Wotou.Bard.Setting;
+using Wotou.Bard.Utility;
 
 namespace Wotou.Bard.SlotResolvers.Ability;
 
@@ -22,7 +23,7 @@ public class BardSongSpecialOrderAbility : ISlotResolver
         if (!BardRotationEntry.QT.GetQt("唱歌"))
             return -1;
         // 此文件只处理歌曲顺序不为 旅神-贤者-军神 的特殊循环情况。 只要有一首歌不是默认的顺序，就不会执行这个文件
-        if (BardSettings.Instance.IsSongOrderNormal())
+        if (BardUtil.IsSongOrderNormal())
             return -999;
 
         if (Core.Resolve<JobApi_Bard>().ActiveSong == Song.NONE && GCDHelper.GetGCDCooldown() > 530)
@@ -36,74 +37,61 @@ public class BardSongSpecialOrderAbility : ISlotResolver
             return -1;
         
         if (Core.Resolve<JobApi_Bard>().ActiveSong == BardSettings.Instance.FirstSong &&
-            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45000.0 - BardSettings.Instance.GetSongDuration(BardSettings.Instance.FirstSong) * 1000 &&
-            GetSpellBySong(BardSettings.Instance.SecondSong).IsReady() && 
+            BardRotationEntry.QT.GetQt(QTKey.Song) &&
+            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45000.0 - BardUtil.GetSongDuration(BardSettings.Instance.FirstSong) * 1000 &&
+            BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).IsReady() && 
             GCDHelper.GetGCDCooldown() > 530)
             return 1;
 
         if (Core.Resolve<JobApi_Bard>().ActiveSong == BardSettings.Instance.SecondSong &&
-            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45000.0 - BardSettings.Instance.GetSongDuration(BardSettings.Instance.SecondSong) * 1000 &&
-            GetSpellBySong(BardSettings.Instance.ThirdSong).IsReady() &&
+            BardRotationEntry.QT.GetQt(QTKey.Song) &&
+            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45000.0 - BardUtil.GetSongDuration(BardSettings.Instance.SecondSong) * 1000 &&
+            BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).IsReady() &&
             (GCDHelper.GetGCDCooldown() > 530))
             return 1;
 
         if (Core.Resolve<JobApi_Bard>().ActiveSong == BardSettings.Instance.ThirdSong && 
-            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45000.0 - BardSettings.Instance.GetSongDuration(BardSettings.Instance.ThirdSong) * 1000 &&
-            GetSpellBySong(BardSettings.Instance.FirstSong).IsReady())
+            BardRotationEntry.QT.GetQt(QTKey.Song) &&
+            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45000.0 - BardUtil.GetSongDuration(BardSettings.Instance.ThirdSong) * 1000 &&
+            BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).IsReady() &&
+            GCDHelper.GetGCDCooldown() > 530)
             return 1;
-        
-        
-        
+
+        if (Core.Resolve<JobApi_Bard>().ActiveSong == Song.NONE &&
+            BardRotationEntry.QT.GetQt(QTKey.Song) &&
+            (BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).IsReady() ||
+             BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).IsReady() ||
+             BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).IsReady()) &&
+            GCDHelper.GetGCDCooldown() > 530)
+            return 1;
         return -1;
     }
 
     public void Build(Slot slot)
     {
         var spell = this.GetSpell();
-        if (BardRotationEntry.QT.GetQt("Debug"))
-            LogHelper.Print("特殊歌轴切歌", $"当前歌曲：{Core.Resolve<JobApi_Bard>().ActiveSong}, 下一首歌曲：{GetSongBySpell(spell.Id)}, 当前歌曲剩余时间：{Core.Resolve<JobApi_Bard>().SongTimer}");
+        BardUtil.LogDebug("特殊歌轴切歌", $"当前歌曲：{Core.Resolve<JobApi_Bard>().ActiveSong}, 下一首歌曲：{BardUtil.GetSongBySpell(spell.Id)}, 当前歌曲剩余时间：{Core.Resolve<JobApi_Bard>().SongTimer}");
         slot.Add(spell);
     }
     
     private Spell GetSpell()
     {
         if ((Core.Resolve<JobApi_Bard>().ActiveSong == BardSettings.Instance.ThirdSong || BardBattleData.Instance.LastSong == BardSettings.Instance.ThirdSong) && 
-            GetSpellBySong(BardSettings.Instance.FirstSong).IsReady())
-            return GetSpellBySong(BardSettings.Instance.FirstSong).GetSpell();
+            BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).IsReady())
+            return BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).GetSpell();
         if ((Core.Resolve<JobApi_Bard>().ActiveSong == BardSettings.Instance.FirstSong || BardBattleData.Instance.LastSong == BardSettings.Instance.FirstSong) && 
-            GetSpellBySong(BardSettings.Instance.SecondSong).IsReady())
-            return GetSpellBySong(BardSettings.Instance.SecondSong).GetSpell();
+            BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).IsReady())
+            return BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).GetSpell();
         if ((Core.Resolve<JobApi_Bard>().ActiveSong == BardSettings.Instance.SecondSong || BardBattleData.Instance.LastSong == BardSettings.Instance.SecondSong) && 
-            GetSpellBySong(BardSettings.Instance.ThirdSong).IsReady())
-            return GetSpellBySong(BardSettings.Instance.ThirdSong).GetSpell();
+            BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).IsReady())
+            return BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).GetSpell();
         if (Core.Resolve<JobApi_Bard>().ActiveSong == Song.NONE )
-            if (GetSpellBySong(BardSettings.Instance.FirstSong).IsReady())
-                return GetSpellBySong(BardSettings.Instance.FirstSong).GetSpell();
-            else if (GetSpellBySong(BardSettings.Instance.SecondSong).IsReady())
-                return GetSpellBySong(BardSettings.Instance.SecondSong).GetSpell();
-            else if (GetSpellBySong(BardSettings.Instance.ThirdSong).IsReady())
-                return GetSpellBySong(BardSettings.Instance.ThirdSong).GetSpell();
-        return GetSpellBySong(BardSettings.Instance.FirstSong).GetSpell();
-    }
-    private static Song GetSongBySpell(uint song)
-    {
-        return song switch
-        {
-            BardDefinesData.Spells.TheWanderersMinuet => Song.WANDERER,
-            BardDefinesData.Spells.MagesBallad => Song.MAGE,
-            BardDefinesData.Spells.ArmysPaeon => Song.ARMY,
-            _ => throw new ArgumentOutOfRangeException(nameof(song), song, null)
-        };
-    }
-    
-    private static uint GetSpellBySong(Song song)
-    {
-        return song switch
-        {
-            Song.WANDERER => BardDefinesData.Spells.TheWanderersMinuet,
-            Song.MAGE => BardDefinesData.Spells.MagesBallad,
-            Song.ARMY => BardDefinesData.Spells.ArmysPaeon,
-            _ => throw new ArgumentOutOfRangeException(nameof(song), song, null)
-        };
+            if (BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).IsReady())
+                return BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).GetSpell();
+            else if (BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).IsReady())
+                return BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).GetSpell();
+            else if (BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).IsReady())
+                return BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).GetSpell();
+        return BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).GetSpell();
     }
 }

@@ -12,61 +12,22 @@ using ImGuiNET;
 using Wotou.Bard.Data;
 using Wotou.Bard.Opener;
 using Wotou.Bard.Setting;
-using Wotou.Bard.SlotResolvers.Ability;
-using Wotou.Bard.SlotResolvers.GCD;
-using Wotou.Bard.Trigger;
+using Wotou.Bard.SlotResolvers;
 using Wotou.Bard.Triggers;
+using Wotou.Bard.Utility;
 
 namespace Wotou.Bard;
 
 // 重要 类一定要Public声明才会被查找到
 public class BardRotationEntry : IRotationEntry
 {
-    // 逻辑从上到下判断，通用队列是无论如何都会判断的 
-    // gcd则在可以使用gcd时判断
-    // offGcd则在不可以使用gcd 且没达到gcd内插入能力技上限时判断
-    // pvp环境下 全都强制认为是通用队列
-    private readonly List<SlotResolverData> SlotResolvers = new()
-    {
-        // 通用队列 不管是不是gcd 都会判断的逻辑
-        //new(new XXXXXXXX(),SlotMode.Always),
-
-        // gcd队列
-        new SlotResolverData(new BardEmpyrealArrowGcd(), SlotMode.Gcd),
-        new SlotResolverData(new BardDotGcd(), SlotMode.Gcd),
-        new SlotResolverData(new BardApexMaxGcd(), SlotMode.Gcd),
-        new SlotResolverData(new BardBlastArrowMaxGcd(), SlotMode.Gcd),
-        new SlotResolverData(new BardRefulgentArrowMaxGcd(), SlotMode.Gcd),
-        new SlotResolverData(new BardIronJawsGcd(), SlotMode.Gcd),
-        new SlotResolverData(new BardApexGcd(), SlotMode.Gcd),
-        new SlotResolverData(new BardBlastArrowGcd(), SlotMode.Gcd),
-        new SlotResolverData(new BardRadiantEncoreGcd(), SlotMode.Gcd),
-        new SlotResolverData(new BardResonantArrowGcd(), SlotMode.Gcd),
-        new SlotResolverData(new BardBaseGcd(), SlotMode.Gcd),
-
-
-        // offGcd队列
-        new SlotResolverData(new BardSongMaxAbility(), SlotMode.OffGcd),
-        new SlotResolverData(new BardRagingStrikesAbility(), SlotMode.OffGcd),
-        new SlotResolverData(new BardBattleVoiceAndRadiantFinaleAbility(), SlotMode.OffGcd),
-        new SlotResolverData(new BardEmpyrealArrowAbility(), SlotMode.OffGcd),
-        new SlotResolverData(new BardPitchPerfectMaxAbility(), SlotMode.OffGcd),
-        new SlotResolverData(new BardHeartBreakMaxChargeAbility(), SlotMode.OffGcd),
-        new SlotResolverData(new BardBarrageAbility(), SlotMode.OffGcd),
-        new SlotResolverData(new BardSideWinderAbility(), SlotMode.OffGcd),
-        new SlotResolverData(new BardPitchPerfectAbility(), SlotMode.OffGcd),
-        new SlotResolverData(new BardSongAbility(), SlotMode.OffGcd),
-        new SlotResolverData(new BardSongSpecialOrderAbility(), SlotMode.OffGcd),
-        new SlotResolverData(new BardHeartBreakAbility(), SlotMode.OffGcd),
-        new SlotResolverData(new BardPotionAbility(), SlotMode.OffGcd),
-        new SlotResolverData(new BardNaturesMinneAbility(), SlotMode.OffGcd)
-    };
-
     // 声明当前要使用的UI的实例 示例里使用QT
     public static JobViewWindow QT { get; private set; }
     public string AuthorName { get; set; } = "Wotou";
-
-
+    //  更新日志
+    private const string UpdateLog = "更新日志：10.22 " +
+                                     "\n- 重构了部分代码，希望彻底解决特殊歌轴时遇到的各种问题";
+    
     public Rotation Build(string settingFolder)
     {
         // 初始化设置
@@ -74,31 +35,14 @@ public class BardRotationEntry : IRotationEntry
         // 初始化QT （依赖了设置的数据）
         BuildQT();
 
-        var rot = new Rotation(SlotResolvers)
+        var rot = new Rotation(BardSlotResolverConfig.SlotResolvers)
         {
             TargetJob = Jobs.Bard,
             AcrType = AcrType.Both,
             MinLevel = 70,
             MaxLevel = 100,
-            Description = "诗人ACR" +
-                          "\n更新日志：10.21.5 " +
-                          "\n- 添加时间轴设置：碎心箭保留层数 " +
-                          "\n- 允许双插碎心箭" +
-                          "\n- 修复未开启爆发时，碎心九天和侧风不会使用的bug，感谢@Delete" +
-                          "\n- 高级设置-九天最晚使用时间，现在可设置的最小值为0" +
-                          "\n更新日志：10.20.2 " +
-                          "\n- 修复队友倒计时抢开时，有几率打两个风dot的bug " +
-                          "\n更新日志：10.19.3 " +
-                          "\n- 修复时间轴控制与时间轴行动 " +
-                          "\n- 现在支持调整歌轴顺序了，感谢@Blz " +
-                          "\n- 修复爆发药可能卡GCD的bug " +
-                          "\n更新日志：10.18.6 " +
-                          "\n- 现在可以在战斗中动态修改歌轴了 " +
-                          "\n- 现在无目标时也可以自动切歌了 " +
-                          "\n- 增加强对齐模式（不会因为GCD时间变化而延后爆发） " +
-                          "\n- 战声和光明神在下个GCD前多久使用的默认值修改为1300（点击重置后并保存启用） " +
-                          "\n- 修改强对齐QT的作用机制，避免用户在开启强对齐的同时关闭爆发和对齐旅神" +
-                          "\n- 修复2.48技速下，开启强对齐后九天延后的问题"
+            Description = "诗人ACR\n" + UpdateLog,
+                          
         };
 
         // 添加各种事件回调
@@ -152,7 +96,7 @@ public class BardRotationEntry : IRotationEntry
 
     private void OnClickStrongAlign(bool value)
     {
-        if (!BardSettings.Instance.IsSongOrderNormal())
+        if (!BardUtil.IsSongOrderNormal())
         {
             QT.SetQt("强对齐", false);
             LogHelper.Print("特殊歌轴顺序不支持强对齐");
@@ -164,10 +108,6 @@ public class BardRotationEntry : IRotationEntry
             QT.SetQt("对齐旅神", true);
             LogHelper.Print("你已启用强对齐，强制开启爆发");
             LogHelper.Print("你已启用强对齐，强制开启对齐旅神");
-        }
-        else
-        {
-            LogHelper.Print("强对齐已关闭");
         }
     }
 
@@ -182,7 +122,7 @@ public class BardRotationEntry : IRotationEntry
 
     private void OnClickBurstWithWandererQT()
     {
-        if (!BardSettings.Instance.IsSongOrderNormal())
+        if (!BardUtil.IsSongOrderNormal())
         {
             QT.SetQt("对齐旅神", false);
             LogHelper.Print("特殊歌轴顺序不支持对齐旅神");
@@ -225,8 +165,6 @@ public class BardRotationEntry : IRotationEntry
         BardSettings.Instance.JobViewSave.QtUnVisibleList.Clear();
         BardSettings.Instance.JobViewSave.QtUnVisibleList.Add("Debug");
 
-        //QT.AddQt(QTKey.UsePotionAsap,false,"是否在CD好了就吃爆发药水");
-
         // 添加快捷按钮 (带技能图标)
         QT.AddHotkey("防击退", new HotKeyResolver_NormalSpell(BardDefinesData.Spells.ArmsLength, SpellTargetType.Target));
         QT.AddHotkey("内丹",
@@ -260,24 +198,12 @@ public class BardRotationEntry : IRotationEntry
     {
         ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0.0f, 0.0f, 0.0f, 0.0f));
         ImGui.PushStyleColor(ImGuiCol.Border, new Vector4(0.4314f, 0.6667f, 0.5569f, 1));
-
         if (ImGui.CollapsingHeader("   重要说明"))
         {
-            ImGui.Text("诗人ACR\n适配技速2.48-2.5\n精细调整过能力技插入窗口，所以请在fuck插件中修改动画锁至530ms（重要）");
-            ImGui.TextColored(new Vector4(1, 0.7f, 0, 1), "并且关闭全局能力技不卡GCD（重要）");
+            ImGui.Text("诗人ACR\n适配技速2.48-2.5\n精细调整过能力技插入窗口，所以请在fuck插件中适当降低动画锁\n直到你连续两个能力技插入间隔在620ms以下（这个数字可以在Logs网站上查看）\n但也别让间隔低于520ms，会有概率被Logs网站标红");
             ImGui.Separator();
-            ImGui.Text(
-                "如果你希望打满警察网上要求的爆发8G，光明神9G，战斗之声9G和猛者强击9G\n那你需要根据你的网络延迟，精细调节fuck中的动画锁数值\n直到你连续两个能力技插入间隔在620ms以下（这个数字可以在Logs网站上查看）\n但也别让间隔低于520ms，会有概率被Logs网站标红");
-            ImGui.Separator();
-            ImGui.Text("更新日志：10.21.5" +
-                       "\n- 添加时间轴设置：碎心箭保留层数 " +
-                       "\n- 允许双插碎心箭" +
-                       "\n- 修复未开启爆发时，碎心九天和侧风不会使用的bug，感谢@Delete" +
-                       "\n- 高级设置-九天最晚使用时间，现在可设置的最小值为0" +
-                       "\n更新日志：10.20.2 " +
-                       "\n- 修复队友倒计时抢开时，有几率打两个风dot的bug ");
+            ImGui.Text(UpdateLog);
         }
-
         ImGui.Separator();
         if (ImGui.CollapsingHeader("   基础设置"))
         {
@@ -296,24 +222,22 @@ public class BardRotationEntry : IRotationEntry
                     var setting = songSettings[i];
 
                     // 同步 Value，与 BardSettings.Instance 保持一致
-                    switch (setting.Label)
+                    switch (setting.Song)
                     {
-                        case "旅神歌时长":
+                        case Song.WANDERER:
                             setting.Value = BardSettings.Instance.WandererSongDuration;
                             break;
-                        case "贤者歌时长":
+                        case Song.MAGE:
                             setting.Value = BardSettings.Instance.MageSongDuration;
                             break;
-                        case "军神歌时长":
+                        case Song.ARMY:
                             setting.Value = BardSettings.Instance.ArmySongDuration;
                             break;
                     }
-
                     // 开始一个组，将 Label 和 Input Box 一起处理
                     ImGui.BeginGroup();
                     // 获取当前光标位置
                     Vector2 cursorPos = ImGui.GetCursorScreenPos();
-
                     // 定义方块的大小
                     float squareSize = ImGui.GetFontSize() - 9; // 使用字体大小作为方块大小，确保与文本高度一致
 
@@ -323,18 +247,17 @@ public class BardRotationEntry : IRotationEntry
                     // 计算方块的 Y 坐标，使其与文本垂直居中
                     float framePaddingY = ImGui.GetStyle().FramePadding.Y;
                     float squareY = cursorPos.Y + framePaddingY + (lineHeight - squareSize) / 2.0f;
-
                     // 根据歌曲类型设置颜色
                     uint color;
-                    switch (setting.Label)
+                    switch (setting.Song)
                     {
-                        case "旅神歌时长": // 绿色
+                        case Song.WANDERER: // 绿色
                             color = ImGui.ColorConvertFloat4ToU32(new Vector4(0.3f,0.9f,0.35f, 1.0f));
                             break;
-                        case "军神歌时长": // 黄色
+                        case Song.ARMY: // 黄色
                             color = ImGui.ColorConvertFloat4ToU32(new Vector4(0.88f, 0.55f, 0.03f, 1.0f));
                             break;
-                        case "贤者歌时长": // 蓝色
+                        case Song.MAGE: // 蓝色
                             color = ImGui.ColorConvertFloat4ToU32(new Vector4(0.31f, 0.33f, 0.89f, 1.0f));
                             break;
                         default: // 默认白色
@@ -363,20 +286,19 @@ public class BardRotationEntry : IRotationEntry
                     {
                         setting.Value = Math.Clamp(setting.Value, setting.Min, setting.Max);
                         // 更新 BardSettings.Instance 中的值
-                        switch (setting.Label)
+                        switch (setting.Song)
                         {
-                            case "旅神歌时长":
+                            case Song.WANDERER:
                                 BardSettings.Instance.WandererSongDuration = setting.Value;
                                 break;
-                            case "贤者歌时长":
+                            case Song.MAGE:
                                 BardSettings.Instance.MageSongDuration = setting.Value;
                                 break;
-                            case "军神歌时长":
+                            case Song.ARMY:
                                 BardSettings.Instance.ArmySongDuration = setting.Value;
                                 break;
                         }
                     }
-
                     ImGui.SameLine();
                     ImGui.Button("\u2195");
                     ImGui.SameLine();
@@ -385,7 +307,6 @@ public class BardRotationEntry : IRotationEntry
                     ImGui.Dummy(new Vector2(100f, 0.0f));
                     ImGui.PopID();
                     ImGui.EndGroup();
-
                     // 处理拖拽源
                     // ImGui.PushStyleColor(ImGuiCol.DragDropTarget, new Vector4(0f, 0.3012f, 0.2306f, 1f)); 
                     if (ImGui.BeginDragDropSource())
@@ -414,36 +335,18 @@ public class BardRotationEntry : IRotationEntry
                             if (moveFrom != -1 && moveTo != -1 && moveFrom != moveTo)
                             {
                                 var draggedSetting = songSettings[moveFrom];
-                                songSettings.RemoveAt(moveFrom);
+                                songSettings.RemoveAt(moveFrom);    
                                 songSettings.Insert(moveTo, draggedSetting);
 
                                 // 更新 BardSettings.Instance 的歌曲顺序
-                                BardSettings.Instance.FirstSong = songSettings[0].Label switch
-                                {
-                                    "旅神歌时长" => Song.WANDERER,
-                                    "贤者歌时长" => Song.MAGE,
-                                    "军神歌时长" => Song.ARMY,
-                                    _ => BardSettings.Instance.FirstSong
-                                };
-                                BardSettings.Instance.SecondSong = songSettings[1].Label switch
-                                {
-                                    "旅神歌时长" => Song.WANDERER,
-                                    "贤者歌时长" => Song.MAGE,
-                                    "军神歌时长" => Song.ARMY,
-                                    _ => BardSettings.Instance.SecondSong
-                                };
-                                BardSettings.Instance.ThirdSong = songSettings[2].Label switch
-                                {
-                                    "旅神歌时长" => Song.WANDERER,
-                                    "贤者歌时长" => Song.MAGE,
-                                    "军神歌时长" => Song.ARMY,
-                                    _ => BardSettings.Instance.ThirdSong
-                                };
+                                BardSettings.Instance.FirstSong = songSettings[0].Song;
+                                BardSettings.Instance.SecondSong = songSettings[1].Song;
+                                BardSettings.Instance.ThirdSong = songSettings[2].Song;
                                 // 重置
                                 moveFrom = -1;
                                 moveTo = -1;
 
-                                if (!BardSettings.Instance.IsSongOrderNormal())
+                                if (!BardUtil.IsSongOrderNormal())
                                 {
                                     LogHelper.Print("特殊歌轴顺序，将禁用强对齐和对齐旅神");
                                     QT.SetQt("强对齐", false);
@@ -461,7 +364,6 @@ public class BardRotationEntry : IRotationEntry
                                 }
                             }
                         }
-
                         ImGui.EndDragDropTarget();
                     }
                 }
@@ -473,27 +375,27 @@ public class BardRotationEntry : IRotationEntry
             if (BardSettings.Instance.WandererSongDuration == 42.6f &&
                 BardSettings.Instance.MageSongDuration == 39.2f &&
                 BardSettings.Instance.ArmySongDuration == 39f &&
-                BardSettings.Instance.IsSongOrderNormal())
+                BardUtil.IsSongOrderNormal())
                 songTimelineSelectionIndex = 1;
             if (BardSettings.Instance.WandererSongDuration == 42.6f &&
                 BardSettings.Instance.MageSongDuration == 42.2f &&
                 BardSettings.Instance.ArmySongDuration == 36f &&
-                BardSettings.Instance.IsSongOrderNormal())
+                BardUtil.IsSongOrderNormal())
                 songTimelineSelectionIndex = 2;
             if (BardSettings.Instance.WandererSongDuration == 42.6f &&
                 BardSettings.Instance.MageSongDuration == 33.4f &&
                 BardSettings.Instance.ArmySongDuration == 45f &&
-                BardSettings.Instance.IsSongOrderNormal())
+                BardUtil.IsSongOrderNormal())
                 songTimelineSelectionIndex = 3;
             if (BardSettings.Instance.WandererSongDuration == 42.6f &&
                 BardSettings.Instance.MageSongDuration == 42.2f &&
                 BardSettings.Instance.ArmySongDuration == 45f &&
-                BardSettings.Instance.IsSongOrderNormal())
+                BardUtil.IsSongOrderNormal())
                 songTimelineSelectionIndex = 4;
             if (BardSettings.Instance.WandererSongDuration == 45f &&
                 BardSettings.Instance.MageSongDuration == 45f &&
                 BardSettings.Instance.ArmySongDuration == 45f &&
-                BardSettings.Instance.IsSongOrderNormal())
+                BardUtil.IsSongOrderNormal())
                 songTimelineSelectionIndex = 5;
 
             switch (songTimelineSelectionIndex)
@@ -563,7 +465,6 @@ public class BardRotationEntry : IRotationEntry
                     BardSettings.Instance.ArmySongDuration = 45f;
                     BardSongSettingsManager.Instance.ResetOrder();
                 }
-
                 ImGui.EndCombo();
             }
 

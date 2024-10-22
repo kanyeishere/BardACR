@@ -12,9 +12,6 @@ public class BardResonantArrowGcd : ISlotResolver
     private const uint ResonantArrow = BardDefinesData.Spells.ResonantArrow;
     
     private const uint ResonantArrowReady = BardDefinesData.Buffs.ResonantArrowReady;
-    private const uint BattleVoiceBuff = BardDefinesData.Buffs.BattleVoice;
-    private const uint RagingStrikesBuff = BardDefinesData.Buffs.RagingStrikes;
-    private const uint RadiantFinaleBuff = BardDefinesData.Buffs.RadiantFinale;
     
     public int Check()
     {
@@ -22,7 +19,7 @@ public class BardResonantArrowGcd : ISlotResolver
             return -1;
         if (!Core.Me.HasLocalPlayerAura(ResonantArrowReady))
             return -1;
-        if (Util.HasAllPartyBuff())
+        if (BardUtil.HasAllPartyBuff())
             return 1;
         if (Core.Me.HasLocalPlayerAura(ResonantArrowReady) && !Core.Me.HasMyAuraWithTimeleft(ResonantArrowReady, 3000))
             return 1;

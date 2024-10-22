@@ -5,6 +5,7 @@ using AEAssist.Helper;
 using Dalamud.Game.ClientState.JobGauge.Enums;
 using ImGuiNET;
 using Wotou.Bard.Setting;
+using Wotou.Bard.Utility;
 
 namespace Wotou.Bard.Triggers;
 
@@ -78,7 +79,7 @@ public class BardSongOrderAction : ITriggerAction, ITriggerBase
             _ => BardSettings.Instance.ThirdSong
         };
         BardSongSettingsManager.Instance.InitializeSongSettings();
-        if (!BardSettings.Instance.IsSongOrderNormal())
+        if (!BardUtil.IsSongOrderNormal())
         {
             BardRotationEntry.QT.SetQt("对齐旅神", false);
             BardRotationEntry.QT.SetQt("强对齐", false);
