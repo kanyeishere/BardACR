@@ -1,8 +1,10 @@
+using System.Globalization;
 using System.Numerics;
 using AEAssist;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using Dalamud.Game.ClientState.JobGauge.Enums;
+using Dalamud.Interface;
 using ImGuiNET;
 using Wotou.Bard.Data;
 using Wotou.Bard.Setting;
@@ -93,7 +95,9 @@ public static class BardUtil
     
         // 固定输入框和单位标签之间的间距
         float labelWidth = labelSize.X; // 标签的实际宽度
-        float inputWidth = 98f; // 输入框的宽度
+        float globalFontSize = UiBuilder.DefaultFontSizePx;   // Get the global font size in pixels
+        float globalFontScale = ImGui.GetIO().FontGlobalScale;
+        float inputWidth = globalFontSize * globalFontScale * 5 + 20;  // 输入框的宽度
         float unitLabelWidth = !string.IsNullOrEmpty(unitLabel) ? ImGui.CalcTextSize(unitLabel).X : 0;
         float totalInputWidth = inputWidth + unitLabelWidth + 5; // 输入框和单位标签的总宽度（带间距）
     

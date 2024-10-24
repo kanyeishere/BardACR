@@ -8,6 +8,7 @@ using AEAssist.CombatRoutine.View.JobView.HotkeyResolver;
 using AEAssist.GUI;
 using AEAssist.Helper;
 using Dalamud.Game.ClientState.JobGauge.Enums;
+using Dalamud.Interface;
 using ImGuiNET;
 using Wotou.Bard.Data;
 using Wotou.Bard.Opener;
@@ -25,11 +26,8 @@ public class BardRotationEntry : IRotationEntry
     public static JobViewWindow QT { get; private set; }
     public string AuthorName { get; set; } = "Wotou";
     //  更新日志
-    private const string UpdateLog = "更新日志：10.22.3 " +
-                                     "\n- 重构了部分代码，希望彻底解决特殊歌轴时遇到的各种问题" +
-                                     "\n- 更新了高级设置的UI" + 
-                                     "\n- 解耦了绝峰箭与爆发QT的绑定 \n  现在爆发QT只控制猛者强击，光明神，战斗之声和纷乱箭"  + 
-                                     "\n- 增加九天和侧风的QT控制（轴用，已隐藏）" ;
+    private const string UpdateLog = "更新日志：10.24" +
+                                     "\n- 修复了UI在不同缩放下的显示问题" ;
     
     public Rotation Build(string settingFolder)
     {
@@ -143,7 +141,7 @@ public class BardRotationEntry : IRotationEntry
     {
         // JobViewSave是AE底层提供的QT设置存档类 在你自己的设置里定义即可
         // 第二个参数是你设置文件的Save类 第三个参数是QT窗口标题
-        QT = new JobViewWindow(BardSettings.Instance.JobViewSave, BardSettings.Instance.Save, "Wotou Bard 诗人]");
+        QT = new JobViewWindow(BardSettings.Instance.JobViewSave, BardSettings.Instance.Save, "Wotou Bard 诗人");
         QT.SetUpdateAction(OnUIUpdate); // 设置QT中的Update回调 不需要就不设置
 
         //添加QT分页 第一个参数是分页标题 第二个是分页里的内容
@@ -287,7 +285,10 @@ public class BardRotationEntry : IRotationEntry
                     ImGui.Text(setting.Label); // Label
                     ImGui.SameLine();
                     ImGui.PushID(i); // 使用索引作为 ID
-                    ImGui.SetNextItemWidth(150f);
+                    float globalFontSize = UiBuilder.DefaultFontSizePx;   // Get the global font size in pixels
+                    float globalFontScale = ImGui.GetIO().FontGlobalScale;
+                    float widthForNextItem = globalFontSize * globalFontScale * 6 + 20;  
+                    ImGui.SetNextItemWidth(widthForNextItem);
 
                     if (ImGui.InputFloat("", ref setting.Value, 0.1f))
                     {
