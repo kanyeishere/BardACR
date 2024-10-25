@@ -20,6 +20,7 @@ public class Bard3GOpener100 : IOpener
   private const uint Barrage = BardDefinesData.Spells.Barrage;
   private const uint VenomousBite = BardDefinesData.Spells.VenomousBite;
   private const uint WindBite = BardDefinesData.Spells.Windbite;
+  private const uint StormBite = BardDefinesData.Spells.Stormbite;
   private const uint RagingStrikes = BardDefinesData.Spells.RagingStrikes;
   private const uint BattleVoice = BardDefinesData.Spells.BattleVoice;
   private const uint RadiantFinale = BardDefinesData.Spells.RadiantFinale;
@@ -92,7 +93,7 @@ public class Bard3GOpener100 : IOpener
 
   private static void Step0(Slot slot)
   {
-    if (Core.Resolve<MemApiSpellCastSuccess>().LastGcd != Core.Resolve<MemApiSpell>().CheckActionChange(WindBite))
+    if (Core.Resolve<MemApiSpellCastSuccess>().LastGcd != WindBite && Core.Resolve<MemApiSpellCastSuccess>().LastGcd != StormBite)
       slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(WindBite).GetSpell());
     slot.Add(BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).GetSpell());
     slot.Add(GetHeartBreakSpell());
