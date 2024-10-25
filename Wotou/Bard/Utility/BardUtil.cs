@@ -88,7 +88,7 @@ public static class BardUtil
     
     public static bool IsSongOrderNormal() => BardSettings.Instance.FirstSong == Song.WANDERER && BardSettings.Instance.SecondSong == Song.MAGE && BardSettings.Instance.ThirdSong == Song.ARMY;
     
-    public static bool RightInputInt(string label, ref int value, int min, int max, string unitLabel = "", int step = 1)
+    public static bool RightInputInt(string label, ref int value, int min, int max, string unitLabel = "", int step = 1, string tooltip = "")
     {
         // 获取标签的实际渲染宽度
         Vector2 labelSize = ImGui.CalcTextSize(label);
@@ -106,6 +106,15 @@ public static class BardUtil
     
         // 显示左对齐的标签
         ImGui.Text(label);
+        if (tooltip != "")
+        {
+            if (ImGui.IsItemHovered())
+            {
+                ImGui.BeginTooltip();
+                ImGui.Text(tooltip);
+                ImGui.EndTooltip();
+            }
+        }
         ImGui.SameLine();
     
         // 根据标签的宽度和输入框的总宽度来调整偏移，确保输入框和单位标签都右对齐

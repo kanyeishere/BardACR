@@ -87,7 +87,7 @@ public class Bard2GOpener100 : IOpener
 
   private static void Step0(Slot slot)
   {
-    if (Core.Resolve<MemApiSpell>().GetLastComboSpellId() != Core.Resolve<MemApiSpell>().CheckActionChange(WindBite))
+    if (Core.Resolve<MemApiSpellCastSuccess>().LastGcd != Core.Resolve<MemApiSpell>().CheckActionChange(WindBite))
       slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(WindBite).GetSpell());
     slot.Add(BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).GetSpell());
     slot.Add(GetHeartBreakSpell());
