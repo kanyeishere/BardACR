@@ -133,7 +133,7 @@ public class DancerRotationEntry : IRotationEntry
         QT.AddHotkey("内丹", new HotKeyResolver_NormalSpell(DancerDefinesData.Spells.SecondWind, SpellTargetType.Self));
         QT.AddHotkey("桑巴", new HotKeyResolver_NormalSpell(DancerDefinesData.Spells.ShieldSamba, SpellTargetType.Self));
         QT.AddHotkey("华尔兹", new HotKeyResolver_NormalSpell(DancerDefinesData.Spells.CuringWaltz, SpellTargetType.Self));
-        QT.AddHotkey("秒开即兴", new HotkeyResolver_General("../../ACR/Wotou/Dancer/Asset/Improvisation.png", Improvisation));
+        QT.AddHotkey("秒开关即兴", new ImprovisationHotkeyResolver());
         QT.AddHotkey("疾跑", new HotKeyResolver_疾跑());
         QT.AddHotkey("前冲步", new HotKeyResolver_NormalSpell(DancerDefinesData.Spells.EnAvant, SpellTargetType.Target));
         QT.AddHotkey("爆发药", new HotKeyResolver_Potion());
@@ -147,39 +147,7 @@ public class DancerRotationEntry : IRotationEntry
         for (var i = 1; i < PartyHelper.Party.Count; i++)
         {
             var index = i;
-            DancePartnerPanel?.AddHotkey("切换舞伴: " + PartyHelper.Party[i].Name, new HotkeyResolver_General( "../../ACR/Wotou/Dancer/Asset/ClosedPosition.png", () => DancerRotationEntry.ClosedPosition(index)));
-        }
-    }
-
-    private static void Improvisation()
-    {
-        if (!DancerDefinesData.Spells.Improvisation.CoolDownInGCDs(0) || 
-            Core.Resolve<JobApi_Dancer>().IsDancing)
-            return;
-        if (AI.Instance.BattleData.NextSlot == null)
-            AI.Instance.BattleData.NextSlot = new Slot();
-        AI.Instance.BattleData.NextSlot.Add(DancerDefinesData.Spells.Improvisation.GetSpell());
-        AI.Instance.BattleData.NextSlot.Add(DancerDefinesData.Spells.ImprovisationFinish.GetSpell());
-    }
-    
-    private static void ClosedPosition(int index)
-    {
-        var partyMembers = PartyHelper.Party;
-        if (partyMembers.Count < index + 1)
-            return;
-        if (!DancerDefinesData.Spells.ClosedPosition.CoolDownInGCDs(0) || 
-            Core.Resolve<JobApi_Dancer>().IsDancing)
-            return;
-        if (AI.Instance.BattleData.NextSlot == null)
-            AI.Instance.BattleData.NextSlot = new Slot();
-        if (Core.Me.HasLocalPlayerAura(DancerDefinesData.Buffs.ClosedPosition))
-        {
-            AI.Instance.BattleData.NextSlot.Add(DancerDefinesData.Spells.Ending.GetSpell());
-            AI.Instance.BattleData.NextSlot.Add(new Spell(DancerDefinesData.Spells.ClosedPosition, partyMembers[index]));
-        }
-        else
-        {
-            AI.Instance.BattleData.NextSlot.Add(new Spell(DancerDefinesData.Spells.ClosedPosition, partyMembers[index]));
+            DancePartnerPanel?.AddHotkey("切换舞伴" + PartyHelper.Party[i].Name, new ClosedPositionHotkeyResolver(index));
         }
     }
 
