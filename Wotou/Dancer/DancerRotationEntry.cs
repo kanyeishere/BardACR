@@ -148,7 +148,7 @@ public class DancerRotationEntry : IRotationEntry
         for (var i = 1; i < PartyHelper.Party.Count; i++)
         {
             var index = i;
-            DancePartnerPanel?.AddHotkey("闭式舞姿: " + PartyHelper.Party[i].Name, new HotkeyResolver_General( "../../ACR/Wotou/Dancer/Asset/ClosedPosition.png", () => DancerRotationEntry.ClosedPosition(index)));
+            DancePartnerPanel?.AddHotkey("切换舞伴: " + PartyHelper.Party[i].Name, new HotkeyResolver_General( "../../ACR/Wotou/Dancer/Asset/ClosedPosition.png", () => DancerRotationEntry.ClosedPosition(index)));
         }
     }
 
@@ -211,9 +211,8 @@ public class DancerRotationEntry : IRotationEntry
         ImGui.Separator();
         if (ImGui.CollapsingHeader("   界面设置"))
         {
-            ImGui.Checkbox("显示快速舞伴QT", ref DancerSettings.Instance.ShowDancePartnerPanel);
-            ImGui.Separator();
-            ImGuiHelper.LeftInputInt("舞伴QT图标大小", ref DancerSettings.Instance.DancePartnerIconSize, 10, 80);
+            ImGui.Checkbox("显示快速舞伴切换面板", ref DancerSettings.Instance.ShowDancePartnerPanel);
+            ImGuiHelper.LeftInputInt("舞伴面板图标大小", ref DancerSettings.Instance.DancePartnerIconSize, 10, 80);
 
             ImGui.Separator();
             if (ImGui.Button("保存界面设置")) DancerSettings.Instance.Save();
