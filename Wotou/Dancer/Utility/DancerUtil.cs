@@ -18,12 +18,7 @@ namespace Wotou.Dancer
         private const uint FountainFall = DancerDefinesData.Spells.Fountainfall;
         private const uint RisingWindmill = DancerDefinesData.Spells.RisingWindmill;
         private const uint BloodShower = DancerDefinesData.Spells.Bloodshower;
-    
-        private const uint FlourishingFlow = DancerDefinesData.Buffs.FlourshingFlow;
-        private const uint FlourishingSymmetry = DancerDefinesData.Buffs.FlourishingSymmetry;
-        private const uint SilkenFlow = DancerDefinesData.Buffs.SilkenFlow;
-        private const uint SilkenSymmetry = DancerDefinesData.Buffs.SilkenSymmetry;
-
+        
         public static Spell GetBaseGcdCombo()
         {
             if (Windmill.IsReady() &&
@@ -66,20 +61,8 @@ namespace Wotou.Dancer
         {
             if (BloodShower.IsReady())
                 return BloodShower.GetSpell();
-        
             if (RisingWindmill.IsReady())
                 return RisingWindmill.GetSpell();
-        
-            if (BloodShower.IsReady() &&
-                (Core.Me.HasAura(FlourishingSymmetry) ||
-                 Core.Me.HasAura(SilkenSymmetry)))
-                return BloodShower.GetSpell();
-        
-            if (RisingWindmill.IsReady() &&
-                (Core.Me.HasAura(FlourishingFlow) ||
-                 Core.Me.HasAura(SilkenFlow)))
-                return RisingWindmill.GetSpell();
-        
             return null;
         }
 
@@ -88,20 +71,8 @@ namespace Wotou.Dancer
         {
             if (FountainFall.IsReady())
                 return FountainFall.GetSpell();
-        
             if (ReverseCascade.IsReady())
                 return ReverseCascade.GetSpell();
-        
-            if (FountainFall.IsReady() &&
-                (Core.Me.HasAura(FlourishingSymmetry) ||
-                 Core.Me.HasAura(SilkenSymmetry)))
-                return FountainFall.GetSpell();
-        
-            if (ReverseCascade.IsReady() &&
-                (Core.Me.HasAura(FlourishingFlow) ||
-                 Core.Me.HasAura(SilkenFlow)))
-                return ReverseCascade.GetSpell();
-        
             return null;
         }
 

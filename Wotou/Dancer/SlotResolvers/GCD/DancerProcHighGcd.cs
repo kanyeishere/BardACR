@@ -22,26 +22,22 @@ public class DancerProcHighGcd : ISlotResolver
     
     public int Check()
     {
-        if (Core.Me.HasAura(FlourishingSymmetry) && !Core.Me.HasMyAuraWithTimeleft(FlourishingSymmetry,3000))
-            return 1;
-        if (Core.Me.HasAura(FlourishingFlow) && !Core.Me.HasMyAuraWithTimeleft(FlourishingFlow,3000))
-            return 1;
-        if (Core.Me.HasAura(SilkenFlow) && !Core.Me.HasMyAuraWithTimeleft(SilkenFlow,3000))
-            return 1;
-        if (Core.Me.HasAura(SilkenSymmetry) && !Core.Me.HasMyAuraWithTimeleft(SilkenSymmetry,3000))
-            return 1;
-        
         if (!ReverseCascade.IsReady() &&
             !FountainFall.IsReady() && 
             !RisingWindmill.IsReady() && 
             !BloodShower.IsReady())
             return -2;
-
-        if (!Core.Me.HasAura(FlourishingSymmetry) && 
-            !Core.Me.HasAura(FlourishingFlow) && 
-            !Core.Me.HasAura(SilkenFlow) && 
-            !Core.Me.HasAura(SilkenSymmetry))
-            return -3;
+        
+        if (Core.Me.HasAura(FlourishingSymmetry) && !Core.Me.HasMyAuraWithTimeleft(FlourishingSymmetry,3500))
+            return 1;
+        if (Core.Me.HasAura(FlourishingFlow) && !Core.Me.HasMyAuraWithTimeleft(FlourishingFlow,3500))
+            return 1;
+        if (Core.Me.HasAura(SilkenFlow) && !Core.Me.HasMyAuraWithTimeleft(SilkenFlow,3500))
+            return 1;
+        if (Core.Me.HasAura(SilkenSymmetry) && !Core.Me.HasMyAuraWithTimeleft(SilkenSymmetry,3500))
+            return 1;
+        
+        
         
         return -1;
     }

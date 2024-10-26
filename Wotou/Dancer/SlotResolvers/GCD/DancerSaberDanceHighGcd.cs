@@ -20,7 +20,7 @@ public class DancerSaberDanceHighGcd : ISlotResolver
             return -1;
         if (!Core.Me.HasLocalPlayerAura(Devilment))
             return -2;
-        if (Core.Resolve<JobApi_Dancer>().Esprit < 80)
+        if (Core.Resolve<JobApi_Dancer>().Esprit < 70)
             return -3;
         return 1;
     }

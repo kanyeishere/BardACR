@@ -18,7 +18,9 @@ public class Dancer1GBeforeTechStepGcd : ISlotResolver
     private const uint LastDance = DancerDefinesData.Spells.LastDance;
 
     private const uint LastDanceReady = DancerDefinesData.Buffs.LastDanceReady;
-
+    private const uint SilkenFlow = DancerDefinesData.Buffs.SilkenFlow;
+    private const uint SilkenSymmetry = DancerDefinesData.Buffs.SilkenSymmetry;
+    
     public int Check()
     {
         if (TechnicalStep.GetSpell().Cooldown.TotalMilliseconds < 3100 &&
@@ -40,6 +42,8 @@ public class Dancer1GBeforeTechStepGcd : ISlotResolver
             return Fountain.GetSpell();
         if (Core.Resolve<MemApiSpell>().GetLastComboSpellId() == Fountain)
         {
+            if (Core.Me.HasAura(SilkenFlow) || Core.Me.HasAura(SilkenSymmetry))
+                return DancerUtil.GetProcGcdCombo();
             if (Core.Resolve<JobApi_Dancer>().Esprit >= 50)
                 return SaberDance.GetSpell();
             if (Core.Me.HasAura(LastDanceReady))

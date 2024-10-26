@@ -17,7 +17,7 @@ public class DancerFinishingMoveGcd : ISlotResolver
     {
         if (!DancerRotationEntry.QT.GetQt(QTKey.StandardStep))
             return -1;
-        if (Core.Me.HasLocalPlayerAura(Devilment) && FinishingMove.GetSpell().Cooldown.TotalMilliseconds <= 1000)
+        if (Core.Me.HasLocalPlayerAura(Devilment) && FinishingMove.GetSpell().Cooldown.TotalMilliseconds <= 600)
             return 1;
         if (!FinishingMove.IsReady())
             return -10;

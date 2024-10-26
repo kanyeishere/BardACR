@@ -18,11 +18,13 @@ public class DancerFlourishAbility : ISlotResolver
     {
         if (!Flourish.IsReady())
             return -1;
+        if (GCDHelper.GetGCDCooldown() <= 650)
+            return -4;
         if (!DancerRotationEntry.QT.GetQt(QTKey.Flourish))
             return -1;
         if (TechnicalStep.GetSpell().Cooldown.TotalMilliseconds < 15000)
             return -2;
-        if (QuadrupleTechnicalFinish.RecentlyUsed(2000))
+        if (QuadrupleTechnicalFinish.RecentlyUsed(1500))
             return -3;
         return 0;
     }

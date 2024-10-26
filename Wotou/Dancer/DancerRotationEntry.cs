@@ -66,7 +66,9 @@ public class DancerRotationEntry : IRotationEntry
             AcrType = AcrType.Both,
             MinLevel = 100,
             MaxLevel = 100,
-            Description = "100级高难舞者-测试版",
+            Description = "100级高难舞者-测试版-技速选择2.5" +
+                          "\n本ACR目前所用的是固定4小舞循环，暂时只适配100级高难环境" +
+                          "\n在90级及以下副本中，此循环并非最优解，请自行评估使用",
         };
         rot.SetRotationEventHandler(new DancerRotationEventHandler());
         rot.AddOpener(GetOpener);
@@ -187,7 +189,8 @@ public class DancerRotationEntry : IRotationEntry
         ImGui.PushStyleColor(ImGuiCol.Border, new Vector4(1f,0.36f,0.54f, 1));
         if (ImGui.CollapsingHeader("   重要说明"))
         {
-            ImGui.Text("舞者ACR\n技速选择2.5，暂时只适配100级高难环境\n90级及以下副本时，本ACR目前所使用的是非最优循环");
+            ImGui.Text("舞者ACR-技速选择2.5\n本ACR目前所用的是固定4小舞循环，暂时只适配100级高难环境" +
+                       "\n在90级及以下副本中，此循环并非最优解，请自行评估使用");
         }
 
         ImGui.Separator();

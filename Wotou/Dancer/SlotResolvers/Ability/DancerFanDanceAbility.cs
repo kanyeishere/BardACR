@@ -13,6 +13,7 @@ public class DancerFanDanceAbility : ISlotResolver
 {
     private const uint FanDance = DancerDefinesData.Spells.FanDance;
     private const uint FanDance2 = DancerDefinesData.Spells.FanDance2;
+    private const uint QuadrupleTechnicalFinish = DancerDefinesData.Spells.QuadrupleTechnicalFinish;
     private const uint FlourishingSymmetry = DancerDefinesData.Buffs.FlourishingSymmetry;
     private const uint FlourishingFlow = DancerDefinesData.Buffs.FlourshingFlow;
     private const uint SilkenFlow = DancerDefinesData.Buffs.SilkenFlow;
@@ -25,6 +26,8 @@ public class DancerFanDanceAbility : ISlotResolver
             return -1;
         if (!FanDance.IsReady() && !CanUseFanDance2())
             return -2;
+        if (QuadrupleTechnicalFinish.RecentlyUsed(1500))
+            return -3;
         if (DancerRotationEntry.QT.GetQt(QTKey.FinalBurst))
             return 100;
         if (Core.Resolve<JobApi_Dancer>().FourFoldFeathers > 3 &&
