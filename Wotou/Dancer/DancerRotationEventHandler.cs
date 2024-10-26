@@ -1,11 +1,9 @@
 ﻿using AEAssist;
 using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
-using AEAssist.CombatRoutine.Module.AILoop;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.JobApi;
-using AEAssist.MemoryApi;
 using Wotou.Dancer.Data;
 using Dalamud.Game.ClientState.Objects.Types;
 
@@ -41,17 +39,14 @@ namespace Wotou.Dancer
 
         public void OnBattleUpdate(int currTimeInMs)
         {
-
         }
 
         public void OnEnterRotation()
         {
-
         }
 
         public void OnExitRotation()
         {
-
         }
 
         public async Task OnNoTarget()
@@ -108,12 +103,13 @@ namespace Wotou.Dancer
 
         public Task OnPreCombat()
         {
+            DancerRotationEntry.UpdateDancerPartnerPanel();
             return Task.CompletedTask;
         }
 
         public void OnResetBattle()
         {
-
+            DancerRotationEntry.UpdateDancerPartnerPanel();
         }
 
         public void OnSpellCastSuccess(Slot slot, Spell spell)
@@ -123,7 +119,7 @@ namespace Wotou.Dancer
 
         public void OnTerritoryChanged()
         {
-
+            DancerRotationEntry.UpdateDancerPartnerPanel();
         }
     }
 }

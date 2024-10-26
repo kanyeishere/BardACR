@@ -1,4 +1,5 @@
 using System.Numerics;
+using Dalamud.Game.ClientState.Party;
 using AEAssist;
 using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
@@ -84,7 +85,7 @@ public class DancerRotationEntry : IRotationEntry
     // 声明当前要使用的UI的实例 示例里使用QT
     public static JobViewWindow QT { get; private set; }
     
-    private static HotkeyWindow HotkeyWindow2 { get; set; }
+    public static HotkeyWindow? DancePartnerPanel { get; set; }
     
     // 如果你不想用QT 可以自行创建一个实现IRotationUI接口的类
     public IRotationUI GetRotationUI()
@@ -98,33 +99,36 @@ public class DancerRotationEntry : IRotationEntry
         // JobViewSave是AE底层提供的QT设置存档类 在你自己的设置里定义即可
         // 第二个参数是你设置文件的Save类 第三个参数是QT窗口标题
         DancerRotationEntry.QT = new JobViewWindow(DancerSettings.Instance.JobViewSave, DancerSettings.Instance.Save, "Wotou");
-        // 创建 HotkeyWindow2 实例
-        HotkeyWindow2 = new HotkeyWindow(new JobViewSave(), "Custom DNC HotkeyWindow");
-    
-        // 设置 HotkeyWindow2 的 HotkeyLineCount
-        HotkeyWindow2.HotkeyLineCount = 1; // 设置每行显示的快捷键数量
+        
+        var myJobViewSave = new JobViewSave();
+        myJobViewSave.ShowHotkey = DancerSettings.Instance.ShowDancePartnerPanel;
+        myJobViewSave.QtHotkeySize = new Vector2(DancerSettings.Instance.DancePartnerIconSize, DancerSettings.Instance.DancePartnerIconSize);
+        DancePartnerPanel = new HotkeyWindow(myJobViewSave, "Custom DNC HotkeyWindow");
 
         // 创建 JobViewWindow 并传递回调
         //var QT2 = new JobViewWindow(DancerSettings.Instance.JobViewSave, DancerSettings.Instance.Save, "Wotou");
-        var qtStyle = new QtStyle(DancerSettings.Instance.JobViewSave);
 
         // 为 JobViewWindow 设置 UpdateAction 来渲染 HotkeyWindow2
-        DancerRotationEntry.QT.SetUpdateAction(() =>
-        {
-            HotkeyWindow2.DrawHotkeyWindow(qtStyle);
-            //QT2.OnDrawUI();
+        QT.SetUpdateAction(() =>
+        {   
+            var myJobViewSave = new JobViewSave();
+            myJobViewSave.QtHotkeySize = new Vector2(DancerSettings.Instance.DancePartnerIconSize, DancerSettings.Instance.DancePartnerIconSize);
+            myJobViewSave.ShowHotkey = DancerSettings.Instance.ShowDancePartnerPanel;
+            DancePartnerPanel.DrawHotkeyWindow(new QtStyle(DancerSettings.Instance.JobViewSave));
+            DancePartnerPanel = new HotkeyWindow(myJobViewSave, "Custom DNC HotkeyWindow");
+            DancePartnerPanel.HotkeyLineCount = 1;
+            UpdateDancerPartnerPanel();
         });
         
-        QT.AddTab("通用", DrawBattle);
+        QT.AddTab("通用", DrawGeneral);
         QT.AddTab("Dev", DrawQtDev);
         
-        
-        DancerRotationEntry.QT.AddQt(QTKey.UsePotion, false, "是否使用爆发药");
-        DancerRotationEntry.QT.AddQt(QTKey.Aoe, true, "是否使用AOE");
-        DancerRotationEntry.QT.AddQt(QTKey.TechnicalStep, true, "是否使用技巧舞步与进攻之探戈");
-        DancerRotationEntry.QT.AddQt(QTKey.StandardStep, true, "是否使用标准舞步与结束动作");
-        DancerRotationEntry.QT.AddQt(QTKey.Flourish, true, "是否使用百花争艳");
-        DancerRotationEntry.QT.AddQt(QTKey.FinalBurst, false, "是否倾泻资源");
+        QT.AddQt(QTKey.UsePotion, false, "是否使用爆发药");
+        QT.AddQt(QTKey.Aoe, true, "是否使用AOE");
+        QT.AddQt(QTKey.TechnicalStep, true, "是否使用技巧舞步与进攻之探戈");
+        QT.AddQt(QTKey.StandardStep, true, "是否使用标准舞步与结束动作");
+        QT.AddQt(QTKey.Flourish, true, "是否使用百花争艳");
+        QT.AddQt(QTKey.FinalBurst, false, "是否倾泻资源");
         
         QT.AddHotkey("防击退", new HotKeyResolver_NormalSpell(DancerDefinesData.Spells.ArmsLength, SpellTargetType.Target));
         QT.AddHotkey("内丹", new HotKeyResolver_NormalSpell(DancerDefinesData.Spells.SecondWind, SpellTargetType.Self));
@@ -136,15 +140,19 @@ public class DancerRotationEntry : IRotationEntry
         QT.AddHotkey("爆发药", new HotKeyResolver_Potion());
         QT.AddHotkey("极限技", new HotKeyResolver_LB());
         DancerSettings.Instance.JobViewSave.HotkeyLineCount = 5;
-
+    }
+    
+    public static void UpdateDancerPartnerPanel()
+    {
+        PartyHelper.UpdateAllies();
         for (var i = 1; i < PartyHelper.Party.Count; i++)
         {
             var index = i;
-            HotkeyWindow2.AddHotkey("闭式舞姿: " + PartyHelper.Party[i].Name, new HotkeyResolver_General( "../../ACR/Wotou/Dancer/Asset/ClosedPosition.png", () => ClosedPosition(index)));
+            DancePartnerPanel?.AddHotkey("闭式舞姿: " + PartyHelper.Party[i].Name, new HotkeyResolver_General( "../../ACR/Wotou/Dancer/Asset/ClosedPosition.png", () => DancerRotationEntry.ClosedPosition(index)));
         }
     }
 
-    private void Improvisation()
+    private static void Improvisation()
     {
         if (!DancerDefinesData.Spells.Improvisation.CoolDownInGCDs(0))
             return;
@@ -154,7 +162,7 @@ public class DancerRotationEntry : IRotationEntry
         AI.Instance.BattleData.NextSlot.Add(DancerDefinesData.Spells.ImprovisationFinish.GetSpell());
     }
     
-    private void ClosedPosition(int index)
+    private static void ClosedPosition(int index)
     {
         var partyMembers = PartyHelper.Party;
         if (partyMembers.Count < index + 1)
@@ -175,7 +183,7 @@ public class DancerRotationEntry : IRotationEntry
         }
     }
 
-    public void DrawBattle(JobViewWindow jobViewWindow)
+    public void DrawGeneral(JobViewWindow jobViewWindow)
     {
         ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0.0f, 0.0f, 0.0f, 0.0f));
         ImGui.PushStyleColor(ImGuiCol.Border, new Vector4(1f,0.36f,0.54f, 1));
@@ -199,7 +207,16 @@ public class DancerRotationEntry : IRotationEntry
             ImGui.Separator();
             if (ImGui.Button("保存设置")) DancerSettings.Instance.Save();
             
-            
+        }
+        ImGui.Separator();
+        if (ImGui.CollapsingHeader("   界面设置"))
+        {
+            ImGui.Checkbox("显示快速舞伴QT", ref DancerSettings.Instance.ShowDancePartnerPanel);
+            ImGui.Separator();
+            ImGuiHelper.LeftInputInt("舞伴QT图标大小", ref DancerSettings.Instance.DancePartnerIconSize, 10, 80);
+
+            ImGui.Separator();
+            if (ImGui.Button("保存界面设置")) DancerSettings.Instance.Save();
         }
         ImGui.Separator();
         if (ImGui.CollapsingHeader("   技能队列"))
