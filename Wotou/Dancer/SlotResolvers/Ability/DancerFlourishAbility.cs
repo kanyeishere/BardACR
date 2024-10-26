@@ -12,7 +12,8 @@ namespace Wotou.Dancer.Ability;
 public class DancerFlourishAbility : ISlotResolver
 {
     private const uint Flourish = DancerDefinesData.Spells.Flourish;
-    private const uint TechnicalStep = DancerDefinesData.Spells.TechnicalStep;
+    private const uint TechnicalStep = DancerDefinesData.Buffs.TechnicalStep;
+    private const uint QuadrupleTechnicalFinish = DancerDefinesData.Spells.QuadrupleTechnicalFinish;
     public int Check()
     {
         if (!Flourish.IsReady())
@@ -21,7 +22,7 @@ public class DancerFlourishAbility : ISlotResolver
             return -1;
         if (TechnicalStep.GetSpell().Cooldown.TotalMilliseconds < 10000)
             return -2;
-        if (TechnicalStep.RecentlyUsed(1500))
+        if (QuadrupleTechnicalFinish.RecentlyUsed(1500))
             return -3;
         return 0;
     }
