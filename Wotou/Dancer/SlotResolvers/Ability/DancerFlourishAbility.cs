@@ -12,7 +12,7 @@ namespace Wotou.Dancer.Ability;
 public class DancerFlourishAbility : ISlotResolver
 {
     private const uint Flourish = DancerDefinesData.Spells.Flourish;
-    private const uint TechnicalStep = DancerDefinesData.Buffs.TechnicalStep;
+    private const uint TechnicalStep = DancerDefinesData.Spells.TechnicalStep;
     private const uint QuadrupleTechnicalFinish = DancerDefinesData.Spells.QuadrupleTechnicalFinish;
     public int Check()
     {
@@ -20,7 +20,7 @@ public class DancerFlourishAbility : ISlotResolver
             return -1;
         if (!DancerRotationEntry.QT.GetQt(QTKey.Flourish))
             return -1;
-        if (TechnicalStep.GetSpell().Cooldown.TotalMilliseconds < 10000)
+        if (TechnicalStep.GetSpell().Cooldown.TotalMilliseconds < 2000)
             return -2;
         if (QuadrupleTechnicalFinish.RecentlyUsed(2000))
             return -3;
