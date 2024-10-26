@@ -22,13 +22,13 @@ public class DancerProcHighGcd : ISlotResolver
     
     public int Check()
     {
-        if (Core.Me.HasAura(FlourishingSymmetry) && !Core.Me.HasMyAuraWithTimeleft(3000))
+        if (Core.Me.HasAura(FlourishingSymmetry) && !Core.Me.HasMyAuraWithTimeleft(FlourishingSymmetry,3000))
             return 1;
-        if (Core.Me.HasAura(FlourishingFlow) && !Core.Me.HasMyAuraWithTimeleft(3000))
+        if (Core.Me.HasAura(FlourishingFlow) && !Core.Me.HasMyAuraWithTimeleft(FlourishingFlow,3000))
             return 1;
-        if (Core.Me.HasAura(SilkenFlow) && !Core.Me.HasMyAuraWithTimeleft(3000))
+        if (Core.Me.HasAura(SilkenFlow) && !Core.Me.HasMyAuraWithTimeleft(SilkenFlow,3000))
             return 1;
-        if (Core.Me.HasAura(SilkenSymmetry) && !Core.Me.HasMyAuraWithTimeleft(3000))
+        if (Core.Me.HasAura(SilkenSymmetry) && !Core.Me.HasMyAuraWithTimeleft(SilkenSymmetry,3000))
             return 1;
         
         if (!ReverseCascade.IsReady() &&

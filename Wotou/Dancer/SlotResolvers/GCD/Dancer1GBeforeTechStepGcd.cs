@@ -21,7 +21,7 @@ public class Dancer1GBeforeTechStepGcd : ISlotResolver
 
     public int Check()
     {
-        if (TechnicalStep.GetSpell().Cooldown.TotalMilliseconds < 3500 &&
+        if (TechnicalStep.GetSpell().Cooldown.TotalMilliseconds < 3100 &&
             DancerRotationEntry.QT.GetQt(QTKey.TechnicalStep))
             return 1;
         return -1;
