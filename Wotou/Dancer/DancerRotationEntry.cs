@@ -101,7 +101,7 @@ public class DancerRotationEntry : IRotationEntry
         
         var myJobViewSave = new JobViewSave();
         myJobViewSave.ShowHotkey = DancerSettings.Instance.ShowDancePartnerPanel;
-        myJobViewSave.QtHotkeySize = new Vector2(DancerSettings.Instance.DancePartnerIconSize, DancerSettings.Instance.DancePartnerIconSize);
+        myJobViewSave.QtHotkeySize = new Vector2(DancerSettings.Instance.DancePartnerPanelIconSize, DancerSettings.Instance.DancePartnerPanelIconSize);
         DancePartnerPanel = new HotkeyWindow(myJobViewSave, "Custom DNC HotkeyWindow");
 
         // 创建 JobViewWindow 并传递回调
@@ -111,7 +111,7 @@ public class DancerRotationEntry : IRotationEntry
         QT.SetUpdateAction(() =>
         {   
             var myJobViewSave = new JobViewSave();
-            myJobViewSave.QtHotkeySize = new Vector2(DancerSettings.Instance.DancePartnerIconSize, DancerSettings.Instance.DancePartnerIconSize);
+            myJobViewSave.QtHotkeySize = new Vector2(DancerSettings.Instance.DancePartnerPanelIconSize, DancerSettings.Instance.DancePartnerPanelIconSize);
             myJobViewSave.ShowHotkey = DancerSettings.Instance.ShowDancePartnerPanel;
             DancePartnerPanel.DrawHotkeyWindow(new QtStyle(DancerSettings.Instance.JobViewSave));
             DancePartnerPanel = new HotkeyWindow(myJobViewSave, "Custom DNC HotkeyWindow");
@@ -213,7 +213,7 @@ public class DancerRotationEntry : IRotationEntry
         if (ImGui.CollapsingHeader("   界面设置"))
         {
             ImGui.Checkbox("显示快速舞伴切换面板", ref DancerSettings.Instance.ShowDancePartnerPanel);
-            ImGuiHelper.LeftInputInt("舞伴面板图标大小", ref DancerSettings.Instance.DancePartnerIconSize, 10, 80);
+            ImGuiHelper.LeftInputInt("舞伴面板图标大小", ref DancerSettings.Instance.DancePartnerPanelIconSize, 10, 80);
 
             ImGui.Separator();
             if (ImGui.Button("保存界面设置")) DancerSettings.Instance.Save();
