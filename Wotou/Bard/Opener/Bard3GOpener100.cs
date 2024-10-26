@@ -63,7 +63,6 @@ public class Bard3GOpener100 : IOpener
   public void InitCountDown(CountDownHandler countDownHandler)
   {
     BardBattleData.Instance.UseCountdown = true;
-    LogHelper.Print("use countdown: " + BardBattleData.Instance.UseCountdown);
     countDownHandler.AddAction(BardSettings.Instance.OpenerTime, PreCastSpell);
   }
 
@@ -95,7 +94,6 @@ public class Bard3GOpener100 : IOpener
 
   private static void Step0(Slot slot)
   {
-    LogHelper.Print("use countdown: " + BardBattleData.Instance.UseCountdown);
     if (!BardBattleData.Instance.UseCountdown)
       slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(WindBite).GetSpell());
     slot.Add(BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).GetSpell());
