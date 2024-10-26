@@ -18,7 +18,12 @@ namespace Wotou.Dancer
         private const uint FountainFall = DancerDefinesData.Spells.Fountainfall;
         private const uint RisingWindmill = DancerDefinesData.Spells.RisingWindmill;
         private const uint BloodShower = DancerDefinesData.Spells.Bloodshower;
-        
+    
+        private const uint FlourishingFlow = DancerDefinesData.Buffs.FlourshingFlow;
+        private const uint FlourishingSymmetry = DancerDefinesData.Buffs.FlourishingSymmetry;
+        private const uint SilkenFlow = DancerDefinesData.Buffs.SilkenFlow;
+        private const uint SilkenSymmetry = DancerDefinesData.Buffs.SilkenSymmetry;
+
         public static Spell GetBaseGcdCombo()
         {
             if (Windmill.IsReady() &&
@@ -59,20 +64,36 @@ namespace Wotou.Dancer
 
         private static Spell GetProcAoeCombo()
         {
+            if (Core.Me.HasAura(SilkenFlow))
+                return BloodShower.GetSpell();
+            
+            if (Core.Me.HasAura(SilkenSymmetry))
+                return RisingWindmill.GetSpell();
+            
             if (BloodShower.IsReady())
                 return BloodShower.GetSpell();
+        
             if (RisingWindmill.IsReady())
                 return RisingWindmill.GetSpell();
+        
             return null;
         }
 
 
         private static Spell GetProcSingleCombo()
         {
+            if (Core.Me.HasAura(SilkenFlow))
+                return FountainFall.GetSpell();
+            
+            if (Core.Me.HasAura(SilkenSymmetry))
+                return ReverseCascade.GetSpell();
+            
             if (FountainFall.IsReady())
                 return FountainFall.GetSpell();
+        
             if (ReverseCascade.IsReady())
                 return ReverseCascade.GetSpell();
+            
             return null;
         }
 

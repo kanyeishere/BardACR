@@ -15,10 +15,16 @@ public class DancerSaberDanceGcd : ISlotResolver
     private const uint TechnicalStep = DancerDefinesData.Spells.TechnicalStep;
     private const uint StandardStep = DancerDefinesData.Spells.StandardStep;
     
+    private const uint FlourishingFlow = DancerDefinesData.Buffs.FlourshingFlow;
+    private const uint FlourishingSymmetry = DancerDefinesData.Buffs.FlourishingSymmetry;
+    
     public int Check()
     {
         if (!Core.Resolve<MemApiSpell>().CheckActionChange(SaberDance).IsReady())
             return -1;
+        /*if (Core.Me.HasAura(FlourishingSymmetry) || 
+            Core.Me.HasAura(FlourishingFlow))
+            return -4;*/
         if (TechnicalStep.GetSpell().Cooldown.TotalMilliseconds < 35000 && 
             StandardStep.GetSpell().Cooldown.TotalMilliseconds < 3500 &&
             Core.Resolve<JobApi_Dancer>().Esprit >= 85 &&

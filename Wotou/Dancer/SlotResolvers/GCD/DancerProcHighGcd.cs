@@ -14,6 +14,7 @@ public class DancerProcHighGcd : ISlotResolver
     private const uint FountainFall = DancerDefinesData.Spells.Fountainfall;
     private const uint RisingWindmill = DancerDefinesData.Spells.RisingWindmill;
     private const uint BloodShower = DancerDefinesData.Spells.Bloodshower;
+    private const uint StandardStep = DancerDefinesData.Spells.StandardStep;
     
     private const uint FlourishingFlow = DancerDefinesData.Buffs.FlourshingFlow;
     private const uint FlourishingSymmetry = DancerDefinesData.Buffs.FlourishingSymmetry;
@@ -36,6 +37,16 @@ public class DancerProcHighGcd : ISlotResolver
             return 1;
         if (Core.Me.HasAura(SilkenSymmetry) && !Core.Me.HasMyAuraWithTimeleft(SilkenSymmetry,3500))
             return 1;
+        
+        if (Core.Me.HasAura(FlourishingFlow) && 
+            !Core.Me.HasMyAuraWithTimeleft(FlourishingFlow,8000) &&
+            StandardStep.GetSpell().Cooldown.TotalMilliseconds < 5500)
+            return 1;
+        if (Core.Me.HasAura(SilkenFlow) && 
+            !Core.Me.HasMyAuraWithTimeleft(SilkenFlow,8000) && 
+            StandardStep.GetSpell().Cooldown.TotalMilliseconds < 5500)
+            return 1;
+
         
         
         
