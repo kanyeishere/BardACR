@@ -9,7 +9,7 @@ using Wotou.Dancer.Setting;
 
 namespace Wotou.Dancer.GCD;
 
-public class DancerSaberDanceHighGcd : ISlotResolver
+public class DancerSaberDanceMediumGcd : ISlotResolver
 {
     private const uint SaberDance = DancerDefinesData.Spells.SaberDance;
     private const uint Devilment = DancerDefinesData.Buffs.Devilment;
@@ -20,7 +20,7 @@ public class DancerSaberDanceHighGcd : ISlotResolver
             return -1;
         if (!Core.Me.HasLocalPlayerAura(Devilment))
             return -2;
-        if (Core.Resolve<JobApi_Dancer>().Esprit < 80)
+        if (Core.Resolve<JobApi_Dancer>().Esprit < 50)
             return -3;
         return 1;
     }

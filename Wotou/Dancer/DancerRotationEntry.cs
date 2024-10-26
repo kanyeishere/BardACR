@@ -39,10 +39,11 @@ public class DancerRotationEntry : IRotationEntry
         new SlotResolverData(new Dancer1GBeforeTechStepGcd(), SlotMode.Gcd),
         
         new SlotResolverData(new DancerProcHighGcd(), SlotMode.Gcd), // 快过期的触发
-        new SlotResolverData(new DancerSaberDanceHighGcd(), SlotMode.Gcd), //团辅期剑舞
+        new SlotResolverData(new DancerSaberDanceHighGcd(), SlotMode.Gcd), //团辅期高能量剑舞
         new SlotResolverData(new DancerTillanaGcd(), SlotMode.Gcd),
         new SlotResolverData(new DancerStarfallDanceGCD(), SlotMode.Gcd),
         new SlotResolverData(new DancerLastDanceGcd(), SlotMode.Gcd),
+        new SlotResolverData(new DancerSaberDanceMediumGcd(), SlotMode.Gcd), //团辅期低能量剑舞
 
         new SlotResolverData(new DancerSaberDanceGcd(), SlotMode.Gcd), //普通剑舞
         new SlotResolverData(new DancerProcGcd(), SlotMode.Gcd),
@@ -150,7 +151,8 @@ public class DancerRotationEntry : IRotationEntry
 
     private static void Improvisation()
     {
-        if (!DancerDefinesData.Spells.Improvisation.CoolDownInGCDs(0))
+        if (!DancerDefinesData.Spells.Improvisation.CoolDownInGCDs(0) || 
+            Core.Resolve<JobApi_Dancer>().IsDancing)
             return;
         if (AI.Instance.BattleData.NextSlot == null)
             AI.Instance.BattleData.NextSlot = new Slot();
