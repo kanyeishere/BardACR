@@ -28,4 +28,19 @@
         </Reference>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Dancer\SlotResolvers\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="Dancer\Asset\ClosedPosition.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <EmbeddedResource Include="Dancer\Asset\Improvisation.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="ClosedPosition.png" />
+      <None Remove="Improvisation.png" />
+    </ItemGroup>
+
 </Project>
