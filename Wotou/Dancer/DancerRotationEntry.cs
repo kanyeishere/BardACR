@@ -178,7 +178,7 @@ public class DancerRotationEntry : IRotationEntry
     public void DrawBattle(JobViewWindow jobViewWindow)
     {
         ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0.0f, 0.0f, 0.0f, 0.0f));
-        ImGui.PushStyleColor(ImGuiCol.Border, new Vector4(0.82f, 0.46f, 0.68f, 1));
+        ImGui.PushStyleColor(ImGuiCol.Border, new Vector4(1f,0.36f,0.54f, 1));
         if (ImGui.CollapsingHeader("   重要说明"))
         {
             ImGui.Text("舞者ACR\n技速选择2.5，目前只适配100级高难环境");
