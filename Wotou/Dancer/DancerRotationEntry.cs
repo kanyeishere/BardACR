@@ -1,5 +1,4 @@
 using System.Numerics;
-using Dalamud.Game.ClientState.Party;
 using AEAssist;
 using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
@@ -17,7 +16,6 @@ using Wotou.Dancer.Opener;
 using Wotou.Dancer.Setting;
 using Wotou.Dancer.Trigger;
 using ImGuiNET;
-using Wotou.Dancer.Setting;
 
 namespace Wotou.Dancer;
 
@@ -26,8 +24,6 @@ public class DancerRotationEntry : IRotationEntry
     public void Dispose()
     {
     }
-
-    
     
     public string AuthorName { get; set; } = "Wotou";
 
@@ -66,7 +62,7 @@ public class DancerRotationEntry : IRotationEntry
         var rot = new Rotation(SlotResolvers)
         {
             TargetJob = Jobs.Dancer,
-            AcrType = AcrType.HighEnd,
+            AcrType = AcrType.Both,
             MinLevel = 100,
             MaxLevel = 100,
             Description = "100级高难舞者-测试版",
@@ -98,7 +94,7 @@ public class DancerRotationEntry : IRotationEntry
     {
         // JobViewSave是AE底层提供的QT设置存档类 在你自己的设置里定义即可
         // 第二个参数是你设置文件的Save类 第三个参数是QT窗口标题
-        DancerRotationEntry.QT = new JobViewWindow(DancerSettings.Instance.JobViewSave, DancerSettings.Instance.Save, "Wotou");
+        QT = new JobViewWindow(DancerSettings.Instance.JobViewSave, DancerSettings.Instance.Save, "Wotou");
         
         var myJobViewSave = new JobViewSave();
         myJobViewSave.ShowHotkey = DancerSettings.Instance.ShowDancePartnerPanel;
@@ -189,7 +185,7 @@ public class DancerRotationEntry : IRotationEntry
         ImGui.PushStyleColor(ImGuiCol.Border, new Vector4(1f,0.36f,0.54f, 1));
         if (ImGui.CollapsingHeader("   重要说明"))
         {
-            ImGui.Text("舞者ACR\n技速选择2.5，目前只适配100级高难环境");
+            ImGui.Text("舞者ACR\n技速选择2.5，暂时只适配100级高难环境\n90级及以下副本时，本ACR目前所使用的是非最优循环");
         }
 
         ImGui.Separator();
