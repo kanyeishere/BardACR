@@ -22,7 +22,7 @@ public class DancerFlourishAbility : ISlotResolver
             return -1;
         if (TechnicalStep.GetSpell().Cooldown.TotalMilliseconds < 10000)
             return -2;
-        if (QuadrupleTechnicalFinish.RecentlyUsed(1500))
+        if (QuadrupleTechnicalFinish.RecentlyUsed(2000))
             return -3;
         return 0;
     }
