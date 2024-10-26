@@ -12,6 +12,8 @@ public class BardBattleData
     
     public int WandererTimes = 0;
     
+    public bool UseCountdown = false;
+    
     public bool HasFirst120SBuff = false;
     
     public bool HasSecond120SBuff = false;
