@@ -49,6 +49,7 @@ public class DancerSettings
     public string DancePartnerMacro = "/em ：<t>哥哥，舞伴给了你，姐姐不会生气吧";
     public int OpenerTime = 300; // 起手提前多少时间 （毫秒）
     public int OpenerStandardStepTime = 15000; // 起手标准舞时间
+    public int StandardStepCdTolerance = 600; // 标准舞CD容差
     
     public JobViewSave JobViewSave = new JobViewSave()
     {

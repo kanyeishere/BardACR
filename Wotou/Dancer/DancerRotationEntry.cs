@@ -24,8 +24,9 @@ public class DancerRotationEntry : IRotationEntry
     
     private const string UpdateLog = "更新日志：10.27" +
                                      "\n- 添加了即兴表演与闭式舞姿的CD时间显示"+
-                                     "\n- 修复AOE逻辑"+
-                                     "\n- 增加了舞伴宏功能";
+                                     "\n- 修复AOE技能释放逻辑"+
+                                     "\n- 增加了舞伴宏功能"+
+                                     "\n- 修复小舞在不同技速下有可能卡死的bug";
     public void Dispose()
     {
     }
@@ -180,6 +181,15 @@ public class DancerRotationEntry : IRotationEntry
             if (!QT.GetQt("爆发药"))
                 ImGui.TextColored(new Vector4(0.7f, 0.8f, 0.0f, 1.0000f), "如果你希望使用爆发药，请在QT面板中开启爆发药开关");
             ImGui.Checkbox("起手吃爆发药", ref DancerSettings.Instance.UsePotionInOpener);
+            ImGui.Separator();
+            ImGui.BeginGroup();
+            ImGuiHelper.LeftInputInt("小舞冷却时间容差值  (毫秒)", ref DancerSettings.Instance.StandardStepCdTolerance, 0, 1000);
+            ImGui.EndGroup();
+            if (ImGui.IsItemHovered())
+            {
+                // 显示 Tooltip
+                ImGui.SetTooltip("仅当你技速小于2.50时，为了避免小舞延后才需做调整");
+            }
             ImGui.Separator();
             if (ImGui.Button("保存设置")) DancerSettings.Instance.Save();
             

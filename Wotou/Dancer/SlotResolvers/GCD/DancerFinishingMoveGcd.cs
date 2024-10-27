@@ -3,13 +3,17 @@ using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.JobApi;
+using AEAssist.MemoryApi;
 using Wotou.Dancer.Data;
+using Wotou.Dancer.Setting;
 
 namespace Wotou.Dancer.GCD;
 
 public class DancerFinishingMoveGcd : ISlotResolver
 {
     private const uint FinishingMove = DancerDefinesData.Spells.FinishingMove;
+    private const uint StandardStep = DancerDefinesData.Spells.StandardStep;
+    
     private const uint Devilment = DancerDefinesData.Buffs.Devilment;
     private const uint FinishingMoveReady = DancerDefinesData.Buffs.FinishingMoveReady;
 
@@ -18,6 +22,8 @@ public class DancerFinishingMoveGcd : ISlotResolver
         if (!DancerRotationEntry.QT.GetQt(QTKey.StandardStep))
             return -1;
         if (Core.Me.HasLocalPlayerAura(Devilment) && FinishingMove.GetSpell().Cooldown.TotalMilliseconds <= 600)
+            return 1;
+        if (FinishingMove.GetSpell().Cooldown.TotalMilliseconds <= DancerSettings.Instance.StandardStepCdTolerance)
             return 1;
         if (!FinishingMove.IsReady())
             return -10;
@@ -28,7 +34,15 @@ public class DancerFinishingMoveGcd : ISlotResolver
 
     public void Build(Slot slot)
     {
-        slot.Add(FinishingMove.GetSpell());
-        AI.Instance.BattleData.CurrGcdAbilityCount = 1;
+        if (FinishingMove.IsReady())
+        {
+            slot.Add(FinishingMove.GetSpell());
+            return;
+        }
+        if (StandardStep.IsReady())
+        {
+            slot.Add(StandardStep.GetSpell());
+            AI.Instance.BattleData.CurrGcdAbilityCount = 1;
+        }
     }
 }
