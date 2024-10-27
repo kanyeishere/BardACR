@@ -10,6 +10,7 @@ using AEAssist.MemoryApi;
 using Dalamud.Interface.Textures.TextureWraps;
 using ImGuiNET;
 using Wotou.Dancer.Data;
+using Wotou.Dancer.Setting;
 
 namespace Wotou.Dancer;
 
@@ -97,5 +98,7 @@ public class ClosedPositionHotkeyResolver : IHotkeyResolver
         {
             AI.Instance.BattleData.NextSlot.Add(new Spell(DancerDefinesData.Spells.ClosedPosition, partyMembers[index]));
         }
+        if (DancerSettings.Instance.UseDancePartnerMacro)
+            ChatHelper.SendMessage(DancerSettings.Instance.DancePartnerMacro.Replace("<t>", PartyHelper.Party[index].Name.ToString()) );
     }
 }

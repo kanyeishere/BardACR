@@ -45,6 +45,8 @@ public class DancerSettings
     public bool UsePotionInOpener = false; // 是否在开场使用药水
     public bool ShowDancePartnerPanel = true; // 是否显示舞者配偶面板
     public int DancePartnerPanelIconSize = 47; // 舞者配偶面板图标大小
+    public bool UseDancePartnerMacro = true; // 是否使用舞伴宏
+    public string DancePartnerMacro = "/em ：<t>哥哥，舞伴给了你，姐姐不会生气吧";
     public int OpenerTime = 300; // 起手提前多少时间 （毫秒）
     public int OpenerStandardStepTime = 15000; // 起手标准舞时间
     

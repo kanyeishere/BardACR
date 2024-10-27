@@ -24,7 +24,8 @@ public class DancerRotationEntry : IRotationEntry
     
     private const string UpdateLog = "更新日志：10.27" +
                                      "\n- 添加了即兴表演与闭式舞姿的CD时间显示"+
-                                     "\n- 修复AOE逻辑";
+                                     "\n- 修复AOE逻辑"+
+                                     "\n- 增加了舞伴宏功能";
     public void Dispose()
     {
     }
@@ -188,6 +189,12 @@ public class DancerRotationEntry : IRotationEntry
         {
             ImGui.Checkbox("显示快速舞伴切换面板", ref DancerSettings.Instance.ShowDancePartnerPanel);
             ImGuiHelper.LeftInputInt("舞伴面板图标大小", ref DancerSettings.Instance.DancePartnerPanelIconSize, 10, 80);
+
+            ImGui.Separator();
+            ImGui.Checkbox("是否启用舞伴宏", ref DancerSettings.Instance.UseDancePartnerMacro);
+            ImGui.PushItemWidth(ImGui.GetWindowWidth() - ImGui.GetStyle().FramePadding.X * 2 - 5);
+            ImGui.InputText("", ref DancerSettings.Instance.DancePartnerMacro, 50);
+            ImGui.PopItemWidth(); // 恢复默认宽度设置
 
             ImGui.Separator();
             if (ImGui.Button("保存界面设置")) DancerSettings.Instance.Save();
