@@ -25,6 +25,8 @@ public class DancerSaberDanceGcd : ISlotResolver
         /*if (Core.Me.HasAura(FlourishingSymmetry) || 
             Core.Me.HasAura(FlourishingFlow))
             return -4;*/
+        if (DancerRotationEntry.QT.GetQt(QTKey.FinalBurst))
+            return 1;
         if (TechnicalStep.GetSpell().Cooldown.TotalMilliseconds < 35000 && 
             StandardStep.GetSpell().Cooldown.TotalMilliseconds < 3500 &&
             Core.Resolve<JobApi_Dancer>().Esprit >= 85 &&
