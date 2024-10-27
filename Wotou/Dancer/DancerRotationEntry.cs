@@ -115,13 +115,13 @@ public class DancerRotationEntry : IRotationEntry
         // 为 JobViewWindow 设置 UpdateAction 来渲染 HotkeyWindow2
         QT.SetUpdateAction(() =>
         {   
+            UpdateDancerPartnerPanel();
             var myJobViewSave = new JobViewSave();
             myJobViewSave.QtHotkeySize = new Vector2(DancerSettings.Instance.DancePartnerPanelIconSize, DancerSettings.Instance.DancePartnerPanelIconSize);
             myJobViewSave.ShowHotkey = DancerSettings.Instance.ShowDancePartnerPanel;
             DancePartnerPanel.DrawHotkeyWindow(new QtStyle(DancerSettings.Instance.JobViewSave));
             DancePartnerPanel = new HotkeyWindow(myJobViewSave, "Custom DNC HotkeyWindow");
             DancePartnerPanel.HotkeyLineCount = 1;
-            UpdateDancerPartnerPanel();
         });
         
         QT.AddTab("通用", DrawGeneral);
