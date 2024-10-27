@@ -31,6 +31,14 @@ public class DancerStandardStepGcd : ISlotResolver
 
     public void Build(Slot slot)
     {
+        if (StandardStep.GetSpell().Cooldown.TotalMilliseconds <= DancerSettings.Instance.StandardStepCdTolerance &&
+            !FinishingMove.IsReady())
+        {
+            slot.Add(StandardStep.GetSpell());
+            AI.Instance.BattleData.CurrGcdAbilityCount = 1;
+            return;
+        }
+
         if (FinishingMove.IsReady())
         {
             slot.Add(FinishingMove.GetSpell());
@@ -40,6 +48,7 @@ public class DancerStandardStepGcd : ISlotResolver
         {
             slot.Add(StandardStep.GetSpell());
             AI.Instance.BattleData.CurrGcdAbilityCount = 1;
+            return;
         }
     }
 }

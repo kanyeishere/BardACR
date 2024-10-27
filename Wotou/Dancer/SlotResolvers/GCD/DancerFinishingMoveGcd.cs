@@ -22,7 +22,7 @@ public class DancerFinishingMoveGcd : ISlotResolver
         if (!DancerRotationEntry.QT.GetQt(QTKey.StandardStep))
             return -1;
         if (Core.Me.HasLocalPlayerAura(Devilment) && FinishingMove.GetSpell().Cooldown.TotalMilliseconds <= 600)
-            return 1;
+            return 999;
         if (FinishingMove.GetSpell().Cooldown.TotalMilliseconds <= DancerSettings.Instance.StandardStepCdTolerance)
             return 1;
         if (!FinishingMove.IsReady())
@@ -34,6 +34,18 @@ public class DancerFinishingMoveGcd : ISlotResolver
 
     public void Build(Slot slot)
     {
+        if (Core.Me.HasLocalPlayerAura(Devilment) && FinishingMove.GetSpell().Cooldown.TotalMilliseconds <= 600
+            && !StandardStep.IsReady())
+        {
+            slot.Add(FinishingMove.GetSpell());
+            return;
+        }
+        if (FinishingMove.GetSpell().Cooldown.TotalMilliseconds <= DancerSettings.Instance.StandardStepCdTolerance
+            && !StandardStep.IsReady())
+        {
+            slot.Add(FinishingMove.GetSpell());
+            return;
+        }
         if (FinishingMove.IsReady())
         {
             slot.Add(FinishingMove.GetSpell());
