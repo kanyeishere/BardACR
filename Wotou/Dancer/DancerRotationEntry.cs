@@ -21,6 +21,9 @@ namespace Wotou.Dancer;
 
 public class DancerRotationEntry : IRotationEntry
 {
+    
+    private const string UpdateLog = "更新日志：10.27" +
+                                     "\n- 添加了即兴表演与闭式舞姿的CD时间显示";
     public void Dispose()
     {
     }
@@ -68,7 +71,7 @@ public class DancerRotationEntry : IRotationEntry
             MaxLevel = 100,
             Description = "100级高难舞者-测试版-技速选择2.5" +
                           "\n本ACR目前所用的是固定4小舞循环，暂时只适配100级高难环境" +
-                          "\n在90级及以下副本中，此循环并非最优解，请自行评估使用",
+                          "\n在90级及以下副本中，此循环并非最优解，请自行评估使用\n" + UpdateLog,
         };
         rot.SetRotationEventHandler(new DancerRotationEventHandler());
         rot.AddOpener(GetOpener);
@@ -159,6 +162,8 @@ public class DancerRotationEntry : IRotationEntry
         {
             ImGui.Text("舞者ACR-技速选择2.5\n本ACR目前所用的是固定4小舞循环，暂时只适配100级高难环境" +
                        "\n在90级及以下副本中，此循环并非最优解，请自行评估使用");
+            ImGui.Separator();
+            ImGui.Text(UpdateLog);
         }
 
         ImGui.Separator();
