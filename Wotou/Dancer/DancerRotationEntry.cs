@@ -71,7 +71,7 @@ public class DancerRotationEntry : IRotationEntry
             AcrType = AcrType.Both,
             MinLevel = 100,
             MaxLevel = 100,
-            Description = "100级高难舞者-测试版-技速选择2.5" +
+            Description = "100级高难舞者-技速选择2.5" +
                           "\n本ACR目前所用的是固定4小舞循环，暂时只适配100级高难环境" +
                           "\n在90级及以下副本中，此循环并非最优解，请自行评估使用\n" + UpdateLog,
         };
