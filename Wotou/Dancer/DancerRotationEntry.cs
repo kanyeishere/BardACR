@@ -36,7 +36,6 @@ public class DancerRotationEntry : IRotationEntry
     private List<SlotResolverData> SlotResolvers = new()
     {
         new SlotResolverData(new DancerLastDanceHighGcd(), SlotMode.Gcd), //马上到期的终结舞步
-        
         new SlotResolverData(new DancerFinishingMoveGcd(), SlotMode.Gcd),
         new SlotResolverData(new DancerStandardStepDancingGcd(), SlotMode.Gcd),
         new SlotResolverData(new DancerStandardStepGcd(), SlotMode.Gcd),

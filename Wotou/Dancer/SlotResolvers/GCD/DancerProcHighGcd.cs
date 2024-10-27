@@ -20,6 +20,7 @@ public class DancerProcHighGcd : ISlotResolver
     private const uint FlourishingSymmetry = DancerDefinesData.Buffs.FlourishingSymmetry;
     private const uint SilkenFlow = DancerDefinesData.Buffs.SilkenFlow;
     private const uint SilkenSymmetry = DancerDefinesData.Buffs.SilkenSymmetry;
+    private const uint FinishingMoveReady = DancerDefinesData.Buffs.FinishingMoveReady;
     
     public int Check()
     {
@@ -40,11 +41,13 @@ public class DancerProcHighGcd : ISlotResolver
         
         if (Core.Me.HasAura(FlourishingFlow) && 
             !Core.Me.HasMyAuraWithTimeleft(FlourishingFlow,8000) &&
-            StandardStep.GetSpell().Cooldown.TotalMilliseconds < 5500)
+            StandardStep.GetSpell().Cooldown.TotalMilliseconds < 5500 &&
+            !Core.Me.HasLocalPlayerAura(FinishingMoveReady))
             return 1;
         if (Core.Me.HasAura(SilkenFlow) && 
             !Core.Me.HasMyAuraWithTimeleft(SilkenFlow,8000) && 
-            StandardStep.GetSpell().Cooldown.TotalMilliseconds < 5500)
+            StandardStep.GetSpell().Cooldown.TotalMilliseconds < 5500 &&
+            !Core.Me.HasLocalPlayerAura(FinishingMoveReady))
             return 1;
 
         
