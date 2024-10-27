@@ -13,12 +13,13 @@ public class DancerStandardStepGcd : ISlotResolver
 {
     private const uint StandardStep = DancerDefinesData.Spells.StandardStep;
     private const uint FinishingMove = DancerDefinesData.Spells.FinishingMove;
+    private const uint FinishingMoveReady = DancerDefinesData.Buffs.FinishingMoveReady;
     
     public int Check()
     {
         if (!DancerRotationEntry.QT.GetQt(QTKey.StandardStep))
             return -1;
-        if (Core.Me.HasAura(DancerDefinesData.Buffs.FinishingMoveReady))
+        if (Core.Me.HasAura(FinishingMoveReady))
             return -2;
         if (Core.Resolve<JobApi_Dancer>().IsDancing)
             return -3;
@@ -31,24 +32,15 @@ public class DancerStandardStepGcd : ISlotResolver
 
     public void Build(Slot slot)
     {
-        if (StandardStep.GetSpell().Cooldown.TotalMilliseconds <= DancerSettings.Instance.StandardStepCdTolerance &&
-            !FinishingMove.IsReady())
-        {
-            slot.Add(StandardStep.GetSpell());
-            AI.Instance.BattleData.CurrGcdAbilityCount = 1;
-            return;
-        }
-
-        if (FinishingMove.IsReady())
+        if (FinishingMove.IsReady() || Core.Me.HasAura(FinishingMoveReady))
         {
             slot.Add(FinishingMove.GetSpell());
             return;
         }
-        if (StandardStep.IsReady())
+        if (StandardStep.IsReady() || !Core.Me.HasAura(FinishingMoveReady))
         {
             slot.Add(StandardStep.GetSpell());
             AI.Instance.BattleData.CurrGcdAbilityCount = 1;
-            return;
         }
     }
 }
