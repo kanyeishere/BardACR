@@ -23,7 +23,8 @@ public class DancerRotationEntry : IRotationEntry
 {
     
     private const string UpdateLog = "更新日志：10.27" +
-                                     "\n- 添加了即兴表演与闭式舞姿的CD时间显示";
+                                     "\n- 添加了即兴表演与闭式舞姿的CD时间显示"+
+                                     "\n- 修复AOE逻辑";
     public void Dispose()
     {
     }

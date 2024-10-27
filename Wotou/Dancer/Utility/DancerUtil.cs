@@ -28,8 +28,8 @@ namespace Wotou.Dancer
         {
             if (Windmill.IsReady() &&
                 DancerRotationEntry.QT.GetQt(QTKey.Aoe) &&
-                ((TargetHelper.GetNearbyEnemyCount(5) > 3 && Core.Me.Level >= 94) || 
-                 TargetHelper.GetNearbyEnemyCount(5) > 2))
+                ((TargetHelper.GetNearbyEnemyCount(5) > 2 && Core.Me.Level >= 94) ||
+                 (TargetHelper.GetNearbyEnemyCount(5) > 1) && Core.Me.Level < 94))
                 return GetAoeCombo();
             return GetSingleCombo();
         }
@@ -38,7 +38,7 @@ namespace Wotou.Dancer
         {
             if (BladeShower.IsReady() &&
                 Core.Resolve<MemApiSpell>().GetLastComboSpellId() == Windmill &&
-                Core.Resolve<MemApiSpell>().GetComboTimeLeft().TotalMilliseconds > 50.0)
+                Core.Resolve<MemApiSpell>().GetComboTimeLeft().TotalMilliseconds > 10.0)
                 return BladeShower.GetSpell();
             return Windmill.GetSpell();
         }
@@ -47,7 +47,7 @@ namespace Wotou.Dancer
         {
             if (Fountain.IsReady() &&
                 Core.Resolve<MemApiSpell>().GetLastComboSpellId() == Cascade && 
-                Core.Resolve<MemApiSpell>().GetComboTimeLeft().TotalMilliseconds > 50.0)
+                Core.Resolve<MemApiSpell>().GetComboTimeLeft().TotalMilliseconds > 10.0)
                 return Fountain.GetSpell();
             return Cascade.GetSpell();
         }
@@ -56,8 +56,8 @@ namespace Wotou.Dancer
         public static Spell GetProcGcdCombo()
         {
             if (DancerRotationEntry.QT.GetQt(QTKey.Aoe) &&
-                ((TargetHelper.GetNearbyEnemyCount(5) > 2 && Core.Me.Level >= 94) || 
-                 TargetHelper.GetNearbyEnemyCount(5) > 1))
+                ((TargetHelper.GetNearbyEnemyCount(5) > 2 && Core.Me.Level >= 94) ||
+                 (TargetHelper.GetNearbyEnemyCount(5) > 1) && Core.Me.Level < 94))
                 return GetProcAoeCombo();
             return GetProcSingleCombo();
         }
