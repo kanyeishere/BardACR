@@ -38,7 +38,7 @@ public class ClosedPositionHotkeyResolver : IHotkeyResolver
             return;
         ImGui.Image(textureWrap.ImGuiHandle, size1);
         
-        if (SpellId.GetSpell().Cooldown.Seconds > 0)
+        if (SpellId.GetSpell().Cooldown.TotalMilliseconds > 0)
         {
             // Use ImGui.GetItemRectMin() and ImGui.GetItemRectMax() for exact icon bounds
             Vector2 overlayMin = ImGui.GetItemRectMin();
@@ -51,11 +51,11 @@ public class ClosedPositionHotkeyResolver : IHotkeyResolver
                 ImGui.ColorConvertFloat4ToU32(new Vector4(0, 0, 0, 0.5f))); // 50% transparent grey
         }
         
-        var cooldownRemaining = SpellId.GetSpell().Cooldown.Seconds;
+        var cooldownRemaining = SpellId.GetSpell().Cooldown.TotalMilliseconds / 1000;
         if (cooldownRemaining > 0)
         {
             // Convert cooldown to seconds and format as string
-            string cooldownText = cooldownRemaining.ToString();
+            string cooldownText = Math.Ceiling(cooldownRemaining).ToString();
 
             // 计算文本位置，向左下角偏移
             Vector2 textPos = ImGui.GetItemRectMin();
