@@ -33,7 +33,7 @@ public class DancerSaberDanceGcd : ISlotResolver
             DancerRotationEntry.QT.GetQt(QTKey.TechnicalStep) &&
             DancerRotationEntry.QT.GetQt(QTKey.StandardStep))
             return 1;
-        if (TechnicalStep.GetSpell().Cooldown.TotalMilliseconds < 35000 && 
+        if (TechnicalStep.GetSpell().Cooldown.TotalMilliseconds < 30000 && 
             Core.Resolve<JobApi_Dancer>().Esprit < 90 &&
             DancerRotationEntry.QT.GetQt(QTKey.TechnicalStep))
             return -2;
