@@ -70,7 +70,7 @@ namespace Wotou.Dancer.Opener
 
         private static void Step1(Slot slot)
         {
-            slot.Add(DancerDefinesData.Spells.Flourish.GetSpell());
+            //slot.Add(DancerDefinesData.Spells.Flourish.GetSpell());
             slot.Add(DancerDefinesData.Spells.TechnicalStep.GetSpell());
         }
     }
