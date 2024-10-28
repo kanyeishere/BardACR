@@ -25,7 +25,8 @@ public class DancerRotationEntry : IRotationEntry
     private const string UpdateLog = "更新日志：10.28" +
                                      "\n- 舞伴宏现在支持多行宏命令输入了" +
                                      "\n- 优化提拉纳释放时机" +
-                                     "\n- 优化爆发期剑舞的释放逻辑";
+                                     "\n- 优化爆发期剑舞的释放逻辑"+
+                                     "\n- 优化非爆发期剑舞的释放逻辑";
     public void Dispose()
     {
     }
@@ -179,6 +180,8 @@ public class DancerRotationEntry : IRotationEntry
             if (!QT.GetQt("爆发药"))
                 ImGui.TextColored(new Vector4(0.7f, 0.8f, 0.0f, 1.0000f), "如果你希望使用爆发药，请在QT面板中开启爆发药开关");
             ImGui.Checkbox("起手吃爆发药", ref DancerSettings.Instance.UsePotionInOpener);
+            ImGui.Separator();
+            ImGuiHelper.LeftInputInt("非爆发期剑舞释放阈值", ref DancerSettings.Instance.SaberDanceThreshold, 50, 100);
             ImGui.Separator();
             ImGui.BeginGroup();
             ImGuiHelper.LeftInputInt("小舞冷却时间容差值  (毫秒)", ref DancerSettings.Instance.StandardStepCdTolerance, 0, 1000);

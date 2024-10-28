@@ -37,7 +37,7 @@ public class DancerSaberDanceGcd : ISlotResolver
             Core.Resolve<JobApi_Dancer>().Esprit < 80 &&
             DancerRotationEntry.QT.GetQt(QTKey.TechnicalStep))
             return -2;*/
-        if (Core.Resolve<JobApi_Dancer>().Esprit < 80)
+        if (Core.Resolve<JobApi_Dancer>().Esprit < DancerSettings.Instance.SaberDanceThreshold)
             return -3;
         return 1;
     }

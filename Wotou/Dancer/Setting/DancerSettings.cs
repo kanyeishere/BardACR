@@ -54,6 +54,7 @@ public class DancerSettings
     public int OpenerStandardStepTime = 15000; // 起手标准舞时间
     public int StandardStepCdTolerance = 600; // 标准舞CD容差
     public int FinishingMoveCdTolerance = 600; // 落幕舞CD容差
+    public int SaberDanceThreshold = 80; //剑舞阈值
     
     public JobViewSave JobViewSave = new JobViewSave()
     {
