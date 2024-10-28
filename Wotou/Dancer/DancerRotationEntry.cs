@@ -183,7 +183,7 @@ public class DancerRotationEntry : IRotationEntry
             ImGui.Separator();
             ImGuiHelper.LeftInputInt("非爆发期剑舞释放阈值", ref DancerSettings.Instance.SaberDanceThreshold, 50, 100);
             ImGui.Separator();
-            ImGui.BeginGroup();
+            /*ImGui.BeginGroup();
             ImGuiHelper.LeftInputInt("小舞冷却时间容差值  (毫秒)", ref DancerSettings.Instance.StandardStepCdTolerance, 0, 1000);
             ImGui.EndGroup();
             if (ImGui.IsItemHovered())
@@ -191,7 +191,7 @@ public class DancerRotationEntry : IRotationEntry
                 // 显示 Tooltip
                 ImGui.SetTooltip("仅当你技速小于2.50时，为了避免小舞延后才需做调整");
             }
-            ImGui.Separator();
+            ImGui.Separator();*/
             if (ImGui.Button("保存设置")) DancerSettings.Instance.Save();
             
         }
