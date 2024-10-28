@@ -22,8 +22,8 @@ namespace Wotou.Dancer;
 public class DancerRotationEntry : IRotationEntry
 {
     
-    private const string UpdateLog = "更新日志：10.28" +
-                                     "\n- 重构了触发技能的释放逻辑" +
+    private const string UpdateLog = "更新日志：10.29" +
+                                     "\n- 重构了舞者的战斗逻辑" +
                                      "\n- 调整爆发药的使用时机";
     public void Dispose()
     {
