@@ -27,14 +27,14 @@ public class DancerSaberDanceGcd : ISlotResolver
             return -4;*/
         if (DancerRotationEntry.QT.GetQt(QTKey.FinalBurst))
             return 1;
-        if (TechnicalStep.GetSpell().Cooldown.TotalMilliseconds < 35000 && 
+        if (TechnicalStep.GetSpell().Cooldown.TotalMilliseconds < 30000 && 
             StandardStep.GetSpell().Cooldown.TotalMilliseconds < 3500 &&
-            Core.Resolve<JobApi_Dancer>().Esprit >= 85 &&
+            Core.Resolve<JobApi_Dancer>().Esprit >= 75 &&
             DancerRotationEntry.QT.GetQt(QTKey.TechnicalStep) &&
             DancerRotationEntry.QT.GetQt(QTKey.StandardStep))
             return 1;
         if (TechnicalStep.GetSpell().Cooldown.TotalMilliseconds < 30000 && 
-            Core.Resolve<JobApi_Dancer>().Esprit < 90 &&
+            Core.Resolve<JobApi_Dancer>().Esprit < 80 &&
             DancerRotationEntry.QT.GetQt(QTKey.TechnicalStep))
             return -2;
         if (Core.Resolve<JobApi_Dancer>().Esprit < 50)
