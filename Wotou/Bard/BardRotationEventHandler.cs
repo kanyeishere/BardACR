@@ -17,7 +17,8 @@ namespace Wotou.Bard;
 public class BardRotationEventHandler : IRotationEventHandler
 {
 
-    private bool _originalValueForNoClipGCD3;
+    private bool _originalValueForNoClipGcd3;
+    private int _originalMaxAbilityTimesInGcd;
     
     public async Task OnPreCombat()
     {
@@ -188,14 +189,16 @@ public class BardRotationEventHandler : IRotationEventHandler
     public void OnEnterRotation()
     {
         // 处理全局能力技不卡GCD
-        _originalValueForNoClipGCD3 = SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3;
-        if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3)
-            SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3 = false;
+        _originalValueForNoClipGcd3 = SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3;
+        _originalMaxAbilityTimesInGcd = SettingMgr.GetSetting<GeneralSettings>().MaxAbilityTimesInGcd;
+        SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3 = false;
+        SettingMgr.GetSetting<GeneralSettings>().MaxAbilityTimesInGcd = 2;
     }
 
     public void OnExitRotation()
     {
-        SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3 = _originalValueForNoClipGCD3;
+        SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3 = _originalValueForNoClipGcd3;
+        SettingMgr.GetSetting<GeneralSettings>().MaxAbilityTimesInGcd = _originalMaxAbilityTimesInGcd;
     }
 
     public void OnTerritoryChanged()

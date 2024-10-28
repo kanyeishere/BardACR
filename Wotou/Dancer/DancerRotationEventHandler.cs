@@ -11,6 +11,9 @@ namespace Wotou.Dancer
 {
     public class DancerRotationEventHandler : IRotationEventHandler
     {
+        private bool _originalValueForNoClipGcd3;
+        private int _originalMaxAbilityTimesInGcd;
+        
         private static Dictionary<Jobs, int> jobPriorities = new(){
             { Jobs.Viper, 1 },
             { Jobs.Monk, 2 },
@@ -43,10 +46,17 @@ namespace Wotou.Dancer
 
         public void OnEnterRotation()
         {
+            // 处理全局能力技不卡GCD
+            _originalValueForNoClipGcd3 = SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3;
+            _originalMaxAbilityTimesInGcd = SettingMgr.GetSetting<GeneralSettings>().MaxAbilityTimesInGcd;
+            SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3 = false;
+            SettingMgr.GetSetting<GeneralSettings>().MaxAbilityTimesInGcd = 2;
         }
 
         public void OnExitRotation()
         {
+            SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3 = _originalValueForNoClipGcd3;
+            SettingMgr.GetSetting<GeneralSettings>().MaxAbilityTimesInGcd = _originalMaxAbilityTimesInGcd;
         }
 
         public async Task OnNoTarget()
