@@ -23,13 +23,18 @@ namespace Wotou.Dancer
         private const uint FlourishingSymmetry = DancerDefinesData.Buffs.FlourishingSymmetry;
         private const uint SilkenFlow = DancerDefinesData.Buffs.SilkenFlow;
         private const uint SilkenSymmetry = DancerDefinesData.Buffs.SilkenSymmetry;
-
+        
+        public static bool CanUseAoeCombo()
+        {
+            return DancerRotationEntry.QT.GetQt(QTKey.Aoe) &&
+                   ((TargetHelper.GetNearbyEnemyCount(5) > 2 && Core.Me.Level >= 94) ||
+                    (TargetHelper.GetNearbyEnemyCount(5) > 1) && Core.Me.Level < 94);
+        }
+        
         public static Spell GetBaseGcdCombo()
         {
             if (Windmill.IsReady() &&
-                DancerRotationEntry.QT.GetQt(QTKey.Aoe) &&
-                ((TargetHelper.GetNearbyEnemyCount(5) > 2 && Core.Me.Level >= 94) ||
-                 (TargetHelper.GetNearbyEnemyCount(5) > 1) && Core.Me.Level < 94))
+                CanUseAoeCombo())
                 return GetAoeCombo();
             return GetSingleCombo();
         }
@@ -56,8 +61,7 @@ namespace Wotou.Dancer
         public static Spell GetProcGcdCombo()
         {
             if (DancerRotationEntry.QT.GetQt(QTKey.Aoe) &&
-                ((TargetHelper.GetNearbyEnemyCount(5) > 2 && Core.Me.Level >= 94) ||
-                 (TargetHelper.GetNearbyEnemyCount(5) > 1) && Core.Me.Level < 94))
+                CanUseAoeCombo())
                 return GetProcAoeCombo();
             return GetProcSingleCombo();
         }

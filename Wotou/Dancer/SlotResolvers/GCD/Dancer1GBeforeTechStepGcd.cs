@@ -1,3 +1,4 @@
+using System.Globalization;
 using AEAssist;
 using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
@@ -32,8 +33,6 @@ public class Dancer1GBeforeTechStepGcd : ISlotResolver
     public void Build(Slot slot)
     {
         slot.Add(GetSpell());
-        if (DancerRotationEntry.QT.GetQt(QTKey.UsePotion) && ItemHelper.CheckCurrJobPotion())
-            slot.Add(Spell.CreatePotion());
     }
     
     private static Spell GetSpell()

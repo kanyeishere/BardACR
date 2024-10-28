@@ -38,6 +38,8 @@ namespace Wotou.Dancer
         };
         public void AfterSpell(Slot slot, Spell spell)
         {
+            if (spell.Id == DancerDefinesData.Spells.TechnicalStep)
+                DancerBattleData.Instance.TechnicalStepCount++;
         }
 
         public void OnBattleUpdate(int currTimeInMs)
@@ -120,6 +122,8 @@ namespace Wotou.Dancer
         public void OnResetBattle()
         {
             DancerRotationEntry.UpdateDancerPartnerPanel();
+            // 重置战斗中缓存的数据
+            DancerBattleData.Instance = new DancerBattleData();
             DancerRotationEntry.QT.Reset();
         }
 

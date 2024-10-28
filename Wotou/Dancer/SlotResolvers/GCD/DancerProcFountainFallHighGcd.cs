@@ -9,7 +9,7 @@ using Wotou.Dancer.Data;
 
 namespace Wotou.Dancer.GCD;
 
-public class DancerProcHighGcd : ISlotResolver
+public class DancerProcFountainFailHighGcd : ISlotResolver
 {
     private const uint ReverseCascade = DancerDefinesData.Spells.ReverseCascade;
     private const uint FountainFall = DancerDefinesData.Spells.Fountainfall;
@@ -22,7 +22,6 @@ public class DancerProcHighGcd : ISlotResolver
     private const uint SilkenFlow = DancerDefinesData.Buffs.SilkenFlow;
     private const uint SilkenSymmetry = DancerDefinesData.Buffs.SilkenSymmetry;
     private const uint FinishingMoveReady = DancerDefinesData.Buffs.FinishingMoveReady;
-    private const uint Devilment = DancerDefinesData.Buffs.Devilment;
     
     public int Check()
     {
@@ -32,25 +31,9 @@ public class DancerProcHighGcd : ISlotResolver
             !BloodShower.IsReady())
             return -2;
         
-        if (Core.Me.HasAura(FlourishingSymmetry) && !Core.Me.HasMyAuraWithTimeleft(FlourishingSymmetry,3500))
-            return 1;
-        if (Core.Me.HasAura(FlourishingFlow) && !Core.Me.HasMyAuraWithTimeleft(FlourishingFlow,3500))
-            return 1;
-        if (Core.Me.HasAura(SilkenFlow) && !Core.Me.HasMyAuraWithTimeleft(SilkenFlow, 3500))
-            return 1;
         if (Core.Me.HasAura(SilkenFlow) && !Core.Me.HasMyAuraWithTimeleft(SilkenFlow,3500))
             return 1;
-        
-        if (Core.Me.HasAura(SilkenSymmetry) && 
-            Core.Me.HasLocalPlayerAura(Devilment) &&
-            Core.Resolve<MemApiBuff>().GetAuraTimeleft(Core.Me, SilkenSymmetry, true) < 
-            Core.Resolve<MemApiBuff>().GetAuraTimeleft(Core.Me, Devilment, true))
-            return 1;
-        
-        if (Core.Me.HasAura(SilkenFlow) && 
-            Core.Me.HasLocalPlayerAura(Devilment) &&
-            Core.Resolve<MemApiBuff>().GetAuraTimeleft(Core.Me, SilkenFlow, true) < 
-            Core.Resolve<MemApiBuff>().GetAuraTimeleft(Core.Me, Devilment, true))
+        if (Core.Me.HasAura(FlourishingFlow) && !Core.Me.HasMyAuraWithTimeleft(FlourishingFlow,3500))
             return 1;
         
         if (Core.Me.HasAura(FlourishingFlow) && 
@@ -71,12 +54,21 @@ public class DancerProcHighGcd : ISlotResolver
             !Core.Me.HasMyAuraWithTimeleft(FlourishingFlow,6000) &&
             !Core.Me.HasMyAuraWithTimeleft(FlourishingSymmetry,6000))
             return 1;
+                
+        // 同时两个百花触发又碰到小舞
+        if (Core.Me.HasAura(FlourishingFlow) && 
+            Core.Me.HasAura(FlourishingSymmetry) &&
+            !Core.Me.HasMyAuraWithTimeleft(FlourishingFlow,11000) &&
+            !Core.Me.HasMyAuraWithTimeleft(FlourishingSymmetry,11000) && 
+            StandardStep.GetSpell().Cooldown.TotalMilliseconds < 5500 &&
+            !Core.Me.HasLocalPlayerAura(FinishingMoveReady))
+            return 1;
         
         return -1;
     }
 
     public void Build(Slot slot)
     {
-        slot.Add(DancerUtil.GetProcGcdCombo());
+        slot.Add(DancerUtil.CanUseAoeCombo() ? BloodShower.GetSpell() : FountainFall.GetSpell());
     }
 }

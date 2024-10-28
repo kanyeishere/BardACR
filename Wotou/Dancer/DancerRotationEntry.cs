@@ -23,11 +23,8 @@ public class DancerRotationEntry : IRotationEntry
 {
     
     private const string UpdateLog = "更新日志：10.28" +
-                                     "\n- 舞伴宏现在支持多行宏命令输入了" +
-                                     "\n- 优化提拉纳释放时机" +
-                                     "\n- 优化爆发期剑舞的释放逻辑"+
-                                     "\n- 优化非爆发期剑舞的释放逻辑"+
-                                     "\n- 起手百花后置，防止触发过期";
+                                     "\n- 重构了触发技能的释放逻辑" +
+                                     "\n- 调整爆发药的使用时机";
     public void Dispose()
     {
     }
@@ -43,10 +40,13 @@ public class DancerRotationEntry : IRotationEntry
         new SlotResolverData(new DancerTechnicalStepDancingGcd(), SlotMode.Gcd),
         new SlotResolverData(new DancerTechnicalStepGcd(), SlotMode.Gcd),
         new SlotResolverData(new Dancer1GBeforeTechStepGcd(), SlotMode.Gcd),
-        
-        new SlotResolverData(new DancerProcHighGcd(), SlotMode.Gcd), // 快过期的触发
+       
+        new SlotResolverData(new DancerProcFountainFailHighGcd(), SlotMode.Gcd), // 快过期的触发
+        new SlotResolverData(new DancerProcReverseCascadeHighGcd(), SlotMode.Gcd), // 快过期的触发
         new SlotResolverData(new DancerSaberDanceHighGcd(), SlotMode.Gcd), //团辅期高能量剑舞
         new SlotResolverData(new DancerTillanaGcd(), SlotMode.Gcd),
+        new SlotResolverData(new DancerProcFountainFallMediumGcd(), SlotMode.Gcd), // 团辅外等不到的坠喷泉触发
+        new SlotResolverData(new DancerProcReverseCascadeMediumGcd(), SlotMode.Gcd), // 团辅外等不到的逆瀑泻触发
         new SlotResolverData(new DancerStarfallDanceGCD(), SlotMode.Gcd),
         new SlotResolverData(new DancerLastDanceGcd(), SlotMode.Gcd),
         new SlotResolverData(new DancerSaberDanceMediumGcd(), SlotMode.Gcd), //团辅期低能量剑舞
@@ -73,6 +73,7 @@ public class DancerRotationEntry : IRotationEntry
             MinLevel = 100,
             MaxLevel = 100,
             Description = "100级高难舞者-技速选择2.5" +
+                          "\n请在 FuckAnimationLock 插件中勾选减少爆发药后摇" +
                           "\n本ACR目前所用的是固定4小舞循环，暂时只适配100级高难环境" +
                           "\n在90级及以下副本中，此循环并非最优解，请自行评估使用\n" + UpdateLog,
         };
