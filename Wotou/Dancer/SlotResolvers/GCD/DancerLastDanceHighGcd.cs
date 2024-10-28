@@ -2,9 +2,9 @@
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
-using AEAssist.JobApi;
 using AEAssist.MemoryApi;
 using Wotou.Dancer.Data;
+using Wotou.Dancer.Setting;
 
 namespace Wotou.Dancer.GCD;
 
@@ -20,7 +20,8 @@ public class DancerLastDanceHighGcd : ISlotResolver
             return -1; 
         if (!Core.Me.HasAura(LastDanceReady))
             return -2;
-        if ( Core.Resolve<MemApiSpell>().CheckActionChange(StandardStep).GetSpell().Cooldown.TotalMilliseconds >= GCDHelper.GetGCDDuration() * 2)
+        if ( Core.Resolve<MemApiSpell>().CheckActionChange(StandardStep).GetSpell().Cooldown.TotalMilliseconds > 
+             GCDHelper.GetGCDDuration() + DancerSettings.Instance.FinishingMoveCdTolerance)
             return -1;
         return 0;
     }

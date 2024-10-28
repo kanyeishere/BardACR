@@ -23,7 +23,8 @@ public class DancerFinishingMoveGcd : ISlotResolver
             return -1;
         if (!Core.Me.HasAura(FinishingMoveReady))
             return -20;
-        if (Core.Me.HasLocalPlayerAura(Devilment) && FinishingMove.GetSpell().Cooldown.TotalMilliseconds <= 600)
+        if (Core.Me.HasLocalPlayerAura(Devilment) && 
+            FinishingMove.GetSpell().Cooldown.TotalMilliseconds <= DancerSettings.Instance.FinishingMoveCdTolerance)
             return 999;
         if (FinishingMove.GetSpell().Cooldown.TotalMilliseconds <= DancerSettings.Instance.StandardStepCdTolerance)
             return 1;
