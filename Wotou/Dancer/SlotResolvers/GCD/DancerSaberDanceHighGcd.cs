@@ -18,14 +18,10 @@ public class DancerSaberDanceHighGcd : ISlotResolver
     
     public int Check()
     {
-        if (!Core.Resolve<MemApiSpell>().CheckActionChange(SaberDance).IsReady())
-            return -1;
-        if (!Core.Me.HasLocalPlayerAura(Devilment))
-            return -2;
-        if (TechnicalStepFinish.RecentlyUsed(3000) && Core.Resolve<JobApi_Dancer>().Esprit >= 50)
+        if (Core.Resolve<MemApiSpell>().CheckActionChange(SaberDance).IsReady() &&
+            Core.Me.HasLocalPlayerAura(Devilment) &&
+            Core.Resolve<JobApi_Dancer>().Esprit >= 70)
             return 1;
-        if (Core.Resolve<JobApi_Dancer>().Esprit >= 70)
-            return 2;
         return -1;
     }
 

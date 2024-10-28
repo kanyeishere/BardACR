@@ -16,13 +16,11 @@ public class DancerSaberDanceMediumGcd : ISlotResolver
     
     public int Check()
     {
-        if (!Core.Resolve<MemApiSpell>().CheckActionChange(SaberDance).IsReady())
-            return -1;
-        if (!Core.Me.HasLocalPlayerAura(Devilment))
-            return -2;
-        if (Core.Resolve<JobApi_Dancer>().Esprit < 50)
-            return -3;
-        return 1;
+        if (Core.Me.HasLocalPlayerAura(Devilment) && 
+            Core.Resolve<JobApi_Dancer>().Esprit >= 50 &&
+            Core.Resolve<MemApiSpell>().CheckActionChange(SaberDance).IsReady())
+            return 1;
+        return -1;
     }
 
     public void Build(Slot slot)
