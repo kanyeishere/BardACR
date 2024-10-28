@@ -26,7 +26,8 @@ public class DancerRotationEntry : IRotationEntry
                                      "\n- 舞伴宏现在支持多行宏命令输入了" +
                                      "\n- 优化提拉纳释放时机" +
                                      "\n- 优化爆发期剑舞的释放逻辑"+
-                                     "\n- 优化非爆发期剑舞的释放逻辑";
+                                     "\n- 优化非爆发期剑舞的释放逻辑"+
+                                     "\n- 起手百花后置，防止触发过期";
     public void Dispose()
     {
     }
