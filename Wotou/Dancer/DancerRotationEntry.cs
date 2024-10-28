@@ -181,7 +181,7 @@ public class DancerRotationEntry : IRotationEntry
                 ImGui.TextColored(new Vector4(0.7f, 0.8f, 0.0f, 1.0000f), "如果你希望使用爆发药，请在QT面板中开启爆发药开关");
             ImGui.Checkbox("起手吃爆发药", ref DancerSettings.Instance.UsePotionInOpener);
             ImGui.Separator();
-            ImGuiHelper.LeftInputInt("非爆发期剑舞释放阈值", ref DancerSettings.Instance.SaberDanceThreshold, 50, 100);
+            ImGuiHelper.LeftInputInt("非爆发期剑舞释放阈值", ref DancerSettings.Instance.SaberDanceEspritThreshold, 50, 100);
             ImGui.Separator();
             /*ImGui.BeginGroup();
             ImGuiHelper.LeftInputInt("小舞冷却时间容差值  (毫秒)", ref DancerSettings.Instance.StandardStepCdTolerance, 0, 1000);
