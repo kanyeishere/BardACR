@@ -199,7 +199,7 @@ public class DancerRotationEntry : IRotationEntry
 
             ImGui.Separator();
             ImGui.Checkbox("是否启用舞伴宏", ref DancerSettings.Instance.UseDancePartnerMacro);
-            ImGui.InputTextMultiline("", ref DancerSettings.Instance.DancePartnerMacro, 1000, new Vector2(-1, ImGui.GetTextLineHeight() * 6));
+            ImGui.InputTextMultiline("", ref DancerSettings.Instance.DancePartnerMacroText, 1000, new Vector2(-1, ImGui.GetTextLineHeight() * 6));
             
             ImGui.Separator();
             if (ImGui.Button("保存界面设置")) DancerSettings.Instance.Save();

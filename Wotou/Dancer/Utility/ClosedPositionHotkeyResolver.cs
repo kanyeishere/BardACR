@@ -101,7 +101,7 @@ public class ClosedPositionHotkeyResolver : IHotkeyResolver
         if (DancerSettings.Instance.UseDancePartnerMacro)
         {
             // 将多行输入分割为字符串数组，每个元素是一行
-            var macroLines = DancerSettings.Instance.DancePartnerMacro.Split('\n');
+            var macroLines = DancerSettings.Instance.DancePartnerMacroText.Split('\n');
 
             foreach (var line in macroLines)
             {
