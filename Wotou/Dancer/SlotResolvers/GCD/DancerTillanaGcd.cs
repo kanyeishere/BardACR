@@ -14,7 +14,7 @@ public class DancerTillanaGcd : ISlotResolver
     {
         if (!Tillana.IsReady())
             return -1;
-        if (Core.Resolve<JobApi_Dancer>().Esprit > 35)
+        if (Core.Resolve<JobApi_Dancer>().Esprit >= 35)
             return -2;
         return 0;
     }

@@ -99,6 +99,20 @@ public class ClosedPositionHotkeyResolver : IHotkeyResolver
             AI.Instance.BattleData.NextSlot.Add(new Spell(DancerDefinesData.Spells.ClosedPosition, partyMembers[index]));
         }
         if (DancerSettings.Instance.UseDancePartnerMacro)
-            ChatHelper.SendMessage(DancerSettings.Instance.DancePartnerMacro.Replace("<t>", PartyHelper.Party[index].Name.ToString()) );
+        {
+            // 将多行输入分割为字符串数组，每个元素是一行
+            var macroLines = DancerSettings.Instance.DancePartnerMacro.Split('\n');
+
+            foreach (var line in macroLines)
+            {
+                // 确保不发送空行
+                if (!string.IsNullOrWhiteSpace(line))
+                {
+                    // 替换 <t> 为目标的名称并发送每行消息
+                    var formattedLine = line.Replace("<t>", PartyHelper.Party[index].Name.ToString());
+                    ChatHelper.SendMessage(formattedLine);
+                }
+            }
+        }
     }
 }
