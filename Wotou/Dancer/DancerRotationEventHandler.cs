@@ -120,6 +120,7 @@ namespace Wotou.Dancer
         public void OnResetBattle()
         {
             DancerRotationEntry.UpdateDancerPartnerPanel();
+            DancerRotationEntry.QT.Reset();
         }
 
         public void OnSpellCastSuccess(Slot slot, Spell spell)
