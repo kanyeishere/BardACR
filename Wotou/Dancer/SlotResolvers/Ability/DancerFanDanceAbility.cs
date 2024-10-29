@@ -6,6 +6,7 @@ using AEAssist.Helper;
 using AEAssist.JobApi;
 using AEAssist.MemoryApi;
 using Wotou.Dancer.Data;
+using Wotou.Dancer.Setting;
 
 namespace Wotou.Dancer.Ability;
 
@@ -22,6 +23,8 @@ public class DancerFanDanceAbility : ISlotResolver
     
     public int Check()
     {
+        if (!DancerRotationEntry.QT.GetQt(QTKey.FanDance))
+            return -1;
         if (GCDHelper.GetGCDCooldown() <= 650)
             return -1;
         if (!FanDance.IsReady() && !CanUseFanDance2())
@@ -30,7 +33,7 @@ public class DancerFanDanceAbility : ISlotResolver
             return -3;
         if (DancerRotationEntry.QT.GetQt(QTKey.FinalBurst))
             return 100;
-        if (Core.Resolve<JobApi_Dancer>().FourFoldFeathers > 3 &&
+        if (Core.Resolve<JobApi_Dancer>().FourFoldFeathers > DancerSettings.Instance.FanDanceSaveStack  &&
             (Core.Me.HasLocalPlayerAura(FlourishingSymmetry) ||
              Core.Me.HasLocalPlayerAura(FlourishingFlow) || 
              Core.Me.HasLocalPlayerAura(SilkenFlow) || 

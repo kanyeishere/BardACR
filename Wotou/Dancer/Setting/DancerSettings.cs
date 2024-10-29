@@ -56,6 +56,10 @@ public class DancerSettings
     public int FinishingMoveCdTolerance = 600; // 落幕舞CD容差
     public int SaberDanceEspritThreshold = 70; //剑舞阈值
     
+    // 扇舞保留层数
+    public int FanDanceSaveStack = 3;
+    public bool HotkeyUseHighPrioritySlot = false; // 热键使用高优先级队列
+    
     public JobViewSave JobViewSave = new JobViewSave()
     {
         MainColor = new(0.3f, 0.00f, 0.12f, 1f),

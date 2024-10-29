@@ -18,11 +18,13 @@ public class ClosedPositionHotkeyResolver : IHotkeyResolver
 {
     private uint SpellId;
     private int Index;
+    private bool UseHighPri;
 
-    public ClosedPositionHotkeyResolver(int index)
+    public ClosedPositionHotkeyResolver(int index, bool useHighPrioritySlot = false)
     {
         this.SpellId = DancerDefinesData.Spells.ClosedPosition;
         this.Index = index;
+        this.UseHighPri = useHighPrioritySlot;
     }
     
     public void Draw(Vector2 size)
@@ -79,7 +81,7 @@ public class ClosedPositionHotkeyResolver : IHotkeyResolver
         return;
     }
     
-    private static void ClosedPosition(int index)
+    private void ClosedPosition(int index)
     {
         var partyMembers = PartyHelper.Party;
         if (partyMembers.Count < index + 1)
@@ -87,17 +89,49 @@ public class ClosedPositionHotkeyResolver : IHotkeyResolver
         if (!DancerDefinesData.Spells.ClosedPosition.CoolDownInGCDs(0) || 
             Core.Resolve<JobApi_Dancer>().IsDancing)
             return;
-        if (AI.Instance.BattleData.NextSlot == null)
-            AI.Instance.BattleData.NextSlot = new Slot();
-        if (Core.Me.HasLocalPlayerAura(DancerDefinesData.Buffs.ClosedPosition))
+        
+        if (!this.UseHighPri)
         {
-            AI.Instance.BattleData.NextSlot.Add(DancerDefinesData.Spells.Ending.GetSpell());
-            AI.Instance.BattleData.NextSlot.Add(new Spell(DancerDefinesData.Spells.ClosedPosition, partyMembers[index]));
+            if (AI.Instance.BattleData.NextSlot == null)
+                AI.Instance.BattleData.NextSlot = new Slot();
+            if (Core.Me.HasLocalPlayerAura(DancerDefinesData.Buffs.ClosedPosition))
+            {
+                AI.Instance.BattleData.NextSlot.Add(DancerDefinesData.Spells.Ending.GetSpell());
+                AI.Instance.BattleData.NextSlot.Add(new Spell(DancerDefinesData.Spells.ClosedPosition,
+                    partyMembers[index]));
+            }
+            else
+            {
+                AI.Instance.BattleData.NextSlot.Add(new Spell(DancerDefinesData.Spells.ClosedPosition,
+                    partyMembers[index]));
+            }
         }
         else
         {
-            AI.Instance.BattleData.NextSlot.Add(new Spell(DancerDefinesData.Spells.ClosedPosition, partyMembers[index]));
+            Slot slot = new Slot();
+            if (Core.Me.HasLocalPlayerAura(DancerDefinesData.Buffs.ClosedPosition))
+            {
+                slot.Add(DancerDefinesData.Spells.Ending.GetSpell());
+                slot.Add(new Spell(DancerDefinesData.Spells.ClosedPosition, partyMembers[index]));
+            }
+            else
+            {
+                slot.Add(new Spell(DancerDefinesData.Spells.ClosedPosition, partyMembers[index]));
+            }
+            AI.Instance.BattleData.HighPrioritySlots_OffGCD.Enqueue(slot);
         }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         if (DancerSettings.Instance.UseDancePartnerMacro)
         {
             // 将多行输入分割为字符串数组，每个元素是一行

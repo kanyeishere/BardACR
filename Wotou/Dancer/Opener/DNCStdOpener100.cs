@@ -54,7 +54,7 @@ namespace Wotou.Dancer.Opener
         {
             countDownHandler.AddAction(DancerSettings.Instance.OpenerStandardStepTime,DancerDefinesData.Spells.StandardStep);
             countDownHandler.AddAction(DancerSettings.Instance.OpenerStandardStepTime - 1500, DancerUtil.GetStep);
-            countDownHandler.AddAction(DancerSettings.Instance.OpenerStandardStepTime - 1500 * 2, DancerUtil.GetStep);
+            countDownHandler.AddAction(DancerSettings.Instance.OpenerStandardStepTime - 2500, DancerUtil.GetStep);
             if (DancerRotationEntry.QT.GetQt(QTKey.UsePotion) && DancerSettings.Instance.UsePotionInOpener)
             {
                 countDownHandler.AddPotionAction(DancerSettings.Instance.OpenerTime + 700);

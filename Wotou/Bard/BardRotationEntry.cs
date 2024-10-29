@@ -171,28 +171,24 @@ public class BardRotationEntry : IRotationEntry
         BardSettings.Instance.JobViewSave.QtUnVisibleList.Add(QTKey.Sidewinder);
 
         // 添加快捷按钮 (带技能图标)
-        QT.AddHotkey("防击退", new HotKeyResolver_NormalSpell(BardDefinesData.Spells.ArmsLength, SpellTargetType.Target));
+        QT.AddHotkey("防击退", new HotKeyResolver_NormalSpell(BardDefinesData.Spells.ArmsLength, 
+            SpellTargetType.Target,
+            BardSettings.Instance.HotkeyUseHighPrioritySlot));
         QT.AddHotkey("内丹",
-            new HotKeyResolver_NormalSpell(BardDefinesData.Spells.SecondWind, SpellTargetType.Target));
-        QT.AddHotkey("行吟", new HotKeyResolver_NormalSpell(BardDefinesData.Spells.Troubadour, SpellTargetType.Target));
+            new HotKeyResolver_NormalSpell(BardDefinesData.Spells.SecondWind, SpellTargetType.Target,
+                BardSettings.Instance.HotkeyUseHighPrioritySlot));
+        QT.AddHotkey("行吟", new HotKeyResolver_NormalSpell(BardDefinesData.Spells.Troubadour, 
+            SpellTargetType.Target,
+            BardSettings.Instance.HotkeyUseHighPrioritySlot));
         QT.AddHotkey("大地神",
-            new HotKeyResolver_NormalSpell(BardDefinesData.Spells.NaturesMinne, SpellTargetType.Target));
+            new HotKeyResolver_NormalSpell(BardDefinesData.Spells.NaturesMinne, SpellTargetType.Target,
+        BardSettings.Instance.HotkeyUseHighPrioritySlot));
         QT.AddHotkey("疾跑", new HotKeyResolver_疾跑());
         QT.AddHotkey("后跳",
-            new HotKeyResolver_NormalSpell(BardDefinesData.Spells.RepellingShot, SpellTargetType.Target));
+            new HotKeyResolver_NormalSpell(BardDefinesData.Spells.RepellingShot, SpellTargetType.Target,
+                BardSettings.Instance.HotkeyUseHighPrioritySlot));
         QT.AddHotkey("爆发药", new HotKeyResolver_Potion());
         QT.AddHotkey("极限技", new HotKeyResolver_LB());
-
-        /*
-        // 这是一个自定义的快捷按钮 一般用不到
-        // 图片路径是相对路径 基于AEAssist(C|E)NVersion/AEAssist
-        // 如果想用AE自带的图片资源 路径示例: Resources/AE2Logo.png
-        QT.AddHotkey("极限技", new HotkeyResolver_General("#自定义图片路径", () =>
-        {
-            // 点击这个图片会触发什么行为
-            LogHelper.Print("你好");
-        }));
-        */
     }
 
     public void OnUIUpdate()
@@ -540,6 +536,9 @@ public class BardRotationEntry : IRotationEntry
                 ref BardSettings.Instance.UseBattleVoiceBeforeGcdTimeInMs, 500, 2000, "(毫秒)");
             BardUtil.RightInputInt("九天连箭最晚在下个GCD前多久使用",
                 ref BardSettings.Instance.EmpyrealArrowNotBeforeGcdTime, 0, 2000, "(毫秒)");
+            ImGui.Separator();
+            ImGui.Text("热键技能设置：" + (BardSettings.Instance.HotkeyUseHighPrioritySlot ? "高优先级队列" : "强制插入技能"));
+            ImGui.Checkbox("热键技能使用高优先级队列", ref BardSettings.Instance.HotkeyUseHighPrioritySlot);
             ImGui.Separator();
             if (ImGui.Button("保存高级设置"))
                 BardSettings.Instance.Save();

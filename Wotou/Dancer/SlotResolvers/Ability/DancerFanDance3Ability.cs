@@ -6,6 +6,7 @@ using AEAssist.Helper;
 using AEAssist.JobApi;
 using AEAssist.MemoryApi;
 using Wotou.Dancer.Data;
+using Wotou.Dancer.Setting;
 
 namespace Wotou.Dancer.Ability;
 
@@ -22,9 +23,13 @@ public class DancerFanDance3Ability : ISlotResolver
     private const uint SilkenSymmetry = DancerDefinesData.Buffs.SilkenSymmetry;
     private const uint ThreeFoldFanDance = DancerDefinesData.Buffs.ThreeFoldFanDance;
     private const uint Devilment = DancerDefinesData.Buffs.Devilment;
+    private const uint FinishingMoveReady = DancerDefinesData.Buffs.FinishingMoveReady;
+
     
     public int Check()
     {
+        if (!DancerRotationEntry.QT.GetQt(QTKey.FanDance))
+            return -1;
         if (GCDHelper.GetGCDCooldown() <= 650)
             return -1;
         if (!DancerDefinesData.Spells.FanDance3.IsReady())
@@ -38,7 +43,8 @@ public class DancerFanDance3Ability : ISlotResolver
         
         if (Core.Me.HasLocalPlayerAura(ThreeFoldFanDance) && 
             !Core.Me.HasMyAuraWithTimeleft(ThreeFoldFanDance, 7500) &&
-            StandardStep.GetSpell().Cooldown.TotalMilliseconds < 2500)
+            StandardStep.GetSpell().Cooldown.TotalMilliseconds < 2500 &&
+            !Core.Me.HasLocalPlayerAura(FinishingMoveReady))
             return 3;
         
         if (Core.Me.HasLocalPlayerAura(ThreeFoldFanDance) && 
@@ -46,7 +52,7 @@ public class DancerFanDance3Ability : ISlotResolver
             TechnicalStep.GetSpell().Cooldown.TotalMilliseconds < 2500)
             return 4;
         
-        if (Core.Resolve<JobApi_Dancer>().FourFoldFeathers > 3 &&
+        if (Core.Resolve<JobApi_Dancer>().FourFoldFeathers > DancerSettings.Instance.FanDanceSaveStack &&
             (Core.Me.HasLocalPlayerAura(FlourishingSymmetry) ||
              Core.Me.HasLocalPlayerAura(FlourishingFlow) || 
              Core.Me.HasLocalPlayerAura(SilkenFlow) || 

@@ -68,6 +68,8 @@ public class BardSettings
     public bool NaturesMinneWithZoe = true; // 大地神对齐活化
     public bool NaturesMinneWithNeutralSect = true; // 大地神对齐中间学派
     
+    public bool HotkeyUseHighPrioritySlot = false; // 热键使用高优先级队列
+    
     public JobViewSave JobViewSave = new JobViewSave()
     {
         MainColor = new(0f, 0.3012f, 0.2306f, 1f),

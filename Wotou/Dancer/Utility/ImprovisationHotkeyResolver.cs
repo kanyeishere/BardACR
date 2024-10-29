@@ -16,10 +16,12 @@ namespace Wotou.Dancer;
 public class ImprovisationHotkeyResolver : IHotkeyResolver
 {
     private uint SpellId;
+    private bool UseHighPri;
 
-    public ImprovisationHotkeyResolver()
+    public ImprovisationHotkeyResolver(bool useHighPrioritySlot = false)
     {
         this.SpellId = DancerDefinesData.Spells.Improvisation;
+        this.UseHighPri = useHighPrioritySlot;
     }
     
     public void Draw(Vector2 size)
@@ -75,14 +77,23 @@ public class ImprovisationHotkeyResolver : IHotkeyResolver
         return;
     }
     
-    private static void Improvisation()
+    private void Improvisation()
     {
         if (!DancerDefinesData.Spells.Improvisation.CoolDownInGCDs(0) || 
             Core.Resolve<JobApi_Dancer>().IsDancing)
             return;
-        if (AI.Instance.BattleData.NextSlot == null)
-            AI.Instance.BattleData.NextSlot = new Slot();
-        AI.Instance.BattleData.NextSlot.Add(DancerDefinesData.Spells.Improvisation.GetSpell());
-        AI.Instance.BattleData.NextSlot.Add(DancerDefinesData.Spells.ImprovisationFinish.GetSpell());
+        if (!UseHighPri)
+        {
+            if (AI.Instance.BattleData.NextSlot == null)
+                AI.Instance.BattleData.NextSlot = new Slot();
+            AI.Instance.BattleData.NextSlot.Add(DancerDefinesData.Spells.Improvisation.GetSpell());
+            AI.Instance.BattleData.NextSlot.Add(DancerDefinesData.Spells.ImprovisationFinish.GetSpell());
+        }else
+        {
+            Slot slot = new Slot();
+            slot.Add(DancerDefinesData.Spells.Improvisation.GetSpell());
+            slot.Add(DancerDefinesData.Spells.ImprovisationFinish.GetSpell());
+            AI.Instance.BattleData.HighPrioritySlots_OffGCD.Enqueue(slot);
+        }
     }
 }

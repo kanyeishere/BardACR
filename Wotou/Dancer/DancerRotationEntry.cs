@@ -16,6 +16,7 @@ using Wotou.Dancer.Opener;
 using Wotou.Dancer.Setting;
 using Wotou.Dancer.Trigger;
 using ImGuiNET;
+using Wotou.Dancer.Triggers;
 
 namespace Wotou.Dancer;
 
@@ -80,6 +81,10 @@ public class DancerRotationEntry : IRotationEntry
         rot.SetRotationEventHandler(new DancerRotationEventHandler());
         rot.AddOpener(GetOpener);
         rot.AddTriggerAction(new DancerTriggerActionQt());
+        rot.AddTriggerAction(new DancerEspritSaveAction());
+        rot.AddTriggerAction(new DancerFeatherSaveAction());
+        rot.AddTriggerCondition(new DancerFeatherCondition());
+        rot.AddTriggerCondition(new DancerEspritCondition());
         return rot;
     }
 
@@ -134,15 +139,18 @@ public class DancerRotationEntry : IRotationEntry
         QT.AddQt(QTKey.TechnicalStep, true, "是否使用技巧舞步与进攻之探戈");
         QT.AddQt(QTKey.StandardStep, true, "是否使用标准舞步与结束动作");
         QT.AddQt(QTKey.Flourish, true, "是否使用百花争艳");
+        QT.AddQt(QTKey.SaberDance, true, "是否使用剑舞与拂晓舞");
+        QT.AddQt(QTKey.FanDance, true, "是否使用扇舞");
         QT.AddQt(QTKey.FinalBurst, false, "是否倾泻资源");
         
-        QT.AddHotkey("防击退", new HotKeyResolver_NormalSpell(DancerDefinesData.Spells.ArmsLength, SpellTargetType.Target));
-        QT.AddHotkey("内丹", new HotKeyResolver_NormalSpell(DancerDefinesData.Spells.SecondWind, SpellTargetType.Self));
-        QT.AddHotkey("桑巴", new HotKeyResolver_NormalSpell(DancerDefinesData.Spells.ShieldSamba, SpellTargetType.Self));
-        QT.AddHotkey("华尔兹", new HotKeyResolver_NormalSpell(DancerDefinesData.Spells.CuringWaltz, SpellTargetType.Self));
-        QT.AddHotkey("秒开关即兴", new ImprovisationHotkeyResolver());
+        
+        QT.AddHotkey("防击退", new HotKeyResolver_NormalSpell(DancerDefinesData.Spells.ArmsLength, SpellTargetType.Target, DancerSettings.Instance.HotkeyUseHighPrioritySlot));
+        QT.AddHotkey("内丹", new HotKeyResolver_NormalSpell(DancerDefinesData.Spells.SecondWind, SpellTargetType.Self, DancerSettings.Instance.HotkeyUseHighPrioritySlot));
+        QT.AddHotkey("桑巴", new HotKeyResolver_NormalSpell(DancerDefinesData.Spells.ShieldSamba, SpellTargetType.Self, DancerSettings.Instance.HotkeyUseHighPrioritySlot));
+        QT.AddHotkey("华尔兹", new HotKeyResolver_NormalSpell(DancerDefinesData.Spells.CuringWaltz, SpellTargetType.Self, DancerSettings.Instance.HotkeyUseHighPrioritySlot));
+        QT.AddHotkey("秒开关即兴", new ImprovisationHotkeyResolver(DancerSettings.Instance.HotkeyUseHighPrioritySlot));
         QT.AddHotkey("疾跑", new HotKeyResolver_疾跑());
-        QT.AddHotkey("前冲步", new HotKeyResolver_NormalSpell(DancerDefinesData.Spells.EnAvant, SpellTargetType.Target));
+        QT.AddHotkey("前冲步", new HotKeyResolver_NormalSpell(DancerDefinesData.Spells.EnAvant, SpellTargetType.Target, DancerSettings.Instance.HotkeyUseHighPrioritySlot));
         QT.AddHotkey("爆发药", new HotKeyResolver_Potion());
         QT.AddHotkey("极限技", new HotKeyResolver_LB());
         DancerSettings.Instance.JobViewSave.HotkeyLineCount = 5;
@@ -206,7 +214,9 @@ public class DancerRotationEntry : IRotationEntry
             ImGui.Separator();
             ImGui.Checkbox("是否启用舞伴宏", ref DancerSettings.Instance.UseDancePartnerMacro);
             ImGui.InputTextMultiline("", ref DancerSettings.Instance.DancePartnerMacroText, 1000, new Vector2(-1, ImGui.GetTextLineHeight() * 6));
-            
+            ImGui.Separator();
+            ImGui.Text("热键技能设置：" + (DancerSettings.Instance.HotkeyUseHighPrioritySlot ? "高优先级队列" : "强制插入技能"));
+            ImGui.Checkbox("热键技能使用高优先级队列", ref DancerSettings.Instance.HotkeyUseHighPrioritySlot);
             ImGui.Separator();
             if (ImGui.Button("保存界面设置")) DancerSettings.Instance.Save();
         }

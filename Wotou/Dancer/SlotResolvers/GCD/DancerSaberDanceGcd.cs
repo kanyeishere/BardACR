@@ -24,6 +24,9 @@ public class DancerSaberDanceGcd : ISlotResolver
     {
         if (!Core.Resolve<MemApiSpell>().CheckActionChange(SaberDance).IsReady())
             return -1;
+        if (!DancerRotationEntry.QT.GetQt(QTKey.SaberDance))
+            return -1;
+        
         /*if (Core.Me.HasAura(FlourishingSymmetry) || 
             Core.Me.HasAura(FlourishingFlow))
             return -4;*/

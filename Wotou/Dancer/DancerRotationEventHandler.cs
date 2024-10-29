@@ -6,6 +6,7 @@ using AEAssist.Helper;
 using AEAssist.JobApi;
 using Wotou.Dancer.Data;
 using Dalamud.Game.ClientState.Objects.Types;
+using Wotou.Dancer.Setting;
 
 namespace Wotou.Dancer
 {
@@ -125,6 +126,9 @@ namespace Wotou.Dancer
             // 重置战斗中缓存的数据
             DancerBattleData.Instance = new DancerBattleData();
             DancerRotationEntry.QT.Reset();
+            
+            //重置扇舞保留层数
+            DancerSettings.Instance.FanDanceSaveStack = 3;
         }
 
         public void OnSpellCastSuccess(Slot slot, Spell spell)

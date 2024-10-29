@@ -16,6 +16,8 @@ public class DancerSaberDanceMediumGcd : ISlotResolver
     
     public int Check()
     {
+        if (!DancerRotationEntry.QT.GetQt(QTKey.SaberDance))
+            return -1;
         if (Core.Me.HasLocalPlayerAura(Devilment) && 
             Core.Resolve<JobApi_Dancer>().Esprit >= 50 &&
             Core.Resolve<MemApiSpell>().CheckActionChange(SaberDance).IsReady())
