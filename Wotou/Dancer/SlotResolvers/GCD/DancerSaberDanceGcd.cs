@@ -17,6 +17,8 @@ public class DancerSaberDanceGcd : ISlotResolver
     
     private const uint FlourishingFlow = DancerDefinesData.Buffs.FlourshingFlow;
     private const uint FlourishingSymmetry = DancerDefinesData.Buffs.FlourishingSymmetry;
+    private const uint FinishingMoveReady = DancerDefinesData.Buffs.FinishingMoveReady;
+
     
     public int Check()
     {
@@ -27,12 +29,12 @@ public class DancerSaberDanceGcd : ISlotResolver
             return -4;*/
         if (DancerRotationEntry.QT.GetQt(QTKey.FinalBurst))
             return 1;
-        /*if (TechnicalStep.GetSpell().Cooldown.TotalMilliseconds < 30000 && 
-            StandardStep.GetSpell().Cooldown.TotalMilliseconds < 3500 &&
-            Core.Resolve<JobApi_Dancer>().Esprit >= 75 &&
-            DancerRotationEntry.QT.GetQt(QTKey.TechnicalStep) &&
-            DancerRotationEntry.QT.GetQt(QTKey.StandardStep))
-            return 1;*/
+        // 下一个技能是 需要跳舞的标准舞步 （而非结束动作）
+        if (StandardStep.GetSpell().Cooldown.TotalMilliseconds < 3500 &&
+            Core.Resolve<JobApi_Dancer>().Esprit >= 80 &&
+            DancerRotationEntry.QT.GetQt(QTKey.StandardStep) &&
+            !Core.Me.HasLocalPlayerAura(FinishingMoveReady))
+            return 1;
         /*if (TechnicalStep.GetSpell().Cooldown.TotalMilliseconds < 30000 && 
             Core.Resolve<JobApi_Dancer>().Esprit < 80 &&
             DancerRotationEntry.QT.GetQt(QTKey.TechnicalStep))

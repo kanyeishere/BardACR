@@ -72,7 +72,7 @@ public class DancerRotationEntry : IRotationEntry
             AcrType = AcrType.Both,
             MinLevel = 100,
             MaxLevel = 100,
-            Description = "100级高难舞者-技速选择2.5" +
+            Description = "100级高难舞者\n技速推荐2.49，兼容2.5" +
                           "\n请在 FuckAnimationLock 插件中勾选减少爆发药后摇" +
                           "\n本ACR目前所用的是固定4小舞循环，暂时只适配100级高难环境" +
                           "\n在90级及以下副本中，此循环并非最优解，请自行评估使用\n" + UpdateLog,
@@ -164,7 +164,7 @@ public class DancerRotationEntry : IRotationEntry
         ImGui.PushStyleColor(ImGuiCol.Border, new Vector4(1f,0.36f,0.54f, 1));
         if (ImGui.CollapsingHeader("   重要说明"))
         {
-            ImGui.Text("舞者ACR-技速选择2.5\n本ACR目前所用的是固定4小舞循环，暂时只适配100级高难环境" +
+            ImGui.Text("舞者ACR - 技速推荐2.49，兼容2.50\n请在 FuckAnimationLock 插件中勾选减少爆发药后摇\n本ACR所用的是固定4小舞循环，暂只适配100级高难环境" +
                        "\n在90级及以下副本中，此循环并非最优解，请自行评估使用");
             ImGui.Separator();
             ImGui.Text(UpdateLog);
