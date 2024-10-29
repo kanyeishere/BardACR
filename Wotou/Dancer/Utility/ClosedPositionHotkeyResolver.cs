@@ -12,7 +12,7 @@ using ImGuiNET;
 using Wotou.Dancer.Data;
 using Wotou.Dancer.Setting;
 
-namespace Wotou.Dancer;
+namespace Wotou.Dancer.Utility;
 
 public class ClosedPositionHotkeyResolver : IHotkeyResolver
 {

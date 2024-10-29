@@ -6,7 +6,7 @@ using AEAssist.JobApi;
 using AEAssist.MemoryApi;
 using Wotou.Dancer.Data;
 
-namespace Wotou.Dancer
+namespace Wotou.Dancer.Utility
 {
     public static class DancerUtil
     {

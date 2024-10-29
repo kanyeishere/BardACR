@@ -6,6 +6,7 @@ using AEAssist.Helper;
 using AEAssist.JobApi;
 using AEAssist.MemoryApi;
 using Wotou.Dancer.Data;
+using Wotou.Dancer.Utility;
 
 namespace Wotou.Dancer.GCD;
 

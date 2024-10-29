@@ -11,7 +11,7 @@ using Dalamud.Interface.Textures.TextureWraps;
 using ImGuiNET;
 using Wotou.Dancer.Data;
 
-namespace Wotou.Dancer;
+namespace Wotou.Dancer.Utility;
 
 public class ImprovisationHotkeyResolver : IHotkeyResolver
 {

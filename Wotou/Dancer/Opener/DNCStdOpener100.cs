@@ -6,6 +6,7 @@ using AEAssist.Helper;
 using AEAssist.JobApi;
 using Wotou.Dancer.Data;
 using Wotou.Dancer.Setting;
+using Wotou.Dancer.Utility;
 
 namespace Wotou.Dancer.Opener
 {

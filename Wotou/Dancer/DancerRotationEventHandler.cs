@@ -8,6 +8,7 @@ using AEAssist.MemoryApi;
 using Wotou.Dancer.Data;
 using Dalamud.Game.ClientState.Objects.Types;
 using Wotou.Dancer.Setting;
+using Wotou.Dancer.Utility;
 
 namespace Wotou.Dancer
 {

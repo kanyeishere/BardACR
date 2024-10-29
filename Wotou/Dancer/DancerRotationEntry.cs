@@ -17,6 +17,7 @@ using Wotou.Dancer.Setting;
 using Wotou.Dancer.Trigger;
 using ImGuiNET;
 using Wotou.Dancer.Triggers;
+using Wotou.Dancer.Utility;
 
 namespace Wotou.Dancer;
 
