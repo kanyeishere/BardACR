@@ -49,12 +49,13 @@ public class BardHeartBreakAbility : ISlotResolver
             return -1;
         
         // 不和两层诗心以上的完美音调冲突，抢团辅最后一个能力技能
-        if (!Core.Me.HasMyAuraWithTimeleft(Fist120SBuffId, 1200) && Core.Me.HasMyAuraWithTimeleft(Fist120SBuffId, 30) && Core.Resolve<JobApi_Bard>().Repertoire >= 2)
+        if (!Core.Me.HasMyAuraWithTimeleft(Fist120SBuffId, 1200) && Core.Me.HasLocalPlayerAura(Fist120SBuffId) && Core.Resolve<JobApi_Bard>().Repertoire >= 2)
             return -1;
         
         // 不和切歌前最后一个完美音调冲突
         if (Core.Resolve<JobApi_Bard>().ActiveSong == Song.WANDERER &&
-            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45000.0 - FirstSongDuration && SecondSong.IsReady())
+            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45600.0 - FirstSongDuration && 
+            Core.Resolve<JobApi_Bard>().Repertoire >= 1)
             return -100;
         
         /*if (EmpyrealArrow.RecentlyUsed())

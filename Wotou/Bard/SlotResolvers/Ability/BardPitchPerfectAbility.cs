@@ -39,7 +39,7 @@ public class BardPitchPerfectAbility : ISlotResolver
         if ((double) Core.Resolve<JobApi_Bard>().SongTimer <= 45600.0 - (double) BardSettings.Instance.WandererSongDuration * 1000.0 && Core.Resolve<JobApi_Bard>().Repertoire >= 1)
             return 1;
         // 团辅最后一个技能
-        if (!Core.Me.HasMyAuraWithTimeleft(Fist120SBuffId, 1000) && Core.Me.HasMyAuraWithTimeleft(Fist120SBuffId, 100) && Core.Resolve<JobApi_Bard>().Repertoire >= 1)
+        if (!Core.Me.HasMyAuraWithTimeleft(Fist120SBuffId, 1000) && Core.Me.HasLocalPlayerAura(Fist120SBuffId) && Core.Resolve<JobApi_Bard>().Repertoire >= 1)
             return 1;
         if (Core.Resolve<JobApi_Bard>().Repertoire >= 1 && Core.Resolve<JobApi_Bard>().SongTimer < 1000)
             return 1;
