@@ -25,7 +25,8 @@ public class DancerRotationEntry : IRotationEntry
     
     private const string UpdateLog = "更新日志：10.29" +
                                      "\n- 重构了舞者的战斗逻辑" +
-                                     "\n- 调整爆发药的使用时机";
+                                     "\n- 调整爆发药的使用时机"+
+                                     "\n- 添加了对时间轴的支持";
     public void Dispose()
     {
     }
