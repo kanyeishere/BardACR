@@ -27,7 +27,8 @@ public class DancerDefinesData
             FlourishingStarfall = 2700,
             LastDanceReady = 3867,
             FinishingMoveReady = 3868,
-            DanceOfTheDawnReady = 3869;
+            DanceOfTheDawnReady = 3869,
+            Medicated = 49;
     }
 
     public static class Spells

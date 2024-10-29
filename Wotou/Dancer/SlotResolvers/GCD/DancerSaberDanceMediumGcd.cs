@@ -13,12 +13,17 @@ public class DancerSaberDanceMediumGcd : ISlotResolver
 {
     private const uint SaberDance = DancerDefinesData.Spells.SaberDance;
     private const uint Devilment = DancerDefinesData.Buffs.Devilment;
+    private const uint Medicated = DancerDefinesData.Buffs.Medicated;
     
     public int Check()
     {
         if (!DancerRotationEntry.QT.GetQt(QTKey.SaberDance))
             return -1;
         if (Core.Me.HasLocalPlayerAura(Devilment) && 
+            Core.Resolve<JobApi_Dancer>().Esprit >= 50 &&
+            Core.Resolve<MemApiSpell>().CheckActionChange(SaberDance).IsReady())
+            return 1;
+        if (Core.Me.HasLocalPlayerAura(Medicated) && 
             Core.Resolve<JobApi_Dancer>().Esprit >= 50 &&
             Core.Resolve<MemApiSpell>().CheckActionChange(SaberDance).IsReady())
             return 1;

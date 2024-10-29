@@ -24,7 +24,7 @@ public class DancerFanDance3Ability : ISlotResolver
     private const uint ThreeFoldFanDance = DancerDefinesData.Buffs.ThreeFoldFanDance;
     private const uint Devilment = DancerDefinesData.Buffs.Devilment;
     private const uint FinishingMoveReady = DancerDefinesData.Buffs.FinishingMoveReady;
-
+    private const uint Medicated = DancerDefinesData.Buffs.Medicated;
     
     public int Check()
     {
@@ -59,6 +59,8 @@ public class DancerFanDance3Ability : ISlotResolver
              Core.Me.HasLocalPlayerAura(SilkenSymmetry)))
             return 1;
         if (Core.Me.HasLocalPlayerAura(Devilment))
+            return 1;
+        if (Core.Me.HasLocalPlayerAura(Medicated))
             return 1;
         return -3;
     }
