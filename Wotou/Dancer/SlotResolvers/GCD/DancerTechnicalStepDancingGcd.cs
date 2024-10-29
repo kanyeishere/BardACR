@@ -15,6 +15,7 @@ public class DancerTechnicalStepDancingGcd: ISlotResolver
     private const uint StandardStep = DancerDefinesData.Buffs.StandardStep;
     private const uint TechnicalStep = DancerDefinesData.Buffs.TechnicalStep;
     private const uint QuadrupleTechnicalFinish = DancerDefinesData.Spells.QuadrupleTechnicalFinish;
+    private const uint Devilment = DancerDefinesData.Spells.Devilment;
     
     public int Check()
     {
@@ -33,6 +34,7 @@ public class DancerTechnicalStepDancingGcd: ISlotResolver
         {
             slot.Add(QuadrupleTechnicalFinish.GetSpell());
             AI.Instance.BattleData.CurrGcdAbilityCount = 1;
+            slot.Add(Devilment.GetSpell());
             return;
         }
         slot.Add(Core.Resolve<JobApi_Dancer>().NextStep.GetSpell());

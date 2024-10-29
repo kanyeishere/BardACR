@@ -58,7 +58,7 @@ public class DancerRotationEntry : IRotationEntry
         new SlotResolverData(new DancerProcGcd(), SlotMode.Gcd),
         new SlotResolverData(new DancerBaseGcd(), SlotMode.Gcd),
         
-        new SlotResolverData(new DancerDevilmentAbility(), SlotMode.OffGcd),
+        //new SlotResolverData(new DancerDevilmentAbility(), SlotMode.OffGcd),
         new SlotResolverData(new DancerFlourishAbility(), SlotMode.OffGcd),
         new SlotResolverData(new DancerFanDance3Ability(), SlotMode.OffGcd),
         new SlotResolverData(new DancerFanDanceAbility(), SlotMode.OffGcd),
