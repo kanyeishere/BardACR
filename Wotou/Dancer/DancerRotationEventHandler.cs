@@ -4,6 +4,7 @@ using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.JobApi;
+using AEAssist.MemoryApi;
 using Wotou.Dancer.Data;
 using Dalamud.Game.ClientState.Objects.Types;
 using Wotou.Dancer.Setting;
@@ -45,6 +46,7 @@ namespace Wotou.Dancer
 
         public void OnBattleUpdate(int currTimeInMs)
         {
+            SmartUseHighPrioritySlot();
         }
 
         public void OnEnterRotation()
@@ -117,6 +119,7 @@ namespace Wotou.Dancer
         public Task OnPreCombat()
         {
             DancerRotationEntry.UpdateDancerPartnerPanel();
+            SmartUseHighPrioritySlot();
             return Task.CompletedTask;
         }
 
@@ -139,6 +142,16 @@ namespace Wotou.Dancer
         public void OnTerritoryChanged()
         {
             DancerRotationEntry.UpdateDancerPartnerPanel();
+        }
+
+        private void SmartUseHighPrioritySlot()
+        {
+            if (Core.Resolve<MemApiCondition>().IsInCombat() && 
+                Core.Me.GetCurrTarget() != null &&
+                Core.Me.GetCurrTarget().CanAttack())
+                DancerSettings.Instance.HotkeyUseHighPrioritySlot = true;
+            else
+                DancerSettings.Instance.HotkeyUseHighPrioritySlot = false;
         }
     }
 }

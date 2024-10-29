@@ -163,7 +163,7 @@ public class DancerRotationEntry : IRotationEntry
         for (var i = 1; i < PartyHelper.Party.Count; i++)
         {
             var index = i;
-            DancePartnerPanel?.AddHotkey("切换舞伴: " + PartyHelper.Party[i].Name, new ClosedPositionHotkeyResolver(index));
+            DancePartnerPanel?.AddHotkey("切换舞伴: " + PartyHelper.Party[i].Name, new ClosedPositionHotkeyResolver(index, DancerSettings.Instance.HotkeyUseHighPrioritySlot));
         }
     }
 
@@ -215,9 +215,6 @@ public class DancerRotationEntry : IRotationEntry
             ImGui.Separator();
             ImGui.Checkbox("是否启用舞伴宏", ref DancerSettings.Instance.UseDancePartnerMacro);
             ImGui.InputTextMultiline("", ref DancerSettings.Instance.DancePartnerMacroText, 1000, new Vector2(-1, ImGui.GetTextLineHeight() * 6));
-            ImGui.Separator();
-            ImGui.Text("热键技能设置：" + (DancerSettings.Instance.HotkeyUseHighPrioritySlot ? "高优先级队列" : "强制插入技能"));
-            ImGui.Checkbox("热键技能使用高优先级队列", ref DancerSettings.Instance.HotkeyUseHighPrioritySlot);
             ImGui.Separator();
             if (ImGui.Button("保存界面设置")) DancerSettings.Instance.Save();
         }

@@ -6,6 +6,7 @@ using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.JobApi;
+using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.JobGauge.Enums;
 using Wotou.Bard.Utility;
 
@@ -22,6 +23,7 @@ public class BardRotationEventHandler : IRotationEventHandler
     
     public async Task OnPreCombat()
     {
+        SmartUseHighPrioritySlot();
         if (!BardUtil.IsSongOrderNormal())
         {
             BardRotationEntry.QT.SetQt("对齐旅神", false);
@@ -184,6 +186,7 @@ public class BardRotationEventHandler : IRotationEventHandler
 
     public void OnBattleUpdate(int currTimeInMs)
     {
+        SmartUseHighPrioritySlot();
     }
 
     public void OnEnterRotation()
@@ -204,5 +207,15 @@ public class BardRotationEventHandler : IRotationEventHandler
     public void OnTerritoryChanged()
     {
         
+    }
+    
+    private void SmartUseHighPrioritySlot()
+    {
+        if (Core.Resolve<MemApiCondition>().IsInCombat() && 
+            Core.Me.GetCurrTarget() != null &&
+            Core.Me.GetCurrTarget().CanAttack())
+            BardSettings.Instance.HotkeyUseHighPrioritySlot = true;
+        else
+            BardSettings.Instance.HotkeyUseHighPrioritySlot = false;
     }
 }

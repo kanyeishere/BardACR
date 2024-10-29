@@ -537,9 +537,6 @@ public class BardRotationEntry : IRotationEntry
             BardUtil.RightInputInt("九天连箭最晚在下个GCD前多久使用",
                 ref BardSettings.Instance.EmpyrealArrowNotBeforeGcdTime, 0, 2000, "(毫秒)");
             ImGui.Separator();
-            ImGui.Text("热键技能设置：" + (BardSettings.Instance.HotkeyUseHighPrioritySlot ? "高优先级队列" : "强制插入技能"));
-            ImGui.Checkbox("热键技能使用高优先级队列", ref BardSettings.Instance.HotkeyUseHighPrioritySlot);
-            ImGui.Separator();
             if (ImGui.Button("保存高级设置"))
                 BardSettings.Instance.Save();
             ImGui.SameLine();
