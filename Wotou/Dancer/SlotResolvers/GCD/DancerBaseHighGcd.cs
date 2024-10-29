@@ -12,7 +12,7 @@ public class DancerBaseHighGcd : ISlotResolver
 {
     public int Check()
     {
-        if (Core.Resolve<MemApiSpell>().GetComboTimeLeft().TotalMilliseconds > 3000)
+        if (Core.Resolve<MemApiSpell>().GetComboTimeLeft().TotalMilliseconds < 3000)
             return -1;
         return 1;
     }

@@ -26,8 +26,8 @@ public class BardRotationEntry : IRotationEntry
     public static JobViewWindow QT { get; private set; }
     public string AuthorName { get; set; } = "Wotou";
     //  更新日志
-    private const string UpdateLog = "更新日志：10.24" +
-                                     "\n- 修复了UI在不同缩放下的显示问题" ;
+    private const string UpdateLog = "更新日志：10.30" +
+                                     "\n- 现在团辅中满能量的绝峰箭使用时机会更早" ;
     
     public Rotation Build(string settingFolder)
     {
