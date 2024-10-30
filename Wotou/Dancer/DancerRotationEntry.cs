@@ -24,10 +24,8 @@ namespace Wotou.Dancer;
 public class DancerRotationEntry : IRotationEntry
 {
     
-    private const string UpdateLog = "更新日志：10.29" +
-                                     "\n- 重构了舞者的战斗逻辑" +
-                                     "\n- 调整爆发药的使用时机"+
-                                     "\n- 添加了对时间轴的支持";
+    private const string UpdateLog = "更新日志：10.30" +
+                                     "\n- 防止伶俐过多时偶然导致的流星舞过期";
     public void Dispose()
     {
     }
@@ -44,6 +42,7 @@ public class DancerRotationEntry : IRotationEntry
         new SlotResolverData(new DancerTechnicalStepGcd(), SlotMode.Gcd),
         new SlotResolverData(new Dancer1GBeforeTechStepGcd(), SlotMode.Gcd),
        
+        new SlotResolverData(new DancerStarfallDanceHighGCD(), SlotMode.Gcd), // 快过期的流星舞
         new SlotResolverData(new DancerProcFountainFailHighGcd(), SlotMode.Gcd), // 快过期的触发
         new SlotResolverData(new DancerProcReverseCascadeHighGcd(), SlotMode.Gcd), // 快过期的触发
         new SlotResolverData(new DancerSaberDanceHighGcd(), SlotMode.Gcd), //团辅期高能量剑舞
