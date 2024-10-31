@@ -166,10 +166,12 @@ public class BardRotationEntry : IRotationEntry
         QT.AddQt(QTKey.Debug, false, "是否打印调试信息");
         QT.AddQt(QTKey.EmpyrealArrow, true, "是否使用九天");
         QT.AddQt(QTKey.Sidewinder, true, "是否使用侧风");
-        BardSettings.Instance.JobViewSave.QtUnVisibleList.Clear();
-        BardSettings.Instance.JobViewSave.QtUnVisibleList.Add("Debug");
-        BardSettings.Instance.JobViewSave.QtUnVisibleList.Add(QTKey.EmpyrealArrow);
-        BardSettings.Instance.JobViewSave.QtUnVisibleList.Add(QTKey.Sidewinder);
+        if(BardSettings.Instance.JobViewSave.QtUnVisibleList.Count == 0 )
+        {
+            BardSettings.Instance.JobViewSave.QtUnVisibleList.Add("Debug");
+            BardSettings.Instance.JobViewSave.QtUnVisibleList.Add(QTKey.EmpyrealArrow);
+            BardSettings.Instance.JobViewSave.QtUnVisibleList.Add(QTKey.Sidewinder);
+        }
 
         // 添加快捷按钮 (带技能图标)
         QT.AddHotkey("防击退", new HotKeyResolver_NormalSpell(BardDefinesData.Spells.ArmsLength, 
