@@ -1,4 +1,6 @@
-﻿namespace Wotou.Dancer.Data;
+﻿using System.Reflection;
+
+namespace Wotou.Dancer.Data;
 
 public class DancerDefinesData
 {
@@ -33,7 +35,7 @@ public class DancerDefinesData
 
     public static class Spells
     {
-        public const uint Potion = 846,
+        public const uint
             ArmsLength = 7548,
             Cascade = 15989,
             Fountain = 15990,
@@ -76,5 +78,80 @@ public class DancerDefinesData
             FinishingMove = 36984,
             DanceOfTheDawn = 36985,
             SecondWind = 7541;
+    }
+    
+    public static class 舞者技能
+    {
+        public const uint 亲疏自行 = 7548;
+        public const uint 瀑泻 = 15989;
+        public const uint 喷泉 = 15990;
+        public const uint 逆瀑泻 = 15991;
+        public const uint 坠喷泉 = 15992;
+        public const uint 风车 = 15993;
+        public const uint 落刃雨 = 15994;
+        public const uint 升风车 = 15995;
+        public const uint 落血雨 = 15996;
+        public const uint 标准舞步 = 15997;
+        public const uint 技巧舞步 = 15998;
+        public const uint 单色标准舞步结束 = 16191;
+        public const uint 双色标准舞步结束 = 16192;
+        public const uint 单色技巧舞步结束 = 16193;
+        public const uint 双色技巧舞步结束 = 16194;
+        public const uint 三色技巧舞步结束 = 16195;
+        public const uint 四色技巧舞步结束 = 16196;
+        public const uint 剑舞 = 16005;
+        public const uint 闭式舞姿 = 16006;
+        public const uint 解除闭式舞姿 = 18073;
+        public const uint 扇舞序 = 16007;
+        public const uint 扇舞破 = 16008;
+        public const uint 扇舞急 = 16009;
+        public const uint 扇舞终 = 25791;
+        public const uint 前冲步 = 16010;
+        public const uint 进攻之探戈 = 16011;
+        public const uint 防守之桑巴 = 16012;
+        public const uint 百花争艳 = 16013;
+        public const uint 即兴表演 = 16014;
+        public const uint 即兴表演结束 = 25789;
+        public const uint 治疗之华尔兹 = 16015;
+        public const uint 流星舞 = 25792;
+        public const uint 提拉纳 = 25790;
+        public const uint 落幕舞 = 36983;
+        public const uint 结束动作 = 36984;
+        public const uint 拂晓舞 = 36985;
+        public const uint 内丹 = 7541;
+    }
+    
+    private static Dictionary<string, uint> skillDictionary;
+    
+    public static void InitializeDictionary()
+    {
+        if (skillDictionary == null)
+        {
+            skillDictionary = new Dictionary<string, uint>();
+            // 加入你的中文技能类 
+            foreach (var field in typeof(舞者技能).GetFields(BindingFlags.Public | BindingFlags.Static))
+            {
+                if (field.FieldType == typeof(uint))
+                {
+                    skillDictionary.Add(field.Name, (uint)field.GetValue(null));
+                }
+            }
+            // 加入你的英文技能类 （可选）
+            foreach (var field in typeof(Spells).GetFields(BindingFlags.Public | BindingFlags.Static))
+            {
+                if (field.FieldType == typeof(uint))
+                {
+                    skillDictionary.Add(field.Name, (uint)field.GetValue(null));
+                }
+            }
+        }
+    }
+    
+    public static Dictionary<string, uint> GetMatchingSkills(string searchQuery)
+    {
+        // 将查询和技能名称转换为小写，避免大小写影响匹配
+        var lowerCaseQuery = searchQuery.ToLower();
+        return skillDictionary.Where(skill => skill.Key.ToLower().Contains(lowerCaseQuery))
+            .ToDictionary(skill => skill.Key, skill => skill.Value);
     }
 }

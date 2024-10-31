@@ -26,8 +26,8 @@ public class BardRotationEntry : IRotationEntry
     public static JobViewWindow QT { get; private set; }
     public string AuthorName { get; set; } = "Wotou";
     //  更新日志
-    private const string UpdateLog = "更新日志：10.30" +
-                                     "\n- 现在团辅中满能量的绝峰箭使用时机会更早" ;
+    private const string UpdateLog = "更新日志：10.31" +
+                                     "\n- 在Dev界面中加入搜索技能id功能，方便写轴" ;
     
     public Rotation Build(string settingFolder)
     {
@@ -139,6 +139,7 @@ public class BardRotationEntry : IRotationEntry
     // 构造函数里初始化QT
     public void BuildQT()
     {
+        BardDefinesData.InitializeDictionary();
         // JobViewSave是AE底层提供的QT设置存档类 在你自己的设置里定义即可
         // 第二个参数是你设置文件的Save类 第三个参数是QT窗口标题
         QT = new JobViewWindow(BardSettings.Instance.JobViewSave, BardSettings.Instance.Save, "Wotou Bard 诗人");
@@ -578,11 +579,38 @@ public class BardRotationEntry : IRotationEntry
         }
     }
 
+    private string searchQuery = "";
+    private Dictionary<string, uint> matchingSkills = new Dictionary<string, uint>();
+    
     public void DrawQtDev(JobViewWindow jobViewWindow)
     {
-        ImGui.Text("Dev信息");
-        foreach (var v in jobViewWindow.GetQtArray()) ImGui.Text($"Qt按钮: {v}");
+        ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0.0f, 0.0f, 0.0f, 0.0f));
+        ImGui.PushStyleColor(ImGuiCol.Border, new Vector4(0.4314f, 0.6667f, 0.5569f, 1));
+        ImGui.Text("请输入技能名，以搜索对应id：");
+        if (ImGui.InputText("##SearchQuery", ref searchQuery, 100))
+        {
+            // 在输入框变化时实时更新匹配项
+            matchingSkills = BardDefinesData.GetMatchingSkills(searchQuery);
+        }
 
-        foreach (var v in jobViewWindow.GetHotkeyArray()) ImGui.Text($"Hotkey按钮: {v}");
+        // 显示匹配结果
+        if (matchingSkills.Count > 0)
+        {
+            ImGui.Text("匹配的技能：");
+            foreach (var skill in matchingSkills)
+            {
+                if (ImGui.Button($"复制ID"))
+                {
+                    ImGui.SetClipboardText(skill.Value.ToString()); // 将ID复制到剪贴板
+                }
+                ImGui.SameLine();
+                ImGui.Text($"{skill.Key} - ID: {skill.Value}");
+            }
+        }
+        else if (!string.IsNullOrEmpty(searchQuery))
+        {
+            ImGui.Text("未找到匹配的技能。");
+        }
+        ImGui.Separator();
     }
 }

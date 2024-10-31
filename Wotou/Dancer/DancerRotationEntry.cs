@@ -24,8 +24,8 @@ namespace Wotou.Dancer;
 public class DancerRotationEntry : IRotationEntry
 {
     
-    private const string UpdateLog = "更新日志：10.30" +
-                                     "\n- 防止伶俐过多时偶然导致的流星舞过期";
+    private const string UpdateLog = "更新日志：10.31" +
+                                     "\n- 在Dev界面中加入搜索技能id功能，方便写轴" ;
     public void Dispose()
     {
     }
@@ -66,6 +66,8 @@ public class DancerRotationEntry : IRotationEntry
     
     public Rotation Build(string settingFolder)
     {
+        DancerDefinesData.InitializeDictionary();
+        
         DancerSettings.Build(settingFolder);
         BuildQT(settingFolder);
         var rot = new Rotation(SlotResolvers)
@@ -249,11 +251,38 @@ public class DancerRotationEntry : IRotationEntry
         DancerSettingsUI.Instance.Draw();
     }
     
+    private string searchQuery = "";
+    private Dictionary<string, uint> matchingSkills = new Dictionary<string, uint>();
+    
     public void DrawQtDev(JobViewWindow jobViewWindow)
     {
-        ImGui.Text("Dev信息");
-        foreach (var v in jobViewWindow.GetQtArray()) ImGui.Text($"Qt按钮: {v}");
+        ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0.0f, 0.0f, 0.0f, 0.0f));
+        ImGui.PushStyleColor(ImGuiCol.Border, new Vector4(1f,0.36f,0.54f, 1));
+        ImGui.Text("请输入技能名，以搜索对应id：");
+        if (ImGui.InputText("##SearchQuery", ref searchQuery, 100))
+        {
+            // 在输入框变化时实时更新匹配项
+            matchingSkills = DancerDefinesData.GetMatchingSkills(searchQuery);
+        }
 
-        foreach (var v in jobViewWindow.GetHotkeyArray()) ImGui.Text($"Hotkey按钮: {v}");
+        // 显示匹配结果
+        if (matchingSkills.Count > 0)
+        {
+            ImGui.Text("匹配的技能：");
+            foreach (var skill in matchingSkills)
+            {
+                if (ImGui.Button($"复制ID"))
+                {
+                    ImGui.SetClipboardText(skill.Value.ToString()); // 将ID复制到剪贴板
+                }
+                ImGui.SameLine();
+                ImGui.Text($"{skill.Key} - ID: {skill.Value}");
+            }
+        }
+        else if (!string.IsNullOrEmpty(searchQuery))
+        {
+            ImGui.Text("未找到匹配的技能。");
+        }
+        ImGui.Separator();
     }
 }
