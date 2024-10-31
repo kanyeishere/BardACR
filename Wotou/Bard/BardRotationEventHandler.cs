@@ -23,12 +23,17 @@ public class BardRotationEventHandler : IRotationEventHandler
     
     public async Task OnPreCombat()
     {
-        //SmartUseHighPrioritySlot();
+        SmartUseHighPrioritySlot();
         if (!BardUtil.IsSongOrderNormal())
         {
             BardRotationEntry.QT.SetQt("对齐旅神", false);
             BardRotationEntry.QT.SetQt("强对齐", false);
         }
+        if (PartyHelper.CastableParty.Any(characterAgent => 
+                (characterAgent.HasAura(1896U) && BardSettings.Instance.NaturesMinneWithRecitation) ||  //秘策
+                (characterAgent.HasAura(2611U) && BardSettings.Instance.NaturesMinneWithZoe) ||         //活化
+                (characterAgent.HasAura(1892U) && BardSettings.Instance.NaturesMinneWithNeutralSect)))  //中间学派
+        await BardDefinesData.Spells.NaturesMinne.GetSpell().Cast();
     }
 
     public void OnResetBattle()
@@ -186,7 +191,7 @@ public class BardRotationEventHandler : IRotationEventHandler
 
     public void OnBattleUpdate(int currTimeInMs)
     {
-        //SmartUseHighPrioritySlot();
+        SmartUseHighPrioritySlot();
         if (!BardUtil.IsSongOrderNormal())
         {
             BardRotationEntry.QT.SetQt("对齐旅神", false);
@@ -219,8 +224,8 @@ public class BardRotationEventHandler : IRotationEventHandler
         if (Core.Resolve<MemApiCondition>().IsInCombat() && 
             Core.Me.GetCurrTarget() != null &&
             Core.Me.GetCurrTarget().CanAttack())
-            BardSettings.Instance.HotkeyUseHighPrioritySlot = true;
+            BardBattleData.Instance.HotkeyUseHighPrioritySlot = true;
         else
-            BardSettings.Instance.HotkeyUseHighPrioritySlot = false;
+            BardBattleData.Instance.HotkeyUseHighPrioritySlot = false;
     }
 }

@@ -31,4 +31,5 @@ public class BardBattleData
     
     public bool HasUseIronJawsInCurrentBursting = false;
     public bool HasUseApexArrowInCurrentNonBurstingPeriod = false;
+    public bool HotkeyUseHighPrioritySlot = false; // 热键使用高优先级队列
 }

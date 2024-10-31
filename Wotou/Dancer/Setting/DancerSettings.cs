@@ -58,7 +58,6 @@ public class DancerSettings
     
     // 扇舞保留层数
     public int FanDanceSaveStack = 3;
-    public bool HotkeyUseHighPrioritySlot = false; // 热键使用高优先级队列
     
     public JobViewSave JobViewSave = new JobViewSave()
     {

@@ -47,7 +47,7 @@ namespace Wotou.Dancer
 
         public void OnBattleUpdate(int currTimeInMs)
         {
-            //SmartUseHighPrioritySlot();
+            SmartUseHighPrioritySlot();
         }
 
         public void OnEnterRotation()
@@ -120,7 +120,7 @@ namespace Wotou.Dancer
         public Task OnPreCombat()
         {
             DancerRotationEntry.UpdateDancerPartnerPanel();
-            //SmartUseHighPrioritySlot();
+            SmartUseHighPrioritySlot();
             return Task.CompletedTask;
         }
 
@@ -150,9 +150,10 @@ namespace Wotou.Dancer
             if (Core.Resolve<MemApiCondition>().IsInCombat() && 
                 Core.Me.GetCurrTarget() != null &&
                 Core.Me.GetCurrTarget().CanAttack())
-                DancerSettings.Instance.HotkeyUseHighPrioritySlot = true;
+                DancerBattleData.Instance.HotkeyUseHighPrioritySlot = true;
             else
-                DancerSettings.Instance.HotkeyUseHighPrioritySlot = false;
+                DancerBattleData.Instance.HotkeyUseHighPrioritySlot = false;
+
         }
     }
 }

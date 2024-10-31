@@ -18,13 +18,11 @@ public class ClosedPositionHotkeyResolver : IHotkeyResolver
 {
     private uint SpellId;
     private int Index;
-    private bool UseHighPri;
 
-    public ClosedPositionHotkeyResolver(int index, bool useHighPrioritySlot = false)
+    public ClosedPositionHotkeyResolver(int index)
     {
         this.SpellId = DancerDefinesData.Spells.ClosedPosition;
         this.Index = index;
-        this.UseHighPri = useHighPrioritySlot;
     }
     
     public void Draw(Vector2 size)
@@ -65,15 +63,22 @@ public class ClosedPositionHotkeyResolver : IHotkeyResolver
             textPos.Y += size1.Y - ImGui.CalcTextSize(cooldownText).Y + 5; // 向下移动一点
 
             // 绘制冷却时间文本
-            ImGui.GetWindowDrawList().AddText(textPos, ImGui.ColorConvertFloat4ToU32(new Vector4(1, 1, 1, 1)), cooldownText);
+            //ImGui.GetWindowDrawList().AddText(textPos, ImGui.ColorConvertFloat4ToU32(new Vector4(1, 1, 1, 1)), cooldownText);
         }
     }
 
     public void DrawExternal(Vector2 size, bool isActive)
     {
+        SpellHelper.DrawSpellInfo(Core.Resolve<MemApiSpell>().CheckActionChange(this.SpellId).GetSpell(), size, isActive);
     }
 
-    public int Check() => 0;
+    public int Check()
+    {
+        if (DancerDefinesData.Spells.ClosedPosition.GetSpell().Cooldown.TotalMilliseconds != 0 || 
+            Core.Resolve<JobApi_Dancer>().IsDancing)
+            return -1;
+        return 0;
+    }
 
     public void Run()
     {
@@ -86,11 +91,11 @@ public class ClosedPositionHotkeyResolver : IHotkeyResolver
         var partyMembers = PartyHelper.Party;
         if (partyMembers.Count < index + 1)
             return;
-        if (!DancerDefinesData.Spells.ClosedPosition.CoolDownInGCDs(0) || 
+        if (DancerDefinesData.Spells.ClosedPosition.GetSpell().Cooldown.TotalMilliseconds != 0 || 
             Core.Resolve<JobApi_Dancer>().IsDancing)
             return;
         
-        if (!this.UseHighPri)
+        if (!DancerBattleData.Instance.HotkeyUseHighPrioritySlot)
         {
             if (AI.Instance.BattleData.NextSlot == null)
                 AI.Instance.BattleData.NextSlot = new Slot();

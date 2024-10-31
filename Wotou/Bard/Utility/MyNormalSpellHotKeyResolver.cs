@@ -3,23 +3,25 @@ using AEAssist;
 using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.CombatRoutine.View.JobView;
-using AEAssist.Extension;
 using AEAssist.Helper;
-using AEAssist.JobApi;
 using AEAssist.MemoryApi;
+using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Interface.Textures.TextureWraps;
 using ImGuiNET;
+using Wotou.Bard.Data;
 using Wotou.Dancer.Data;
 
-namespace Wotou.Dancer.Utility;
+namespace Wotou.Bard.Utility;
 
-public class ImprovisationHotkeyResolver : IHotkeyResolver
+public class MyNormalSpellHotKeyResolver: IHotkeyResolver
 {
-    private uint SpellId;
-
-    public ImprovisationHotkeyResolver()
+    public uint SpellId;
+    public SpellTargetType TargetType;
+    
+    public MyNormalSpellHotKeyResolver(uint spellId, SpellTargetType targetType) 
     {
-        this.SpellId = DancerDefinesData.Spells.Improvisation;
+        this.SpellId = spellId;
+        this.TargetType = targetType;
     }
     
     public void Draw(Vector2 size)
@@ -58,7 +60,7 @@ public class ImprovisationHotkeyResolver : IHotkeyResolver
             textPos.Y += size1.Y - ImGui.CalcTextSize(cooldownText).Y + 5; // 向下移动一点
 
             // 绘制冷却时间文本
-            //ImGui.GetWindowDrawList().AddText(textPos, ImGui.ColorConvertFloat4ToU32(new Vector4(1, 1, 1, 1)), cooldownText);
+            ImGui.GetWindowDrawList().AddText(textPos, ImGui.ColorConvertFloat4ToU32(new Vector4(1, 1, 1, 1)), cooldownText);
         }
         
     }
@@ -70,35 +72,27 @@ public class ImprovisationHotkeyResolver : IHotkeyResolver
 
     public int Check()
     {
-        if (DancerDefinesData.Spells.Improvisation.GetSpell().Cooldown.TotalMilliseconds != 0 ||
-            Core.Resolve<JobApi_Dancer>().IsDancing)
-            return -1;
-        return 0;
+        return SpellId.IsReady() ? 0 : -1;
     }
 
-    public void Run()
+
+    public new void Run()
     {
-        Improvisation();
-        return;
-    }
-    
-    private void Improvisation()
-    {
-        if (DancerDefinesData.Spells.Improvisation.GetSpell().Cooldown.TotalMilliseconds != 0 || 
-            Core.Resolve<JobApi_Dancer>().IsDancing)
-            return;
-        if (!DancerBattleData.Instance.HotkeyUseHighPrioritySlot)
+        Spell spell = Core.Resolve<MemApiSpell>().CheckActionChange(this.SpellId).GetSpell(this.TargetType);
+        if (!BardBattleData.Instance.HotkeyUseHighPrioritySlot)
         {
             if (AI.Instance.BattleData.NextSlot == null)
                 AI.Instance.BattleData.NextSlot = new Slot();
-            AI.Instance.BattleData.NextSlot.Add(DancerDefinesData.Spells.Improvisation.GetSpell());
-            AI.Instance.BattleData.NextSlot.Add(DancerDefinesData.Spells.ImprovisationFinish.GetSpell());
-        }else
+            AI.Instance.BattleData.NextSlot.Add(spell);
+        }
+        else
         {
             Slot slot = new Slot();
-            slot.Add(DancerDefinesData.Spells.Improvisation.GetSpell());
-            slot.Add(DancerDefinesData.Spells.ImprovisationFinish.GetSpell());
-            AI.Instance.BattleData.HighPrioritySlots_OffGCD.Enqueue(slot);
+            slot.Add(spell);
+            if (spell.IsAbility())
+                AI.Instance.BattleData.HighPrioritySlots_OffGCD.Enqueue(slot);
+            else
+                AI.Instance.BattleData.HighPrioritySlots_GCD.Enqueue(slot);
         }
     }
 }
