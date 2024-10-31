@@ -23,7 +23,7 @@ public class BardRotationEventHandler : IRotationEventHandler
     
     public async Task OnPreCombat()
     {
-        SmartUseHighPrioritySlot();
+        //SmartUseHighPrioritySlot();
         if (!BardUtil.IsSongOrderNormal())
         {
             BardRotationEntry.QT.SetQt("对齐旅神", false);
@@ -186,7 +186,12 @@ public class BardRotationEventHandler : IRotationEventHandler
 
     public void OnBattleUpdate(int currTimeInMs)
     {
-        SmartUseHighPrioritySlot();
+        //SmartUseHighPrioritySlot();
+        if (!BardUtil.IsSongOrderNormal())
+        {
+            BardRotationEntry.QT.SetQt("对齐旅神", false);
+            BardRotationEntry.QT.SetQt("强对齐", false);
+        }
     }
 
     public void OnEnterRotation()

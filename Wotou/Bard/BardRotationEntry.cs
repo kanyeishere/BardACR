@@ -175,21 +175,16 @@ public class BardRotationEntry : IRotationEntry
 
         // 添加快捷按钮 (带技能图标)
         QT.AddHotkey("防击退", new HotKeyResolver_NormalSpell(BardDefinesData.Spells.ArmsLength, 
-            SpellTargetType.Target,
-            BardSettings.Instance.HotkeyUseHighPrioritySlot));
+            SpellTargetType.Target));
         QT.AddHotkey("内丹",
-            new HotKeyResolver_NormalSpell(BardDefinesData.Spells.SecondWind, SpellTargetType.Target,
-                BardSettings.Instance.HotkeyUseHighPrioritySlot));
+            new HotKeyResolver_NormalSpell(BardDefinesData.Spells.SecondWind, SpellTargetType.Target));
         QT.AddHotkey("行吟", new HotKeyResolver_NormalSpell(BardDefinesData.Spells.Troubadour, 
-            SpellTargetType.Target,
-            BardSettings.Instance.HotkeyUseHighPrioritySlot));
+            SpellTargetType.Target));
         QT.AddHotkey("大地神",
-            new HotKeyResolver_NormalSpell(BardDefinesData.Spells.NaturesMinne, SpellTargetType.Target,
-        BardSettings.Instance.HotkeyUseHighPrioritySlot));
+            new HotKeyResolver_NormalSpell(BardDefinesData.Spells.NaturesMinne, SpellTargetType.Target));
         QT.AddHotkey("疾跑", new HotKeyResolver_疾跑());
         QT.AddHotkey("后跳",
-            new HotKeyResolver_NormalSpell(BardDefinesData.Spells.RepellingShot, SpellTargetType.Target,
-                BardSettings.Instance.HotkeyUseHighPrioritySlot));
+            new HotKeyResolver_NormalSpell(BardDefinesData.Spells.RepellingShot, SpellTargetType.Target));
         QT.AddHotkey("爆发药", new HotKeyResolver_Potion());
         QT.AddHotkey("极限技", new HotKeyResolver_LB());
     }

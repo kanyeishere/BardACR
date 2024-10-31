@@ -147,13 +147,13 @@ public class DancerRotationEntry : IRotationEntry
         QT.AddQt(QTKey.FinalBurst, false, "是否倾泻资源");
         
         
-        QT.AddHotkey("防击退", new HotKeyResolver_NormalSpell(DancerDefinesData.Spells.ArmsLength, SpellTargetType.Target, DancerSettings.Instance.HotkeyUseHighPrioritySlot));
-        QT.AddHotkey("内丹", new HotKeyResolver_NormalSpell(DancerDefinesData.Spells.SecondWind, SpellTargetType.Self, DancerSettings.Instance.HotkeyUseHighPrioritySlot));
-        QT.AddHotkey("桑巴", new HotKeyResolver_NormalSpell(DancerDefinesData.Spells.ShieldSamba, SpellTargetType.Self, DancerSettings.Instance.HotkeyUseHighPrioritySlot));
-        QT.AddHotkey("华尔兹", new HotKeyResolver_NormalSpell(DancerDefinesData.Spells.CuringWaltz, SpellTargetType.Self, DancerSettings.Instance.HotkeyUseHighPrioritySlot));
-        QT.AddHotkey("秒开关即兴", new ImprovisationHotkeyResolver(DancerSettings.Instance.HotkeyUseHighPrioritySlot));
+        QT.AddHotkey("防击退", new HotKeyResolver_NormalSpell(DancerDefinesData.Spells.ArmsLength, SpellTargetType.Target));
+        QT.AddHotkey("内丹", new HotKeyResolver_NormalSpell(DancerDefinesData.Spells.SecondWind, SpellTargetType.Self));
+        QT.AddHotkey("桑巴", new HotKeyResolver_NormalSpell(DancerDefinesData.Spells.ShieldSamba, SpellTargetType.Self));
+        QT.AddHotkey("华尔兹", new HotKeyResolver_NormalSpell(DancerDefinesData.Spells.CuringWaltz, SpellTargetType.Self));
+        QT.AddHotkey("秒开关即兴", new ImprovisationHotkeyResolver());
         QT.AddHotkey("疾跑", new HotKeyResolver_疾跑());
-        QT.AddHotkey("前冲步", new HotKeyResolver_NormalSpell(DancerDefinesData.Spells.EnAvant, SpellTargetType.Target, DancerSettings.Instance.HotkeyUseHighPrioritySlot));
+        QT.AddHotkey("前冲步", new HotKeyResolver_NormalSpell(DancerDefinesData.Spells.EnAvant, SpellTargetType.Target));
         QT.AddHotkey("爆发药", new HotKeyResolver_Potion());
         QT.AddHotkey("极限技", new HotKeyResolver_LB());
         DancerSettings.Instance.JobViewSave.HotkeyLineCount = 5;
@@ -165,7 +165,7 @@ public class DancerRotationEntry : IRotationEntry
         for (var i = 1; i < PartyHelper.Party.Count; i++)
         {
             var index = i;
-            DancePartnerPanel?.AddHotkey("切换舞伴: " + PartyHelper.Party[i].Name, new ClosedPositionHotkeyResolver(index, DancerSettings.Instance.HotkeyUseHighPrioritySlot));
+            DancePartnerPanel?.AddHotkey("切换舞伴: " + PartyHelper.Party[i].Name, new ClosedPositionHotkeyResolver(index));
         }
     }
 
