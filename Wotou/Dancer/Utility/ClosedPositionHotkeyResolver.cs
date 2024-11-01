@@ -38,7 +38,7 @@ public class ClosedPositionHotkeyResolver : IHotkeyResolver
             return;
         ImGui.Image(textureWrap.ImGuiHandle, size1);
         
-        if (SpellId.GetSpell().Cooldown.TotalMilliseconds > 0)
+        if (SpellId.GetSpell().Cooldown.TotalMilliseconds > 0 && !Core.Resolve<JobApi_Dancer>().IsDancing)
         {
             // Use ImGui.GetItemRectMin() and ImGui.GetItemRectMax() for exact icon bounds
             Vector2 overlayMin = ImGui.GetItemRectMin();
@@ -63,13 +63,14 @@ public class ClosedPositionHotkeyResolver : IHotkeyResolver
             textPos.Y += size1.Y - ImGui.CalcTextSize(cooldownText).Y + 5; // 向下移动一点
 
             // 绘制冷却时间文本
-            //ImGui.GetWindowDrawList().AddText(textPos, ImGui.ColorConvertFloat4ToU32(new Vector4(1, 1, 1, 1)), cooldownText);
+            ImGui.GetWindowDrawList().AddText(textPos, ImGui.ColorConvertFloat4ToU32(new Vector4(1, 1, 1, 1)), cooldownText);
         }
     }
 
     public void DrawExternal(Vector2 size, bool isActive)
     {
-        SpellHelper.DrawSpellInfo(Core.Resolve<MemApiSpell>().CheckActionChange(this.SpellId).GetSpell(), size, isActive);
+        /*SpellTargetType targetType = Index >= 1 && Index <= 8 ? (SpellTargetType)(Index + 3) : SpellTargetType.Target;
+        SpellHelper.DrawSpellInfo(Core.Resolve<MemApiSpell>().CheckActionChange(this.SpellId).GetSpell(targetType), size, isActive);*/
     }
 
     public int Check()
@@ -125,17 +126,6 @@ public class ClosedPositionHotkeyResolver : IHotkeyResolver
             }
             AI.Instance.BattleData.HighPrioritySlots_OffGCD.Enqueue(slot);
         }
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         
         if (DancerSettings.Instance.UseDancePartnerMacro)
         {
