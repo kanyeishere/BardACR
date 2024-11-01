@@ -33,7 +33,7 @@ public class ImprovisationHotkeyResolver : IHotkeyResolver
         ImGui.Image(textureWrap.ImGuiHandle, size1);
         // Check if skill is on cooldown and apply grey overlay if true
         
-        if (!Core.Resolve<MemApiSpell>().CheckActionChange(SpellId).IsReady())
+        if (!Core.Resolve<MemApiSpell>().CheckActionChange(SpellId).GetSpell().IsReadyWithCanCast())
         {
             // Use ImGui.GetItemRectMin() and ImGui.GetItemRectMax() for exact icon bounds
             Vector2 overlayMin = ImGui.GetItemRectMin();

@@ -16,7 +16,7 @@ public class DancerFanDance4Ability : ISlotResolver
     {
         if (GCDHelper.GetGCDCooldown() <= 650)
             return -1;
-        if (!FanDance4.IsReady())
+        if (!FanDance4.GetSpell().IsReadyWithCanCast())
             return -1;
         return 1;
     }

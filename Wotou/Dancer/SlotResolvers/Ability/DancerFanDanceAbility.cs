@@ -28,7 +28,7 @@ public class DancerFanDanceAbility : ISlotResolver
             return -1;
         if (GCDHelper.GetGCDCooldown() <= 650)
             return -1;
-        if (!FanDance.IsReady() && !CanUseFanDance2())
+        if (!FanDance.GetSpell().IsReadyWithCanCast() && !CanUseFanDance2())
             return -2;
         if (QuadrupleTechnicalFinish.RecentlyUsed(1500))
             return -3;
@@ -59,7 +59,7 @@ public class DancerFanDanceAbility : ISlotResolver
     
     private static bool CanUseFanDance2()
     {
-        return FanDance2.IsReady() &&
+        return FanDance2.GetSpell().IsReadyWithCanCast() &&
                TargetHelper.GetNearbyEnemyCount(5) > 2 && 
                DancerRotationEntry.QT.GetQt(QTKey.Aoe);
     }

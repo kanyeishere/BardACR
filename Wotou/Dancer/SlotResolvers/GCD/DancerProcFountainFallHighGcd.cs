@@ -26,10 +26,10 @@ public class DancerProcFountainFailHighGcd : ISlotResolver
     
     public int Check()
     {
-        if (!ReverseCascade.IsReady() &&
-            !FountainFall.IsReady() && 
-            !RisingWindmill.IsReady() && 
-            !BloodShower.IsReady())
+        if (!ReverseCascade.GetSpell().IsReadyWithCanCast() &&
+            !FountainFall.GetSpell().IsReadyWithCanCast() && 
+            !RisingWindmill.GetSpell().IsReadyWithCanCast() && 
+            !BloodShower.GetSpell().IsReadyWithCanCast())
             return -2;
         
         if (Core.Me.HasAura(SilkenFlow) && !Core.Me.HasMyAuraWithTimeleft(SilkenFlow,3500))

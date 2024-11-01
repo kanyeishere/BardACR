@@ -20,7 +20,7 @@ public class BardEmpyrealArrowGcd : ISlotResolver
             return -1;
         // 仅在开启强对齐时才启用, 且当前无团辅buff
         if (BardRotationEntry.QT.GetQt("强对齐") && 
-            EmpyrealArrow.IsReady() &&
+            EmpyrealArrow.GetSpell().IsReadyWithCanCast() &&
             BardUtil.HasNoPartyBuff())
             return 1;
         return -1;

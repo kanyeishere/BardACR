@@ -26,7 +26,7 @@ public class BardSongMaxAbility : ISlotResolver
             return -1;
         if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow))
             return -1;
-        if (!WanderersMinuet.IsReady() && !MagesBallad.IsReady() && !ArmysPaeon.IsReady())
+        if (!WanderersMinuet.GetSpell().IsReadyWithCanCast() && !MagesBallad.GetSpell().IsReadyWithCanCast() && !ArmysPaeon.GetSpell().IsReadyWithCanCast())
             return -1;
         if (WanderersMinuet.RecentlyUsed() || MagesBallad.RecentlyUsed() || ArmysPaeon.RecentlyUsed())
             return -1;
@@ -44,18 +44,18 @@ public class BardSongMaxAbility : ISlotResolver
     
     private Spell GetSpell()
     {
-        if ((Core.Resolve<JobApi_Bard>().ActiveSong == BardUtil.GetSongBySpell(ArmysPaeon) || BardBattleData.Instance.LastSong == BardUtil.GetSongBySpell(ArmysPaeon)) && WanderersMinuet.IsReady())
+        if ((Core.Resolve<JobApi_Bard>().ActiveSong == BardUtil.GetSongBySpell(ArmysPaeon) || BardBattleData.Instance.LastSong == BardUtil.GetSongBySpell(ArmysPaeon)) && WanderersMinuet.GetSpell().IsReadyWithCanCast())
             return WanderersMinuet.GetSpell();
-        if ((Core.Resolve<JobApi_Bard>().ActiveSong == BardUtil.GetSongBySpell(WanderersMinuet) || BardBattleData.Instance.LastSong == BardUtil.GetSongBySpell(WanderersMinuet)) && MagesBallad.IsReady())
+        if ((Core.Resolve<JobApi_Bard>().ActiveSong == BardUtil.GetSongBySpell(WanderersMinuet) || BardBattleData.Instance.LastSong == BardUtil.GetSongBySpell(WanderersMinuet)) && MagesBallad.GetSpell().IsReadyWithCanCast())
             return MagesBallad.GetSpell();
-        if ((Core.Resolve<JobApi_Bard>().ActiveSong == BardUtil.GetSongBySpell(MagesBallad) || BardBattleData.Instance.LastSong == BardUtil.GetSongBySpell(MagesBallad)) && ArmysPaeon.IsReady())
+        if ((Core.Resolve<JobApi_Bard>().ActiveSong == BardUtil.GetSongBySpell(MagesBallad) || BardBattleData.Instance.LastSong == BardUtil.GetSongBySpell(MagesBallad)) && ArmysPaeon.GetSpell().IsReadyWithCanCast())
             return ArmysPaeon.GetSpell();
         if (Core.Resolve<JobApi_Bard>().ActiveSong == Song.NONE )
-            if (WanderersMinuet.IsReady())
+            if (WanderersMinuet.GetSpell().IsReadyWithCanCast())
                 return WanderersMinuet.GetSpell();
-            else if (MagesBallad.IsReady())
+            else if (MagesBallad.GetSpell().IsReadyWithCanCast())
                 return MagesBallad.GetSpell();
-            else if (ArmysPaeon.IsReady())
+            else if (ArmysPaeon.GetSpell().IsReadyWithCanCast())
                 return ArmysPaeon.GetSpell();
         return WanderersMinuet.GetSpell();
     }

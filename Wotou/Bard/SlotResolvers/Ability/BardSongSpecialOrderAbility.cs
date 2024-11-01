@@ -28,7 +28,7 @@ public class BardSongSpecialOrderAbility : ISlotResolver
         
         if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow))
             return -1;
-        if (!WanderersMinuet.IsReady() && !MagesBallad.IsReady() && !ArmysPaeon.IsReady())
+        if (!WanderersMinuet.GetSpell().IsReadyWithCanCast() && !MagesBallad.GetSpell().IsReadyWithCanCast() && !ArmysPaeon.GetSpell().IsReadyWithCanCast())
             return -1;
         if (WanderersMinuet.RecentlyUsed() || MagesBallad.RecentlyUsed() || ArmysPaeon.RecentlyUsed())
             return -1;
@@ -61,20 +61,20 @@ public class BardSongSpecialOrderAbility : ISlotResolver
     private Spell GetSpell()
     {
         if ((Core.Resolve<JobApi_Bard>().ActiveSong == BardSettings.Instance.ThirdSong || BardBattleData.Instance.LastSong == BardSettings.Instance.ThirdSong) && 
-            BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).IsReady())
+            BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).GetSpell().IsReadyWithCanCast())
             return BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).GetSpell();
         if ((Core.Resolve<JobApi_Bard>().ActiveSong == BardSettings.Instance.FirstSong || BardBattleData.Instance.LastSong == BardSettings.Instance.FirstSong) && 
-            BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).IsReady())
+            BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).GetSpell().IsReadyWithCanCast())
             return BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).GetSpell();
         if ((Core.Resolve<JobApi_Bard>().ActiveSong == BardSettings.Instance.SecondSong || BardBattleData.Instance.LastSong == BardSettings.Instance.SecondSong) && 
-            BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).IsReady())
+            BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).GetSpell().IsReadyWithCanCast())
             return BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).GetSpell();
         if (Core.Resolve<JobApi_Bard>().ActiveSong == Song.NONE )
-            if (BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).IsReady())
+            if (BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).GetSpell().IsReadyWithCanCast())
                 return BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).GetSpell();
-            else if (BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).IsReady())
+            else if (BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).GetSpell().IsReadyWithCanCast())
                 return BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).GetSpell();
-            else if (BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).IsReady())
+            else if (BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).GetSpell().IsReadyWithCanCast())
                 return BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).GetSpell();
         return BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).GetSpell();
     }

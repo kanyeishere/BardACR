@@ -8,6 +8,7 @@ using AEAssist.Helper;
 using AEAssist.JobApi;
 using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.JobGauge.Enums;
+using Dalamud.Utility;
 using Wotou.Bard.Utility;
 
 namespace Wotou.Bard;
@@ -69,35 +70,35 @@ public class BardRotationEventHandler : IRotationEventHandler
         if (BardSongSwitchUtil.CanSwitchFromNone())
         {
             if (BardBattleData.Instance.LastSong == BardSettings.Instance.FirstSong && 
-                BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).IsReady())
+                BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).GetSpell().IsReadyWithCanCast())
             {
                 await BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).GetSpell().Cast();
                 return;
             }
             if (BardBattleData.Instance.LastSong == BardSettings.Instance.SecondSong && 
-                BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).IsReady())
+                BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).GetSpell().IsReadyWithCanCast())
             {
                 await BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).GetSpell().Cast();
                 return;
             }
             if (BardBattleData.Instance.LastSong == BardSettings.Instance.ThirdSong && 
-                BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).IsReady())
+                BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).GetSpell().IsReadyWithCanCast())
             {
                 await BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).GetSpell().Cast();
                 return;
             }
             
-            if (BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).IsReady())
+            if (BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).GetSpell().IsReadyWithCanCast())
             {
                 await BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).GetSpell().Cast();
                 return;
             }
-            if (BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).IsReady())
+            if (BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).GetSpell().IsReadyWithCanCast())
             {
                 await BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).GetSpell().Cast();
                 return;
             }
-            if (BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).IsReady())
+            if (BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).GetSpell().IsReadyWithCanCast())
             {
                 await BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).GetSpell().Cast();
                 return;
@@ -114,6 +115,10 @@ public class BardRotationEventHandler : IRotationEventHandler
 
     public void AfterSpell(Slot slot, Spell spell)
     {
+        if (spell.Id == BardDefinesData.Spells.IronJaws && BardUtil.HasAllPartyBuff())
+            BardBattleData.Instance.HasUseIronJawsInCurrentBursting = true;
+        if (spell.Id == BardDefinesData.Spells.ApexArrow && BardUtil.HasNoPartyBuff())
+            BardBattleData.Instance.HasUseApexArrowInCurrentNonBurstingPeriod = true;
         // 没有记录到第一个120秒的buff，就记录下来
         if (!BardBattleData.Instance.HasFirst120SBuff)
             switch (spell.Id)

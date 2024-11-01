@@ -13,7 +13,7 @@ public static class BardSongSwitchUtil
         return Core.Resolve<JobApi_Bard>().ActiveSong == BardSettings.Instance.FirstSong &&
                BardRotationEntry.QT.GetQt(QTKey.Song) &&
                Core.Resolve<JobApi_Bard>().SongTimer <= 45000.0 - BardUtil.GetSongDuration(BardSettings.Instance.FirstSong) * 1000 &&
-               BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).IsReady();
+               BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).GetSpell().IsReadyWithCanCast();
     }
     
     public static bool CanSwitchFromSecondToThird()
@@ -21,7 +21,7 @@ public static class BardSongSwitchUtil
         return Core.Resolve<JobApi_Bard>().ActiveSong == BardSettings.Instance.SecondSong &&
                BardRotationEntry.QT.GetQt(QTKey.Song) &&
                Core.Resolve<JobApi_Bard>().SongTimer <= 45000.0 - BardUtil.GetSongDuration(BardSettings.Instance.SecondSong) * 1000 &&
-               BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).IsReady();
+               BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).GetSpell().IsReadyWithCanCast();
     }
     
     public static bool CanSwitchFromThirdToFirst()
@@ -29,15 +29,15 @@ public static class BardSongSwitchUtil
         return Core.Resolve<JobApi_Bard>().ActiveSong == BardSettings.Instance.ThirdSong && 
                BardRotationEntry.QT.GetQt(QTKey.Song) &&
                Core.Resolve<JobApi_Bard>().SongTimer <= 45000.0 - BardUtil.GetSongDuration(BardSettings.Instance.ThirdSong) * 1000 &&
-               BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).IsReady();
+               BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).GetSpell().IsReadyWithCanCast();
     }
     
     public static bool CanSwitchFromNone()
     {
         return Core.Resolve<JobApi_Bard>().ActiveSong == Song.NONE &&
                BardRotationEntry.QT.GetQt(QTKey.Song) &&
-               (BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).IsReady() ||
-                BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).IsReady() ||
-                BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).IsReady());
+               (BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).GetSpell().IsReadyWithCanCast() ||
+                BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).GetSpell().IsReadyWithCanCast() ||
+                BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).GetSpell().IsReadyWithCanCast());
     }
 }

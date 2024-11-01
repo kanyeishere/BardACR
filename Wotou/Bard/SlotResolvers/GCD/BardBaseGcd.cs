@@ -29,21 +29,12 @@ public class BardBaseGcd : ISlotResolver
     // 返回>=0表示检测通过 即将调用Build方法
     public int Check()
     {
-        const int gcdAnimationTime = 650;
+        const int gcdAnimationTime = 620;
         // 强对齐时，非团辅期间，九天不延后，延后gcd
         if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < gcdAnimationTime &&
             BardRotationEntry.QT.GetQt("强对齐") &&
-            !Core.Me.HasAura(RagingStrikesBuff) &&
-            !Core.Me.HasAura(BattleVoiceBuff) &&
-            (RadiantFinale.IsUnlock() && !Core.Me.HasAura(RadiantFinaleBuff)))
-        {
-            if (EmpyrealArrow.IsReady())
-            {
-                BardUtil.LogDebug("基础GCD", "九天技能准备好了，使用九天，延后gcd");
-                EmpyrealArrow.GetSpell().Cast();
-            }
+            BardUtil.HasNoPartyBuff())
             return -1;
-        }
         
         // 当前歌曲为军神 且开启爆发 且开启爆发对齐旅神 且强对齐 且第一个开的120秒buffCD时间小于2200 + 2020 * 3  + GCD动画时间，
         // 且九天CD时间大于约7秒，停手

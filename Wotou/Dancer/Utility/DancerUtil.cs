@@ -33,7 +33,7 @@ namespace Wotou.Dancer.Utility
         
         public static Spell GetBaseGcdCombo()
         {
-            if (Windmill.IsReady() &&
+            if (Windmill.GetSpell().IsReadyWithCanCast() &&
                 CanUseAoeCombo())
                 return GetAoeCombo();
             return GetSingleCombo();
@@ -41,7 +41,7 @@ namespace Wotou.Dancer.Utility
     
         private static Spell GetAoeCombo()
         {
-            if (BladeShower.IsReady() &&
+            if (BladeShower.GetSpell().IsReadyWithCanCast() &&
                 Core.Resolve<MemApiSpell>().GetLastComboSpellId() == Windmill &&
                 Core.Resolve<MemApiSpell>().GetComboTimeLeft().TotalMilliseconds > 10.0)
                 return BladeShower.GetSpell();
@@ -50,7 +50,7 @@ namespace Wotou.Dancer.Utility
     
         private static Spell GetSingleCombo()
         {
-            if (Fountain.IsReady() &&
+            if (Fountain.GetSpell().IsReadyWithCanCast() &&
                 Core.Resolve<MemApiSpell>().GetLastComboSpellId() == Cascade && 
                 Core.Resolve<MemApiSpell>().GetComboTimeLeft().TotalMilliseconds > 10.0)
                 return Fountain.GetSpell();
@@ -74,10 +74,10 @@ namespace Wotou.Dancer.Utility
             if (Core.Me.HasAura(SilkenSymmetry))
                 return RisingWindmill.GetSpell();
             
-            if (BloodShower.IsReady())
+            if (BloodShower.GetSpell().IsReadyWithCanCast())
                 return BloodShower.GetSpell();
         
-            if (RisingWindmill.IsReady())
+            if (RisingWindmill.GetSpell().IsReadyWithCanCast())
                 return RisingWindmill.GetSpell();
         
             return null;
@@ -92,10 +92,10 @@ namespace Wotou.Dancer.Utility
             if (Core.Me.HasAura(SilkenSymmetry))
                 return ReverseCascade.GetSpell();
             
-            if (FountainFall.IsReady())
+            if (FountainFall.GetSpell().IsReadyWithCanCast())
                 return FountainFall.GetSpell();
         
-            if (ReverseCascade.IsReady())
+            if (ReverseCascade.GetSpell().IsReadyWithCanCast())
                 return ReverseCascade.GetSpell();
             
             return null;

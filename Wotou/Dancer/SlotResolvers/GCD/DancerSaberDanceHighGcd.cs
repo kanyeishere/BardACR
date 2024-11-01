@@ -20,7 +20,7 @@ public class DancerSaberDanceHighGcd : ISlotResolver
     {
         if (!DancerRotationEntry.QT.GetQt(QTKey.SaberDance))
             return -1;
-        if (Core.Resolve<MemApiSpell>().CheckActionChange(SaberDance).IsReady() &&
+        if (Core.Resolve<MemApiSpell>().CheckActionChange(SaberDance).GetSpell().IsReadyWithCanCast() &&
             Core.Me.HasLocalPlayerAura(Devilment) &&
             Core.Resolve<JobApi_Dancer>().Esprit >= 70)
             return 1;

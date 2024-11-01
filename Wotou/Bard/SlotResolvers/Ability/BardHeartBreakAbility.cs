@@ -31,7 +31,7 @@ public class BardHeartBreakAbility : ISlotResolver
     {
         if (GCDHelper.GetGCDCooldown() <= 650)
             return -1;
-        if (!Core.Resolve<MemApiSpell>().CheckActionChange(HeartBreak).IsReady())
+        if (!Core.Resolve<MemApiSpell>().CheckActionChange(HeartBreak).GetSpell().IsReadyWithCanCast())
             return -1;
         /*if (Core.Resolve<MemApiSpell>().CheckActionChange(HeartBreak).RecentlyUsed(2300))
             return -1;*/

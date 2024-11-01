@@ -13,7 +13,7 @@ public class DancerStarfallDanceGCD : ISlotResolver
     
     public int Check()
     {
-        if (!StarfallDance.IsReady())
+        if (!StarfallDance.GetSpell().IsReadyWithCanCast())
             return -1;
         if (!Core.Me.HasAura(FlourishingStarfall))
             return -2;

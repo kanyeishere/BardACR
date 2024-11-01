@@ -22,7 +22,7 @@ public class DancerSaberDanceGcd : ISlotResolver
     
     public int Check()
     {
-        if (!Core.Resolve<MemApiSpell>().CheckActionChange(SaberDance).IsReady())
+        if (!Core.Resolve<MemApiSpell>().CheckActionChange(SaberDance).GetSpell().IsReadyWithCanCast())
             return -1;
         if (!DancerRotationEntry.QT.GetQt(QTKey.SaberDance))
             return -1;

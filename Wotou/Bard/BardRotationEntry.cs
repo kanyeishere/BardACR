@@ -26,8 +26,8 @@ public class BardRotationEntry : IRotationEntry
     public static JobViewWindow QT { get; private set; }
     public string AuthorName { get; set; } = "Wotou";
     //  更新日志
-    private const string UpdateLog = "更新日志：10.31" +
-                                     "\n- 在Dev界面中加入搜索技能id功能，方便写轴" ;
+    private const string UpdateLog = "更新日志：11.01v11" +
+                                     "\n- 适配AE新版技能检查接口" ;
     
     public Rotation Build(string settingFolder)
     {

@@ -28,19 +28,19 @@ public class DancerFinishingMoveGcd : ISlotResolver
             return 999;
         if (FinishingMove.GetSpell().Cooldown.TotalMilliseconds <= DancerSettings.Instance.StandardStepCdTolerance)
             return 1;
-        if (!FinishingMove.IsReady())
+        if (!FinishingMove.GetSpell().IsReadyWithCanCast())
             return -10;
         return 0;
     }
 
     public void Build(Slot slot)
     {
-        if (FinishingMove.IsReady() || Core.Me.HasAura(FinishingMoveReady))
+        if (FinishingMove.GetSpell().IsReadyWithCanCast() || Core.Me.HasAura(FinishingMoveReady))
         {
             slot.Add(FinishingMove.GetSpell());
             return;
         }
-        if (StandardStep.IsReady() || !Core.Me.HasAura(FinishingMoveReady))
+        if (StandardStep.GetSpell().IsReadyWithCanCast() || !Core.Me.HasAura(FinishingMoveReady))
         {
             slot.Add(StandardStep.GetSpell());
             AI.Instance.BattleData.CurrGcdAbilityCount = 1;

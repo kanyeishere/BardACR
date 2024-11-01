@@ -18,7 +18,7 @@ public class BardSideWinderAbility: ISlotResolver
             return -1;
         if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow))
             return -1;
-        if (!SideWinder.IsReady())
+        if (!SideWinder.GetSpell().IsReadyWithCanCast())
             return -1;
         return 1;
     }

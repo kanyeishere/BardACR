@@ -36,9 +36,9 @@ public class Bard2GOpener100 : IOpener
   {
     if (AI.Instance.BattleData.CurrBattleTimeInMs > 3000L)
       return -9;
-    if (!Barrage.IsReady() || 
-        !RagingStrikes.IsReady() || 
-        !BattleVoice.IsReady() ||
+    if (!Barrage.GetSpell().IsReadyWithCanCast() || 
+        !RagingStrikes.GetSpell().IsReadyWithCanCast() || 
+        !BattleVoice.GetSpell().IsReadyWithCanCast() ||
         (RadiantFinale.IsUnlock() && Core.Resolve<MemApiSpell>().GetCooldown(RadiantFinale).TotalSeconds > 0.0) ||
         Core.Resolve<MemApiSpell>().GetCooldown(BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong)).TotalSeconds > 0.0)
       return -4;

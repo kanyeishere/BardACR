@@ -15,7 +15,7 @@ public class BardNaturesMinneAbility : ISlotResolver
     {
         if (!BardRotationEntry.QT.GetQt("大地神"))
             return -3;
-        if (!NaturesMinne.IsReady())
+        if (!NaturesMinne.GetSpell().IsReadyWithCanCast())
             return -1;
         if (GCDHelper.GetGCDCooldown() <= 650)
             return -1;

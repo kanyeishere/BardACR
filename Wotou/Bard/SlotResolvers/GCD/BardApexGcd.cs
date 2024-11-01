@@ -31,8 +31,7 @@ public class BardApexGcd : ISlotResolver
         
         // 非爆发期绝峰箭处理
         var partyBuffCountdown  = BardBattleData.Instance.First120SBuffSpellId.GetSpell().Cooldown.TotalSeconds;
-        if (!Core.Me.HasLocalPlayerAura(BattleVoiceBuff) && !Core.Me.HasLocalPlayerAura(RagingStrikesBuff) &&
-            !Core.Me.HasLocalPlayerAura(RadiantFinaleBuff))
+        if (BardUtil.HasNoPartyBuff())
         {
             if (GambleTripleApex)
             {
@@ -47,7 +46,6 @@ public class BardApexGcd : ISlotResolver
                     partyBuffCountdown > 53 && 
                     !BardBattleData.Instance.HasUseApexArrowInCurrentNonBurstingPeriod)
                 {
-                    BardBattleData.Instance.HasUseApexArrowInCurrentNonBurstingPeriod = true;
                     return 1;
                 }
                     
@@ -55,7 +53,6 @@ public class BardApexGcd : ISlotResolver
                     partyBuffCountdown is > 43 and <= 53 &&
                     !BardBattleData.Instance.HasUseApexArrowInCurrentNonBurstingPeriod)
                 {
-                    BardBattleData.Instance.HasUseApexArrowInCurrentNonBurstingPeriod = true;
                     return 1;
                 }
                 // 非团辅期间，绝峰箭能量不足时的处理
@@ -63,7 +60,6 @@ public class BardApexGcd : ISlotResolver
                     partyBuffCountdown is <= 43 and >= 39 &&
                     !BardBattleData.Instance.HasUseApexArrowInCurrentNonBurstingPeriod)
                 {
-                    BardBattleData.Instance.HasUseApexArrowInCurrentNonBurstingPeriod = true;
                     return 1;
                 }
             }

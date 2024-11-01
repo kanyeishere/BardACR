@@ -14,7 +14,7 @@ public class DancerDevilmentAbility : ISlotResolver
     
     public int Check()
     {
-        if (!Devilment.IsReady())
+        if (!Devilment.GetSpell().IsReadyWithCanCast())
             return -1;
         if (Core.Resolve<MemApiSpellCastSuccess>().LastGcd != QuadrupleTechnicalFinish)
             return -2;

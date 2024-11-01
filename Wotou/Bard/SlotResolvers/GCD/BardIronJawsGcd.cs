@@ -45,7 +45,6 @@ public class BardIronJawsGcd : ISlotResolver
             if (!Core.Me.HasMyAuraWithTimeleft(BattleVoiceBuff, 3000) ||
                 !Core.Me.HasMyAuraWithTimeleft(RagingStrikesBuff, 3000))
             {
-                BardBattleData.Instance.HasUseIronJawsInCurrentBursting = true;
                 return 1;
             }
             
@@ -54,7 +53,6 @@ public class BardIronJawsGcd : ISlotResolver
             {
                 if (Core.Me.HasLocalPlayerAura(HawksEyeBuff))
                     return -1;
-                BardBattleData.Instance.HasUseIronJawsInCurrentBursting = true;
                 return 1;
             }
             return -1;

@@ -16,7 +16,7 @@ public class DancerTillanaGcd : ISlotResolver
 
     public int Check()
     {
-        if (!Tillana.IsReady())
+        if (!Tillana.GetSpell().IsReadyWithCanCast())
             return -1;
         if (Core.Resolve<JobApi_Dancer>().Esprit <= 35 && Core.Me.HasLocalPlayerAura(Devilment))
             return 1;

@@ -22,7 +22,7 @@ namespace Wotou.Dancer.Opener
             {
                 return -1;
             }
-            if (!DancerDefinesData.Spells.TechnicalStep.IsReady())
+            if (!DancerDefinesData.Spells.TechnicalStep.GetSpell().IsReadyWithCanCast())
             {
                 return -4;
             }
@@ -30,11 +30,11 @@ namespace Wotou.Dancer.Opener
             {
                 return -10;
             }
-            if (!DancerDefinesData.Spells.Devilment.IsReady())
+            if (!DancerDefinesData.Spells.Devilment.GetSpell().IsReadyWithCanCast())
             {
                 return -5;
             }
-            if (!DancerDefinesData.Spells.Flourish.IsReady())
+            if (!DancerDefinesData.Spells.Flourish.GetSpell().IsReadyWithCanCast())
             {
                 return -6;
             }

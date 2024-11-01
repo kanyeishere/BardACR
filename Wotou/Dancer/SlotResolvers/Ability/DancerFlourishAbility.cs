@@ -16,7 +16,7 @@ public class DancerFlourishAbility : ISlotResolver
     private const uint QuadrupleTechnicalFinish = DancerDefinesData.Spells.QuadrupleTechnicalFinish;
     public int Check()
     {
-        if (!Flourish.IsReady())
+        if (!Flourish.GetSpell().IsReadyWithCanCast())
             return -1;
         if (GCDHelper.GetGCDCooldown() <= 650)
             return -4;

@@ -23,10 +23,10 @@ public class DancerProcGcd : ISlotResolver
     
     public int Check()
     {
-        if (!ReverseCascade.IsReady() &&
-            !FountainFall.IsReady() && 
-            !RisingWindmill.IsReady() && 
-            !BloodShower.IsReady())
+        if (!ReverseCascade.GetSpell().IsReadyWithCanCast() &&
+            !FountainFall.GetSpell().IsReadyWithCanCast() && 
+            !RisingWindmill.GetSpell().IsReadyWithCanCast() && 
+            !BloodShower.GetSpell().IsReadyWithCanCast())
             return -1;
 
         if (!Core.Me.HasAura(FlourishingSymmetry) && 

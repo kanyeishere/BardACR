@@ -42,7 +42,7 @@ public class BardRagingStrikesAbility : ISlotResolver
             return 1;
         
         // 不使用爆发药
-        if (RagingStrikes.IsReady() && 
+        if (RagingStrikes.GetSpell().IsReadyWithCanCast() && 
             GCDHelper.GetGCDCooldown() <= BardSettings.Instance.RagingStrikeBeforeGcdTime)
             return 1;
         

@@ -13,7 +13,7 @@ public class DancerStarfallDanceHighGCD : ISlotResolver
     
     public int Check()
     {
-        if (!StarfallDance.IsReady())
+        if (!StarfallDance.GetSpell().IsReadyWithCanCast())
             return -1;
         // 快过期的流星舞 
         if (Core.Me.HasAura(FlourishingStarfall) && 

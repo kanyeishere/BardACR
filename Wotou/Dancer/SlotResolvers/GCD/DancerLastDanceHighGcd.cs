@@ -16,7 +16,7 @@ public class DancerLastDanceHighGcd : ISlotResolver
     
     public int Check()
     {
-        if (!LastDance.IsReady())
+        if (!LastDance.GetSpell().IsReadyWithCanCast())
             return -1; 
         if (!Core.Me.HasAura(LastDanceReady))
             return -2;

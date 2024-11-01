@@ -21,11 +21,11 @@ public class DancerSaberDanceMediumGcd : ISlotResolver
             return -1;
         if (Core.Me.HasLocalPlayerAura(Devilment) && 
             Core.Resolve<JobApi_Dancer>().Esprit >= 50 &&
-            Core.Resolve<MemApiSpell>().CheckActionChange(SaberDance).IsReady())
+            Core.Resolve<MemApiSpell>().CheckActionChange(SaberDance).GetSpell().IsReadyWithCanCast())
             return 1;
         if (Core.Me.HasLocalPlayerAura(Medicated) && 
             Core.Resolve<JobApi_Dancer>().Esprit >= 50 &&
-            Core.Resolve<MemApiSpell>().CheckActionChange(SaberDance).IsReady())
+            Core.Resolve<MemApiSpell>().CheckActionChange(SaberDance).GetSpell().IsReadyWithCanCast())
             return 1;
         return -1;
     }

@@ -25,7 +25,7 @@ public class BardBattleVoiceAndRadiantFinaleAbility: ISlotResolver
             return -1;
         if (!BardRotationEntry.QT.GetQt("爆发"))
             return -1;
-        if (!BattleVoice.IsReady())
+        if (!BattleVoice.GetSpell().IsReadyWithCanCast())
             return -1;
         // 第一个120s技能是BattleVoice，且剩下的两个120s技能中有一个技能的CD大于当前GCDDuration + UseBattleVoiceBeforeGcdTimeInMs - RagingStrikeBeforeGcdTime
         if (BardBattleData.Instance.First120SBuffSpellId == BattleVoice &&

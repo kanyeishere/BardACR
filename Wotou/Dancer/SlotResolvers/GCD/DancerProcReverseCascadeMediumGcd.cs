@@ -20,7 +20,7 @@ public class DancerProcReverseCascadeMediumGcd : ISlotResolver
     
     public int Check()
     {
-        if (!ReverseCascade.IsReady())
+        if (!ReverseCascade.GetSpell().IsReadyWithCanCast())
             return -2;
         
         if (Core.Me.HasAura(SilkenSymmetry) && 

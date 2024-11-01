@@ -32,7 +32,7 @@ public class DancerFanDance3Ability : ISlotResolver
             return -1;
         if (GCDHelper.GetGCDCooldown() <= 650)
             return -1;
-        if (!DancerDefinesData.Spells.FanDance3.IsReady())
+        if (!DancerDefinesData.Spells.FanDance3.GetSpell().IsReadyWithCanCast())
             return -2;
         if (QuadrupleTechnicalFinish.RecentlyUsed(1500))
             return -3;

@@ -20,7 +20,7 @@ public class DancerProcFountainFallMediumGcd : ISlotResolver
     
     public int Check()
     {
-        if (!FountainFall.IsReady())
+        if (!FountainFall.GetSpell().IsReadyWithCanCast())
             return -2;
         
         if (Core.Me.HasAura(SilkenFlow) && 

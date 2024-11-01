@@ -23,22 +23,22 @@ public class BardRadiantEncoreGcd : ISlotResolver
         if (Core.Me.HasLocalPlayerAura(RadiantEncoreReady) && !Core.Me.HasMyAuraWithTimeleft(RadiantEncoreReady, 3000))
             return 1;
 
-        if (BardBattleData.Instance.First120SBuffSpellId == RagingStrikes &&
-            RadiantEncore.IsReady())
-            return 1;
+        /*if (BardBattleData.Instance.First120SBuffSpellId == RagingStrikes &&
+            RadiantEncore.GetSpell().IsReadyWithCanCast())
+            return 1;*/
         
         if (BardBattleData.Instance.First120SBuffSpellId == RagingStrikes && 
             Core.Me.HasLocalPlayerAura(RadiantEncoreReady))
             return 1;
                 
-        if (BardUtil.HasAllPartyBuff() &&
-            RadiantEncore.IsReady())
-            return 1;
+        /*if (BardUtil.HasAllPartyBuff() &&
+            RadiantEncore.GetSpell().IsReadyWithCanCast())
+            return 1;*/
         
-        if (BardBattleData.Instance.First120SBuffSpellId == BattleVoice &&
+        /*if (BardBattleData.Instance.First120SBuffSpellId == BattleVoice &&
             RagingStrikes.RecentlyUsed(18000) &&
-            RadiantEncore.IsReady())
-            return 1;
+            RadiantEncore.GetSpell().IsReadyWithCanCast())
+            return 1;*/
         
         if (BardBattleData.Instance.First120SBuffSpellId == BattleVoice &&
             RagingStrikes.RecentlyUsed(18000)  &&

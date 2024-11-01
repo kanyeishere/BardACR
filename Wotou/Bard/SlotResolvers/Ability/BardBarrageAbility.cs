@@ -17,7 +17,7 @@ public class BardBarrageAbility : ISlotResolver
             return -1;
         if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow))
             return -1;
-        if (!Barrage.IsReady())
+        if (!Barrage.GetSpell().IsReadyWithCanCast())
             return -1;
         if (BardUtil.HasAllPartyBuff())
             return 1;
