@@ -10,7 +10,7 @@
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <OutputPath>F:\Games\AE\AE3.0\ACR\Wotou\</OutputPath>
+      <OutputPath>A:\AE3.0\ACR\Wotou</OutputPath>
     </PropertyGroup>
 
     <ItemGroup>

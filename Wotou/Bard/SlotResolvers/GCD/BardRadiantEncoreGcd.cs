@@ -27,8 +27,9 @@ public class BardRadiantEncoreGcd : ISlotResolver
             RadiantEncore.GetSpell().IsReadyWithCanCast())
             return 1;*/
         
-        if (BardBattleData.Instance.First120SBuffSpellId == RagingStrikes && 
-            Core.Me.HasLocalPlayerAura(RadiantEncoreReady))
+        if (RagingStrikes.RecentlyUsed(18000) &&
+            BattleVoice.RecentlyUsed(18000) &&
+            RadiantEncore.GetSpell().IsReadyWithCanCast())
             return 1;
                 
         /*if (BardUtil.HasAllPartyBuff() &&
@@ -40,10 +41,11 @@ public class BardRadiantEncoreGcd : ISlotResolver
             RadiantEncore.GetSpell().IsReadyWithCanCast())
             return 1;*/
         
-        if (BardBattleData.Instance.First120SBuffSpellId == BattleVoice &&
+        /*if (BardBattleData.Instance.First120SBuffSpellId == BattleVoice &&
             RagingStrikes.RecentlyUsed(18000)  &&
-            Core.Me.HasLocalPlayerAura(RadiantEncoreReady))
-            return 1;
+            BattleVoice.RecentlyUsed(18000) &&
+            RadiantEncore.GetSpell().IsReadyWithCanCast())
+            return 1;*/
         
         return -1;
     }

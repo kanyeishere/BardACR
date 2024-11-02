@@ -23,9 +23,8 @@ namespace Wotou.Dancer;
 
 public class DancerRotationEntry : IRotationEntry
 {
-    
-    private const string UpdateLog = "更新日志：11.01v11" +
-                                     "\n- 适配AE新版技能检查接口" ;
+    private const string UpdateLog = "更新日志：11.03" +
+                                     "\n- 适配AE测试功能：优化GCD偏移" ;
     public void Dispose()
     {
     }
