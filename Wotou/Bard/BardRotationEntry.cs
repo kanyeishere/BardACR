@@ -202,7 +202,7 @@ public class BardRotationEntry : IRotationEntry
         ImGui.PushStyleColor(ImGuiCol.Border, new Vector4(0.4314f, 0.6667f, 0.5569f, 1));
         if (ImGui.CollapsingHeader("   重要说明"))
         {
-            ImGui.Text("诗人ACR\n适配技速2.48-2.5\n精细调整过能力技插入窗口，所以请在fuck插件中适当降低动画锁\n直到你连续两个能力技插入间隔在620ms以下（此数字可在FFLogs上查）\n但也别让间隔低于520ms，有概率你的Logs会被标红");
+            ImGui.Text("诗人ACR\n适配技速2.48-2.50\n精细调整过能力技插入窗口，所以请在fuck插件中适当降低动画锁\n直到你连续两个能力技插入间隔在620ms以下（此数字可在FFLogs上查）\n但也别让间隔低于520ms，有概率你的Logs会被标红");
             ImGui.Separator();
             ImGui.Text(UpdateLog);
         }
