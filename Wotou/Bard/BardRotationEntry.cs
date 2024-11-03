@@ -12,6 +12,7 @@ using Dalamud.Interface;
 using ImGuiNET;
 using Wotou.Bard.Data;
 using Wotou.Bard.Opener;
+using Wotou.Bard.Sequence;
 using Wotou.Bard.Setting;
 using Wotou.Bard.SlotResolvers;
 using Wotou.Bard.Triggers;
@@ -26,8 +27,9 @@ public class BardRotationEntry : IRotationEntry
     public static JobViewWindow QT { get; private set; }
     public string AuthorName { get; set; } = "Wotou";
     //  更新日志
-    private const string UpdateLog = "更新日志：11.03" +
-                                     "\n- 适配AE测试功能：优化GCD偏移" ;
+    private const string UpdateLog = "更新日志：11.03v2" +
+                                     "\n- 适配AE测试功能：优化GCD偏移"  + 
+                                     "\n- 修复玩家死亡后，因为技能CD同时转好导致的互锁问题";
     
     public Rotation Build(string settingFolder)
     {
@@ -45,7 +47,8 @@ public class BardRotationEntry : IRotationEntry
             Description = "诗人ACR\n" + UpdateLog,
                           
         };
-
+        // 添加死后爆发
+        rot.AddSlotSequences(new BurstingAfterDeathSequence());
         // 添加各种事件回调
         rot.SetRotationEventHandler(new BardRotationEventHandler());
         rot.AddOpener(GetOpener);

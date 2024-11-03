@@ -18,7 +18,9 @@ public class BardRagingStrikesAbility : ISlotResolver
     {
         if (!BardRotationEntry.QT.GetQt("爆发"))
             return -1;
-        if (BardRotationEntry.QT.GetQt("对齐旅神") && Core.Resolve<JobApi_Bard>().ActiveSong != Song.WANDERER)
+        if (BardRotationEntry.QT.GetQt("对齐旅神") && 
+            BardRotationEntry.QT.GetQt(QTKey.Song) &&
+            Core.Resolve<JobApi_Bard>().ActiveSong != Song.WANDERER)
             return -1;
         
         // 第一个120s技能是RagingStrikes，且剩下的两个120s技能中有一个技能的CD大于当前GCDDuration

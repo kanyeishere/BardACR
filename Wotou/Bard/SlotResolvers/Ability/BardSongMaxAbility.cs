@@ -19,18 +19,18 @@ public class BardSongMaxAbility : ISlotResolver
     // 仅当身上没有歌时，且GCD大于530ms时，才会唱歌
     public int Check()
     {
-        // 此文件只处理歌曲顺序为 旅神-贤者-军神 的正常循环情况
+        // 此文件只处理歌曲顺序为 旅神-贤者-军神 的正常循环情况下，没有歌曲时切歌的情况
         if (!BardUtil.IsSongOrderNormal())
             return -999;
         if (!BardRotationEntry.QT.GetQt("唱歌"))
             return -1;
-        if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow))
-            return -1;
+        /*if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow))
+            return -1;*/
         if (!WanderersMinuet.GetSpell().IsReadyWithCanCast() && !MagesBallad.GetSpell().IsReadyWithCanCast() && !ArmysPaeon.GetSpell().IsReadyWithCanCast())
             return -1;
         if (WanderersMinuet.RecentlyUsed() || MagesBallad.RecentlyUsed() || ArmysPaeon.RecentlyUsed())
             return -1;
-        if (Core.Resolve<JobApi_Bard>().ActiveSong == Song.NONE && GCDHelper.GetGCDCooldown() > 530)
+        if (Core.Resolve<JobApi_Bard>().ActiveSong == Song.NONE)
             return 1;
         return -1;
     }
