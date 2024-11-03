@@ -20,8 +20,7 @@ public class DancerLastDanceHighGcd : ISlotResolver
             return -1; 
         if (!Core.Me.HasAura(LastDanceReady))
             return -2;
-        if ( Core.Resolve<MemApiSpell>().CheckActionChange(StandardStep).GetSpell().Cooldown.TotalMilliseconds > 
-             GCDHelper.GetGCDDuration() + DancerSettings.Instance.FinishingMoveCdTolerance)
+        if (Core.Resolve<MemApiSpell>().CheckActionChange(StandardStep).GetSpell().Cooldown.TotalMilliseconds > 3500)
             return -1;
         return 0;
     }

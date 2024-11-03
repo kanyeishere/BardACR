@@ -23,8 +23,9 @@ namespace Wotou.Dancer;
 
 public class DancerRotationEntry : IRotationEntry
 {
-    private const string UpdateLog = "更新日志：11.03" +
-                                     "\n- 适配AE测试功能：优化GCD偏移" ;
+    private const string UpdateLog = "更新日志：11.03v3" +
+                                     "\n- 适配AE测试功能：优化GCD偏移" +
+                                     "\n- 优化了结束动作与落幕舞的代码结构" ;
     public void Dispose()
     {
     }
@@ -33,7 +34,7 @@ public class DancerRotationEntry : IRotationEntry
 
     private List<SlotResolverData> SlotResolvers = new()
     {
-        new SlotResolverData(new DancerLastDanceHighGcd(), SlotMode.Gcd), //马上到期的终结舞步
+        new SlotResolverData(new DancerLastDanceHighGcd(), SlotMode.Gcd), //马上到期的落幕舞
         new SlotResolverData(new DancerFinishingMoveGcd(), SlotMode.Gcd),
         new SlotResolverData(new DancerStandardStepDancingGcd(), SlotMode.Gcd),
         new SlotResolverData(new DancerStandardStepGcd(), SlotMode.Gcd),

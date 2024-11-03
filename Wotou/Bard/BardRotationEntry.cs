@@ -27,9 +27,11 @@ public class BardRotationEntry : IRotationEntry
     public static JobViewWindow QT { get; private set; }
     public string AuthorName { get; set; } = "Wotou";
     //  更新日志
-    private const string UpdateLog = "更新日志：11.03v2" +
+    private const string UpdateLog = "更新日志：11.03v3" +
                                      "\n- 适配AE测试功能：优化GCD偏移"  + 
-                                     "\n- 修复玩家死亡后，因为技能CD同时转好导致的互锁问题";
+                                     "\n- 修复玩家死亡后，因为技能CD同时转好导致的互锁问题" +
+                                     "\n- 提高了贤者歌切军神歌的时间点准确性"+ 
+                                     "\n- 微调默认歌轴（请在下拉菜单中重新选择歌轴）" ;
     
     public Rotation Build(string settingFolder)
     {
@@ -378,22 +380,22 @@ public class BardRotationEntry : IRotationEntry
             var songTimelineSelectionIndex = 0;
             var songTimelineSelection = "";
             if (BardSettings.Instance.WandererSongDuration == 42.6f &&
-                BardSettings.Instance.MageSongDuration == 39.2f &&
-                BardSettings.Instance.ArmySongDuration == 39f &&
+                BardSettings.Instance.MageSongDuration == 39f &&
+                BardSettings.Instance.ArmySongDuration == 39.2f &&
                 BardUtil.IsSongOrderNormal())
                 songTimelineSelectionIndex = 1;
             if (BardSettings.Instance.WandererSongDuration == 42.6f &&
-                BardSettings.Instance.MageSongDuration == 42.2f &&
-                BardSettings.Instance.ArmySongDuration == 36f &&
+                BardSettings.Instance.MageSongDuration == 42f &&
+                BardSettings.Instance.ArmySongDuration == 36.2f &&
                 BardUtil.IsSongOrderNormal())
                 songTimelineSelectionIndex = 2;
             if (BardSettings.Instance.WandererSongDuration == 42.6f &&
-                BardSettings.Instance.MageSongDuration == 33.4f &&
+                BardSettings.Instance.MageSongDuration == 33f &&
                 BardSettings.Instance.ArmySongDuration == 45f &&
                 BardUtil.IsSongOrderNormal())
                 songTimelineSelectionIndex = 3;
             if (BardSettings.Instance.WandererSongDuration == 42.6f &&
-                BardSettings.Instance.MageSongDuration == 42.2f &&
+                BardSettings.Instance.MageSongDuration == 42f &&
                 BardSettings.Instance.ArmySongDuration == 45f &&
                 BardUtil.IsSongOrderNormal())
                 songTimelineSelectionIndex = 4;
@@ -434,23 +436,23 @@ public class BardRotationEntry : IRotationEntry
                 if (ImGui.Selectable("43-40-37 建议2.49-2.50技速"))
                 {
                     BardSettings.Instance.WandererSongDuration = 42.6f;
-                    BardSettings.Instance.MageSongDuration = 39.2f;
-                    BardSettings.Instance.ArmySongDuration = 39f;
+                    BardSettings.Instance.MageSongDuration = 39f;
+                    BardSettings.Instance.ArmySongDuration = 39.2f;
                     BardSongSettingsManager.Instance.ResetOrder();
                 }
 
                 if (ImGui.Selectable("43-43-34 建议2.48技速"))
                 {
                     BardSettings.Instance.WandererSongDuration = 42.6f;
-                    BardSettings.Instance.MageSongDuration = 42.2f;
-                    BardSettings.Instance.ArmySongDuration = 36f;
+                    BardSettings.Instance.MageSongDuration = 42f;
+                    BardSettings.Instance.ArmySongDuration = 36.2f;
                     BardSongSettingsManager.Instance.ResetOrder();
                 }
 
                 if (ImGui.Selectable("43-34-43 90级歌轴"))
                 {
                     BardSettings.Instance.WandererSongDuration = 42.6f;
-                    BardSettings.Instance.MageSongDuration = 33.4f;
+                    BardSettings.Instance.MageSongDuration = 33f;
                     BardSettings.Instance.ArmySongDuration = 45f;
                     BardSongSettingsManager.Instance.ResetOrder();
                 }
@@ -458,7 +460,7 @@ public class BardRotationEntry : IRotationEntry
                 if (ImGui.Selectable("43-43-45 特化歌轴"))
                 {
                     BardSettings.Instance.WandererSongDuration = 42.6f;
-                    BardSettings.Instance.MageSongDuration = 42.2f;
+                    BardSettings.Instance.MageSongDuration = 42f;
                     BardSettings.Instance.ArmySongDuration = 45f;
                     BardSongSettingsManager.Instance.ResetOrder();
                 }

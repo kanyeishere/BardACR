@@ -22,8 +22,9 @@ public class BardHeartBreakAbility : ISlotResolver
     private const uint RagingStrikes = BardDefinesData.Spells.RagingStrikes;
     private const uint BattleVoice = BardDefinesData.Spells.BattleVoice;
     private const uint EmpyrealArrow = BardDefinesData.Spells.EmpyrealArrow;
+    private const uint ArmysPaeon = BardDefinesData.Spells.ArmysPaeon;
+    private const uint MagesBallad = BardDefinesData.Spells.MagesBallad;
     
-    private static readonly float FirstSongDuration = BardSettings.Instance.WandererSongDuration * 1000;
     
     private static readonly uint Fist120SBuffId = BardBattleData.Instance.First120SBuffId;
     
@@ -33,8 +34,6 @@ public class BardHeartBreakAbility : ISlotResolver
             return -1;
         if (!Core.Resolve<MemApiSpell>().CheckActionChange(HeartBreak).GetSpell().IsReadyWithCanCast())
             return -1;
-        /*if (Core.Resolve<MemApiSpell>().CheckActionChange(HeartBreak).RecentlyUsed(2300))
-            return -1;*/
         if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow))
             return -1;
         if (EmpyrealArrow.RecentlyUsed(650))
@@ -52,14 +51,20 @@ public class BardHeartBreakAbility : ISlotResolver
         if (!Core.Me.HasMyAuraWithTimeleft(Fist120SBuffId, 1200) && Core.Me.HasLocalPlayerAura(Fist120SBuffId) && Core.Resolve<JobApi_Bard>().Repertoire >= 2)
             return -1;
         
-        // 不和切歌前最后一个完美音调冲突
+        // 不和切贤者歌前最后一个完美音调冲突
+        var wandererSongDuration = BardSettings.Instance.WandererSongDuration * 1000;
         if (Core.Resolve<JobApi_Bard>().ActiveSong == Song.WANDERER &&
-            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45600.0 - FirstSongDuration && 
+            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45600.0 - wandererSongDuration && 
             Core.Resolve<JobApi_Bard>().Repertoire >= 1)
             return -100;
         
-        /*if (EmpyrealArrow.RecentlyUsed())
-            return -1;*/
+        // 不和切军神歌冲突
+        var mageSongDuration = BardSettings.Instance.MageSongDuration * 1000;
+        if (Core.Resolve<JobApi_Bard>().ActiveSong == BardUtil.GetSongBySpell(MagesBallad) &&
+            (double)Core.Resolve<JobApi_Bard>().SongTimer < 45600.0 - mageSongDuration &&
+            ArmysPaeon.GetSpell().IsReadyWithCanCast() &&
+            (GCDHelper.GetGCDCooldown() > 530))
+            return -100;
         
         // 满三层碎心箭，使用
         if (Core.Resolve<MemApiSpell>().GetCharges(Core.Resolve<MemApiSpell>().CheckActionChange(HeartBreak)) >= Core.Resolve<MemApiSpell>().GetMaxCharges(Core.Resolve<MemApiSpell>().CheckActionChange(HeartBreak)) - 0.1)
@@ -75,6 +80,7 @@ public class BardHeartBreakAbility : ISlotResolver
         // 设置保留碎心箭的层数
         if (Core.Resolve<MemApiSpell>().GetCharges(Core.Resolve<MemApiSpell>().CheckActionChange(HeartBreak)) <= BardSettings.Instance.HeartBreakSaveStack)
             return -1;
+        
         return 1;
     }
     
