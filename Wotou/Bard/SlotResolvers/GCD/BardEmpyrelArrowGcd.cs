@@ -18,8 +18,8 @@ public class BardEmpyrealArrowGcd : ISlotResolver
             return -1;
         if (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt("爆发"))
             return -1;
-        // 仅在开启强对齐时才启用, 且当前无团辅buff
-        if (BardRotationEntry.QT.GetQt("强对齐") && 
+        // 当前无团辅buff
+        if (//BardRotationEntry.QT.GetQt("强对齐") && 
             EmpyrealArrow.GetSpell().IsReadyWithCanCast() &&
             BardUtil.HasNoPartyBuff())
             return 1;
