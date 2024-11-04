@@ -27,7 +27,6 @@ public class EmpyrealAfterDeathSequence: ISlotSequence
     
     private static void Step0(Slot slot)
     {
-        LogHelper.Print("EmpyrealAfterDeathSequence", "Step0");
         slot.Add(EmpyrealArrow.GetSpell());
     }
 }
