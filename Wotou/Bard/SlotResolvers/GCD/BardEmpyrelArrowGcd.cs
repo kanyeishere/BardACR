@@ -20,7 +20,7 @@ public class BardEmpyrealArrowGcd : ISlotResolver
             return -1;
         // 当前无团辅buff
         if (//BardRotationEntry.QT.GetQt("强对齐") && 
-            EmpyrealArrow.GetSpell().IsReadyWithCanCast() &&
+            EmpyrealArrow.IsUnlockWithCDCheck() &&
             BardUtil.HasNoPartyBuff())
             return 1;
         return -1;

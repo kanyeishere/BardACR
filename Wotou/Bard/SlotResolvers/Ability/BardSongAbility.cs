@@ -82,7 +82,9 @@ public class BardSongAbility : ISlotResolver
             !BardRotationEntry.QT.GetQt("对齐旅神"))
             return 1;
         
-        if (Core.Resolve<JobApi_Bard>().ActiveSong == Song.NONE && GCDHelper.GetGCDCooldown() > 530)
+        if (Core.Resolve<JobApi_Bard>().ActiveSong == Song.NONE && 
+            GCDHelper.GetGCDCooldown() > 530 && 
+            (WanderersMinuet.IsUnlockWithCDCheck() || MagesBallad.IsUnlockWithCDCheck() || ArmysPaeon.IsUnlockWithCDCheck()))
             return 1;
         
         return -1;

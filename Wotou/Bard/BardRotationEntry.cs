@@ -27,11 +27,8 @@ public class BardRotationEntry : IRotationEntry
     public static JobViewWindow QT { get; private set; }
     public string AuthorName { get; set; } = "Wotou";
     //  更新日志
-    private const string UpdateLog = "更新日志：11.03v3" +
-                                     "\n- 适配AE测试功能：优化GCD偏移"  + 
-                                     "\n- 修复玩家死亡后，因为技能CD同时转好导致的互锁问题" +
-                                     "\n- 提高了贤者歌切军神歌的时间点准确性"+ 
-                                     "\n- 微调默认歌轴（请在下拉菜单中重新选择歌轴）" ;
+    private const string UpdateLog = "更新日志：11.04" +
+                                     "\n- 修复玩家死亡/停手释放LB后，因为技能CD同时转好导致的互锁问题" ;
     
     public Rotation Build(string settingFolder)
     {
@@ -51,6 +48,7 @@ public class BardRotationEntry : IRotationEntry
         };
         // 添加死后爆发
         rot.AddSlotSequences(new BurstingAfterDeathSequence());
+        rot.AddSlotSequences(new EmpyrealAfterDeathSequence());
         // 添加各种事件回调
         rot.SetRotationEventHandler(new BardRotationEventHandler());
         rot.AddOpener(GetOpener);

@@ -9,12 +9,12 @@ namespace Wotou.Bard.Sequence;
 public class EmpyrealAfterDeathSequence: ISlotSequence
 {
     private const uint EmpyrealArrow = BardDefinesData.Spells.EmpyrealArrow;
-    private const uint WanderersMinuet = BardDefinesData.Spells.TheWanderersMinuet;
+    //private const uint WanderersMinuet = BardDefinesData.Spells.TheWanderersMinuet;
     
     public int StartCheck()
     {
         if (EmpyrealArrow.IsUnlockWithCDCheck() &&
-            !WanderersMinuet.IsUnlockWithCDCheck() &&
+            //!WanderersMinuet.IsUnlockWithCDCheck() &&
             GCDHelper.GetGCDCooldown() == 0)
             return 1;
         return -1;
@@ -27,6 +27,7 @@ public class EmpyrealAfterDeathSequence: ISlotSequence
     
     private static void Step0(Slot slot)
     {
+        LogHelper.Print("EmpyrealAfterDeathSequence", "Step0");
         slot.Add(EmpyrealArrow.GetSpell());
     }
 }

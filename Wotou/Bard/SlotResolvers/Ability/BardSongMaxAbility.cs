@@ -30,7 +30,8 @@ public class BardSongMaxAbility : ISlotResolver
             return -1;
         if (WanderersMinuet.RecentlyUsed() || MagesBallad.RecentlyUsed() || ArmysPaeon.RecentlyUsed())
             return -1;
-        if (Core.Resolve<JobApi_Bard>().ActiveSong == Song.NONE)
+        if (Core.Resolve<JobApi_Bard>().ActiveSong == Song.NONE && 
+            (WanderersMinuet.IsUnlockWithCDCheck() || MagesBallad.IsUnlockWithCDCheck() || ArmysPaeon.IsUnlockWithCDCheck()) )
             return 1;
         return -1;
     }
