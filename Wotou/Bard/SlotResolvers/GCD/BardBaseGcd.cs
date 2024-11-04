@@ -33,7 +33,8 @@ public class BardBaseGcd : ISlotResolver
         // 非团辅期间，九天不延后，延后gcd
         if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < gcdAnimationTime &&
             //BardRotationEntry.QT.GetQt("强对齐") &&
-            BardUtil.HasNoPartyBuff())
+            BardUtil.HasNoPartyBuff() &&
+            BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow))
             return -1;
         
         // 当前歌曲为军神 且开启爆发 且开启爆发对齐旅神 且强对齐 且第一个开的120秒buffCD时间小于2200 + 2020 * 3  + GCD动画时间，
@@ -41,6 +42,7 @@ public class BardBaseGcd : ISlotResolver
         if (BardRotationEntry.QT.GetQt("爆发") && 
             BardRotationEntry.QT.GetQt("对齐旅神") && 
             BardRotationEntry.QT.GetQt("强对齐") &&
+            BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow) &&
             Core.Resolve<JobApi_Bard>().ActiveSong == Song.ARMY &&
             BardBattleData.Instance.First120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds <
             2200 + 2020 * 3  + gcdAnimationTime )
