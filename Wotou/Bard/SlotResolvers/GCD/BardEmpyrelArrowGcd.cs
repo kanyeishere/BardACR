@@ -17,13 +17,15 @@ public class BardEmpyrealArrowGcd : ISlotResolver
         if (BattleVoice.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt("爆发"))
             return -1;
         if (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt("爆发"))
-            return -1;
-        // 当前无团辅buff
+            return -2;
+        if (!BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow))
+            return -3;
+            // 当前无团辅buff
         if (//BardRotationEntry.QT.GetQt("强对齐") && 
             EmpyrealArrow.IsUnlockWithCDCheck() &&
             BardUtil.HasNoPartyBuff())
             return 1;
-        return -1;
+        return -4;
     }
 
     public void Build(Slot slot) => slot.Add(EmpyrealArrow.GetSpell());

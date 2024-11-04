@@ -9,7 +9,7 @@ public static class BardSlotResolverConfig
         public static readonly List<SlotResolverData> SlotResolvers = new()
         {
             // 通用队列 不管是不是gcd 都会判断的逻辑
-            new SlotResolverData(new BardEmpyrealArrowAbility(), SlotMode.Always),
+            new SlotResolverData(new BardEmpyrealArrowGcd(), SlotMode.Always),
 
             // gcd队列
             new SlotResolverData(new BardDotGcd(), SlotMode.Gcd),
@@ -26,6 +26,7 @@ public static class BardSlotResolverConfig
 
 
             // offGcd队列
+            new SlotResolverData(new BardEmpyrealArrowAbility(), SlotMode.OffGcd),
             new SlotResolverData(new BardSongMaxAbility(), SlotMode.OffGcd),
             new SlotResolverData(new BardRagingStrikesAbility(), SlotMode.OffGcd),
             new SlotResolverData(new BardBattleVoiceAndRadiantFinaleAbility(), SlotMode.OffGcd),
