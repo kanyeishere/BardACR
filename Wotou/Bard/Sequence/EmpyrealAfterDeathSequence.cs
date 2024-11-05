@@ -14,6 +14,7 @@ public class EmpyrealAfterDeathSequence: ISlotSequence
     public int StartCheck()
     {
         if (EmpyrealArrow.IsUnlockWithCDCheck() &&
+            BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow) &&
             //!WanderersMinuet.IsUnlockWithCDCheck() &&
             GCDHelper.GetGCDCooldown() == 0)
             return 1;

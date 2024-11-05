@@ -17,8 +17,11 @@ public class BurstingAfterDeathSequence: ISlotSequence
     private const uint RefulgentArrow = BardDefinesData.Spells.RefulgentArrow;
     private const uint BurstShot = BardDefinesData.Spells.BurstShot;
     private const uint Ladonsbite = BardDefinesData.Spells.Ladonsbite;
+    private const uint StormBite = BardDefinesData.Spells.Stormbite;
     
     private const uint HawkEyeBuff = BardDefinesData.Buffs.HawksEye;
+    private const uint WindBiteDot = BardDefinesData.Buffs.Windbite;
+    private const uint StormBiteDot = BardDefinesData.Buffs.Stormbite;
     
     public int StartCheck()
     {
@@ -53,6 +56,10 @@ public class BurstingAfterDeathSequence: ISlotSequence
     private static void Step0(Slot slot)
     {
         slot.Add(WanderersMinuet.GetSpell());
-        slot.Add(GetBaseGcd());
+        if (Core.Me.GetCurrTarget().HasLocalPlayerAura(WindBiteDot) || 
+            Core.Me.GetCurrTarget().HasLocalPlayerAura(StormBiteDot))
+            slot.Add(GetBaseGcd());
+        else
+            slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(StormBite).GetSpell());
     }
 }
