@@ -76,7 +76,7 @@ public class DancerRotationEntry : IRotationEntry
             AcrType = AcrType.Both,
             MinLevel = 100,
             MaxLevel = 100,
-            Description = "100级高难舞者\n技速推荐2.49，兼容2.5" +
+            Description = "100级高难舞者\n技速只推荐2.50" +
                           "\n请在 FuckAnimationLock 插件中勾选减少爆发药后摇" +
                           "\n本ACR目前所用的是固定4小舞循环，暂时只适配100级高难环境" +
                           "\n在90级及以下副本中，此循环并非最优解，请自行评估使用\n" + UpdateLog,
