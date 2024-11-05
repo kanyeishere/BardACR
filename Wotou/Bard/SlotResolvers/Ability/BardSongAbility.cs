@@ -44,7 +44,7 @@ public class BardSongAbility : ISlotResolver
             BardRotationEntry.QT.GetQt("爆发") && 
             BardRotationEntry.QT.GetQt("对齐旅神") &&
             BardBattleData.Instance.First120SBuffSpellId == BattleVoice &&
-            BardBattleData.Instance.First120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds <= 2200 &&
+            BardBattleData.Instance.First120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds <= 2200 - 600 &&
             BardBattleData.Instance.Third120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds <= 2200 * 2)
         {
             BardUtil.LogDebug("切歌", "第一个开的120秒buff是战斗之声，爆发切歌条件满足");
