@@ -13,6 +13,8 @@ public class EmpyrealAfterDeathSequence: ISlotSequence
     
     public int StartCheck()
     {
+        if (AI.Instance.BattleData.CurrBattleTimeInMs < 5000)
+            return -9;
         if (EmpyrealArrow.IsUnlockWithCDCheck() &&
             BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow) &&
             //!WanderersMinuet.IsUnlockWithCDCheck() &&

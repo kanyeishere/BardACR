@@ -25,6 +25,8 @@ public class BurstingAfterDeathSequence: ISlotSequence
     
     public int StartCheck()
     {
+        if (AI.Instance.BattleData.CurrBattleTimeInMs < 5000)
+            return -9;
         if (EmpyrealArrow.IsUnlockWithCDCheck() && 
             WanderersMinuet.IsUnlockWithCDCheck() &&
             //BardRotationEntry.QT.GetQt(QTKey.StrongAlign) &&
