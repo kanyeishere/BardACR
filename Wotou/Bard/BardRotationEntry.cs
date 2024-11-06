@@ -27,8 +27,9 @@ public class BardRotationEntry : IRotationEntry
     public static JobViewWindow QT { get; private set; }
     public string AuthorName { get; set; } = "Wotou";
     //  更新日志
-    private const string UpdateLog = "更新日志：11.04" +
-                                     "\n- 修复玩家死亡/停手释放LB后，因为技能CD同时转好导致的互锁问题" ;
+    private const string UpdateLog = "更新日志：11.05" +
+                                     "\n- 修复玩家死亡/停手释放LB后，因为技能CD同时转好导致的互锁问题" +
+                                     "\n- 且为以上逻辑添加了进入战斗后5秒才有可能触发的条件";
     
     public Rotation Build(string settingFolder)
     {
