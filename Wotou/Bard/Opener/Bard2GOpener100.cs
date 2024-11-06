@@ -31,6 +31,8 @@ public class Bard2GOpener100 : IOpener
   private const uint HawkEyeBuff = BardDefinesData.Buffs.HawksEye;
   private const uint CausticBiteDot = BardDefinesData.Buffs.CausticBite;
   private const uint VenomousBiteDot = BardDefinesData.Buffs.VenomousBite;
+  private const uint WindBiteDot = BardDefinesData.Buffs.Windbite;
+  private const uint StormBiteDot = BardDefinesData.Buffs.Stormbite;
   
   public int StartCheck()
   {
@@ -89,7 +91,10 @@ public class Bard2GOpener100 : IOpener
 
   private static void Step0(Slot slot)
   {
-    if (!BardBattleData.Instance.UseCountdown)
+    if (!BardBattleData.Instance.UseCountdown &&
+        !Core.Me.GetCurrTarget().HasLocalPlayerAura(WindBiteDot) &&
+        !Core.Me.GetCurrTarget().HasLocalPlayerAura(StormBiteDot) && 
+        !Core.Resolve<MemApiSpell>().CheckActionChange(WindBite).RecentlyUsed(3000))
       slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(WindBite).GetSpell());
     slot.Add(BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).GetSpell());
     slot.Add(GetHeartBreakSpell());

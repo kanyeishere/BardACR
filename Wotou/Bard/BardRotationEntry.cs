@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using AEAssist.CombatRoutine;
@@ -27,9 +28,9 @@ public class BardRotationEntry : IRotationEntry
     public static JobViewWindow QT { get; private set; }
     public string AuthorName { get; set; } = "Wotou";
     //  更新日志
-    private const string UpdateLog = "更新日志：11.05" +
-                                     "\n- 修复玩家死亡/停手释放LB后，因为技能CD同时转好导致的互锁问题" +
-                                     "\n- 且为以上逻辑添加了进入战斗后5秒才有可能触发的条件";
+    private const string UpdateLog = "更新日志：11.06" +
+                                     "\n- 加入了反馈问题（Discord）的快捷按键" +
+                                     "\n- 尝试修复起手偶尔会打两个风Dot的 bug " +"\n 现在还未完全确定此 bug 出现的原因，但是已经做了一些调整\n 如果还有问题请一定向我反馈" ;
     
     public Rotation Build(string settingFolder)
     {
@@ -206,6 +207,23 @@ public class BardRotationEntry : IRotationEntry
             ImGui.Text("诗人ACR\n适配技速2.48-2.50\n精细调整过能力技插入窗口，所以请在fuck插件中适当降低动画锁\n直到你连续两个能力技插入间隔在620ms以下（此数字可在FFLogs上查）\n但也别让间隔低于520ms，有概率你的Logs会被标红");
             ImGui.Separator();
             ImGui.Text(UpdateLog);
+            ImGui.Separator();
+            if (ImGui.Button("反馈问题"))
+            {
+                string url = "https://discord.com/channels/1191648233454313482/1296269368224911461";  
+                try
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = url,
+                        UseShellExecute = true  // 在默认浏览器中打开
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"打开浏览器失败：{ex.Message}");
+                }
+            }
         }
         ImGui.Separator();
         if (ImGui.CollapsingHeader("   基础设置"))

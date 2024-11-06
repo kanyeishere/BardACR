@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Numerics;
 using AEAssist;
 using AEAssist.CombatRoutine;
@@ -23,9 +24,8 @@ namespace Wotou.Dancer;
 
 public class DancerRotationEntry : IRotationEntry
 {
-    private const string UpdateLog = "更新日志：11.03v3" +
-                                     "\n- 适配AE测试功能：优化GCD偏移" +
-                                     "\n- 优化了结束动作与落幕舞的代码结构" ;
+    private const string UpdateLog = "更新日志：11.06" +
+                                     "\n- 加入了反馈问题（Discord）的快捷按键" ;
     public void Dispose()
     {
     }
@@ -179,6 +179,23 @@ public class DancerRotationEntry : IRotationEntry
                        "\n在90级及以下副本中，此循环并非最优解，请自行评估使用");
             ImGui.Separator();
             ImGui.Text(UpdateLog);
+            ImGui.Separator();
+            if (ImGui.Button("反馈问题"))
+            {
+                string url = "https://discord.com/channels/1191648233454313482/1296269368224911461";  
+                try
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = url,
+                        UseShellExecute = true  // 在默认浏览器中打开
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"打开浏览器失败：{ex.Message}");
+                }
+            }
         }
 
         ImGui.Separator();
