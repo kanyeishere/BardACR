@@ -94,7 +94,8 @@ public class Bard2GOpener100 : IOpener
     if (!BardBattleData.Instance.UseCountdown &&
         !Core.Me.GetCurrTarget().HasLocalPlayerAura(WindBiteDot) &&
         !Core.Me.GetCurrTarget().HasLocalPlayerAura(StormBiteDot) && 
-        !Core.Resolve<MemApiSpell>().CheckActionChange(WindBite).RecentlyUsed(3000))
+        !Core.Resolve<MemApiSpell>().CheckActionChange(WindBite).RecentlyUsed(3000) &&
+        !Core.Resolve<MemApiSpell>().CheckActionChange(StormBite).RecentlyUsed(3000))
       slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(WindBite).GetSpell());
     slot.Add(BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).GetSpell());
     slot.Add(GetHeartBreakSpell());
