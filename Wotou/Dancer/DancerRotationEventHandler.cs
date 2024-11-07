@@ -65,7 +65,8 @@ namespace Wotou.Dancer
                 ChatHelper.SendMessage("/e <se.1>");
             }
             else
-                Core.Resolve<MemApiChatMessage>().Toast2("欢迎使用窝头的舞者ACR", 1, 5000);
+                Core.Resolve<MemApiChatMessage>()
+                    .Toast2("欢迎使用窝头的舞者ACR\n请关闭全局能力技能不卡GCD\n打开此设置会导致本ACR产生能力技插入问题", 1, 5000);
         }
 
         public void OnExitRotation()
