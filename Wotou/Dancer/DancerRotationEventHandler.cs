@@ -117,11 +117,48 @@ namespace Wotou.Dancer
             }
         }
 
-        public Task OnPreCombat()
+        public async Task OnPreCombat()
         {
             DancerRotationEntry.UpdateDancerPartnerPanel();
             SmartUseHighPrioritySlot();
-            return Task.CompletedTask;
+            
+            if (DancerSettings.Instance.IsDailyMode)
+            {
+                if (Core.Resolve<JobApi_Dancer>().IsDancing && DancerSettings.Instance.EnableAutoDancing)
+                {
+                    if (Core.Me.HasLocalPlayerAura(DancerDefinesData.Buffs.StandardStep))
+                    {
+                        if (Core.Resolve<JobApi_Dancer>().CompleteSteps < 2)
+                        {
+                            await DancerUtil.GetStep().Cast();
+                        }
+                        else if (DancerRotationEntry.QT.GetQt("小舞") && TargetHelper.GetNearbyEnemyCount(10) > 0 && AI.Instance.BattleData.CurrBattleTimeInMs > 0)
+                        {
+                            await DancerDefinesData.Spells.DoubleStandardFinish.GetSpell().Cast();
+                        }
+
+                    }
+                    else if (Core.Me.HasLocalPlayerAura(DancerDefinesData.Buffs.TechnicalStep))
+                    {
+                        if (Core.Resolve<JobApi_Dancer>().CompleteSteps < 4)
+                        {
+                            await DancerUtil.GetStep().Cast();
+                        }
+                        else if (DancerRotationEntry.QT.GetQt("大舞") && TargetHelper.GetNearbyEnemyCount(10) > 0 && AI.Instance.BattleData.CurrBattleTimeInMs > 0)
+                        {
+                            await DancerDefinesData.Spells.QuadrupleTechnicalFinish.GetSpell().Cast();
+                        }
+
+                    }
+                }
+                if (DancerSettings.Instance.EnableAutoPeloton && !Core.Resolve<JobApi_Dancer>().IsDancing)
+                {
+                    await Task.Delay(new Random().Next(600, 3000));
+                    if (!Core.Me.HasAura(DancerDefinesData.Buffs.Peloton) || !Core.Me.HasMyAuraWithTimeleft(DancerDefinesData.Buffs.Peloton, 4000))
+                        await DancerDefinesData.Spells.Peloton.GetSpell().Cast();
+                    
+                }
+            }
         }
 
         public void OnResetBattle()

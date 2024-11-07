@@ -6,6 +6,7 @@ using AEAssist.Helper;
 using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.Objects.Types;
 using Wotou.Bard.Data;
+using Wotou.Bard.Setting;
 
 namespace Wotou.Bard.SlotResolvers.GCD;
 
@@ -28,6 +29,8 @@ public class BardDotGcd : ISlotResolver
         if (HasAnyDot(target, 风dotBuffs) && HasAnyDot(target, 毒dotBuffs))
             return -1;
         if (DotBlacklistHelper.IsBlackList(target))
+            return -1;
+        if (!TargetHelper.IsBoss(target) && !BardSettings.Instance.ApplyDotOnTrashMobs && BardSettings.Instance.IsDailyMode)
             return -1;
         return 1;
     }

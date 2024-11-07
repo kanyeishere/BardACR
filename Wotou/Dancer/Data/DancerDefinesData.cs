@@ -30,7 +30,8 @@ public class DancerDefinesData
             LastDanceReady = 3867,
             FinishingMoveReady = 3868,
             DanceOfTheDawnReady = 3869,
-            Medicated = 49;
+            Medicated = 49,
+            Peloton = 1199;
     }
 
     public static class Spells
@@ -77,6 +78,7 @@ public class DancerDefinesData
             LastDance = 36983,
             FinishingMove = 36984,
             DanceOfTheDawn = 36985,
+            Peloton = 7557,
             SecondWind = 7541;
     }
     

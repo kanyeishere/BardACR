@@ -24,8 +24,8 @@ namespace Wotou.Dancer;
 
 public class DancerRotationEntry : IRotationEntry
 {
-    private const string UpdateLog = "更新日志：11.06" +
-                                     "\n- 加入了反馈问题（Discord）的快捷按键" ;
+    private const string UpdateLog = "更新日志：11.07" +
+                                     "\n- 添加日随模式" ;
     public void Dispose()
     {
     }
@@ -74,11 +74,11 @@ public class DancerRotationEntry : IRotationEntry
         {
             TargetJob = Jobs.Dancer,
             AcrType = AcrType.Both,
-            MinLevel = 100,
+            MinLevel = 1,
             MaxLevel = 100,
             Description = "100级高难舞者\n技速只推荐2.50" +
                           "\n请在 FuckAnimationLock 插件中勾选减少爆发药后摇" +
-                          "\n本ACR目前所用的是固定4小舞循环，暂时只适配100级高难环境" +
+                          "\n本ACR所用的是固定4小舞循环，最优使用环境100级高难" +
                           "\n在90级及以下副本中，此循环并非最优解，请自行评估使用\n" + UpdateLog,
         };
         rot.SetRotationEventHandler(new DancerRotationEventHandler());
@@ -175,7 +175,7 @@ public class DancerRotationEntry : IRotationEntry
         ImGui.PushStyleColor(ImGuiCol.Border, new Vector4(1f,0.36f,0.54f, 1));
         if (ImGui.CollapsingHeader("   重要说明"))
         {
-            ImGui.Text("舞者ACR - 技速只推荐2.50\n请在 FuckAnimationLock 插件中勾选减少爆发药后摇\n本ACR所用的是固定4小舞循环，暂只适配100级高难环境" +
+            ImGui.Text("舞者ACR - 技速只推荐2.50\n请在 FuckAnimationLock 插件中勾选减少爆发药后摇\n本ACR所用的是固定4小舞循环，最优使用环境100级高难" +
                        "\n在90级及以下副本中，此循环并非最优解，请自行评估使用");
             ImGui.Separator();
             ImGui.Text(UpdateLog);
@@ -201,6 +201,40 @@ public class DancerRotationEntry : IRotationEntry
         ImGui.Separator();
         if (ImGui.CollapsingHeader("   基础设置"))
         {
+            ImGui.Text("当前模式：" + (DancerSettings.Instance.IsDailyMode ? "日随模式" : "高难模式"));
+            if (DancerSettings.Instance.IsDailyMode)
+            {
+                ImGui.PushStyleColor(ImGuiCol.Button, DancerSettings.Instance.JobViewSave.MainColor); // 选中时的颜色
+            }
+            if (ImGui.Button("日随模式"))
+            {
+                DancerSettings.Instance.IsDailyMode = true;
+            }
+            if (DancerSettings.Instance.IsDailyMode)
+            {
+                ImGui.PopStyleColor();
+            }
+            ImGui.SameLine();
+            if (!DancerSettings.Instance.IsDailyMode)
+            {
+                ImGui.PushStyleColor(ImGuiCol.Button, DancerSettings.Instance.JobViewSave.MainColor); // 选中时的颜色
+            }
+            if (ImGui.Button("高难模式"))
+            {
+                DancerSettings.Instance.IsDailyMode = false;
+            }
+            if (!DancerSettings.Instance.IsDailyMode)
+            {
+                ImGui.PopStyleColor();
+            }
+            if (DancerSettings.Instance.IsDailyMode)
+            {
+                ImGui.Separator();
+                ImGui.Checkbox("自动完成舞步", ref DancerSettings.Instance.EnableAutoDancing);
+                ImGui.SameLine();
+                ImGui.Checkbox("自动使用速行", ref DancerSettings.Instance.EnableAutoPeloton);
+            }
+            ImGui.Separator();
             ImGuiHelper.LeftInputInt("倒计时提前使用小舞  (毫秒)", ref DancerSettings.Instance.OpenerStandardStepTime, 6500, 15000);
             ImGui.Separator();
 

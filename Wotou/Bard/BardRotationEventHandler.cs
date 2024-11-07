@@ -30,6 +30,20 @@ public class BardRotationEventHandler : IRotationEventHandler
             BardRotationEntry.QT.SetQt("对齐旅神", false);
             BardRotationEntry.QT.SetQt("强对齐", false);
         }
+        if (BardSettings.Instance.IsDailyMode)
+        {
+            BardRotationEntry.QT.SetQt("强对齐", false);
+            BardRotationEntry.QT.SetQt("对齐旅神", false);
+            BardRotationEntry.QT.SetQt("攒碎心箭", false);
+            await Task.Delay(new Random().Next(600, 3000));
+            if (BardSettings.Instance.EnableAutoPeloton)
+            {
+                if (!Core.Me.HasAura(BardDefinesData.Buffs.Peloton) || !Core.Me.HasMyAuraWithTimeleft(BardDefinesData.Buffs.Peloton, 4000))
+                {
+                    await BardDefinesData.Spells.Peloton.GetSpell().Cast();
+                }
+            }
+        }
         if (PartyHelper.CastableParty.Any(characterAgent => 
                 (characterAgent.HasAura(1896U) && BardSettings.Instance.NaturesMinneWithRecitation) ||  //秘策
                 (characterAgent.HasAura(2611U) && BardSettings.Instance.NaturesMinneWithZoe) ||         //活化
@@ -52,6 +66,13 @@ public class BardRotationEventHandler : IRotationEventHandler
         {
             BardRotationEntry.QT.SetQt("对齐旅神", false);
             BardRotationEntry.QT.SetQt("强对齐", false);
+        }
+        
+        if (BardSettings.Instance.IsDailyMode)
+        {
+            BardRotationEntry.QT.SetQt("强对齐", false);
+            BardRotationEntry.QT.SetQt("对齐旅神", false);
+            BardRotationEntry.QT.SetQt("攒碎心箭", false);
         }
     }
 

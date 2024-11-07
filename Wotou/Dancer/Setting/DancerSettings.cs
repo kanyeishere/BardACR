@@ -55,6 +55,10 @@ public class DancerSettings
     public int StandardStepCdTolerance = 600; // 标准舞CD容差
     public int SaberDanceEspritThreshold = 70; //剑舞阈值
     
+    public bool IsDailyMode = false; //false 表示高难模式，true 表示日随模式
+    public bool EnableAutoPeloton  = true; // 是否在自动使用速行
+    public bool EnableAutoDancing = true; // 是否在自动使用舞步
+    
     // 扇舞保留层数
     public int FanDanceSaveStack = 3;
     

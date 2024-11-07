@@ -43,6 +43,8 @@ public class Bard3GOpener100 : IOpener
   {
     if (AI.Instance.BattleData.CurrBattleTimeInMs > 3000L)
       return -9;
+    if (BardSettings.Instance.IsDailyMode)
+      return -1;
     if (!Barrage.GetSpell().IsReadyWithCanCast() || 
         !RagingStrikes.GetSpell().IsReadyWithCanCast() || 
         !BattleVoice.GetSpell().IsReadyWithCanCast() ||

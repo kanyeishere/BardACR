@@ -67,7 +67,10 @@ public class BardSettings
     public bool NaturesMinneWithRecitation = true; // 大地神对齐秘策
     public bool NaturesMinneWithZoe = true; // 大地神对齐活化
     public bool NaturesMinneWithNeutralSect = true; // 大地神对齐中间学派
-    
+
+    public bool IsDailyMode = false; //false 表示高难模式，true 表示日随模式
+    public bool ApplyDotOnTrashMobs = false; // 是否在小怪身上使用DOT
+    public bool EnableAutoPeloton  = true; // 是否在自动使用速行
     
     public JobViewSave JobViewSave = new JobViewSave()
     {

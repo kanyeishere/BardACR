@@ -28,9 +28,8 @@ public class BardRotationEntry : IRotationEntry
     public static JobViewWindow QT { get; private set; }
     public string AuthorName { get; set; } = "Wotou";
     //  更新日志
-    private const string UpdateLog = "更新日志：11.06" +
-                                     "\n- 加入了反馈问题（Discord）的快捷按键" +
-                                     "\n- 尝试修复起手偶尔会打两个风Dot的 bug " +"\n 现在还未完全确定此 bug 出现的原因，但是已经做了一些调整\n 如果还有问题请一定向我反馈" ;
+    private const string UpdateLog = "更新日志：11.07" +
+                                     "\n- 添加日随模式" ;
     
     public Rotation Build(string settingFolder)
     {
@@ -43,7 +42,7 @@ public class BardRotationEntry : IRotationEntry
         {
             TargetJob = Jobs.Bard,
             AcrType = AcrType.Both,
-            MinLevel = 70,
+            MinLevel = 1,
             MaxLevel = 100,
             Description = "诗人ACR\n" + UpdateLog,
                           
@@ -202,6 +201,7 @@ public class BardRotationEntry : IRotationEntry
     {
         ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0.0f, 0.0f, 0.0f, 0.0f));
         ImGui.PushStyleColor(ImGuiCol.Border, new Vector4(0.4314f, 0.6667f, 0.5569f, 1));
+        
         if (ImGui.CollapsingHeader("   重要说明"))
         {
             ImGui.Text("诗人ACR\n适配技速2.48-2.50\n精细调整过能力技插入窗口，所以请在fuck插件中适当降低动画锁\n直到你连续两个能力技插入间隔在620ms以下（此数字可在FFLogs上查）\n但也别让间隔低于520ms，有概率你的Logs会被标红");
@@ -228,6 +228,46 @@ public class BardRotationEntry : IRotationEntry
         ImGui.Separator();
         if (ImGui.CollapsingHeader("   基础设置"))
         {
+            ImGui.Text("当前模式：" + (BardSettings.Instance.IsDailyMode ? "日随模式" : "高难模式"));
+            if (BardSettings.Instance.IsDailyMode)
+            {
+                ImGui.PushStyleColor(ImGuiCol.Button, BardSettings.Instance.JobViewSave.MainColor); // 选中时的颜色
+            }
+            if (ImGui.Button("日随模式"))
+            {
+                BardSettings.Instance.IsDailyMode = true;
+                QT.SetQt("强对齐", false);
+                QT.SetQt("对齐旅神", false);
+                QT.SetQt("攒碎心箭", false);
+            }
+            if (BardSettings.Instance.IsDailyMode)
+            {
+                ImGui.PopStyleColor();
+            }
+            ImGui.SameLine();
+            if (!BardSettings.Instance.IsDailyMode)
+            {
+                ImGui.PushStyleColor(ImGuiCol.Button, BardSettings.Instance.JobViewSave.MainColor); // 选中时的颜色
+            }
+            if (ImGui.Button("高难模式"))
+            {
+                BardSettings.Instance.IsDailyMode = false;
+                QT.SetQt("强对齐", true);
+                QT.SetQt("对齐旅神", true);
+                QT.SetQt("攒碎心箭", true);
+            }
+            if (!BardSettings.Instance.IsDailyMode)
+            {
+                ImGui.PopStyleColor();
+            }
+            if (BardSettings.Instance.IsDailyMode)
+            {
+                ImGui.Separator();
+                ImGui.Checkbox("对小怪用Dot", ref BardSettings.Instance.ApplyDotOnTrashMobs);
+                ImGui.SameLine();
+                ImGui.Checkbox("自动使用速行", ref BardSettings.Instance.EnableAutoPeloton);
+            }
+            ImGui.Separator();
             ImGui.Text("木桩本建议军神歌设置略长些，开启爆发和对齐旅神时，会自动切旅神");
             if (BardSettings.Instance.WandererSongDuration + BardSettings.Instance.MageSongDuration +
                 BardSettings.Instance.ArmySongDuration < 120)
