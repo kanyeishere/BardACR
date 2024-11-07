@@ -18,9 +18,7 @@ namespace Wotou.Bard;
 /// </summary>
 public class BardRotationEventHandler : IRotationEventHandler
 {
-
-    private bool _originalValueForNoClipGcd3;
-    private int _originalMaxAbilityTimesInGcd;
+    private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
     
     public async Task OnPreCombat()
     {
@@ -44,7 +42,7 @@ public class BardRotationEventHandler : IRotationEventHandler
                      !Core.Me.HasMyAuraWithTimeleft(BardDefinesData.Buffs.Peloton, 4000)) && 
                     !Core.Me.InCombat())
                 {
-                    await Task.Delay(new Random().Next(1000, 3000));
+                    await Task.Delay(new Random().Next(1000, 3000), _cancellationTokenSource.Token);
                     if ((!Core.Me.HasAura(BardDefinesData.Buffs.Peloton) || 
                          !Core.Me.HasMyAuraWithTimeleft(BardDefinesData.Buffs.Peloton, 4000)) && 
                         !Core.Me.InCombat())
@@ -251,8 +249,7 @@ public class BardRotationEventHandler : IRotationEventHandler
 
     public void OnExitRotation()
     {
-        /*SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3 = _originalValueForNoClipGcd3;
-        SettingMgr.GetSetting<GeneralSettings>().MaxAbilityTimesInGcd = _originalMaxAbilityTimesInGcd;*/
+        _cancellationTokenSource.Cancel();
     }
 
     public void OnTerritoryChanged()

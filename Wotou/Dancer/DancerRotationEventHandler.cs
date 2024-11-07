@@ -14,8 +14,7 @@ namespace Wotou.Dancer
 {
     public class DancerRotationEventHandler : IRotationEventHandler
     {
-        private bool _originalValueForNoClipGcd3;
-        private int _originalMaxAbilityTimesInGcd;
+        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         
         private static Dictionary<Jobs, int> jobPriorities = new(){
             { Jobs.Viper, 1 },
@@ -71,6 +70,7 @@ namespace Wotou.Dancer
 
         public void OnExitRotation()
         {
+            _cancellationTokenSource.Cancel();
         }
 
         public async Task OnNoTarget()
@@ -176,10 +176,10 @@ namespace Wotou.Dancer
                          !Core.Me.HasMyAuraWithTimeleft(DancerDefinesData.Buffs.Peloton, 4000)) && 
                         !Core.Me.InCombat())
                     {
-                        await Task.Delay(new Random().Next(1000, 3000));
+                        await Task.Delay(new Random().Next(1000, 3000), _cancellationTokenSource.Token);
                         if ((!Core.Me.HasAura(DancerDefinesData.Buffs.Peloton) ||
-                            !Core.Me.HasMyAuraWithTimeleft(DancerDefinesData.Buffs.Peloton, 4000)) && 
-                           !Core.Me.InCombat()) 
+                             !Core.Me.HasMyAuraWithTimeleft(DancerDefinesData.Buffs.Peloton, 4000)) && 
+                            !Core.Me.InCombat()) 
                             await DancerDefinesData.Spells.Peloton.GetSpell().Cast();
                     }
                     
