@@ -25,11 +25,13 @@ public class BardRotationEventHandler : IRotationEventHandler
     public async Task OnPreCombat()
     {
         SmartUseHighPrioritySlot();
+        
         if (!BardUtil.IsSongOrderNormal())
         {
             BardRotationEntry.QT.SetQt("对齐旅神", false);
             BardRotationEntry.QT.SetQt("强对齐", false);
         }
+        
         if (BardSettings.Instance.IsDailyMode)
         {
             BardRotationEntry.QT.SetQt("强对齐", false);
@@ -50,11 +52,18 @@ public class BardRotationEventHandler : IRotationEventHandler
                 }
             }
         }
+        
         if (PartyHelper.CastableParty.Any(characterAgent => 
                 (characterAgent.HasAura(1896U) && BardSettings.Instance.NaturesMinneWithRecitation) ||  //秘策
                 (characterAgent.HasAura(2611U) && BardSettings.Instance.NaturesMinneWithZoe) ||         //活化
                 (characterAgent.HasAura(1892U) && BardSettings.Instance.NaturesMinneWithNeutralSect)))  //中间学派
         await BardDefinesData.Spells.NaturesMinne.GetSpell().Cast();
+        
+        if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3)
+        {
+            await Task.Delay(5000);
+            ChatHelper.SendMessage("/e 警告，严重错误，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->设置->基础设置->能力技 中关闭 <se.1>");
+        }
     }
 
     public void OnResetBattle()
@@ -216,9 +225,6 @@ public class BardRotationEventHandler : IRotationEventHandler
         
         if (spell.Id == BardDefinesData.Spells.RagingStrikes)
             BardBattleData.Instance.HasUseIronJawsInCurrentBursting = false;
-        
-        if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3)
-            ChatHelper.SendMessage("/e 警告，严重错误，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->设置->基础设置->能力技 中关闭 <se.1>");
     }
 
     public void OnBattleUpdate(int currTimeInMs)
@@ -229,6 +235,8 @@ public class BardRotationEventHandler : IRotationEventHandler
             BardRotationEntry.QT.SetQt("对齐旅神", false);
             BardRotationEntry.QT.SetQt("强对齐", false);
         }
+        if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3)
+            ChatHelper.SendMessage("/e 警告，严重错误，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->设置->基础设置->能力技 中关闭 <se.1>");
     }
 
     public void OnEnterRotation()

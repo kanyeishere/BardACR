@@ -130,6 +130,7 @@ namespace Wotou.Dancer
             
             if (DancerSettings.Instance.IsDailyMode)
             {
+                
                 if (Core.Resolve<JobApi_Dancer>().IsDancing && DancerSettings.Instance.EnableAutoDancing)
                 {
                     if (Core.Me.HasLocalPlayerAura(DancerDefinesData.Buffs.StandardStep))
@@ -157,6 +158,7 @@ namespace Wotou.Dancer
 
                     }
                 }
+                
                 if (DancerSettings.Instance.EnableAutoPeloton && !Core.Resolve<JobApi_Dancer>().IsDancing && !Core.Me.InCombat())
                 {
                     if ((!Core.Me.HasAura(DancerDefinesData.Buffs.Peloton) ||
@@ -171,6 +173,12 @@ namespace Wotou.Dancer
                     }
                     
                 }
+            }
+            
+            if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3)
+            {
+                await Task.Delay(5000);
+                ChatHelper.SendMessage("/e 警告，严重错误，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->设置->基础设置->能力技 中关闭 <se.1>");
             }
         }
 
