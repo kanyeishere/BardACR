@@ -14,10 +14,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Reference Include="AEAssist">
-        <HintPath>F:\Games\AE\AE3.0\AEAssistCNVersion\AEAssist\AEAssist.dll</HintPath>
-        <Private>False</Private>
-      </Reference>
+        <Reference Include="AEAssist">
+          <HintPath>A:\AE3.0\AEAssistCNVersion\AEAssist\AEAssist.dll</HintPath>
+        </Reference>
         <Reference Include="Dalamud">
             <HintPath>..\..\..\..\Games\XIVLauncherCN\Roaming\addon\Hooks\10.0.0.15\Dalamud.dll</HintPath>
             <Private>False</Private>

@@ -48,21 +48,23 @@ namespace Wotou.Dancer
         public void OnBattleUpdate(int currTimeInMs)
         {
             SmartUseHighPrioritySlot();
+            if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3)
+                ChatHelper.SendMessage("/e 警告，严重错误，你开启了全局能力技能不卡GCD，可能导致本ACR产生能力技插入问题，建议关闭 <se.1>");
         }
 
         public void OnEnterRotation()
         {
-            // 处理全局能力技不卡GCD
+            /*// 处理全局能力技不卡GCD
             _originalValueForNoClipGcd3 = SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3;
             _originalMaxAbilityTimesInGcd = SettingMgr.GetSetting<GeneralSettings>().MaxAbilityTimesInGcd;
             SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3 = false;
-            SettingMgr.GetSetting<GeneralSettings>().MaxAbilityTimesInGcd = 2;
+            SettingMgr.GetSetting<GeneralSettings>().MaxAbilityTimesInGcd = 2;*/
         }
 
         public void OnExitRotation()
         {
-            SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3 = _originalValueForNoClipGcd3;
-            SettingMgr.GetSetting<GeneralSettings>().MaxAbilityTimesInGcd = _originalMaxAbilityTimesInGcd;
+            /*SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3 = _originalValueForNoClipGcd3;
+            SettingMgr.GetSetting<GeneralSettings>().MaxAbilityTimesInGcd = _originalMaxAbilityTimesInGcd;*/
         }
 
         public async Task OnNoTarget()
