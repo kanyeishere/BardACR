@@ -54,6 +54,10 @@ namespace Wotou.Dancer
 
         public void OnEnterRotation()
         {
+            if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3)
+                Core.Resolve<MemApiChatMessage>().Toast2("欢迎使用窝头的舞者ACR\n请关闭全局能力技能不卡GCD\n打开此设置会导致本ACR产生能力技插入问题", 1, 5000);
+            else
+                Core.Resolve<MemApiChatMessage>().Toast2("欢迎使用窝头的舞者ACR", 1, 5000);
             /*// 处理全局能力技不卡GCD
             _originalValueForNoClipGcd3 = SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3;
             _originalMaxAbilityTimesInGcd = SettingMgr.GetSetting<GeneralSettings>().MaxAbilityTimesInGcd;
