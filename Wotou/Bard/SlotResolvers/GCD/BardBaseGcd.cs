@@ -34,6 +34,7 @@ public class BardBaseGcd : ISlotResolver
         if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < gcdAnimationTime &&
             //BardRotationEntry.QT.GetQt("强对齐") &&
             BardUtil.HasNoPartyBuff() &&
+            EmpyrealArrow.IsUnlock() &&
             BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow))
             return -1;
         

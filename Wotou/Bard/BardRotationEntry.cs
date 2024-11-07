@@ -263,7 +263,7 @@ public class BardRotationEntry : IRotationEntry
             if (BardSettings.Instance.IsDailyMode)
             {
                 ImGui.Separator();
-                ImGui.Checkbox("对小怪用Dot", ref BardSettings.Instance.ApplyDotOnTrashMobs);
+                ImGui.Checkbox("对小怪用DOT", ref BardSettings.Instance.ApplyDotOnTrashMobs);
                 ImGui.SameLine();
                 ImGui.Checkbox("自动使用速行", ref BardSettings.Instance.EnableAutoPeloton);
             }

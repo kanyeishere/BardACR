@@ -151,7 +151,7 @@ namespace Wotou.Dancer
 
                     }
                 }
-                if (DancerSettings.Instance.EnableAutoPeloton && !Core.Resolve<JobApi_Dancer>().IsDancing)
+                if (DancerSettings.Instance.EnableAutoPeloton && !Core.Resolve<JobApi_Dancer>().IsDancing && !Core.Me.InCombat())
                 {
                     await Task.Delay(new Random().Next(600, 3000));
                     if (!Core.Me.HasAura(DancerDefinesData.Buffs.Peloton) || !Core.Me.HasMyAuraWithTimeleft(DancerDefinesData.Buffs.Peloton, 4000))

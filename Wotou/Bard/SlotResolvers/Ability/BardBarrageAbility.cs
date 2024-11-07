@@ -15,7 +15,7 @@ public class BardBarrageAbility : ISlotResolver
             return -1;
         if (!BardRotationEntry.QT.GetQt("爆发"))
             return -1;
-        if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow))
+        if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow) && EmpyrealArrow.IsUnlock())
             return -1;
         if (!Barrage.GetSpell().IsReadyWithCanCast())
             return -1;

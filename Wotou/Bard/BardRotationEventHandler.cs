@@ -35,9 +35,9 @@ public class BardRotationEventHandler : IRotationEventHandler
             BardRotationEntry.QT.SetQt("强对齐", false);
             BardRotationEntry.QT.SetQt("对齐旅神", false);
             BardRotationEntry.QT.SetQt("攒碎心箭", false);
-            await Task.Delay(new Random().Next(600, 3000));
-            if (BardSettings.Instance.EnableAutoPeloton)
+            if (BardSettings.Instance.EnableAutoPeloton && !Core.Me.InCombat())
             {
+                await Task.Delay(new Random().Next(600, 3000));
                 if (!Core.Me.HasAura(BardDefinesData.Buffs.Peloton) || !Core.Me.HasMyAuraWithTimeleft(BardDefinesData.Buffs.Peloton, 4000))
                 {
                     await BardDefinesData.Spells.Peloton.GetSpell().Cast();

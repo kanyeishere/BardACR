@@ -31,6 +31,8 @@ public class BardIronJawsGcd : ISlotResolver
             return -1;
         if (!BardRotationEntry.QT.GetQt("DOT"))
             return -1;
+        if (!IronJaws.IsUnlock())
+            return -1;
         var target = Core.Me.GetCurrTarget();
         if (target == null)
             return -1;
