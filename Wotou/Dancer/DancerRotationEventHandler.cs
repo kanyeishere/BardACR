@@ -49,7 +49,10 @@ namespace Wotou.Dancer
         {
             SmartUseHighPrioritySlot();
             if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3)
-                ChatHelper.SendMessage("/e 警告，严重错误，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->设置->基础设置->能力技 中关闭 <se.1>");
+            {
+                LogHelper.PrintError("警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->设置->基础设置->能力技 中关闭");
+                ChatHelper.SendMessage("/e <se.1>");
+            }
         }
 
         public void OnEnterRotation()
@@ -178,7 +181,8 @@ namespace Wotou.Dancer
             if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3)
             {
                 await Task.Delay(5000);
-                ChatHelper.SendMessage("/e 警告，严重错误，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->设置->基础设置->能力技 中关闭 <se.1>");
+                LogHelper.PrintError("警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->设置->基础设置->能力技 中关闭");
+                ChatHelper.SendMessage("/e <se.1>");
             }
         }
 
