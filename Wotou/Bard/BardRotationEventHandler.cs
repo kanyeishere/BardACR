@@ -42,7 +42,7 @@ public class BardRotationEventHandler : IRotationEventHandler
                      !Core.Me.HasMyAuraWithTimeleft(BardDefinesData.Buffs.Peloton, 4000)) && 
                     !Core.Me.InCombat())
                 {
-                    await Task.Delay(new Random().Next(600, 3000));
+                    await Task.Delay(new Random().Next(1000, 3000));
                     if ((!Core.Me.HasAura(BardDefinesData.Buffs.Peloton) || 
                          !Core.Me.HasMyAuraWithTimeleft(BardDefinesData.Buffs.Peloton, 4000)) && 
                         !Core.Me.InCombat())

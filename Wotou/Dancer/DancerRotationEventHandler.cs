@@ -163,7 +163,7 @@ namespace Wotou.Dancer
                          !Core.Me.HasMyAuraWithTimeleft(DancerDefinesData.Buffs.Peloton, 4000)) && 
                         !Core.Me.InCombat())
                     {
-                        await Task.Delay(new Random().Next(600, 3000));
+                        await Task.Delay(new Random().Next(1000, 3000));
                         if ((!Core.Me.HasAura(DancerDefinesData.Buffs.Peloton) ||
                             !Core.Me.HasMyAuraWithTimeleft(DancerDefinesData.Buffs.Peloton, 4000)) && 
                            !Core.Me.InCombat()) 

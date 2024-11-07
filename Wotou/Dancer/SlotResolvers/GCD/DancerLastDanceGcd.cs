@@ -5,6 +5,7 @@ using AEAssist.Helper;
 using AEAssist.JobApi;
 using AEAssist.MemoryApi;
 using Wotou.Dancer.Data;
+using Wotou.Dancer.Setting;
 
 namespace Wotou.Dancer.GCD;
 
@@ -22,6 +23,8 @@ public class DancerLastDanceGcd : ISlotResolver
             return -2;
         if (DancerRotationEntry.QT.GetQt(QTKey.FinalBurst) && Core.Me.HasAura(LastDanceReady))
             return 1;
+        if (DancerSettings.Instance.IsDailyMode)
+            return 2;
         if (Core.Me.HasMyAuraWithTimeleft(LastDanceReady, (int)Devilment.GetSpell().Cooldown.TotalMilliseconds + 2500) && 
             DancerRotationEntry.QT.GetQt(QTKey.TechnicalStep))
             return -3;
