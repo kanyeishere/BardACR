@@ -62,7 +62,7 @@ public class BardRotationEventHandler : IRotationEventHandler
         if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3)
         {
             await Task.Delay(5000);
-            LogHelper.PrintError("警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->设置->基础设置->能力技 中关闭");
+            LogHelper.PrintError("警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭");
             ChatHelper.SendMessage("/e <se.1>");
         }
     }
@@ -238,7 +238,7 @@ public class BardRotationEventHandler : IRotationEventHandler
         }
         if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3)
         {
-            LogHelper.PrintError("警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->设置->基础设置->能力技 中关闭");
+            LogHelper.PrintError("警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭");
             ChatHelper.SendMessage("/e <se.1>");
         }
     }
