@@ -161,6 +161,15 @@ namespace Wotou.Dancer
                     }
                 }
                 
+                if (DancerSettings.Instance.EnableAutoDancing)
+                {
+                    var nearbyEnemies = TargetHelper.GetNearbyEnemyCount(35);
+                    if (nearbyEnemies > 0 && DancerDefinesData.Spells.StandardStep.GetSpell().IsReadyWithCanCast())
+                    {
+                        await DancerDefinesData.Spells.StandardStep.GetSpell().Cast();
+                    }
+                }
+                
                 if (DancerSettings.Instance.EnableAutoPeloton && !Core.Resolve<JobApi_Dancer>().IsDancing && !Core.Me.InCombat())
                 {
                     if ((!Core.Me.HasAura(DancerDefinesData.Buffs.Peloton) ||
