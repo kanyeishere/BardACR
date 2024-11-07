@@ -28,8 +28,9 @@ public class BardRotationEntry : IRotationEntry
     public static JobViewWindow QT { get; private set; }
     public string AuthorName { get; set; } = "Wotou";
     //  更新日志
-    private const string UpdateLog = "更新日志：11.07" +
-                                     "\n- 添加日随模式" ;
+    private const string UpdateLog = "更新日志：11.08" +
+                                     "\n- 适配AE新版本，用户现在需要手动关闭全局能力技能不卡GCD" +
+                                     "\n- 修复日随模式下，开启自动速行时，进入战斗后会试图使用一次速行的bug";
     
     public Rotation Build(string settingFolder)
     {
