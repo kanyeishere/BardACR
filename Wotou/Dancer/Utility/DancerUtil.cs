@@ -33,6 +33,16 @@ namespace Wotou.Dancer.Utility
         
         public static Spell GetBaseGcdCombo()
         {
+            if (Fountain.GetSpell().IsReadyWithCanCast() &&
+                Core.Resolve<MemApiSpell>().GetLastComboSpellId() == Cascade && 
+                Core.Resolve<MemApiSpell>().GetComboTimeLeft().TotalMilliseconds > 10.0)
+                return Fountain.GetSpell();
+            
+            if (BladeShower.GetSpell().IsReadyWithCanCast() &&
+                Core.Resolve<MemApiSpell>().GetLastComboSpellId() == Windmill &&
+                Core.Resolve<MemApiSpell>().GetComboTimeLeft().TotalMilliseconds > 10.0)
+                return BladeShower.GetSpell();
+            
             if (Windmill.GetSpell().IsReadyWithCanCast() &&
                 CanUseAoeCombo())
                 return GetAoeCombo();
