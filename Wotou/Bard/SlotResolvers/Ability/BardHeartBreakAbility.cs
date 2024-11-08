@@ -33,23 +33,27 @@ public class BardHeartBreakAbility : ISlotResolver
         if (GCDHelper.GetGCDCooldown() <= 650)
             return -1;
         if (!Core.Resolve<MemApiSpell>().CheckActionChange(HeartBreak).GetSpell().IsReadyWithCanCast())
-            return -1;
-        if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow) && EmpyrealArrow.IsUnlock())
-            return -1;
+            return -2;
+        if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 1200 &&
+            BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow) && 
+            EmpyrealArrow.IsUnlock())
+            return -3;
         if (EmpyrealArrow.RecentlyUsed(650))
-            return -1;
-        if (Sidewinder.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt(QTKey.Sidewinder))
-            return -1;
+            return -4;
+        if (Sidewinder.GetSpell().Cooldown.TotalMilliseconds < 1200 && 
+            BardRotationEntry.QT.GetQt(QTKey.Sidewinder) &&
+            Sidewinder.IsUnlock())
+            return -5;
         if (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt("爆发"))
-            return -1;
+            return -6;
         if (BattleVoice.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt("爆发"))
-            return -1;
+            return -7;
         if (Barrage.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt("爆发"))
-            return -1;
+            return -8;
         
         // 不和两层诗心以上的完美音调冲突，抢团辅最后一个能力技能
         if (!Core.Me.HasMyAuraWithTimeleft(Fist120SBuffId, 1200) && Core.Me.HasLocalPlayerAura(Fist120SBuffId) && Core.Resolve<JobApi_Bard>().Repertoire >= 2)
-            return -1;
+            return -9;
         
         // 不和切贤者歌前最后一个完美音调冲突
         var wandererSongDuration = BardSettings.Instance.WandererSongDuration * 1000;
@@ -64,22 +68,24 @@ public class BardHeartBreakAbility : ISlotResolver
             (double)Core.Resolve<JobApi_Bard>().SongTimer < 45600.0 - mageSongDuration &&
             ArmysPaeon.GetSpell().IsReadyWithCanCast() &&
             (GCDHelper.GetGCDCooldown() > 530))
-            return -100;
+            return -10;
         
         // 满三层碎心箭，使用
         if (Core.Resolve<MemApiSpell>().GetCharges(Core.Resolve<MemApiSpell>().CheckActionChange(HeartBreak)) >= Core.Resolve<MemApiSpell>().GetMaxCharges(Core.Resolve<MemApiSpell>().CheckActionChange(HeartBreak)) - 0.1)
             return 1;
         
         if (BardRotationEntry.QT.GetQt("攒碎心箭") && BardUtil.PartyBuffWillBeReadyIn(28000))
-            return -1;
+            return -11;
         
         // 旅神期间，不和三层诗心的完美音调冲突
         if (Core.Resolve<JobApi_Bard>().Repertoire == 3 && Core.Resolve<JobApi_Bard>().ActiveSong == Song.WANDERER)
-            return -1;
+            return -12;
         
-        // 设置保留碎心箭的层数
-        if (Core.Resolve<MemApiSpell>().GetCharges(Core.Resolve<MemApiSpell>().CheckActionChange(HeartBreak)) <= BardSettings.Instance.HeartBreakSaveStack)
-            return -1;
+        // 设置保留碎心箭的层数 - 高难模式only
+        if ((Core.Resolve<MemApiSpell>().GetCharges(Core.Resolve<MemApiSpell>().CheckActionChange(HeartBreak)) <=
+             BardSettings.Instance.HeartBreakSaveStack) && 
+            !BardSettings.Instance.IsDailyMode)
+            return -13;
         
         return 1;
     }

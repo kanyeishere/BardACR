@@ -27,7 +27,7 @@ public class BardEmpyrealArrowGcd : ISlotResolver
             EmpyrealArrow.IsUnlockWithCDCheck() &&
             BardUtil.HasNoPartyBuff())
             return 1;
-        return -4;
+        return -5;
     }
 
     public void Build(Slot slot) => slot.Add(EmpyrealArrow.GetSpell());

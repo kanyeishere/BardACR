@@ -40,7 +40,8 @@ namespace Wotou.Dancer.Utility
             
             if (BladeShower.GetSpell().IsReadyWithCanCast() &&
                 Core.Resolve<MemApiSpell>().GetLastComboSpellId() == Windmill &&
-                Core.Resolve<MemApiSpell>().GetComboTimeLeft().TotalMilliseconds > 10.0)
+                Core.Resolve<MemApiSpell>().GetComboTimeLeft().TotalMilliseconds > 10.0 &&
+                CanUseAoeCombo())
                 return BladeShower.GetSpell();
             
             if (Windmill.GetSpell().IsReadyWithCanCast() &&
