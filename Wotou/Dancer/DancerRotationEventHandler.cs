@@ -14,8 +14,8 @@ namespace Wotou.Dancer
 {
     public class DancerRotationEventHandler : IRotationEventHandler
     {
-        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
-        
+        private long _randomTime = 0;
+
         private static Dictionary<Jobs, int> jobPriorities = new(){
             { Jobs.Viper, 1 },
             { Jobs.Monk, 2 },
@@ -70,7 +70,6 @@ namespace Wotou.Dancer
 
         public void OnExitRotation()
         {
-            _cancellationTokenSource.Cancel();
         }
 
         public async Task OnNoTarget()
@@ -170,19 +169,20 @@ namespace Wotou.Dancer
                     }
                 }
                 
-                if (DancerSettings.Instance.EnableAutoPeloton && !Core.Resolve<JobApi_Dancer>().IsDancing && !Core.Me.InCombat())
+                if (DancerSettings.Instance.EnableAutoPeloton && 
+                    !Core.Resolve<JobApi_Dancer>().IsDancing && 
+                    !Core.Me.InCombat() && 
+                    !DancerDefinesData.Spells.Peloton.RecentlyUsed(5000))
                 {
-                    if ((!Core.Me.HasAura(DancerDefinesData.Buffs.Peloton) ||
+                    if ((!Core.Me.HasAura(DancerDefinesData.Buffs.Peloton) || 
                          !Core.Me.HasMyAuraWithTimeleft(DancerDefinesData.Buffs.Peloton, 4000)) && 
                         !Core.Me.InCombat())
                     {
-                        await Task.Delay(new Random().Next(1000, 3000), _cancellationTokenSource.Token);
-                        if ((!Core.Me.HasAura(DancerDefinesData.Buffs.Peloton) ||
-                             !Core.Me.HasMyAuraWithTimeleft(DancerDefinesData.Buffs.Peloton, 4000)) && 
-                            !Core.Me.InCombat()) 
+                        if (_randomTime == 0 || TimeHelper.Now() > _randomTime)
                             await DancerDefinesData.Spells.Peloton.GetSpell().Cast();
                     }
-                    
+                    else
+                        _randomTime = TimeHelper.Now() + RandomHelper.RandomInt(1000, 2000);
                 }
             }
         }
@@ -196,6 +196,8 @@ namespace Wotou.Dancer
             
             //重置扇舞保留层数
             DancerSettings.Instance.FanDanceSaveStack = 3;
+            
+            _randomTime = 0;
         }
 
         public void OnSpellCastSuccess(Slot slot, Spell spell)

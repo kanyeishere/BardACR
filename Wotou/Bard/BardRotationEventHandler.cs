@@ -18,7 +18,7 @@ namespace Wotou.Bard;
 /// </summary>
 public class BardRotationEventHandler : IRotationEventHandler
 {
-    private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+    private long _randomTime = 0;
     
     public async Task OnPreCombat()
     {
@@ -36,18 +36,19 @@ public class BardRotationEventHandler : IRotationEventHandler
             BardRotationEntry.QT.SetQt("对齐旅神", false);
             BardRotationEntry.QT.SetQt("攒碎心箭", false);
             
-            if (BardSettings.Instance.EnableAutoPeloton && !Core.Me.InCombat())
+            if (BardSettings.Instance.EnableAutoPeloton && 
+                !Core.Me.InCombat() && 
+                !BardDefinesData.Spells.Peloton.RecentlyUsed(5000))
             {
                 if ((!Core.Me.HasAura(BardDefinesData.Buffs.Peloton) || 
                      !Core.Me.HasMyAuraWithTimeleft(BardDefinesData.Buffs.Peloton, 4000)) && 
                     !Core.Me.InCombat())
                 {
-                    await Task.Delay(new Random().Next(1000, 3000), _cancellationTokenSource.Token);
-                    if ((!Core.Me.HasAura(BardDefinesData.Buffs.Peloton) || 
-                         !Core.Me.HasMyAuraWithTimeleft(BardDefinesData.Buffs.Peloton, 4000)) && 
-                        !Core.Me.InCombat())
+                    if (_randomTime == 0 || TimeHelper.Now() > _randomTime)
                         await BardDefinesData.Spells.Peloton.GetSpell().Cast();
                 }
+                else
+                    _randomTime = TimeHelper.Now() + RandomHelper.RandomInt(1000, 2000);
             }
         }
         
@@ -67,7 +68,9 @@ public class BardRotationEventHandler : IRotationEventHandler
         BardBattleData.Instance = new BardBattleData();
         
         // 重置碎心箭保留层数
-        BardSettings.Instance.HeartBreakSaveStack = 0;
+        BardSettings.Instance.HeartBreakSaveStack = 0; 
+        
+        _randomTime = 0;
         
         if (!BardUtil.IsSongOrderNormal())
         {
@@ -249,7 +252,6 @@ public class BardRotationEventHandler : IRotationEventHandler
 
     public void OnExitRotation()
     {
-        _cancellationTokenSource.Cancel();
     }
 
     public void OnTerritoryChanged()
