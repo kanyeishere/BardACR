@@ -56,16 +56,25 @@ namespace Wotou.Dancer
 
         public void OnEnterRotation()
         {
-            if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3)
+            try
+            {
+                if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3)
+                {
+                    Core.Resolve<MemApiChatMessage>()
+                        .Toast2("欢迎使用窝头的舞者ACR\n请关闭全局能力技能不卡GCD\n打开此设置会导致本ACR产生能力技插入问题", 1, 5000);
+                    LogHelper.PrintError("警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭");
+                    ChatHelper.SendMessage("/e <se.1>");
+                }
+                else
+                    Core.Resolve<MemApiChatMessage>()
+                        .Toast2("欢迎使用窝头的舞者ACR\n请关闭全局能力技能不卡GCD\n打开此设置会导致本ACR产生能力技插入问题", 1, 5000);
+            } catch (MissingFieldException ex)
             {
                 Core.Resolve<MemApiChatMessage>()
                     .Toast2("欢迎使用窝头的舞者ACR\n请关闭全局能力技能不卡GCD\n打开此设置会导致本ACR产生能力技插入问题", 1, 5000);
-                LogHelper.PrintError("警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭");
+                LogHelper.PrintError("警告，你没有进行全局能力技能不卡GCD设置，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中先开启全局能力技能不卡GCD后，再重新关闭一次");
                 ChatHelper.SendMessage("/e <se.1>");
             }
-            else
-                Core.Resolve<MemApiChatMessage>()
-                    .Toast2("欢迎使用窝头的舞者ACR\n请关闭全局能力技能不卡GCD\n打开此设置会导致本ACR产生能力技插入问题", 1, 5000);
         }
 
         public void OnExitRotation()
