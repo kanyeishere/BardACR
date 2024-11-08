@@ -30,7 +30,8 @@ public class BardRotationEntry : IRotationEntry
     //  更新日志
     private const string UpdateLog = "更新日志：11.08" +
                                      "\n- 适配AE新版本，用户现在需要手动关闭全局能力技能不卡GCD" +
-                                     "\n- 修复日随模式下，开启自动速行时，进入战斗后会试图使用一次速行的bug";
+                                     "\n- 修复日随模式下，开启自动速行时，进入战斗后会试图使用一次速行的bug" +
+                                     "\n- 添加强对齐说明：建议在绝本中关闭强对齐";
     
     public Rotation Build(string settingFolder)
     {
@@ -161,7 +162,7 @@ public class BardRotationEntry : IRotationEntry
         QT.AddQt(QTKey.BurstWithWanderer, true, value => { OnClickBurstWithWandererQT(); });
         QT.SetQtToolTip("爆发是否对齐旅神");
         QT.AddQt(QTKey.StrongAlign, true, value => { OnClickStrongAlign(value); });
-        QT.SetQtToolTip("不会因为GCD时间变化而延后爆发");
+        QT.SetQtToolTip("不会因为GCD时间变化而延后爆发，绝本中建议关闭");
         QT.AddQt(QTKey.Apex, true, "是否使用绝峰箭");
         QT.AddQt(QTKey.HeartBreak, true, "是否攒碎心箭进团辅");
         QT.AddQt(QTKey.DOT, true, "是否使用DOT");
@@ -205,7 +206,7 @@ public class BardRotationEntry : IRotationEntry
         
         if (ImGui.CollapsingHeader("   重要说明"))
         {
-            ImGui.Text("诗人ACR\n适配技速2.48-2.50\n精细调整过能力技插入窗口，所以请在fuck插件中适当降低动画锁\n直到你连续两个能力技插入间隔在620ms以下（此数字可在FFLogs上查）\n但也别让间隔低于520ms，有概率你的Logs会被标红");
+            ImGui.Text("诗人ACR\n适配技速2.48-2.50\n精细调整过能力技插入窗口，所以请在fuck插件中适当降低动画锁\n直到连续两个能力技插入间隔在620ms以下（可在FFLogs上查）");
             ImGui.Separator();
             ImGui.Text(UpdateLog);
             ImGui.Separator();
