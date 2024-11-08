@@ -15,6 +15,8 @@ public class BardEmpyrealArrowAbility : ISlotResolver
     
     public int Check()
     {
+        if (AI.Instance.BattleData.CurrBattleTimeInMs < 3000)
+            return -4;
         if (!BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow))
             return -1;
         if (!EmpyrealArrow.GetSpell().IsReadyWithCanCast())
