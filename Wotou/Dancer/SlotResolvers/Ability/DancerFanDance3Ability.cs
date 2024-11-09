@@ -17,7 +17,6 @@ public class DancerFanDance3Ability : ISlotResolver
     private const uint StandardStep = DancerDefinesData.Spells.StandardStep;
     private const uint TechnicalStep = DancerDefinesData.Spells.TechnicalStep;
     private const uint Flourish = DancerDefinesData.Spells.Flourish;
-
     
     private const uint FlourishingSymmetry = DancerDefinesData.Buffs.FlourishingSymmetry;
     private const uint FlourishingFlow = DancerDefinesData.Buffs.FlourshingFlow;

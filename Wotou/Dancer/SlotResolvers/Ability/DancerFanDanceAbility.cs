@@ -16,6 +16,7 @@ public class DancerFanDanceAbility : ISlotResolver
     private const uint FanDance2 = DancerDefinesData.Spells.FanDance2;
     private const uint QuadrupleTechnicalFinish = DancerDefinesData.Spells.QuadrupleTechnicalFinish;
     private const uint TechnicalStep = DancerDefinesData.Spells.TechnicalStep;
+    private const uint Flourish = DancerDefinesData.Spells.Flourish;
     
     private const uint FlourishingSymmetry = DancerDefinesData.Buffs.FlourishingSymmetry;
     private const uint FlourishingFlow = DancerDefinesData.Buffs.FlourshingFlow;
@@ -38,6 +39,8 @@ public class DancerFanDanceAbility : ISlotResolver
             return -4;
         if (TechnicalStep.GetSpell().Cooldown.TotalMilliseconds <= 6000 && Core.Me.HasLocalPlayerAura(SilkenSymmetry))
             return -3;
+        if (Flourish.GetSpell().Cooldown.TotalMilliseconds <= 650)
+            return -6;
         if (DancerRotationEntry.QT.GetQt(QTKey.FinalBurst))
             return 100;
         if (Core.Resolve<JobApi_Dancer>().FourFoldFeathers > DancerSettings.Instance.FanDanceSaveStack  &&
