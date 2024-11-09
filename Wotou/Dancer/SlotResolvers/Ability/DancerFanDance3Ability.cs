@@ -16,6 +16,8 @@ public class DancerFanDance3Ability : ISlotResolver
     private const uint QuadrupleTechnicalFinish = DancerDefinesData.Spells.QuadrupleTechnicalFinish;
     private const uint StandardStep = DancerDefinesData.Spells.StandardStep;
     private const uint TechnicalStep = DancerDefinesData.Spells.TechnicalStep;
+    private const uint Flourish = DancerDefinesData.Spells.Flourish;
+
     
     private const uint FlourishingSymmetry = DancerDefinesData.Buffs.FlourishingSymmetry;
     private const uint FlourishingFlow = DancerDefinesData.Buffs.FlourshingFlow;
@@ -40,7 +42,8 @@ public class DancerFanDance3Ability : ISlotResolver
             return 100;
         if (Core.Me.HasLocalPlayerAura(ThreeFoldFanDance) && !Core.Me.HasMyAuraWithTimeleft(ThreeFoldFanDance, 3500))
             return 2;
-        
+        if (Flourish.GetSpell().Cooldown.TotalMilliseconds <= 5000)
+            return 2;
         if (Core.Me.HasLocalPlayerAura(ThreeFoldFanDance) && 
             !Core.Me.HasMyAuraWithTimeleft(ThreeFoldFanDance, 7500) &&
             StandardStep.GetSpell().Cooldown.TotalMilliseconds < 2500 &&
