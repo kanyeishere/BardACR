@@ -74,6 +74,10 @@ public class BardHeartBreakAbility : ISlotResolver
         if (Core.Resolve<MemApiSpell>().GetCharges(Core.Resolve<MemApiSpell>().CheckActionChange(HeartBreak)) >= Core.Resolve<MemApiSpell>().GetMaxCharges(Core.Resolve<MemApiSpell>().CheckActionChange(HeartBreak)) - 0.1)
             return 1;
         
+        // 团辅期，使用
+        if (BardUtil.HasAllPartyBuff())
+            return 2;
+        
         if (BardRotationEntry.QT.GetQt("攒碎心箭") && BardUtil.PartyBuffWillBeReadyIn(28000))
             return -11;
         
