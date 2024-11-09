@@ -24,10 +24,8 @@ namespace Wotou.Dancer;
 
 public class DancerRotationEntry : IRotationEntry
 {
-    private const string UpdateLog = "更新日志：11.09" +
-                                     "\n- 日随模式下，检测到周围25米内有敌人时，会自动预跳小舞" +
-                                     "\n- 更正重要说明：现在90级及以下也是4小舞循环最优" +
-                                     "\n- 修改群攻连击逻辑，现在落刃雨只有在符合AOE条件下才会使用";
+    private const string UpdateLog = "更新日志：11.10" +
+                                     "\n- 防止在大舞前一个GCD后插入扇舞·序";
     public void Dispose()
     {
     }
