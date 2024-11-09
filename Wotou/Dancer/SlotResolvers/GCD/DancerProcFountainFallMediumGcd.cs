@@ -23,6 +23,9 @@ public class DancerProcFountainFallMediumGcd : ISlotResolver
         if (!FountainFall.GetSpell().IsReadyWithCanCast())
             return -2;
         
+        if (Core.Resolve<JobApi_Dancer>().FourFoldFeathers == 4)
+            return -3;
+        
         if (Core.Me.HasAura(SilkenFlow) && 
             Core.Me.HasLocalPlayerAura(Devilment) &&
             Core.Resolve<MemApiBuff>().GetAuraTimeleft(Core.Me, SilkenFlow, true) < 

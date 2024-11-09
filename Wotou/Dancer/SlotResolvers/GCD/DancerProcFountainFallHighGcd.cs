@@ -32,6 +32,9 @@ public class DancerProcFountainFailHighGcd : ISlotResolver
             !BloodShower.GetSpell().IsReadyWithCanCast())
             return -2;
         
+        if (Core.Resolve<JobApi_Dancer>().FourFoldFeathers == 4)
+            return -3;
+        
         if (Core.Me.HasAura(SilkenFlow) && !Core.Me.HasMyAuraWithTimeleft(SilkenFlow,3500))
             return 1;
         if (Core.Me.HasAura(FlourishingFlow) && !Core.Me.HasMyAuraWithTimeleft(FlourishingFlow,3500))

@@ -25,7 +25,7 @@ namespace Wotou.Dancer;
 public class DancerRotationEntry : IRotationEntry
 {
     private const string UpdateLog = "更新日志：11.10" +
-                                     "\n- 防止在大舞前一个GCD后插入扇舞·序";
+                                     "\n- 防止在大舞前两个GCD后插入不必要的扇舞";
     public void Dispose()
     {
     }

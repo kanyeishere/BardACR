@@ -32,6 +32,9 @@ public class DancerProcReverseCascadeHighGcd : ISlotResolver
             !BloodShower.GetSpell().IsReadyWithCanCast())
             return -2;
         
+        if (Core.Resolve<JobApi_Dancer>().FourFoldFeathers == 4)
+            return -3;
+        
         if (Core.Me.HasAura(FlourishingSymmetry) && !Core.Me.HasMyAuraWithTimeleft(FlourishingSymmetry,3500))
             return 1;
         if (Core.Me.HasAura(SilkenSymmetry) && !Core.Me.HasMyAuraWithTimeleft(SilkenSymmetry, 3500))

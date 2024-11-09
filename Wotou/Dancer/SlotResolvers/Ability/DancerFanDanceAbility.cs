@@ -36,6 +36,8 @@ public class DancerFanDanceAbility : ISlotResolver
             return -3;
         if (TechnicalStep.GetSpell().Cooldown.TotalMilliseconds <= 3500)
             return -4;
+        if (TechnicalStep.GetSpell().Cooldown.TotalMilliseconds <= 6000 && Core.Me.HasLocalPlayerAura(SilkenSymmetry))
+            return -3;
         if (DancerRotationEntry.QT.GetQt(QTKey.FinalBurst))
             return 100;
         if (Core.Resolve<JobApi_Dancer>().FourFoldFeathers > DancerSettings.Instance.FanDanceSaveStack  &&
