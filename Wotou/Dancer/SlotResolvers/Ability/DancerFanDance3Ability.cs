@@ -37,17 +37,30 @@ public class DancerFanDance3Ability : ISlotResolver
             return -2;
         if (QuadrupleTechnicalFinish.RecentlyUsed(1500))
             return -3;
+        
         if (DancerRotationEntry.QT.GetQt(QTKey.FinalBurst))
             return 100;
+        
         if (Core.Me.HasLocalPlayerAura(ThreeFoldFanDance) && !Core.Me.HasMyAuraWithTimeleft(ThreeFoldFanDance, 3500))
             return 2;
+        
         if (Flourish.GetSpell().Cooldown.TotalMilliseconds <= 5000)
             return 2;
+        
         if (Core.Me.HasLocalPlayerAura(ThreeFoldFanDance) && 
             !Core.Me.HasMyAuraWithTimeleft(ThreeFoldFanDance, 7500) &&
             StandardStep.GetSpell().Cooldown.TotalMilliseconds < 2500 &&
             !Core.Me.HasLocalPlayerAura(FinishingMoveReady))
             return 3;
+        
+        if (Core.Me.HasLocalPlayerAura(ThreeFoldFanDance) &&
+            !Core.Me.HasLocalPlayerAura(FinishingMoveReady) &&
+            Core.Resolve<MemApiBuff>().GetAuraTimeleft(Core.Me, ThreeFoldFanDance, true) < StandardStep.GetSpell().Cooldown.TotalMilliseconds + 5000)
+            return 3;
+        
+        if (Core.Me.HasLocalPlayerAura(ThreeFoldFanDance) &&
+            Core.Resolve<MemApiBuff>().GetAuraTimeleft(Core.Me, ThreeFoldFanDance, true) < TechnicalStep.GetSpell().Cooldown.TotalMilliseconds + 8500)
+            return 4;
         
         if (Core.Me.HasLocalPlayerAura(ThreeFoldFanDance) && 
             !Core.Me.HasMyAuraWithTimeleft(ThreeFoldFanDance, 11000) &&
@@ -58,6 +71,7 @@ public class DancerFanDance3Ability : ISlotResolver
             return -4;
         if (TechnicalStep.GetSpell().Cooldown.TotalMilliseconds <= 6000 && Core.Me.HasLocalPlayerAura(SilkenSymmetry))
             return -5;
+        
         if (Core.Resolve<JobApi_Dancer>().FourFoldFeathers > DancerSettings.Instance.FanDanceSaveStack &&
             (Core.Me.HasLocalPlayerAura(FlourishingSymmetry) ||
              Core.Me.HasLocalPlayerAura(FlourishingFlow) || 
