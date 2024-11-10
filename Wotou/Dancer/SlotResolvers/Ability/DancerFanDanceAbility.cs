@@ -35,9 +35,12 @@ public class DancerFanDanceAbility : ISlotResolver
             return -2;
         if (QuadrupleTechnicalFinish.RecentlyUsed(1500))
             return -3;
-        if (TechnicalStep.GetSpell().Cooldown.TotalMilliseconds <= 3500)
+        if (TechnicalStep.GetSpell().Cooldown.TotalMilliseconds <= 3500 &&
+            DancerRotationEntry.QT.GetQt(QTKey.TechnicalStep))
             return -4;
-        if (TechnicalStep.GetSpell().Cooldown.TotalMilliseconds <= 6000 && Core.Me.HasLocalPlayerAura(SilkenSymmetry))
+        if (TechnicalStep.GetSpell().Cooldown.TotalMilliseconds <= 6000 &&
+            Core.Me.HasLocalPlayerAura(SilkenSymmetry) &&
+            DancerRotationEntry.QT.GetQt(QTKey.TechnicalStep))
             return -3;
         if (Flourish.GetSpell().Cooldown.TotalMilliseconds <= 1000)
             return -6;

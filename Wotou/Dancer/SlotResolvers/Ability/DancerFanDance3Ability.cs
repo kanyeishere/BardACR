@@ -66,6 +66,9 @@ public class DancerFanDance3Ability : ISlotResolver
             !Core.Me.HasMyAuraWithTimeleft(ThreeFoldFanDance, 11000) &&
             TechnicalStep.GetSpell().Cooldown.TotalMilliseconds < 2500)
             return 4;
+
+        if (!DancerRotationEntry.QT.GetQt(QTKey.TechnicalStep))
+            return 5;
         
         if (TechnicalStep.GetSpell().Cooldown.TotalMilliseconds <= 3500)
             return -4;
