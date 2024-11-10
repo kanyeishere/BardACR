@@ -7,6 +7,7 @@ using AEAssist.JobApi;
 using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.JobGauge.Enums;
 using Wotou.Bard.Data;
+using Wotou.Bard.Setting;
 using Wotou.Bard.Utility;
 
 namespace Wotou.Bard.SlotResolvers.GCD;
@@ -30,12 +31,13 @@ public class BardBaseGcd : ISlotResolver
     public int Check()
     {
         const int gcdAnimationTime = 620;
-        // 非团辅期间，九天不延后，延后gcd
+        // 非团辅期间，高难模式下，九天不延后，延后gcd
         if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < gcdAnimationTime &&
             //BardRotationEntry.QT.GetQt("强对齐") &&
             BardUtil.HasNoPartyBuff() &&
             EmpyrealArrow.IsUnlock() &&
-            BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow))
+            BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow) &&
+            !BardSettings.Instance.IsDailyMode)
             return -1;
         
         // 当前歌曲为军神 且开启爆发 且开启爆发对齐旅神 且强对齐 且第一个开的120秒buffCD时间小于2200 + 2020 * 3  + GCD动画时间，

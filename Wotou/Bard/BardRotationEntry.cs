@@ -28,10 +28,8 @@ public class BardRotationEntry : IRotationEntry
     public static JobViewWindow QT { get; private set; }
     public string AuthorName { get; set; } = "Wotou";
     //  更新日志
-    private const string UpdateLog = "更新日志：11.09" +
-                                     "\n- 添加强对齐说明：建议在绝本中关闭强对齐" +
-                                     "\n- 修复了抢开导致起手第一个技能释放九天连箭的Bug" +
-                                     "\n- 修复了日随模式下，失血箭不能正确释放的Bug";
+    private const string UpdateLog = "更新日志：11.10" +
+                                     "\n- 修复了日随模式下，有时开怪后5秒才会释放技能的Bug";
     
     public Rotation Build(string settingFolder)
     {
