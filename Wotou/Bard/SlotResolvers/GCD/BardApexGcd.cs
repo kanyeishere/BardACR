@@ -25,6 +25,11 @@ public class BardApexGcd : ISlotResolver
         if (!BardRotationEntry.QT.GetQt("绝峰箭"))
             return -1;
         
+        // 日常模式下，90能量释放绝峰箭
+        if (BardSettings.Instance.IsDailyMode &&
+            Core.Resolve<JobApi_Bard>().SoulVoice >= 90)
+            return 1;
+        
         // 本文件只处理开启爆发QT时，正常120s循环的绝峰箭
         if (!BardRotationEntry.QT.GetQt("爆发"))
             return -1;

@@ -29,7 +29,8 @@ public class BardRotationEntry : IRotationEntry
     public string AuthorName { get; set; } = "Wotou";
     //  更新日志
     private const string UpdateLog = "更新日志：11.11" +
-                                     "\n- 修复了日随模式下，低于50级时，不使用失血箭及猛者强击的问题" ;
+                                     "\n- 修复了日随模式下，低于50级时，不使用失血箭及猛者强击的问题"+
+                                     "\n- 修复了日随模式下，满灵魂之声不使用绝峰箭的问题" ;
     
     public Rotation Build(string settingFolder)
     {
