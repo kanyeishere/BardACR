@@ -32,7 +32,8 @@ public class BardRagingStrikesAbility : ISlotResolver
         
         // 第一个120s技能是BattleVoice，且BattleVoice的CD小于2s，不使用RagingStrikes以免抢占BattleVoice的CD
         if (BardBattleData.Instance.First120SBuffSpellId == BattleVoice &&
-            BattleVoice.GetSpell().Cooldown.TotalMilliseconds < 2000)
+            BattleVoice.GetSpell().Cooldown.TotalMilliseconds < 2000 &&
+            BardBattleData.Instance.First120SBuffSpellId.IsUnlock())
             return -1;
         
         // 使用爆发药

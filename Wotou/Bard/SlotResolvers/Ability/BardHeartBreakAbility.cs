@@ -44,11 +44,17 @@ public class BardHeartBreakAbility : ISlotResolver
             BardRotationEntry.QT.GetQt(QTKey.Sidewinder) &&
             Sidewinder.IsUnlock())
             return -5;
-        if (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt("爆发"))
+        if (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < 1200 && 
+            BardRotationEntry.QT.GetQt("爆发") &&
+            RagingStrikes.IsUnlock())
             return -6;
-        if (BattleVoice.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt("爆发"))
+        if (BattleVoice.GetSpell().Cooldown.TotalMilliseconds < 1200 && 
+            BardRotationEntry.QT.GetQt("爆发") &&
+            BattleVoice.IsUnlock())
             return -7;
-        if (Barrage.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt("爆发"))
+        if (Barrage.GetSpell().Cooldown.TotalMilliseconds < 1200 && 
+            BardRotationEntry.QT.GetQt("爆发") &&
+            Barrage.IsUnlock())
             return -8;
         
         // 不和两层诗心以上的完美音调冲突，抢团辅最后一个能力技能
@@ -96,7 +102,9 @@ public class BardHeartBreakAbility : ISlotResolver
     
     private static Spell GetHeartBreakSpell()
     {
-        if (TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget(), 25, 8) > 1  && BardRotationEntry.QT.GetQt("AOE"))
+        if (TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget(), 25, 8) > 1  && 
+            BardRotationEntry.QT.GetQt("AOE") && 
+            Core.Resolve<MemApiSpell>().CheckActionChange(RainOfDeath).IsUnlock())
             return Core.Resolve<MemApiSpell>().CheckActionChange(RainOfDeath).GetSpell();
         return Core.Resolve<MemApiSpell>().CheckActionChange(HeartBreak).GetSpell();
     }
