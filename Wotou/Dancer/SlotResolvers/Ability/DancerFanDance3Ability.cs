@@ -45,17 +45,12 @@ public class DancerFanDance3Ability : ISlotResolver
             return 2;
         
         if (Flourish.GetSpell().Cooldown.TotalMilliseconds <= 5000)
-            return 2;
+            return 20;
         
         if (Core.Me.HasLocalPlayerAura(ThreeFoldFanDance) && 
             !Core.Me.HasMyAuraWithTimeleft(ThreeFoldFanDance, 7500) &&
             StandardStep.GetSpell().Cooldown.TotalMilliseconds < 2500 &&
             !Core.Me.HasLocalPlayerAura(FinishingMoveReady))
-            return 3;
-        
-        if (Core.Me.HasLocalPlayerAura(ThreeFoldFanDance) &&
-            !Core.Me.HasLocalPlayerAura(FinishingMoveReady) &&
-            Core.Resolve<MemApiBuff>().GetAuraTimeleft(Core.Me, ThreeFoldFanDance, true) < StandardStep.GetSpell().Cooldown.TotalMilliseconds + 5000)
             return 3;
         
         if (Core.Me.HasLocalPlayerAura(ThreeFoldFanDance) &&
@@ -65,7 +60,7 @@ public class DancerFanDance3Ability : ISlotResolver
         if (Core.Me.HasLocalPlayerAura(ThreeFoldFanDance) && 
             !Core.Me.HasMyAuraWithTimeleft(ThreeFoldFanDance, 11000) &&
             TechnicalStep.GetSpell().Cooldown.TotalMilliseconds < 2500)
-            return 4;
+            return 40;
 
         if (!DancerRotationEntry.QT.GetQt(QTKey.TechnicalStep))
             return 5;
@@ -80,11 +75,11 @@ public class DancerFanDance3Ability : ISlotResolver
              Core.Me.HasLocalPlayerAura(FlourishingFlow) || 
              Core.Me.HasLocalPlayerAura(SilkenFlow) || 
              Core.Me.HasLocalPlayerAura(SilkenSymmetry)))
-            return 1;
+            return 11;
         if (Core.Me.HasLocalPlayerAura(Devilment))
-            return 1;
+            return 12;
         if (Core.Me.HasLocalPlayerAura(Medicated))
-            return 1;
+            return 13;
         return -3;
     }
 
