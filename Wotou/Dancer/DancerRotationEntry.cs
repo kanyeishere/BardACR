@@ -25,7 +25,8 @@ namespace Wotou.Dancer;
 public class DancerRotationEntry : IRotationEntry
 {
     private const string UpdateLog = "更新日志：11.11" +
-                                     "\n- 修复日随模式下不释放扇舞和探戈的bug";
+                                     "\n- 修复日随模式下，不释放扇舞和探戈的bug"+
+                                     "\n- 修复日随模式下，70级前不打AOE连的bug";
     public void Dispose()
     {
     }
