@@ -18,6 +18,7 @@ using Wotou.Bard.Setting;
 using Wotou.Bard.SlotResolvers;
 using Wotou.Bard.Triggers;
 using Wotou.Bard.Utility;
+using Wotou.Common;
 
 namespace Wotou.Bard;
 
@@ -196,6 +197,7 @@ public class BardRotationEntry : IRotationEntry
 
     public void OnUIUpdate()
     {
+        InfoWindow.Draw();
     }
 
     public void DrawQtGeneral(JobViewWindow jobViewWindow)

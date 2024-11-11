@@ -17,6 +17,7 @@ using Wotou.Dancer.Opener;
 using Wotou.Dancer.Setting;
 using Wotou.Dancer.Trigger;
 using ImGuiNET;
+using Wotou.Common;
 using Wotou.Dancer.Triggers;
 using Wotou.Dancer.Utility;
 
@@ -133,6 +134,7 @@ public class DancerRotationEntry : IRotationEntry
             DancePartnerPanel.DrawHotkeyWindow(new QtStyle(DancerSettings.Instance.JobViewSave));
             DancePartnerPanel = new HotkeyWindow(myJobViewSave, "Custom DNC HotkeyWindow");
             DancePartnerPanel.HotkeyLineCount = 1;
+            InfoWindow.Draw();
         });
         
         QT.AddTab("通用", DrawGeneral);
