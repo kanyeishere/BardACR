@@ -11,12 +11,14 @@ public class DancerDevilmentAbility : ISlotResolver
 {
     private const uint Devilment = DancerDefinesData.Spells.Devilment;
     private const uint QuadrupleTechnicalFinish = DancerDefinesData.Spells.QuadrupleTechnicalFinish;
+    private const uint TechnicalStep = DancerDefinesData.Spells.TechnicalStep;
     
     public int Check()
     {
         if (!Devilment.GetSpell().IsReadyWithCanCast())
             return -1;
-        if (Core.Resolve<MemApiSpellCastSuccess>().LastGcd != QuadrupleTechnicalFinish)
+        if (Core.Resolve<MemApiSpellCastSuccess>().LastGcd != QuadrupleTechnicalFinish && 
+            TechnicalStep.IsUnlock())
             return -2;
         return 0;
     }

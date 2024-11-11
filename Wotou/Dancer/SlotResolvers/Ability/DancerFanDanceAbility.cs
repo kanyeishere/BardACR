@@ -17,6 +17,7 @@ public class DancerFanDanceAbility : ISlotResolver
     private const uint QuadrupleTechnicalFinish = DancerDefinesData.Spells.QuadrupleTechnicalFinish;
     private const uint TechnicalStep = DancerDefinesData.Spells.TechnicalStep;
     private const uint Flourish = DancerDefinesData.Spells.Flourish;
+    private const uint DevilmentSpell = DancerDefinesData.Spells.Devilment;
     
     private const uint FlourishingSymmetry = DancerDefinesData.Buffs.FlourishingSymmetry;
     private const uint FlourishingFlow = DancerDefinesData.Buffs.FlourshingFlow;
@@ -35,17 +36,22 @@ public class DancerFanDanceAbility : ISlotResolver
             return -2;
         if (QuadrupleTechnicalFinish.RecentlyUsed(1500))
             return -3;
+        
+        if (DancerRotationEntry.QT.GetQt(QTKey.FinalBurst))
+            return 100;
+        
         if (TechnicalStep.GetSpell().Cooldown.TotalMilliseconds <= 3500 &&
-            DancerRotationEntry.QT.GetQt(QTKey.TechnicalStep))
+            DancerRotationEntry.QT.GetQt(QTKey.TechnicalStep) &&
+            TechnicalStep.IsUnlock())
             return -4;
         if (TechnicalStep.GetSpell().Cooldown.TotalMilliseconds <= 6000 &&
             Core.Me.HasLocalPlayerAura(SilkenSymmetry) &&
-            DancerRotationEntry.QT.GetQt(QTKey.TechnicalStep))
+            DancerRotationEntry.QT.GetQt(QTKey.TechnicalStep) &&
+            TechnicalStep.IsUnlock())
             return -3;
-        if (Flourish.GetSpell().Cooldown.TotalMilliseconds <= 1000)
+        if (Flourish.GetSpell().Cooldown.TotalMilliseconds <= 1000 &&
+            Flourish.IsUnlock())
             return -6;
-        if (DancerRotationEntry.QT.GetQt(QTKey.FinalBurst))
-            return 100;
         if (Core.Resolve<JobApi_Dancer>().FourFoldFeathers > DancerSettings.Instance.FanDanceSaveStack  &&
             (Core.Me.HasLocalPlayerAura(FlourishingSymmetry) ||
              Core.Me.HasLocalPlayerAura(FlourishingFlow) || 
@@ -56,6 +62,8 @@ public class DancerFanDanceAbility : ISlotResolver
             return 1;
         if (Core.Me.HasLocalPlayerAura(Medicated))
             return 1;
+        if (!DevilmentSpell.IsUnlock())
+            return 22;
         return -4;
     }
 
