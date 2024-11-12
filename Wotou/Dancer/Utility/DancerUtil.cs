@@ -79,10 +79,12 @@ namespace Wotou.Dancer.Utility
 
         private static Spell GetProcAoeCombo()
         {
-            if (Core.Me.HasAura(SilkenFlow))
+            if (Core.Me.HasAura(SilkenFlow) &&
+                BloodShower.IsUnlockWithCDCheck())
                 return BloodShower.GetSpell();
             
-            if (Core.Me.HasAura(SilkenSymmetry))
+            if (Core.Me.HasAura(SilkenSymmetry) && 
+                RisingWindmill.IsUnlockWithCDCheck())
                 return RisingWindmill.GetSpell();
             
             if (BloodShower.GetSpell().IsReadyWithCanCast())
@@ -90,6 +92,12 @@ namespace Wotou.Dancer.Utility
         
             if (RisingWindmill.GetSpell().IsReadyWithCanCast())
                 return RisingWindmill.GetSpell();
+            
+            if (Core.Me.HasAura(SilkenFlow))
+                return  FountainFall.GetSpell();
+            
+            if (Core.Me.HasAura(SilkenSymmetry))
+                return ReverseCascade.GetSpell();
         
             return null;
         }

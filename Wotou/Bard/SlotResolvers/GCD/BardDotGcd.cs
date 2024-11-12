@@ -26,13 +26,15 @@ public class BardDotGcd : ISlotResolver
         var target = Core.Me.GetCurrTarget();
         if (target == null)
             return -1;
-        if (HasAnyDot(target, 风dotBuffs) && HasAnyDot(target, 毒dotBuffs))
-            return -1;
         if (DotBlacklistHelper.IsBlackList(target))
             return -1;
         if (!TargetHelper.IsBoss(target) && !BardSettings.Instance.ApplyDotOnTrashMobs && BardSettings.Instance.IsDailyMode)
             return -1;
-        return 1;
+        if (!HasAnyDot(target, 风dotBuffs) && WindBite.IsUnlock())
+            return 1;
+        if (!HasAnyDot(target, 毒dotBuffs) && VenomousBite.IsUnlock())
+            return 2;
+        return -10;
     }
     
     public void Build(Slot slot)
@@ -48,7 +50,7 @@ public class BardDotGcd : ISlotResolver
     private Spell GetSpell()
     {
         var target = Core.Me.GetCurrTarget();
-        return !HasAnyDot(target, 风dotBuffs) ? 
+        return !HasAnyDot(target, 风dotBuffs) && WindBite.IsUnlock()? 
             Core.Resolve<MemApiSpell>().CheckActionChange(WindBite).GetSpell() : 
             Core.Resolve<MemApiSpell>().CheckActionChange(VenomousBite).GetSpell();
     }
