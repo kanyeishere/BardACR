@@ -37,12 +37,13 @@ public class BardRotationEventHandler : IRotationEventHandler
             BardRotationEntry.QT.SetQt("攒碎心箭", false);
             
             if (BardSettings.Instance.EnableAutoPeloton && 
+                Core.Me.IsMoving() &&
                 !Core.Me.InCombat() && 
                 !BardDefinesData.Spells.Peloton.RecentlyUsed(5000))
             {
                 if ((!Core.Me.HasAura(BardDefinesData.Buffs.Peloton) || 
                      !Core.Me.HasMyAuraWithTimeleft(BardDefinesData.Buffs.Peloton, 4000)) && 
-                    !Core.Me.InCombat())
+                    !Core.Me.InCombat() && Core.Me.IsMoving())
                 {
                     if (_randomTime == 0 || TimeHelper.Now() > _randomTime)
                         await BardDefinesData.Spells.Peloton.GetSpell().Cast();

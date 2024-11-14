@@ -181,11 +181,12 @@ namespace Wotou.Dancer
                 if (DancerSettings.Instance.EnableAutoPeloton && 
                     !Core.Resolve<JobApi_Dancer>().IsDancing && 
                     !Core.Me.InCombat() && 
+                    Core.Me.IsMoving() && 
                     !DancerDefinesData.Spells.Peloton.RecentlyUsed(5000))
                 {
                     if ((!Core.Me.HasAura(DancerDefinesData.Buffs.Peloton) || 
                          !Core.Me.HasMyAuraWithTimeleft(DancerDefinesData.Buffs.Peloton, 4000)) && 
-                        !Core.Me.InCombat())
+                        !Core.Me.InCombat() && Core.Me.IsMoving())
                     {
                         if (_randomTime == 0 || TimeHelper.Now() > _randomTime)
                             await DancerDefinesData.Spells.Peloton.GetSpell().Cast();

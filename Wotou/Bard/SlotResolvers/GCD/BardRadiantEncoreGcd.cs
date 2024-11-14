@@ -20,7 +20,9 @@ public class BardRadiantEncoreGcd : ISlotResolver
         if (!BardRotationEntry.QT.GetQt("爆发"))
             return -1;
         
-        if (Core.Me.HasLocalPlayerAura(RadiantEncoreReady))
+        if (RagingStrikes.RecentlyUsed(18000) &&
+            BattleVoice.RecentlyUsed(18000) &&
+            Core.Me.HasLocalPlayerAura(RadiantEncoreReady))
             return 1;
 
         /*if (BardBattleData.Instance.First120SBuffSpellId == RagingStrikes &&

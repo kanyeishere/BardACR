@@ -25,8 +25,8 @@ namespace Wotou.Dancer;
 
 public class DancerRotationEntry : IRotationEntry
 {
-    private const string UpdateLog = "更新日志：11.12" +
-                                     "\n- 修复日随模式下，低于40级时也会尝试使用AOE触发的bug";
+    private const string UpdateLog =  "更新日志：11.13" +
+                                      "\n- 现在只有当玩家移动时，才会触发自动速行";
     public void Dispose()
     {
     }
