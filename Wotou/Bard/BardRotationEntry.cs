@@ -585,8 +585,10 @@ public class BardRotationEntry : IRotationEntry
         }
 
         ImGui.Separator();
-        if (ImGui.CollapsingHeader("   高级设置"))
+        if (ImGui.CollapsingHeader("   其他设置"))
         {
+            ImGui.Checkbox("是否播放欢迎语言（依赖插件 Daily Routines）", ref BardSettings.Instance.WelcomeVoice);
+            ImGui.Separator();
             ImGui.TextColored(new Vector4(1, 0.7f, 0, 1), "除非你明白你要做什么，不然请别动这几项\n建议仅在受网络延迟与动画锁影响，爆发期打不满或者卡GCD时，再做调整");
             BardUtil.RightInputInt("非起手的旅神歌在下个GCD前多久使用", ref BardSettings.Instance.WandererBeforeGcdTime,
                 500, 2000, "(毫秒)");

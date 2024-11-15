@@ -263,6 +263,8 @@ public class DancerRotationEntry : IRotationEntry
         ImGui.Separator();
         if (ImGui.CollapsingHeader("   界面设置"))
         {
+            ImGui.Checkbox("是否播放欢迎语言（依赖插件 Daily Routines）", ref DancerSettings.Instance.WelcomeVoice);
+            ImGui.Separator();
             ImGui.Checkbox("显示快速舞伴切换面板", ref DancerSettings.Instance.ShowDancePartnerPanel);
             ImGuiHelper.LeftInputInt("舞伴面板图标大小", ref DancerSettings.Instance.DancePartnerPanelIconSize, 10, 80);
 

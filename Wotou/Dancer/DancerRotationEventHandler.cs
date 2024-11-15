@@ -75,7 +75,8 @@ namespace Wotou.Dancer
                 LogHelper.PrintError("警告，你没有进行全局能力技能不卡GCD设置，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中先开启全局能力技能不卡GCD后，再重新关闭一次");
                 ChatHelper.SendMessage("/e <se.1>");
             }
-            ChatHelper.SendMessage("/pdr tts 你好，欢迎你使用窝头舞者");
+            if (DancerSettings.Instance.WelcomeVoice)
+                ChatHelper.SendMessage("/pdr tts 你好，欢迎你使用窝头舞者");
         }
 
         public void OnExitRotation()

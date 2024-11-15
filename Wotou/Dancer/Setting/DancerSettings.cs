@@ -46,6 +46,7 @@ public class DancerSettings
     public bool ShowDancePartnerPanel = true; // 是否显示舞者配偶面板
     public int DancePartnerPanelIconSize = 47; // 舞者配偶面板图标大小
     public bool UseDancePartnerMacro = true; // 是否使用舞伴宏
+    public bool WelcomeVoice = true; // 是否开启欢迎声音
 
     public string DancePartnerMacroText =
         "/p <t> 欧尼酱， <t> 欧尼酱 <se.2>\n/p 阔咧[闭式舞姿]跌酷烈跌\n/p 要是 啊呐哒のCP西哒啦 发飙西奈哟呐\n/p pr...pr...哦依稀！~\n/p <t> 欧尼酱 一托库叽 [尝一口治疗之华尔兹]\n/p [倒吸气]<t> 欧尼酱~~ <se.7>\n/p 昂呐哒のCP莫西知道昂呐哒跟瓦大喜做[舞伴]\n/p 吃醋西奈哟呐~~\n/p <t> 欧尼酱[伶俐]给瓦大吸<se.6>\n/p 啊呐哒のCP莫西知道了不会揍瓦大喜吧~~\n/p 阔哇一呐~啊呐哒のCP 不像瓦大喜\n/p 塔哒[防守之桑巴]<t> 欧尼酱";
