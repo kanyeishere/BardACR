@@ -133,7 +133,7 @@ public class DancerRotationEntry : IRotationEntry
             DancePartnerPanel.DrawHotkeyWindow(new QtStyle(DancerSettings.Instance.JobViewSave));
             DancePartnerPanel = new HotkeyWindow(myJobViewSave, "Custom DNC HotkeyWindow");
             DancePartnerPanel.HotkeyLineCount = 1;
-            InfoWindow.Draw();
+            //InfoWindow.Draw();
         });
         
         QT.AddTab("通用", DrawGeneral);
@@ -321,14 +321,16 @@ public class DancerRotationEntry : IRotationEntry
         if (matchingSkills.Count > 0)
         {
             ImGui.Text("匹配的技能：");
+            int index = 0; // 用于区分每个按钮
             foreach (var skill in matchingSkills)
             {
-                if (ImGui.Button($"复制ID"))
+                if (ImGui.Button($"复制ID##{index}"))
                 {
                     ImGui.SetClipboardText(skill.Value.ToString()); // 将ID复制到剪贴板
                 }
                 ImGui.SameLine();
                 ImGui.Text($"{skill.Key} - ID: {skill.Value}");
+                index++;
             }
         }
         else if (!string.IsNullOrEmpty(searchQuery))

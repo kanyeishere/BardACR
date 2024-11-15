@@ -251,7 +251,7 @@ public class BardRotationEventHandler : IRotationEventHandler
             }
             else
                 Core.Resolve<MemApiChatMessage>()
-                    .Toast2("欢迎使用窝头的诗人ACR\n请关闭全局能力技能不卡GCD\n打开此设置会导致本ACR产生能力技插入问题", 1, 5000);
+                    .Toast2("欢迎使用窝头的诗人ACR", 1, 5000);
         } catch (MissingFieldException ex)
         {
             Core.Resolve<MemApiChatMessage>()
@@ -259,6 +259,7 @@ public class BardRotationEventHandler : IRotationEventHandler
             LogHelper.PrintError("警告，你没有进行全局能力技能不卡GCD设置，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中先开启全局能力技能不卡GCD后，再重新关闭一次");
             ChatHelper.SendMessage("/e <se.1>");
         }
+        ChatHelper.SendMessage("/pdr tts 你好，欢迎你使用窝头诗人");
     }
 
     public void OnExitRotation()
