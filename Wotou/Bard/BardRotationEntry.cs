@@ -585,7 +585,7 @@ public class BardRotationEntry : IRotationEntry
         }
 
         ImGui.Separator();
-        if (ImGui.CollapsingHeader("   其他设置"))
+        if (ImGui.CollapsingHeader("   高级设置"))
         {
             ImGui.Checkbox("是否播放欢迎语言（依赖插件 Daily Routines）", ref BardSettings.Instance.WelcomeVoice);
             ImGui.Separator();
