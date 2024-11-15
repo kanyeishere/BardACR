@@ -75,7 +75,9 @@ public class BardBaseGcd : ISlotResolver
             return Core.Resolve<MemApiSpell>().CheckActionChange(RefulgentArrow).GetSpell();
         }
         
-        if (TargetHelper.GetEnemyCountInsideSector(Core.Me, Core.Me.GetCurrTarget(), 12, 90) > 1  && BardRotationEntry.QT.GetQt("AOE"))
+        if (TargetHelper.GetEnemyCountInsideSector(Core.Me, Core.Me.GetCurrTarget(), 12, 90) > 1 &&
+            BardRotationEntry.QT.GetQt("AOE") &&
+            Core.Resolve<MemApiSpell>().CheckActionChange(Ladonsbite).IsUnlock())
             return Core.Resolve<MemApiSpell>().CheckActionChange(Ladonsbite).GetSpell();
         return Core.Resolve<MemApiSpell>().CheckActionChange(BurstShot).GetSpell();
     }
