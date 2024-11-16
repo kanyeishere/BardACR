@@ -29,7 +29,8 @@ public class DancerRotationEntry : IRotationEntry
                                       "\n- 修复UI样式泄露的问题" +
                                       "\n- 添加依赖插件的链接地址" +
                                       "\n- 降低团辅期第二次落幕舞的优先级" +
-                                      "\n- 不在团辅期的结束动作前1G使用提拉纳";
+                                      "\n- 不在团辅期的结束动作前1G时,使用提拉纳" + 
+                                      "\n- 不在团辅期的结束动作前2G且有落幕舞buff时,使用提拉纳";
     public void Dispose()
     {
     }

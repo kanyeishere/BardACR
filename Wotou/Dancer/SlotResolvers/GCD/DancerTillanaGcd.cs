@@ -15,6 +15,7 @@ public class DancerTillanaGcd : ISlotResolver
     
     private const uint Devilment = DancerDefinesData.Buffs.Devilment;
     private const uint FlourishingFinish = DancerDefinesData.Buffs.FlourishingFinish;
+    private const uint LastDanceReady = DancerDefinesData.Buffs.LastDanceReady;
 
     public int Check()
     {
@@ -24,6 +25,10 @@ public class DancerTillanaGcd : ISlotResolver
         if  (Core.Resolve<MemApiSpell>().CheckActionChange(StandardStep).GetSpell().Cooldown.TotalMilliseconds < 
              2 * GCDHelper.GetGCDDuration() - 1000 )
             return -2;
+        // 不在小舞前2G且有落幕舞buff时使用
+        if (Core.Resolve<MemApiSpell>().CheckActionChange(StandardStep).GetSpell().Cooldown.TotalMilliseconds < 
+             3 * GCDHelper.GetGCDDuration() - 1000 && Core.Me.HasAura(LastDanceReady))
+            return -3;
         if (Core.Resolve<JobApi_Dancer>().Esprit <= 35 && Core.Me.HasLocalPlayerAura(Devilment))
             return 1;
         if (Core.Resolve<JobApi_Dancer>().Esprit <= 40 && !Core.Me.HasLocalPlayerAura(Devilment))
