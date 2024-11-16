@@ -200,6 +200,28 @@ public class BardRotationEntry : IRotationEntry
     {
         //InfoWindow.Draw();
     }
+    
+    private void DrawModeButton(string label, bool isDailyMode, Action onClickAction)
+    {
+        // 保存初始状态
+        bool initialIsDailyMode = BardSettings.Instance.IsDailyMode;
+        bool isSelected = (initialIsDailyMode == isDailyMode);
+
+        // 根据初始状态决定是否 PushStyleColor
+        if (isSelected) 
+            ImGui.PushStyleColor(ImGuiCol.Button, BardSettings.Instance.JobViewSave.MainColor);
+
+        // 绘制按钮，并记录是否被点击
+        bool buttonClicked = ImGui.Button(label);
+
+        // 根据初始状态决定是否 PopStyleColor
+        if (isSelected)
+            ImGui.PopStyleColor();
+
+        // 在 Push/Pop 操作之后，处理按钮点击事件
+        if (buttonClicked)
+            onClickAction?.Invoke();
+    }
 
     public void DrawQtGeneral(JobViewWindow jobViewWindow)
     {
@@ -237,37 +259,23 @@ public class BardRotationEntry : IRotationEntry
         if (ImGui.CollapsingHeader("   基础设置"))
         {
             ImGui.Text("当前模式：" + (BardSettings.Instance.IsDailyMode ? "日随模式" : "高难模式"));
-            if (BardSettings.Instance.IsDailyMode)
+            DrawModeButton("日随模式", true, () =>
             {
-                ImGui.PushStyleColor(ImGuiCol.Button, BardSettings.Instance.JobViewSave.MainColor); // 选中时的颜色
-            }
-            if (ImGui.Button("日随模式"))
-            {
+                // 日随模式的相关设置
                 BardSettings.Instance.IsDailyMode = true;
                 QT.SetQt("强对齐", false);
                 QT.SetQt("对齐旅神", false);
                 QT.SetQt("攒碎心箭", false);
-            }
-            if (BardSettings.Instance.IsDailyMode)
-            {
-                ImGui.PopStyleColor();
-            }
+            });
             ImGui.SameLine();
-            if (!BardSettings.Instance.IsDailyMode)
+            DrawModeButton("高难模式", false, () =>
             {
-                ImGui.PushStyleColor(ImGuiCol.Button, BardSettings.Instance.JobViewSave.MainColor); // 选中时的颜色
-            }
-            if (ImGui.Button("高难模式"))
-            {
+                // 高难模式的相关设置
                 BardSettings.Instance.IsDailyMode = false;
                 QT.SetQt("强对齐", true);
                 QT.SetQt("对齐旅神", true);
                 QT.SetQt("攒碎心箭", true);
-            }
-            if (!BardSettings.Instance.IsDailyMode)
-            {
-                ImGui.PopStyleColor();
-            }
+            });
             if (BardSettings.Instance.IsDailyMode)
             {
                 ImGui.Separator();

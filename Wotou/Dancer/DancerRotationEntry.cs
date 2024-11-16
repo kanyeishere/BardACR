@@ -173,7 +173,29 @@ public class DancerRotationEntry : IRotationEntry
             DancePartnerPanel?.AddHotkey("切换舞伴: " + PartyHelper.Party[i].Name, new ClosedPositionHotkeyResolver(index));
         }
     }
+    
+    private void DrawModeButton(string label, bool isDailyMode)
+    {
+        // 保存初始状态
+        bool initialIsDailyMode = DancerSettings.Instance.IsDailyMode;
+        bool isSelected = (initialIsDailyMode == isDailyMode);
 
+        // 根据初始状态决定是否 PushStyleColor
+        if (isSelected)
+            ImGui.PushStyleColor(ImGuiCol.Button, DancerSettings.Instance.JobViewSave.MainColor);
+
+        // 绘制按钮，并记录是否被点击
+        bool buttonClicked = ImGui.Button(label);
+
+        // 根据初始状态决定是否 PopStyleColor
+        if (isSelected)
+            ImGui.PopStyleColor();
+
+        // 在 Push/Pop 操作之后，处理按钮点击事件
+        if (buttonClicked)
+            DancerSettings.Instance.IsDailyMode = isDailyMode;
+    }
+    
     public void DrawGeneral(JobViewWindow jobViewWindow)
     {
         ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0.0f, 0.0f, 0.0f, 0.0f));
@@ -210,31 +232,9 @@ public class DancerRotationEntry : IRotationEntry
         if (ImGui.CollapsingHeader("   基础设置"))
         {
             ImGui.Text("当前模式：" + (DancerSettings.Instance.IsDailyMode ? "日随模式" : "高难模式"));
-            if (DancerSettings.Instance.IsDailyMode)
-            {
-                ImGui.PushStyleColor(ImGuiCol.Button, DancerSettings.Instance.JobViewSave.MainColor); // 选中时的颜色
-            }
-            if (ImGui.Button("日随模式"))
-            {
-                DancerSettings.Instance.IsDailyMode = true;
-            }
-            if (DancerSettings.Instance.IsDailyMode)
-            {
-                ImGui.PopStyleColor();
-            }
+            DrawModeButton("日随模式", true);
             ImGui.SameLine();
-            if (!DancerSettings.Instance.IsDailyMode)
-            {
-                ImGui.PushStyleColor(ImGuiCol.Button, DancerSettings.Instance.JobViewSave.MainColor); // 选中时的颜色
-            }
-            if (ImGui.Button("高难模式"))
-            {
-                DancerSettings.Instance.IsDailyMode = false;
-            }
-            if (!DancerSettings.Instance.IsDailyMode)
-            {
-                ImGui.PopStyleColor();
-            }
+            DrawModeButton("高难模式", false);
             if (DancerSettings.Instance.IsDailyMode)
             {
                 ImGui.Separator();
