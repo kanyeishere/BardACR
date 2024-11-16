@@ -27,7 +27,8 @@ public class DancerRotationEntry : IRotationEntry
 {
     private const string UpdateLog =  "更新日志：11.16" +
                                       "\n- 修复UI样式泄露的问题" +
-                                      "\n- 添加依赖插件的链接地址";
+                                      "\n- 添加依赖插件的链接地址" +
+                                      "\n- 降低团辅期第二次落幕舞的优先级";
     public void Dispose()
     {
     }
@@ -52,8 +53,8 @@ public class DancerRotationEntry : IRotationEntry
         new SlotResolverData(new DancerProcFountainFallMediumGcd(), SlotMode.Gcd), // 团辅外等不到的坠喷泉触发
         new SlotResolverData(new DancerProcReverseCascadeMediumGcd(), SlotMode.Gcd), // 团辅外等不到的逆瀑泻触发
         new SlotResolverData(new DancerStarfallDanceGCD(), SlotMode.Gcd),
-        new SlotResolverData(new DancerLastDanceGcd(), SlotMode.Gcd),
         new SlotResolverData(new DancerSaberDanceMediumGcd(), SlotMode.Gcd), //团辅期低能量剑舞
+        new SlotResolverData(new DancerLastDanceGcd(), SlotMode.Gcd),
 
         new SlotResolverData(new DancerSaberDanceGcd(), SlotMode.Gcd), //普通剑舞
         new SlotResolverData(new DancerProcGcd(), SlotMode.Gcd),
