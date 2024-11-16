@@ -25,8 +25,9 @@ namespace Wotou.Dancer;
 
 public class DancerRotationEntry : IRotationEntry
 {
-    private const string UpdateLog =  "更新日志：11.13" +
-                                      "\n- 现在只有当玩家移动时，才会触发自动速行";
+    private const string UpdateLog =  "更新日志：11.16" +
+                                      "\n- 修复UI样式泄露的问题" +
+                                      "\n- 添加依赖插件的链接地址";
     public void Dispose()
     {
     }
@@ -258,12 +259,16 @@ public class DancerRotationEntry : IRotationEntry
             }
             ImGui.Separator();*/
             if (ImGui.Button("保存设置")) DancerSettings.Instance.Save();
-            
         }
         ImGui.Separator();
         if (ImGui.CollapsingHeader("   界面设置"))
         {
-            ImGui.Checkbox("是否播放欢迎语音（依赖插件 Daily Routines）", ref DancerSettings.Instance.WelcomeVoice);
+            ImGui.Checkbox("", ref DancerSettings.Instance.WelcomeVoice);
+            ImGui.SameLine();
+            ImGui.Text("是否播放欢迎语音 - 依赖插件");
+            ImGui.SameLine();
+            var dailyRoutinesLink = new Hyperlink("Daily Routines", "https://github.com/AtmoOmen/DalamudPlugins");
+            dailyRoutinesLink.Render();      
             ImGui.Separator();
             ImGui.Checkbox("显示快速舞伴切换面板", ref DancerSettings.Instance.ShowDancePartnerPanel);
             ImGuiHelper.LeftInputInt("舞伴面板图标大小", ref DancerSettings.Instance.DancePartnerPanelIconSize, 10, 80);
@@ -299,6 +304,7 @@ public class DancerRotationEntry : IRotationEntry
                     ImGui.Text(" --" + obj);
             ImGui.Separator();
         }
+        ImGui.PopStyleColor(2);
     }
 
     public void OnDrawSetting(){
@@ -340,5 +346,6 @@ public class DancerRotationEntry : IRotationEntry
             ImGui.Text("未找到匹配的技能。");
         }
         ImGui.Separator();
+        ImGui.PopStyleColor(2);
     }
 }

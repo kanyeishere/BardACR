@@ -29,8 +29,10 @@ public class BardRotationEntry : IRotationEntry
     public static JobViewWindow QT { get; private set; }
     public string AuthorName { get; set; } = "Wotou";
     //  更新日志
-    private const string UpdateLog = "更新日志：11.14" +
-                                     "\n- 修复2G起手时会提前使用光明神续剑的Bug";
+    private const string UpdateLog = "更新日志：11.16" +
+                                     "\n- 修复2G起手时会提前使用光明神续剑的Bug" +
+                                     "\n- 修复UI样式泄露的问题" +
+                                     "\n- 添加依赖插件的链接地址";
     
     public Rotation Build(string settingFolder)
     {
@@ -207,6 +209,10 @@ public class BardRotationEntry : IRotationEntry
         if (ImGui.CollapsingHeader("   重要说明"))
         {
             ImGui.Text("诗人ACR\n适配技速2.48-2.50\n精细调整过能力技插入窗口，所以请在fuck插件中适当降低动画锁\n直到连续两个能力技插入间隔在620ms以下（可在FFLogs上查）");
+            ImGui.Text("插件地址：");
+            ImGui.SameLine();
+            var hyperlink = new Hyperlink("FuckAnimationLock", "https://github.com/NiGuangOwO/DalamudPlugins");
+            hyperlink.Render();
             ImGui.Separator();
             ImGui.Text(UpdateLog);
             ImGui.Separator();
@@ -583,11 +589,15 @@ public class BardRotationEntry : IRotationEntry
             if (ImGui.Button("保存设置"))
                 BardSettings.Instance.Save();
         }
-
         ImGui.Separator();
         if (ImGui.CollapsingHeader("   高级设置"))
         {
-            ImGui.Checkbox("是否播放欢迎语音（依赖插件 Daily Routines）", ref BardSettings.Instance.WelcomeVoice);
+            ImGui.Checkbox("", ref BardSettings.Instance.WelcomeVoice);
+            ImGui.SameLine();
+            ImGui.Text("是否播放欢迎语音 - 依赖插件");
+            ImGui.SameLine();
+            var dailyRoutinesLink = new Hyperlink("Daily Routines", "https://github.com/AtmoOmen/DalamudPlugins");
+            dailyRoutinesLink.Render();      
             ImGui.Separator();
             ImGui.TextColored(new Vector4(1, 0.7f, 0, 1), "除非你明白你要做什么，不然请别动这几项\n建议仅在受网络延迟与动画锁影响，爆发期打不满或者卡GCD时，再做调整");
             BardUtil.RightInputInt("非起手的旅神歌在下个GCD前多久使用", ref BardSettings.Instance.WandererBeforeGcdTime,
@@ -640,6 +650,7 @@ public class BardRotationEntry : IRotationEntry
                     ImGui.Text(" --" + obj);
             ImGui.Separator();
         }
+        ImGui.PopStyleColor(2);
     }
 
     private string searchQuery = "";
@@ -677,5 +688,6 @@ public class BardRotationEntry : IRotationEntry
             ImGui.Text("未找到匹配的技能。");
         }
         ImGui.Separator();
+        ImGui.PopStyleColor(2);
     }
 }
