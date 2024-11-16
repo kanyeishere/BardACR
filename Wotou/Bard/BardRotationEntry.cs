@@ -209,7 +209,7 @@ public class BardRotationEntry : IRotationEntry
         if (ImGui.CollapsingHeader("   重要说明"))
         {
             ImGui.Text("诗人ACR\n适配技速2.48-2.50\n精细调整过能力技插入窗口，所以请在fuck插件中适当降低动画锁\n直到连续两个能力技插入间隔在620ms以下（可在FFLogs上查）");
-            ImGui.Text("插件地址：");
+            ImGui.Text("插件地址:");
             ImGui.SameLine();
             var hyperlink = new Hyperlink("FuckAnimationLock", "https://github.com/NiGuangOwO/DalamudPlugins");
             hyperlink.Render();
@@ -592,7 +592,7 @@ public class BardRotationEntry : IRotationEntry
         ImGui.Separator();
         if (ImGui.CollapsingHeader("   高级设置"))
         {
-            ImGui.Checkbox("", ref BardSettings.Instance.WelcomeVoice);
+            ImGui.Checkbox("##WelcomeVoice", ref BardSettings.Instance.WelcomeVoice);
             ImGui.SameLine();
             ImGui.Text("是否播放欢迎语音 - 依赖插件");
             ImGui.SameLine();

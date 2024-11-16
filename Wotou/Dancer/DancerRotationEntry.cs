@@ -178,7 +178,11 @@ public class DancerRotationEntry : IRotationEntry
         ImGui.PushStyleColor(ImGuiCol.Border, new Vector4(1f,0.36f,0.54f, 1));
         if (ImGui.CollapsingHeader("   重要说明"))
         {
-            ImGui.Text("舞者ACR - 技速推荐2.50\n请在 FuckAnimationLock 插件中勾选减少爆发药后摇\n本ACR所用的是固定4小舞循环，技速推荐2.50\n如果有小舞延后现象的，可以改用2.49技速");
+            ImGui.Text("舞者ACR - 技速推荐2.50\n本ACR所用的是固定4小舞循环，技速推荐2.50\n如果有小舞延后现象的，可以改用2.49技速\n请在 FuckAnimationLock 插件中勾选减少爆发药后摇");
+            ImGui.Text("插件地址:");
+            ImGui.SameLine();
+            var hyperlink = new Hyperlink("FuckAnimationLock", "https://github.com/NiGuangOwO/DalamudPlugins");
+            hyperlink.Render();
             ImGui.Separator();
             ImGui.Text(UpdateLog);
             ImGui.Separator();
@@ -263,7 +267,7 @@ public class DancerRotationEntry : IRotationEntry
         ImGui.Separator();
         if (ImGui.CollapsingHeader("   界面设置"))
         {
-            ImGui.Checkbox("", ref DancerSettings.Instance.WelcomeVoice);
+            ImGui.Checkbox("##WelcomeVoice", ref DancerSettings.Instance.WelcomeVoice);
             ImGui.SameLine();
             ImGui.Text("是否播放欢迎语音 - 依赖插件");
             ImGui.SameLine();
