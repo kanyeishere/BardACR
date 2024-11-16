@@ -28,7 +28,8 @@ public class DancerRotationEntry : IRotationEntry
     private const string UpdateLog =  "更新日志：11.16" +
                                       "\n- 修复UI样式泄露的问题" +
                                       "\n- 添加依赖插件的链接地址" +
-                                      "\n- 降低团辅期第二次落幕舞的优先级";
+                                      "\n- 降低团辅期第二次落幕舞的优先级" +
+                                      "\n- 不在团辅期的结束动作前1G使用提拉纳";
     public void Dispose()
     {
     }
