@@ -25,13 +25,13 @@ namespace Wotou.Dancer;
 
 public class DancerRotationEntry : IRotationEntry
 {
-    private const string UpdateLog =  "更新日志：11.16" +
-                                      "\n- 修复UI样式泄露的问题" +
-                                      "\n- 添加依赖插件的链接地址" +
+    private const string UpdateLog =  "更新日志：11.17" +
                                       "\n- 降低团辅期第二次落幕舞的优先级" +
                                       "\n- 在团辅期的结束动作前1G时，不使用提拉纳" + 
                                       "\n- 在团辅期的结束动作前2G且有落幕舞buff时，不使用提拉纳" + 
-                                      "\n- 在团辅期的最后1G，放宽伶俐阈值至<=40时，使用提拉纳";
+                                      "\n- 在团辅期的最后1G，放宽伶俐阈值至<=40时，使用提拉纳" +
+                                      "\n- 提高非团辅期的剑舞优先级，现在会优先于落幕舞" +
+                                      "\n- 修改起手，减少伶俐溢出的可能";
     public void Dispose()
     {
     }
@@ -57,9 +57,9 @@ public class DancerRotationEntry : IRotationEntry
         new SlotResolverData(new DancerProcReverseCascadeMediumGcd(), SlotMode.Gcd), // 团辅外等不到的逆瀑泻触发
         new SlotResolverData(new DancerStarfallDanceGCD(), SlotMode.Gcd),
         new SlotResolverData(new DancerSaberDanceMediumGcd(), SlotMode.Gcd), //团辅期低能量剑舞
+        new SlotResolverData(new DancerSaberDanceGcd(), SlotMode.Gcd), //普通剑舞 >=70 默认
         new SlotResolverData(new DancerLastDanceGcd(), SlotMode.Gcd),
-
-        new SlotResolverData(new DancerSaberDanceGcd(), SlotMode.Gcd), //普通剑舞
+        
         new SlotResolverData(new DancerProcGcd(), SlotMode.Gcd),
         new SlotResolverData(new DancerBaseGcd(), SlotMode.Gcd),
         

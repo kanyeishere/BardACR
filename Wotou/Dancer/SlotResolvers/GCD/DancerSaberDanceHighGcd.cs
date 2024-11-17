@@ -12,7 +12,6 @@ namespace Wotou.Dancer.GCD;
 public class DancerSaberDanceHighGcd : ISlotResolver
 {
     private const uint SaberDance = DancerDefinesData.Spells.SaberDance;
-    private const uint TechnicalStepFinish = DancerDefinesData.Spells.QuadrupleTechnicalFinish;
     
     private const uint Devilment = DancerDefinesData.Buffs.Devilment;
     
@@ -24,6 +23,11 @@ public class DancerSaberDanceHighGcd : ISlotResolver
             Core.Me.HasLocalPlayerAura(Devilment) &&
             Core.Resolve<JobApi_Dancer>().Esprit >= 70)
             return 1;
+        // 起手第一次剑舞
+        if (Core.Me.HasLocalPlayerAura(Devilment) &&
+            DancerBattleData.Instance.DanceOfTheDawnCount == 0 && 
+            Core.Resolve<JobApi_Dancer>().Esprit >= 50)
+            return 2;
         return -1;
     }
 

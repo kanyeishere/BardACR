@@ -42,6 +42,8 @@ namespace Wotou.Dancer
         {
             if (spell.Id == DancerDefinesData.Spells.TechnicalStep)
                 DancerBattleData.Instance.TechnicalStepCount++;
+            if (spell.Id == DancerDefinesData.Spells.DanceOfTheDawn)
+                DancerBattleData.Instance.DanceOfTheDawnCount ++;
         }
 
         public void OnBattleUpdate(int currTimeInMs)
