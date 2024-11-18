@@ -198,7 +198,7 @@ public class BardRotationEntry : IRotationEntry
 
     public void OnUIUpdate()
     {
-        if (!BardSettings.Instance.IsReadInfoWindow)
+        if (!BardSettings.Instance.IsReadInfoWindow1)
             InfoWindow.Draw();
     }
     
