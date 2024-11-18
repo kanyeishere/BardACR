@@ -25,7 +25,7 @@ public class InfoWindow
         ImGui.TextColored(new Vector4(1f, 0.5f, 0.0f, 1f), "特别说明");
         ImGui.Separator();
         ImGui.TextWrapped("本次更新修复了因队友抢开导致的起手问题");
-        ImGui.TextWrapped("因此之前带有起手脚本的M1S-M2S时间轴已不再适用");
+        ImGui.TextWrapped("因此之前带有起手脚本的M1S-M4S时间轴已不再适用");
         ImGui.TextWrapped("请大家前往云时间轴更新至最新版本 v1118.01，以确保正常使用。");
         
         ImGui.Separator();
