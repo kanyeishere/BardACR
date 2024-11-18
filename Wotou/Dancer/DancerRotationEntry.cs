@@ -138,7 +138,7 @@ public class DancerRotationEntry : IRotationEntry
             DancePartnerPanel.DrawHotkeyWindow(new QtStyle(DancerSettings.Instance.JobViewSave));
             DancePartnerPanel = new HotkeyWindow(myJobViewSave, "Custom DNC HotkeyWindow");
             DancePartnerPanel.HotkeyLineCount = 1;
-            if (!DancerSettings.Instance.IsReadInfoWindow1)
+            if (!DancerSettings.Instance.IsReadInfoWindow2)
                 InfoWindow.Draw();
         });
         
