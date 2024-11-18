@@ -138,7 +138,8 @@ public class DancerRotationEntry : IRotationEntry
             DancePartnerPanel.DrawHotkeyWindow(new QtStyle(DancerSettings.Instance.JobViewSave));
             DancePartnerPanel = new HotkeyWindow(myJobViewSave, "Custom DNC HotkeyWindow");
             DancePartnerPanel.HotkeyLineCount = 1;
-            //InfoWindow.Draw();
+            if (!DancerSettings.Instance.IsReadInfoWindow)
+                InfoWindow.Draw();
         });
         
         QT.AddTab("通用", DrawGeneral);
@@ -247,15 +248,21 @@ public class DancerRotationEntry : IRotationEntry
             ImGui.Separator();
             ImGuiHelper.LeftInputInt("倒计时提前使用小舞  (毫秒)", ref DancerSettings.Instance.OpenerStandardStepTime, 6500, 15000);
             ImGui.Separator();
-
-            ImGuiHelper.LeftInputInt("倒计时提前使用起手  (毫秒)", ref DancerSettings.Instance.OpenerTime, 0, 1000);
+            ImGuiHelper.LeftInputInt("非爆发期使用剑舞-伶俐阈值", ref DancerSettings.Instance.SaberDanceEspritThreshold, 50, 100);
             ImGui.Separator();
+            /*ImGuiHelper.LeftInputInt("倒计时提前使用起手  (毫秒)", ref DancerSettings.Instance.OpenerTime, 0, 1000);
+            ImGui.Separator();*/
             ImGui.Text("爆发药设置：" + (DancerSettings.Instance.UsePotionInOpener ? "起手吃" : "2分钟爆发吃"));
             if (!QT.GetQt("爆发药"))
                 ImGui.TextColored(new Vector4(0.7f, 0.8f, 0.0f, 1.0000f), "如果你希望使用爆发药，请在QT面板中开启爆发药开关");
             ImGui.Checkbox("起手吃爆发药", ref DancerSettings.Instance.UsePotionInOpener);
             ImGui.Separator();
-            ImGuiHelper.LeftInputInt("非爆发期剑舞释放阈值", ref DancerSettings.Instance.SaberDanceEspritThreshold, 50, 100);
+            ImGui.Checkbox("##WelcomeVoice", ref DancerSettings.Instance.WelcomeVoice);
+            ImGui.SameLine();
+            ImGui.Text("是否播放欢迎语音 - 依赖插件");
+            ImGui.SameLine();
+            var dailyRoutinesLink = new Hyperlink("Daily Routines", "https://github.com/AtmoOmen/DalamudPlugins");
+            dailyRoutinesLink.Render();      
             ImGui.Separator();
             /*ImGui.BeginGroup();
             ImGuiHelper.LeftInputInt("小舞冷却时间容差值  (毫秒)", ref DancerSettings.Instance.StandardStepCdTolerance, 0, 1000);
@@ -271,13 +278,6 @@ public class DancerRotationEntry : IRotationEntry
         ImGui.Separator();
         if (ImGui.CollapsingHeader("   界面设置"))
         {
-            ImGui.Checkbox("##WelcomeVoice", ref DancerSettings.Instance.WelcomeVoice);
-            ImGui.SameLine();
-            ImGui.Text("是否播放欢迎语音 - 依赖插件");
-            ImGui.SameLine();
-            var dailyRoutinesLink = new Hyperlink("Daily Routines", "https://github.com/AtmoOmen/DalamudPlugins");
-            dailyRoutinesLink.Render();      
-            ImGui.Separator();
             ImGui.Checkbox("显示快速舞伴切换面板", ref DancerSettings.Instance.ShowDancePartnerPanel);
             ImGuiHelper.LeftInputInt("舞伴面板图标大小", ref DancerSettings.Instance.DancePartnerPanelIconSize, 10, 80);
 

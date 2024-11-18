@@ -57,15 +57,15 @@ namespace Wotou.Dancer.Opener
             countDownHandler.AddAction(DancerSettings.Instance.OpenerStandardStepTime - 1500, DancerUtil.GetStep);
             countDownHandler.AddAction(DancerSettings.Instance.OpenerStandardStepTime - 2500, DancerUtil.GetStep);
             if (DancerRotationEntry.QT.GetQt(QTKey.UsePotion) && DancerSettings.Instance.UsePotionInOpener)
-            {
-                countDownHandler.AddPotionAction(DancerSettings.Instance.OpenerTime + 700);
-            }
-            countDownHandler.AddAction(DancerSettings.Instance.OpenerTime, DancerDefinesData.Spells.DoubleStandardFinish);
+                countDownHandler.AddPotionAction(1000);
+            //countDownHandler.AddAction(DancerSettings.Instance.OpenerTime, DancerDefinesData.Spells.DoubleStandardFinish);
         }
 
         private static void Step0(Slot slot)
         {
-            if (Core.Resolve<JobApi_Dancer>().IsDancing && Core.Resolve<JobApi_Dancer>().CompleteSteps == 2 && !DancerDefinesData.Spells.DoubleStandardFinish.RecentlyUsed())
+            if (Core.Resolve<JobApi_Dancer>().IsDancing && 
+                Core.Resolve<JobApi_Dancer>().CompleteSteps == 2 && 
+                !DancerDefinesData.Spells.DoubleStandardFinish.RecentlyUsed())
                 slot.Add(DancerDefinesData.Spells.DoubleStandardFinish.GetSpell());
         }
 

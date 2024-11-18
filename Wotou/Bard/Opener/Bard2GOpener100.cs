@@ -61,13 +61,8 @@ public class Bard2GOpener100 : IOpener
 
   public void InitCountDown(CountDownHandler countDownHandler)
   {
-    BardBattleData.Instance.UseCountdown = true;
-    countDownHandler.AddAction(BardSettings.Instance.OpenerTime, PreCastSpell);
-  }
-
-  private Spell PreCastSpell()
-  {
-    return Core.Resolve<MemApiSpell>().CheckActionChange(WindBite).GetSpell();
+    /*BardBattleData.Instance.UseCountdown = true;
+    countDownHandler.AddAction(BardSettings.Instance.OpenerTime, Core.Resolve<MemApiSpell>().CheckActionChange(WindBite));*/
   }
 
   private static Spell GetBaseGcd()
@@ -93,8 +88,7 @@ public class Bard2GOpener100 : IOpener
 
   private static void Step0(Slot slot)
   {
-    if (!BardBattleData.Instance.UseCountdown &&
-        !Core.Me.GetCurrTarget().HasLocalPlayerAura(WindBiteDot) &&
+    if (!Core.Me.GetCurrTarget().HasLocalPlayerAura(WindBiteDot) &&
         !Core.Me.GetCurrTarget().HasLocalPlayerAura(StormBiteDot) && 
         !Core.Resolve<MemApiSpell>().CheckActionChange(WindBite).RecentlyUsed(3000) &&
         !Core.Resolve<MemApiSpell>().CheckActionChange(StormBite).RecentlyUsed(3000))

@@ -198,7 +198,8 @@ public class BardRotationEntry : IRotationEntry
 
     public void OnUIUpdate()
     {
-        //InfoWindow.Draw();
+        if (!BardSettings.Instance.IsReadInfoWindow)
+            InfoWindow.Draw();
     }
     
     private void DrawModeButton(string label, bool isDailyMode, Action onClickAction)
@@ -569,7 +570,9 @@ public class BardRotationEntry : IRotationEntry
                 ImGui.EndCombo();
             }
 
+            /*
             ImGuiHelper.LeftInputInt("倒计时提前使用起手  (毫秒)", ref BardSettings.Instance.OpenerTime, 0, 1000);
+            */
             ImGui.Separator();
             ImGui.Text("爆发药设置：" + (BardSettings.Instance.UsePotionInOpener ? "起手吃" : "2分钟爆发吃"));
             if (!QT.GetQt("爆发药"))
@@ -594,12 +597,6 @@ public class BardRotationEntry : IRotationEntry
             ImGui.SameLine();
             ImGui.Checkbox("中间学派", ref BardSettings.Instance.NaturesMinneWithNeutralSect);
             ImGui.Separator();
-            if (ImGui.Button("保存设置"))
-                BardSettings.Instance.Save();
-        }
-        ImGui.Separator();
-        if (ImGui.CollapsingHeader("   高级设置"))
-        {
             ImGui.Checkbox("##WelcomeVoice", ref BardSettings.Instance.WelcomeVoice);
             ImGui.SameLine();
             ImGui.Text("是否播放欢迎语音 - 依赖插件");
@@ -607,6 +604,12 @@ public class BardRotationEntry : IRotationEntry
             var dailyRoutinesLink = new Hyperlink("Daily Routines", "https://github.com/AtmoOmen/DalamudPlugins");
             dailyRoutinesLink.Render();      
             ImGui.Separator();
+            if (ImGui.Button("保存设置"))
+                BardSettings.Instance.Save();
+        }
+        ImGui.Separator();
+        if (ImGui.CollapsingHeader("   高级设置"))
+        {
             ImGui.TextColored(new Vector4(1, 0.7f, 0, 1), "除非你明白你要做什么，不然请别动这几项\n建议仅在受网络延迟与动画锁影响，爆发期打不满或者卡GCD时，再做调整");
             BardUtil.RightInputInt("非起手的旅神歌在下个GCD前多久使用", ref BardSettings.Instance.WandererBeforeGcdTime,
                 500, 2000, "(毫秒)");
