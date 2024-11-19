@@ -25,8 +25,7 @@ public class BardNaturesMinneAbility : ISlotResolver
         if (GCDHelper.GetGCDCooldown() <= 650)
             return -1;
         //爆发期不三插
-        if (GCDHelper.GetGCDCooldown() < BardSettings.Instance.UseBattleVoiceBeforeGcdTimeInMs &&
-            (!BardRotationEntry.QT.GetQt("对齐旅神") || 
+        if ((!BardRotationEntry.QT.GetQt("对齐旅神") || 
              !BardRotationEntry.QT.GetQt(QTKey.Song) || 
              Core.Resolve<JobApi_Bard>().ActiveSong == Song.WANDERER) &&
             !(BardBattleData.Instance.First120SBuffSpellId == RagingStrikes && 
