@@ -29,10 +29,8 @@ public class BardRotationEntry : IRotationEntry
     public static JobViewWindow QT { get; private set; }
     public string AuthorName { get; set; } = "Wotou";
     //  更新日志
-    private const string UpdateLog = "更新日志：11.16" +
-                                     "\n- 修复2G起手时会提前使用光明神续剑的Bug" +
-                                     "\n- 修复UI样式泄露的问题" +
-                                     "\n- 添加依赖插件的链接地址";
+    private const string UpdateLog = "更新日志：11.20" +
+                                     "\n- 现在ACR在爆发期内不会三插大地神了";
     
     public Rotation Build(string settingFolder)
     {
