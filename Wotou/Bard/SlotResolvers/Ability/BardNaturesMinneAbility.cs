@@ -15,6 +15,7 @@ public class BardNaturesMinneAbility : ISlotResolver
     private const uint NaturesMinne = BardDefinesData.Spells.NaturesMinne;
     private const uint BattleVoice = BardDefinesData.Spells.BattleVoice;
     private const uint RagingStrikes = BardDefinesData.Spells.RagingStrikes;
+    private const uint EmpyrealArrow = BardDefinesData.Spells.EmpyrealArrow;
     
     public int Check()
     {
@@ -23,6 +24,9 @@ public class BardNaturesMinneAbility : ISlotResolver
         if (!NaturesMinne.GetSpell().IsReadyWithCanCast())
             return -1;
         if (GCDHelper.GetGCDCooldown() <= 650)
+            return -1;
+        if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 700 &&
+            BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow) && EmpyrealArrow.IsUnlock())
             return -1;
         //爆发期不三插
         if ((!BardRotationEntry.QT.GetQt("对齐旅神") || 
