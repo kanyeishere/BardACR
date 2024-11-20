@@ -27,9 +27,19 @@ public static class BardUtil
         return !RadiantFinale.IsUnlock() || Core.Me.HasLocalPlayerAura(RadiantFinaleBuff);
     }
     
+    private static bool IsBattleVoiceConditionMet()
+    {
+        return !BattleVoice.IsUnlock() || Core.Me.HasAura(BattleVoiceBuff);
+    }
+    
+    private static bool IsRagingStrikesConditionMet()
+    {
+        return !RagingStrikes.IsUnlock() || Core.Me.HasAura(RagingStrikesBuff);
+    }
+    
     public static bool HasAllPartyBuff()
     {
-        return Core.Me.HasAura(BattleVoiceBuff) && Core.Me.HasAura(RagingStrikesBuff) && IsRadiantFinaleConditionMet();
+        return IsBattleVoiceConditionMet() && IsRagingStrikesConditionMet() && IsRadiantFinaleConditionMet();
     }
     
     public static bool HasAnyPartyBuff()

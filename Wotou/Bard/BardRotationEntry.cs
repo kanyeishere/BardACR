@@ -30,7 +30,8 @@ public class BardRotationEntry : IRotationEntry
     public string AuthorName { get; set; } = "Wotou";
     //  更新日志
     private const string UpdateLog = "更新日志：11.20" +
-                                     "\n- 现在ACR在爆发期内不会三插大地神了";
+                                     "\n- 现在ACR在爆发期内不会三插大地神了" +
+                                     "\n- 修复日随模式下低等级不打失血箭的问题";
     
     public Rotation Build(string settingFolder)
     {

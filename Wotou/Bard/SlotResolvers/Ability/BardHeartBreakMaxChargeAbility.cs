@@ -25,9 +25,9 @@ public class BardHeartBreakMaxChargeAbility : ISlotResolver
             return -1;
         if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow) && EmpyrealArrow.IsUnlock())
             return -1;
-        if (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt("爆发"))
+        if (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt("爆发") && RagingStrikes.IsUnlock())
             return -1;
-        if (BattleVoice.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt("爆发"))
+        if (BattleVoice.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt("爆发") && BattleVoice.IsUnlock())
             return -1;
         if (Core.Resolve<MemApiSpell>().GetCharges(Core.Resolve<MemApiSpell>().CheckActionChange(HeartBreak)) >= Core.Resolve<MemApiSpell>().GetMaxCharges(Core.Resolve<MemApiSpell>().CheckActionChange(HeartBreak)) - 0.1)
             return 1;
@@ -36,7 +36,9 @@ public class BardHeartBreakMaxChargeAbility : ISlotResolver
 
     private static Spell GetHeartBreakSpell()
     {
-        if (TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget(), 25, 8) > 1  && BardRotationEntry.QT.GetQt("AOE"))
+        if (TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget(), 25, 8) > 1  && 
+            BardRotationEntry.QT.GetQt("AOE") && 
+            Core.Resolve<MemApiSpell>().CheckActionChange(RainOfDeath).IsUnlock())
             return Core.Resolve<MemApiSpell>().CheckActionChange(RainOfDeath).GetSpell();
         return Core.Resolve<MemApiSpell>().CheckActionChange(HeartBreak).GetSpell();
     }
