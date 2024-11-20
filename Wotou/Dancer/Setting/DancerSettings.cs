@@ -60,7 +60,7 @@ public class DancerSettings
     public bool EnableAutoPeloton  = true; // 是否在自动使用速行
     public bool EnableAutoDancing = true; // 是否在自动使用舞步
     
-    public bool IsReadInfoWindow2 = false;
+    public bool IsReadInfoWindow0 = false;
     
     // 扇舞保留层数
     public int FanDanceSaveStack = 3;
