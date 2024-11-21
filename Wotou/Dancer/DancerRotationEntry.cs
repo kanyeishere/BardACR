@@ -164,7 +164,6 @@ public class DancerRotationEntry : IRotationEntry
         QT.AddHotkey("前冲步", new MyNormalSpellHotKeyResolver(DancerDefinesData.Spells.EnAvant, SpellTargetType.Target));
         QT.AddHotkey("爆发药", new HotKeyResolver_Potion());
         QT.AddHotkey("极限技", new HotKeyResolver_LB());
-        DancerSettings.Instance.JobViewSave.HotkeyLineCount = 5;
     }
     
     public static void UpdateDancerPartnerPanel()
