@@ -56,8 +56,10 @@ public class BardRotationEventHandler : IRotationEventHandler
         if (PartyHelper.CastableParty.Any(characterAgent => 
                 (characterAgent.HasAura(1896U) && BardSettings.Instance.NaturesMinneWithRecitation) ||  //秘策
                 (characterAgent.HasAura(2611U) && BardSettings.Instance.NaturesMinneWithZoe) ||         //活化
-                (characterAgent.HasAura(1892U) && BardSettings.Instance.NaturesMinneWithNeutralSect)))  //中间学派
-        await BardDefinesData.Spells.NaturesMinne.GetSpell().Cast();
+                (characterAgent.HasAura(1892U) && BardSettings.Instance.NaturesMinneWithNeutralSect)) &&   //中间学派
+            BardDefinesData.Spells.NaturesMinne.IsUnlockWithCDCheck() &&
+            BardRotationEntry.QT.GetQt(QTKey.NatureMinne))
+            await BardDefinesData.Spells.NaturesMinne.GetSpell().Cast();
     }
 
     public void OnResetBattle()
@@ -136,6 +138,14 @@ public class BardRotationEventHandler : IRotationEventHandler
                 return;
             }
         }
+        
+        if (PartyHelper.CastableParty.Any(characterAgent => 
+                (characterAgent.HasAura(1896U) && BardSettings.Instance.NaturesMinneWithRecitation) ||  //秘策
+                (characterAgent.HasAura(2611U) && BardSettings.Instance.NaturesMinneWithZoe) ||         //活化
+                (characterAgent.HasAura(1892U) && BardSettings.Instance.NaturesMinneWithNeutralSect)) &&   //中间学派
+            BardDefinesData.Spells.NaturesMinne.IsUnlockWithCDCheck() &&
+            BardRotationEntry.QT.GetQt(QTKey.NatureMinne))
+            await BardDefinesData.Spells.NaturesMinne.GetSpell().Cast();
         
         await Task.CompletedTask;
     }

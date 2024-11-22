@@ -93,7 +93,12 @@ public class Bard2GOpener100 : IOpener
         !Core.Resolve<MemApiSpell>().CheckActionChange(WindBite).RecentlyUsed(3000) &&
         !Core.Resolve<MemApiSpell>().CheckActionChange(StormBite).RecentlyUsed(3000))
       slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(WindBite).GetSpell());
-    slot.Add(BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).GetSpell());
+    if (BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).IsUnlockWithCDCheck())
+      slot.Add(BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).GetSpell());
+    else if (BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).IsUnlockWithCDCheck())
+      slot.Add(BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).GetSpell());
+    else if (BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).IsUnlockWithCDCheck())
+      slot.Add(BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).GetSpell());
     slot.Add(GetHeartBreakSpell());
   }
 
