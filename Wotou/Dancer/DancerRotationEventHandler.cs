@@ -15,6 +15,8 @@ namespace Wotou.Dancer
     public class DancerRotationEventHandler : IRotationEventHandler
     {
         private long _randomTime = 0;
+        private int _lastDanceWarningTime = 0; // 用于记录上次提醒时间
+
 
         private static Dictionary<Jobs, int> jobPriorities = new(){
             { Jobs.Viper, 1 },
@@ -54,6 +56,21 @@ namespace Wotou.Dancer
                 LogHelper.PrintError("警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭");
                 ChatHelper.Print.ErrorMessage("警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭");
                 ChatHelper.SendMessage("/e <se.1>");
+            }
+            
+            // 检查舞步的CD和距离，并发送提醒
+            var standardStepSpell = Core.Resolve<MemApiSpell>().CheckActionChange(DancerDefinesData.Spells.StandardStep).GetSpell();
+            var technicalStepSpell = DancerDefinesData.Spells.TechnicalStep.GetSpell();
+            var target = Core.Me.GetCurrTarget();
+            if ((standardStepSpell.Cooldown.TotalMilliseconds < 5000 || 
+                 technicalStepSpell.Cooldown.TotalMilliseconds < 5000) &&
+                target != null && 
+                Core.Me.Distance(target) > 14 &&
+                DancerSettings.Instance.DanceDistanceWarning &&
+                currTimeInMs - _lastDanceWarningTime >= 10000) // 10秒内不重复提醒
+            {
+                _lastDanceWarningTime = currTimeInMs; // 更新提醒时间
+                ChatHelper.SendMessage("/pdr tts 舞步即将释放，请注意距离");
             }
         }
 

@@ -138,7 +138,7 @@ public class DancerRotationEntry : IRotationEntry
             DancePartnerPanel.DrawHotkeyWindow(new QtStyle(DancerSettings.Instance.JobViewSave));
             DancePartnerPanel = new HotkeyWindow(myJobViewSave, "Custom DNC HotkeyWindow");
             DancePartnerPanel.HotkeyLineCount = 1;
-            if (!DancerSettings.Instance.IsReadInfoWindow01)
+            if (!DancerSettings.Instance.IsReadInfoWindow02)
                 InfoWindow.Draw();
         });
         
@@ -256,11 +256,25 @@ public class DancerRotationEntry : IRotationEntry
                 ImGui.TextColored(new Vector4(0.7f, 0.8f, 0.0f, 1.0000f), "如果你希望使用爆发药，请在QT面板中开启爆发药开关");
             ImGui.Checkbox("起手吃爆发药", ref DancerSettings.Instance.UsePotionInOpener);
             ImGui.Separator();
+            ImGui.BeginGroup(); // 开始一个整体分组
+            ImGui.Checkbox("##DanceDistanceWarning", ref DancerSettings.Instance.DanceDistanceWarning);
+            ImGui.SameLine();
+            ImGui.Text("是否播放大小舞距离提醒 - 依赖插件");
+            ImGui.SameLine();
+            var dailyRoutinesLink = new Hyperlink("Daily Routines", "https://github.com/AtmoOmen/DalamudPlugins");
+            dailyRoutinesLink.Render();
+            ImGui.EndGroup(); // 结束分组
+
+            // 检查鼠标是否悬停在整体分组上
+            if (ImGui.IsItemHovered())
+            {
+                ImGui.SetTooltip("当大舞、小舞或结束动作CD剩余5秒且距离超过有效范围时，会播放语音提醒\n请确保安装并正确配置Daily Routines插件以启用此功能");
+            }  
+            ImGui.Separator();
             ImGui.Checkbox("##WelcomeVoice", ref DancerSettings.Instance.WelcomeVoice);
             ImGui.SameLine();
             ImGui.Text("是否播放欢迎语音 - 依赖插件");
             ImGui.SameLine();
-            var dailyRoutinesLink = new Hyperlink("Daily Routines", "https://github.com/AtmoOmen/DalamudPlugins");
             dailyRoutinesLink.Render();      
             ImGui.Separator();
             /*ImGui.BeginGroup();

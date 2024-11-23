@@ -13,9 +13,9 @@ public class InfoWindow
     {
         if (!InfoWindow.isWindowOpen)
             return;
-        if (BardSettings.Instance.IsReadInfoWindow01)
+        if (BardSettings.Instance.IsReadInfoWindow02)
             return;
-        if (DancerSettings.Instance.IsReadInfoWindow01)
+        if (DancerSettings.Instance.IsReadInfoWindow02)
             return;
         ImGuiViewportPtr mainViewport = ImGui.GetMainViewport();
         ImGui.SetNextWindowPos(new Vector2(mainViewport.Pos.X + mainViewport.Size.X / 2f, mainViewport.Pos.Y + mainViewport.Size.Y / 2f + 100), ImGuiCond.Always, new Vector2(0.5f, 0.5f));
@@ -24,11 +24,9 @@ public class InfoWindow
         ImGui.Begin("", ref InfoWindow.isWindowOpen, ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.AlwaysAutoResize);
         ImGui.TextColored(new Vector4(1f, 0.5f, 0.0f, 1f), "特别说明");
         ImGui.Separator();
-        ImGui.TextWrapped("本次更新了M3S与M4S的舞者小舞无损轴");
-        ImGui.TextWrapped("以及M4S诗人6分钟爆发的精修轴");
+        ImGui.TextWrapped("本次更新了M3S与M4S的舞者小舞无损轴v1123.01");
+        ImGui.TextWrapped("以及M4S诗人6分钟爆发的精修轴v1123.01（是的没错又更新了）");
         ImGui.TextWrapped("如果您的时间轴版本过低，请你及时前往云时间轴，选择对应职业搜索，并更新");
-        ImGui.TextWrapped("舞者M3S与M4S轴最新版为v1123.01，诗人M4S轴最新版为v1121.01");
-        
         
         ImGui.Text("");
         ImGui.TextColored(new Vector4(1f, 0.5f, 0.0f, 1f), "关于与绿玩配合与调整团辅节奏的建议");
@@ -36,6 +34,8 @@ public class InfoWindow
         ImGui.TextWrapped("而与绿玩队友配合时，由于绿玩团辅多为手动操作，释放时间可能略有延后。为此，建议您：");
         ImGui.TextWrapped("灵活使用“强对齐”功能");
         ImGui.TextWrapped("如果发现绿玩队友的团辅释放时间比自己的要晚，可以关闭“强对齐”功能，让自己的团辅自然延后，与绿玩队友保持节奏一致。");
+        ImGui.TextWrapped("与之相反，如果发现绿玩队友的团辅释放时间比自己的要早，可以再次开启“强对齐”功能，让自己的团辅不延后");
+        ImGui.TextWrapped("注意，使用M4S诗人6分钟爆发的精修轴时，请在转场前全程开启强对齐，确保爆发能在上天前打完");
         
         ImGui.Text("");
         
@@ -50,8 +50,8 @@ public class InfoWindow
         if (ImGui.Button("已知悉"))
         {
             InfoWindow.isWindowOpen = false;
-            BardSettings.Instance.IsReadInfoWindow01 = true;
-            DancerSettings.Instance.IsReadInfoWindow01 = true;
+            BardSettings.Instance.IsReadInfoWindow02 = true;
+            DancerSettings.Instance.IsReadInfoWindow02 = true;
             BardSettings.Instance.Save();
             DancerSettings.Instance.Save();
         }
