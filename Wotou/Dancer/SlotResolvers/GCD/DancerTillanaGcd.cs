@@ -23,11 +23,14 @@ public class DancerTillanaGcd : ISlotResolver
             return -1;
         // 不在小舞前1G使用 
         if  (Core.Resolve<MemApiSpell>().CheckActionChange(StandardStep).GetSpell().Cooldown.TotalMilliseconds < 
-             2 * GCDHelper.GetGCDDuration() - 1000 )
+             2 * GCDHelper.GetGCDDuration() - 1000 && 
+             DancerRotationEntry.QT.GetQt(QTKey.StandardStep))
             return -2;
         // 不在小舞前2G且有落幕舞buff时使用
         if (Core.Resolve<MemApiSpell>().CheckActionChange(StandardStep).GetSpell().Cooldown.TotalMilliseconds < 
-             3 * GCDHelper.GetGCDDuration() - 1000 && Core.Me.HasAura(LastDanceReady))
+             3 * GCDHelper.GetGCDDuration() - 1000 && 
+             Core.Me.HasAura(LastDanceReady) && 
+             DancerRotationEntry.QT.GetQt(QTKey.StandardStep))
             return -3;
         if (Core.Resolve<JobApi_Dancer>().Esprit <= 35 && Core.Me.HasLocalPlayerAura(Devilment))
             return 1;
