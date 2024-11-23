@@ -16,6 +16,8 @@ public class DancerTillanaGcd : ISlotResolver
     private const uint Devilment = DancerDefinesData.Buffs.Devilment;
     private const uint FlourishingFinish = DancerDefinesData.Buffs.FlourishingFinish;
     private const uint LastDanceReady = DancerDefinesData.Buffs.LastDanceReady;
+    private const uint SilkenFlow = DancerDefinesData.Buffs.SilkenFlow;
+    private const uint SilkenSymmetry = DancerDefinesData.Buffs.SilkenSymmetry;
 
     public int Check()
     {
@@ -32,13 +34,15 @@ public class DancerTillanaGcd : ISlotResolver
              Core.Me.HasAura(LastDanceReady) && 
              DancerRotationEntry.QT.GetQt(QTKey.StandardStep))
             return -3;
-        if (Core.Resolve<JobApi_Dancer>().Esprit <= 35 && Core.Me.HasLocalPlayerAura(Devilment))
+        if (Core.Resolve<JobApi_Dancer>().Esprit <= 20 && Core.Me.HasLocalPlayerAura(Devilment))
             return 1;
         if (Core.Resolve<JobApi_Dancer>().Esprit <= 40 && !Core.Me.HasLocalPlayerAura(Devilment))
             return 2;
         if (Core.Me.HasLocalPlayerAura(Devilment) && 
             !Core.Me.HasMyAuraWithTimeleft(Devilment, 3500) && 
-            Core.Resolve<JobApi_Dancer>().Esprit <= 40)
+            Core.Resolve<JobApi_Dancer>().Esprit <= 35 && 
+            !Core.Me.HasAura(SilkenFlow) &&
+            !Core.Me.HasAura(SilkenSymmetry))
             return 3;
         if (Core.Me.HasLocalPlayerAura(FlourishingFinish) && !Core.Me.HasMyAuraWithTimeleft(FlourishingFinish, 3000))
             return 4;

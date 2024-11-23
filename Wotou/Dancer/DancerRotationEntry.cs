@@ -25,7 +25,10 @@ namespace Wotou.Dancer;
 
 public class DancerRotationEntry : IRotationEntry
 {
-    private const string UpdateLog =  "更新日志：11.17" +
+    private const string UpdateLog =  "更新日志：11.24" +
+                                      "\n- 在团辅期当伶俐<=20时，使用提拉纳" + 
+                                      "\n- 在团辅期的最后1G，放宽伶俐阈值至<=30时，使用提拉纳" +
+                                      "更新日志：11.17" +
                                       "\n- 降低团辅期第二次落幕舞的优先级" +
                                       "\n- 在团辅期的结束动作前1G时，不使用提拉纳" + 
                                       "\n- 在团辅期的结束动作前2G且有落幕舞buff时，不使用提拉纳" + 
