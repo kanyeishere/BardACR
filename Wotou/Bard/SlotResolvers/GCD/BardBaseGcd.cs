@@ -40,9 +40,52 @@ public class BardBaseGcd : ISlotResolver
             !BardSettings.Instance.IsDailyMode)
             return -1;
         
+        // 新版强对齐
+        if (GCDHelper.GetGCDDuration() > 2100) //军神结束后重置
+        {
+            BardBattleData.Instance.TotalStopTime = 0;
+            BardBattleData.Instance.GcdCountDown = 3;
+        }
+        
+        const int gcdDuration = 2080; // 每个 GCD 的持续时间（毫秒）
+
+        // 计算未来 3 个 GCD 后的时间点
+        int futureTime = gcdDuration * BardBattleData.Instance.GcdCountDown; // 3 个 GCD 后的时间（毫秒）
+        double futureFirstBuffCooldown = BardBattleData.Instance.First120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds - futureTime;
+        double futureEmpyrealArrowCooldown = EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds - futureTime;
+
+        // 检查未来条件是否满足
+        bool futureConditionsMet = BardRotationEntry.QT.GetQt("爆发") &&
+                                   BardRotationEntry.QT.GetQt("对齐旅神") &&
+                                   BardRotationEntry.QT.GetQt("强对齐") &&
+                                   BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow) &&
+                                   Core.Resolve<JobApi_Bard>().ActiveSong == Song.ARMY &&
+                                   futureFirstBuffCooldown < 2200 + 2020 * 3 + gcdAnimationTime &&
+                                   futureEmpyrealArrowCooldown >= 2200 * 2 + 2080 + gcdAnimationTime &&
+                                   futureEmpyrealArrowCooldown < 2200 * 2 + 2080 * 2 + gcdAnimationTime;
+
+        if (futureConditionsMet && BardBattleData.Instance.TotalStopTime == 0)
+        {
+            BardBattleData.Instance.TotalStopTime = futureEmpyrealArrowCooldown - (2200 * 2 + 2080 + gcdAnimationTime);
+        }
+        if (BardBattleData.Instance.TotalStopTime > 0 && 
+            BardBattleData.Instance.GcdCountDown <= 3)
+        {
+            var currentGcdIndex = BardBattleData.Instance.GcdCountDown + 2;
+            var empyrealArrowCooldown = EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds;
+            BardBattleData.Instance.RestStopTime = (empyrealArrowCooldown - 2200 * 2 - gcdAnimationTime) % 2080;
+            var conditionsMet = BardBattleData.Instance.RestStopTime  >=
+                                (BardBattleData.Instance.TotalStopTime) * (currentGcdIndex - 1)/5 &&
+                                BardBattleData.Instance.First120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds < 15000;
+            if (conditionsMet)
+            {
+                return -1;
+            }
+        }
+        
         // 当前歌曲为军神 且开启爆发 且开启爆发对齐旅神 且强对齐 且第一个开的120秒buffCD时间小于2200 + 2020 * 3  + GCD动画时间，
         // 且九天CD时间大于约7秒，停手
-        if (BardRotationEntry.QT.GetQt("爆发") && 
+        /*if (BardRotationEntry.QT.GetQt("爆发") && 
             BardRotationEntry.QT.GetQt("对齐旅神") && 
             BardRotationEntry.QT.GetQt("强对齐") &&
             BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow) &&
@@ -50,12 +93,14 @@ public class BardBaseGcd : ISlotResolver
             BardBattleData.Instance.First120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds <
             2200 + 2020 * 3  + gcdAnimationTime )
         {
-            if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds >= 2200 * 2 + 2100 + gcdAnimationTime &&
+            if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds >= 2200 * 2 + 2080 + gcdAnimationTime &&
                 EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 2200 * 2 + 2080 * 2 + gcdAnimationTime )
                 return -1;
-        }
-        return 1;
+        }*/
+        
+        return 1; // 正常继续攻击
     }
+    
     
     
     // 将指定技能加入技能队列中

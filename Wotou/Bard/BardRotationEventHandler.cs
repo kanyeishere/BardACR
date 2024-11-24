@@ -161,6 +161,12 @@ public class BardRotationEventHandler : IRotationEventHandler
             BardBattleData.Instance.HasUseIronJawsInCurrentBursting = true;
         if (spell.Id == BardDefinesData.Spells.ApexArrow && BardUtil.HasNoPartyBuff())
             BardBattleData.Instance.HasUseApexArrowInCurrentNonBurstingPeriod = true;
+        if (BardBattleData.Instance.TotalStopTime > 0 &&
+            (spell.Id == Core.Resolve<MemApiSpell>().CheckActionChange(BardDefinesData.Spells.BurstShot)|| 
+             spell.Id == Core.Resolve<MemApiSpell>().CheckActionChange(BardDefinesData.Spells.RefulgentArrow)||
+             spell.Id == Core.Resolve<MemApiSpell>().CheckActionChange(BardDefinesData.Spells.Ladonsbite)||
+             spell.Id == Core.Resolve<MemApiSpell>().CheckActionChange(BardDefinesData.Spells.Shadowbite)))
+            BardBattleData.Instance.GcdCountDown --;
         // 没有记录到第一个120秒的buff，就记录下来
         if (!BardBattleData.Instance.HasFirst120SBuff)
             switch (spell.Id)

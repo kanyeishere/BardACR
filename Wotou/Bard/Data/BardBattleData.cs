@@ -32,4 +32,8 @@ public class BardBattleData
     public bool HasUseIronJawsInCurrentBursting = false;
     public bool HasUseApexArrowInCurrentNonBurstingPeriod = false;
     public bool HotkeyUseHighPrioritySlot = false; // 热键使用高优先级队列
+    
+    public double TotalStopTime = 0; // 总共需要停手的时间（毫秒）
+    public double RestStopTime = 0; // 剩余停手时间（毫秒）
+    public int GcdCountDown = 4; // GCD 倒计时
 }

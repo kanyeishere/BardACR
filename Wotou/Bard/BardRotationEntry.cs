@@ -29,8 +29,9 @@ public class BardRotationEntry : IRotationEntry
     public static JobViewWindow QT { get; private set; }
     public string AuthorName { get; set; } = "Wotou";
     //  更新日志
-    private const string UpdateLog = "更新日志：11.23" +
-                                     "\n- 修复低等级起手会尝试使用旅神歌的问题";
+    private const string UpdateLog = "更新日志：11.24" +
+                                     "\n- 新版强对齐不再需要停手" +
+                                     "\n- 禁用双插碎心箭";
     
     public Rotation Build(string settingFolder)
     {

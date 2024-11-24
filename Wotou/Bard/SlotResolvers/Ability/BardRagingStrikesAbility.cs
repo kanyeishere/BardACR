@@ -57,5 +57,7 @@ public class BardRagingStrikesAbility : ISlotResolver
         if (BardRotationEntry.QT.GetQt("爆发药") && ItemHelper.CheckCurrJobPotion())
             slot.Add(Spell.CreatePotion());
         slot.Add(RagingStrikes.GetSpell());
+        // 单插 
+        AI.Instance.BattleData.CurrGcdAbilityCount = 1;
     }
 }
