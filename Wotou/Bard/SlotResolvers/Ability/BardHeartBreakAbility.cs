@@ -40,10 +40,6 @@ public class BardHeartBreakAbility : ISlotResolver
             return -3;
         if (EmpyrealArrow.RecentlyUsed(650))
             return -4;
-        if (Core.Resolve<MemApiSpell>().CheckActionChange(HeartBreak).RecentlyUsed(2000))
-            return -10;
-        if (Core.Resolve<MemApiSpell>().CheckActionChange(RainOfDeath).RecentlyUsed(2000))
-            return -11;
         if (Sidewinder.GetSpell().Cooldown.TotalMilliseconds < 1200 && 
             BardRotationEntry.QT.GetQt(QTKey.Sidewinder) &&
             Sidewinder.IsUnlock())

@@ -73,7 +73,7 @@ public class BardSettings
     public bool ApplyDotOnTrashMobs = false; // 是否在小怪身上使用DOT
     public bool EnableAutoPeloton  = true; // 是否在自动使用速行
     
-    public bool IsReadInfoWindow02 = false;
+    public bool IsReadInfoWindow03 = false;
     
     public JobViewSave JobViewSave = new JobViewSave()
     {

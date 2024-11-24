@@ -30,8 +30,7 @@ public class BardRotationEntry : IRotationEntry
     public string AuthorName { get; set; } = "Wotou";
     //  更新日志
     private const string UpdateLog = "更新日志：11.24" +
-                                     "\n- 新版强对齐不再需要停手" +
-                                     "\n- 禁用双插碎心箭";
+                                     "\n- 新版强对齐不再需要停手";
     
     public Rotation Build(string settingFolder)
     {
@@ -197,7 +196,7 @@ public class BardRotationEntry : IRotationEntry
 
     public void OnUIUpdate()
     {
-        if (!BardSettings.Instance.IsReadInfoWindow02)
+        if (!BardSettings.Instance.IsReadInfoWindow03)
             InfoWindow.Draw();
     }
     
