@@ -13,27 +13,38 @@ public class InfoWindow
     {
         if (!InfoWindow.isWindowOpen)
             return;
-        if (BardSettings.Instance.IsReadInfoWindow03)
+        if (BardSettings.Instance.IsReadInfoWindow04)
             return;
-        if (DancerSettings.Instance.IsReadInfoWindow03)
+        if (DancerSettings.Instance.IsReadInfoWindow04)
             return;
         ImGuiViewportPtr mainViewport = ImGui.GetMainViewport();
-        ImGui.SetNextWindowPos(new Vector2(mainViewport.Pos.X + mainViewport.Size.X / 2f, mainViewport.Pos.Y + mainViewport.Size.Y / 2f + 100), ImGuiCond.Always, new Vector2(0.5f, 0.5f));
-        ImGui.SetNextWindowSize(new Vector2(800f, 700f), ImGuiCond.Always);
+        ImGui.SetNextWindowPos(new Vector2(mainViewport.Pos.X + mainViewport.Size.X / 2f, mainViewport.Pos.Y + mainViewport.Size.Y / 2f), ImGuiCond.Always, new Vector2(0.5f, 0.5f));
+        ImGui.SetNextWindowSize(new Vector2(800f, 800f), ImGuiCond.Always);
         ImGui.SetNextWindowFocus();
         ImGui.Begin("", ref InfoWindow.isWindowOpen, ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.AlwaysAutoResize);
         ImGui.TextColored(new Vector4(1f, 0.5f, 0.0f, 1f), "特别说明");
         ImGui.Separator();
-        ImGui.TextWrapped("本次更新了M4S诗人6分钟爆发-落地诗心的精修轴v1124.02（是的，又又更新了）");
-        ImGui.TextWrapped("本次更新重写了诗人“强对齐”功能的实现逻辑");
+        ImGui.TextColored(new Vector4(1f, 0.5f, 0.0f, 1f), "本次更新了M4S诗人6分钟爆发-落地诗心的精修轴v1125.01（是的，又又又又更新了）");
+        ImGui.TextWrapped("修复了转场后半爆发期不打双九天的问题（后半的爆发也因此延后2s）");
         ImGui.TextWrapped("同时，再次提醒您上次更新了M3S与M4S的舞者小舞无损轴 v1123.01");
         ImGui.TextWrapped("如果您的时间轴版本过低，请你及时前往云时间轴，选择对应职业搜索，并更新");
         
+        
+        ImGui.Text("");
+        ImGui.TextColored(new Vector4(1f, 0.5f, 0.0f, 1f), "伪装绿玩手打：全新功能强势上线");
+        ImGui.TextWrapped("本次更新为诗人ACR引入了全新且致命的功能——模仿绿玩手打循环！");
+        ImGui.TextWrapped("新功能的效果是：在您释放旅神歌与猛者强击前，会模仿绿玩手动操作，插入伤腿与伤足");
+        ImGui.TextWrapped("开启这个功能，让小警察们在鉴挂的路上感受来自艺术的震撼，让他们的怀疑流于空中，徒增混乱");
+        ImGui.TextWrapped("想体验这种极致的搅局快感吗？赶紧去诗人ACR面板->高级设置开启此功能");
+        ImGui.TextWrapped("让你在绿玩和红玩之间自由切换，成为鉴挂局中最具谜团的存在！");
+        ImGui.TextWrapped("让鉴挂的猎巫行动陷入迷雾，分不清真相，更分不清你！来吧，搅乱这个无聊的世界！");
+        
         ImGui.Text("");
         ImGui.TextColored(new Vector4(1f, 0.5f, 0.0f, 1f), "新版“强对齐”功能使用说明");
-        ImGui.TextWrapped("新版“强对齐”的效果与旧版相同，能够保证团辅释放精准、不延后");
-        ImGui.TextWrapped("最大的不同点是：新版无需停手！循环更像绿玩！");
-        ImGui.TextWrapped("请根据您的实际需求灵活使用新版“强对齐”功能");
+        ImGui.TextWrapped("本次更新重写了诗人“强对齐”功能的实现逻辑");
+        ImGui.TextWrapped("新版不仅保留了旧版的精准团辅释放功能");
+        ImGui.TextWrapped("最关键的是：新版无停手！");
+        ImGui.TextWrapped("操作丝滑流畅，宛如绿玩亲手操刀！让鉴挂小警察怀疑人生");
         
         ImGui.Text("");
         ImGui.TextColored(new Vector4(1f, 0.5f, 0.0f, 1f), "关于与绿玩配合与调整团辅节奏的建议");
@@ -57,8 +68,8 @@ public class InfoWindow
         if (ImGui.Button("已知悉"))
         {
             InfoWindow.isWindowOpen = false;
-            BardSettings.Instance.IsReadInfoWindow03 = true;
-            DancerSettings.Instance.IsReadInfoWindow03 = true;
+            BardSettings.Instance.IsReadInfoWindow04 = true;
+            DancerSettings.Instance.IsReadInfoWindow04 = true;
             BardSettings.Instance.Save();
             DancerSettings.Instance.Save();
         }

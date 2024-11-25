@@ -16,7 +16,6 @@ namespace Wotou.Bard.Opener;
 
 public class Bard3GOpener100 : IOpener
 {
-  
   private const uint Barrage = BardDefinesData.Spells.Barrage;
   private const uint VenomousBite = BardDefinesData.Spells.VenomousBite;
   private const uint WindBite = BardDefinesData.Spells.Windbite;
@@ -31,7 +30,7 @@ public class Bard3GOpener100 : IOpener
   private const uint BurstShot = BardDefinesData.Spells.BurstShot;
   private const uint Ladonsbite = BardDefinesData.Spells.Ladonsbite;
   private const uint RainOfDeath = BardDefinesData.Spells.RainofDeath;
-  
+  private const uint LegGraze = BardDefinesData.Spells.LegGraze;
   
   private const uint HawkEyeBuff = BardDefinesData.Buffs.HawksEye;
   private const uint CausticBiteDot = BardDefinesData.Buffs.CausticBite;
@@ -123,7 +122,12 @@ public class Bard3GOpener100 : IOpener
       slot.Add(RagingStrikes.GetSpell());
       return;
     }
-    
+    if (BardSettings.Instance.ImitateGreenPlayer)
+    {
+      slot.Add(LegGraze.GetSpell());
+      slot.Add(RagingStrikes.GetSpell());
+      return;
+    }
     slot.Add2NdWindowAbility(RagingStrikes.GetSpell());
   }
 

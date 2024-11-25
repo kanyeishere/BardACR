@@ -68,6 +68,8 @@ public class BardDefinesData
     public const uint ResonantArrow = 36976;
     public const uint RadiantEncore = 36977;
     public const uint WideVolley = 36974;
+    public const uint FootGraze = 7553;
+    public const uint LegGraze = 7554;
   }
   
   public static class 诗人技能
@@ -110,6 +112,8 @@ public class BardDefinesData
     public const uint 共鸣箭 = 36976;
     public const uint 光明神的返场余音 = 36977;
     public const uint 广域射击 = 36974;
+    public const uint 伤足 = 7553;
+    public const uint 伤腿 = 7554;
   }
   
   private static Dictionary<string, uint> skillDictionary;

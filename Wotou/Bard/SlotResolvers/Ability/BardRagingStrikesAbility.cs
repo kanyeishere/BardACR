@@ -13,6 +13,7 @@ public class BardRagingStrikesAbility : ISlotResolver
 {
     private const uint RagingStrikes = BardDefinesData.Spells.RagingStrikes;
     private const uint BattleVoice = BardDefinesData.Spells.BattleVoice;
+    private const uint LegGraze = BardDefinesData.Spells.LegGraze;
     
     public int Check()
     {
@@ -40,8 +41,12 @@ public class BardRagingStrikesAbility : ISlotResolver
         if (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds <= BardSettings.Instance.PotionBeforeGcdTime && 
             BardRotationEntry.QT.GetQt("爆发药") &&
             ItemHelper.CheckCurrJobPotion() &&
-            GCDHelper.GetGCDCooldown() <= BardSettings.Instance.RagingStrikeBeforeGcdTime + BardSettings.Instance.PotionBeforeGcdTime
-           )
+            GCDHelper.GetGCDCooldown() <= BardSettings.Instance.RagingStrikeBeforeGcdTime + BardSettings.Instance.PotionBeforeGcdTime)
+            return 1;
+        
+        if (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds <= 640 &&
+            BardSettings.Instance.ImitateGreenPlayer &&
+            GCDHelper.GetGCDCooldown() <= 640 + BardSettings.Instance.PotionBeforeGcdTime)
             return 1;
         
         // 不使用爆发药
@@ -55,9 +60,21 @@ public class BardRagingStrikesAbility : ISlotResolver
     public void Build(Slot slot)
     {
         if (BardRotationEntry.QT.GetQt("爆发药") && ItemHelper.CheckCurrJobPotion())
+        {
             slot.Add(Spell.CreatePotion());
+            slot.Add(RagingStrikes.GetSpell());
+            AI.Instance.BattleData.CurrGcdAbilityCount = 1;
+            return;
+        }
+        if (BardSettings.Instance.ImitateGreenPlayer)
+        {
+            slot.Add(LegGraze.GetSpell());
+            slot.Add(RagingStrikes.GetSpell());
+            AI.Instance.BattleData.CurrGcdAbilityCount = 1;
+            return;
+        }
         slot.Add(RagingStrikes.GetSpell());
-        // 单插 
         AI.Instance.BattleData.CurrGcdAbilityCount = 1;
+        // 单插 
     }
 }

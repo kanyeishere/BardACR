@@ -20,6 +20,8 @@ public class BardSongAbility : ISlotResolver
     private const uint RagingStrikes = BardDefinesData.Spells.RagingStrikes;
     private const uint BattleVoice = BardDefinesData.Spells.BattleVoice;
     private const uint EmpyrealArrow = BardDefinesData.Spells.EmpyrealArrow;
+    private const uint FootGraze = BardDefinesData.Spells.FootGraze;
+    
     public int Check()
     {
         var wandererSongDuration = BardSettings.Instance.WandererSongDuration * 1000;
@@ -34,10 +36,42 @@ public class BardSongAbility : ISlotResolver
         if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 1200 
             && BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow))
             return -1;
-        if (!WanderersMinuet.GetSpell().IsReadyWithCanCast() && !MagesBallad.GetSpell().IsReadyWithCanCast() && !ArmysPaeon.GetSpell().IsReadyWithCanCast())
+        if (!MagesBallad.GetSpell().IsReadyWithCanCast() && 
+            !ArmysPaeon.GetSpell().IsReadyWithCanCast() &&
+            ((!WanderersMinuet.GetSpell().IsReadyWithCanCast() && 
+              !BardSettings.Instance.ImitateGreenPlayer) ||
+             (WanderersMinuet.GetSpell().Cooldown.TotalMilliseconds > 640 && 
+              BardSettings.Instance.ImitateGreenPlayer)))
             return -1;
         if (WanderersMinuet.RecentlyUsed() || MagesBallad.RecentlyUsed() || ArmysPaeon.RecentlyUsed())
             return -1;
+        
+        if (WanderersMinuet.GetSpell().Cooldown.TotalMilliseconds <= 640 && 
+            GCDHelper.GetGCDCooldown() <= BardSettings.Instance.WandererBeforeGcdTime + 640 && 
+            BardSettings.Instance.ImitateGreenPlayer &&
+            BardRotationEntry.QT.GetQt("爆发") && 
+            BardRotationEntry.QT.GetQt("对齐旅神") &&
+            BardBattleData.Instance.First120SBuffSpellId == BattleVoice &&
+            BardBattleData.Instance.First120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds <= 2200 - 600 + 640 &&
+            BardBattleData.Instance.Third120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds <= 2200 * 2 + 640)
+        {
+            BardUtil.LogDebug("切歌", "第一个开的120秒buff是战斗之声，爆发切歌条件满足");
+            return 120;
+        }
+        
+        if (WanderersMinuet.GetSpell().Cooldown.TotalMilliseconds <= 640 && 
+            GCDHelper.GetGCDCooldown() <= BardSettings.Instance.WandererBeforeGcdTime + 640 && 
+            BardSettings.Instance.ImitateGreenPlayer &&
+            BardRotationEntry.QT.GetQt("爆发") && 
+            BardRotationEntry.QT.GetQt("对齐旅神") &&
+            BardBattleData.Instance.First120SBuffSpellId == RagingStrikes &&
+            BardBattleData.Instance.First120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds <= 2200 + 640
+           )
+        {
+            BardUtil.LogDebug("切歌", "第一个开的120秒buff是猛者强击，爆发切歌条件满足");
+            return 120;
+        }
+        
         
         if (WanderersMinuet.GetSpell().IsReadyWithCanCast() && 
             GCDHelper.GetGCDCooldown() <= BardSettings.Instance.WandererBeforeGcdTime && 
@@ -94,12 +128,20 @@ public class BardSongAbility : ISlotResolver
     {
         var spell = this.GetSpell();
         BardUtil.LogDebug("切歌", $"当前歌曲：{Core.Resolve<JobApi_Bard>().ActiveSong}, 下一首歌曲：{BardUtil.GetSongBySpell(spell.Id)}, 当前歌曲剩余时间：{Core.Resolve<JobApi_Bard>().SongTimer}");
+        if (spell.Id == WanderersMinuet && 
+            BardSettings.Instance.ImitateGreenPlayer &&
+            BardRotationEntry.QT.GetQt("爆发") && 
+            BardRotationEntry.QT.GetQt("对齐旅神"))
+            slot.Add(FootGraze.GetSpell());
         slot.Add(spell);
     }
     
     private Spell GetSpell()
     {
         if ((Core.Resolve<JobApi_Bard>().ActiveSong == BardUtil.GetSongBySpell(ArmysPaeon) || BardBattleData.Instance.LastSong == BardUtil.GetSongBySpell(ArmysPaeon)) && WanderersMinuet.GetSpell().IsReadyWithCanCast())
+            return WanderersMinuet.GetSpell();
+        if ((Core.Resolve<JobApi_Bard>().ActiveSong == BardUtil.GetSongBySpell(ArmysPaeon) || BardBattleData.Instance.LastSong == BardUtil.GetSongBySpell(ArmysPaeon)) && 
+            WanderersMinuet.GetSpell().Cooldown.TotalMilliseconds <= 640 && BardSettings.Instance.ImitateGreenPlayer)
             return WanderersMinuet.GetSpell();
         if ((Core.Resolve<JobApi_Bard>().ActiveSong == BardUtil.GetSongBySpell(WanderersMinuet) || BardBattleData.Instance.LastSong == BardUtil.GetSongBySpell(WanderersMinuet)) && MagesBallad.GetSpell().IsReadyWithCanCast())
             return MagesBallad.GetSpell();

@@ -196,7 +196,7 @@ public class BardRotationEntry : IRotationEntry
 
     public void OnUIUpdate()
     {
-        if (!BardSettings.Instance.IsReadInfoWindow03)
+        if (!BardSettings.Instance.IsReadInfoWindow04)
             InfoWindow.Draw();
     }
     
@@ -619,6 +619,10 @@ public class BardRotationEntry : IRotationEntry
                 ref BardSettings.Instance.UseBattleVoiceBeforeGcdTimeInMs, 500, 2000, "(毫秒)");
             BardUtil.RightInputInt("九天连箭最晚在下个GCD前多久使用",
                 ref BardSettings.Instance.EmpyrealArrowNotBeforeGcdTime, 0, 2000, "(毫秒)");
+            ImGui.Separator();
+            ImGui.Checkbox("模仿绿玩手打循环（实验性功能）", ref BardSettings.Instance.ImitateGreenPlayer);
+            if (ImGui.IsItemHovered())
+                ImGui.SetTooltip("在旅神歌与猛者强击前插入伤腿与伤足");
             ImGui.Separator();
             if (ImGui.Button("保存高级设置"))
                 BardSettings.Instance.Save();

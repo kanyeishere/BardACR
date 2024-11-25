@@ -27,6 +27,7 @@ public class Bard2GOpener100 : IOpener
   private const uint BurstShot = BardDefinesData.Spells.BurstShot;
   private const uint Ladonsbite = BardDefinesData.Spells.Ladonsbite;
   private const uint RainOfDeath = BardDefinesData.Spells.RainofDeath;
+  private const uint LegGraze = BardDefinesData.Spells.LegGraze;
   
   private const uint HawkEyeBuff = BardDefinesData.Buffs.HawksEye;
   private const uint CausticBiteDot = BardDefinesData.Buffs.CausticBite;
@@ -124,6 +125,12 @@ public class Bard2GOpener100 : IOpener
     if (BardRotationEntry.QT.GetQt("爆发药") && BardSettings.Instance.UsePotionInOpener)
     {
       slot.Add(Spell.CreatePotion());
+      slot.Add(RagingStrikes.GetSpell());
+      return;
+    }
+    if (BardSettings.Instance.ImitateGreenPlayer)
+    {
+      slot.Add(LegGraze.GetSpell());
       slot.Add(RagingStrikes.GetSpell());
       return;
     }
