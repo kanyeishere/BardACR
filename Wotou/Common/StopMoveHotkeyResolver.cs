@@ -10,19 +10,19 @@ namespace Wotou.Common;
 
 public class StopMoveHotkeyResolver : IHotkeyResolver
 {
+    private string imagePath = "../../ACR/Wotou/Resources/stop.png";
     public void Draw(Vector2 size)
     {
         Vector2 size1 = size * 0.8f;
         ImGui.SetCursorPos(size * 0.1f);
-        IDalamudTextureWrap textureWrap;
-        if (!Core.Resolve<MemApiIcon>().GetActionTexture(7557U, out textureWrap))
-            return;
-        ImGui.Image(textureWrap.ImGuiHandle, size1);
+        if (Core.Resolve<MemApiIcon>().TryGetTexture(imagePath, out var textureWrap))
+        {
+            ImGui.Image(textureWrap.ImGuiHandle, size1);
+        }
     }
 
     public void DrawExternal(Vector2 size, bool isActive)
     {
-        SpellHelper.DrawSpellInfo(7557U.GetSpell(), size, isActive);
     }
 
     public int Check() => 0;
