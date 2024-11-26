@@ -22,6 +22,7 @@ public class BardRotationEventHandler : IRotationEventHandler
     
     public async Task OnPreCombat()
     {
+        BardRotationEntry.UpdateWardensPaeanPanel();
         SmartUseHighPrioritySlot();
         
         if (!BardUtil.IsSongOrderNormal())
@@ -64,10 +65,8 @@ public class BardRotationEventHandler : IRotationEventHandler
 
     public void OnResetBattle()
     {
-        // QT的设置重置为默认值
+        BardRotationEntry.UpdateWardensPaeanPanel();
         BardRotationEntry.QT.Reset();
-        
-        // 重置战斗中缓存的数据
         BardBattleData.Instance = new BardBattleData();
         
         // 重置碎心箭保留层数
@@ -288,7 +287,7 @@ public class BardRotationEventHandler : IRotationEventHandler
 
     public void OnTerritoryChanged()
     {
-        
+        BardRotationEntry.UpdateWardensPaeanPanel();
     }
     
     private void SmartUseHighPrioritySlot()

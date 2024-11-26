@@ -74,6 +74,10 @@ public class BardSettings
     public bool EnableAutoPeloton  = true; // 是否在自动使用速行
     
     public bool ImitateGreenPlayer = false; // 是否模仿绿玩
+ 
+    public bool ShowWardensPaeanPanel = true; // 是否显示光阴神面板
+    public int WardensPaeanPanelIconSize = 47; // 光阴神面板图标大小
+
     
     public bool IsReadInfoWindow04 = false;
     

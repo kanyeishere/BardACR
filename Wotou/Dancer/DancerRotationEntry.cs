@@ -25,6 +25,12 @@ namespace Wotou.Dancer;
 
 public class DancerRotationEntry : IRotationEntry
 {
+    public static JobViewWindow QT { get; private set; }
+    
+    public static HotkeyWindow? DancePartnerPanel { get; set; }
+    
+    public string AuthorName { get; set; } = "Wotou";
+    
     private const string UpdateLog =  "更新日志：11.24" +
                                       "\n- 在团辅期当伶俐<=20时，使用提拉纳" + 
                                       "\n- 在团辅期的最后1G，放宽伶俐阈值至<=30时，使用提拉纳" +
@@ -35,11 +41,10 @@ public class DancerRotationEntry : IRotationEntry
                                       "\n- 在团辅期的最后1G，放宽伶俐阈值至<=40时，使用提拉纳" +
                                       "\n- 提高非团辅期的剑舞优先级，现在会优先于落幕舞" +
                                       "\n- 修改起手，减少伶俐溢出的可能";
+    
     public void Dispose()
     {
     }
-    
-    public string AuthorName { get; set; } = "Wotou";
 
     private List<SlotResolverData> SlotResolvers = new()
     {
@@ -76,7 +81,6 @@ public class DancerRotationEntry : IRotationEntry
     public Rotation Build(string settingFolder)
     {
         DancerDefinesData.InitializeDictionary();
-        
         DancerSettings.Build(settingFolder);
         BuildQT(settingFolder);
         var rot = new Rotation(SlotResolvers)
@@ -104,13 +108,7 @@ public class DancerRotationEntry : IRotationEntry
     {
         return new DNCStdOpener100();
     }
-
-    // 声明当前要使用的UI的实例 示例里使用QT
-    public static JobViewWindow QT { get; private set; }
     
-    public static HotkeyWindow? DancePartnerPanel { get; set; }
-    
-    // 如果你不想用QT 可以自行创建一个实现IRotationUI接口的类
     public IRotationUI GetRotationUI()
     {
         return DancerRotationEntry.QT;
@@ -297,7 +295,6 @@ public class DancerRotationEntry : IRotationEntry
         {
             ImGui.Checkbox("显示快速舞伴切换面板", ref DancerSettings.Instance.ShowDancePartnerPanel);
             ImGuiHelper.LeftInputInt("舞伴面板图标大小", ref DancerSettings.Instance.DancePartnerPanelIconSize, 10, 80);
-
             ImGui.Separator();
             ImGui.Checkbox("是否启用舞伴宏", ref DancerSettings.Instance.UseDancePartnerMacro);
             ImGui.InputTextMultiline("", ref DancerSettings.Instance.DancePartnerMacroText, 1000, new Vector2(-1, ImGui.GetTextLineHeight() * 6));

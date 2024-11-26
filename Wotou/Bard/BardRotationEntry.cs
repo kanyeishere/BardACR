@@ -25,20 +25,20 @@ namespace Wotou.Bard;
 // 重要 类一定要Public声明才会被查找到
 public class BardRotationEntry : IRotationEntry
 {
-    // 声明当前要使用的UI的实例 示例里使用QT
     public static JobViewWindow QT { get; private set; }
+    
+    public static HotkeyWindow? WardensPaeanPanel { get; set; }
+
     public string AuthorName { get; set; } = "Wotou";
-    //  更新日志
-    private const string UpdateLog = "更新日志：11.24" +
-                                     "\n- 新版强对齐不再需要停手";
+    
+    private const string UpdateLog = "更新日志：11.26" +
+                                     "\n- 助力绝伊甸，推出快速光阴神面板";
     
     public Rotation Build(string settingFolder)
     {
-        // 初始化设置
+        BardDefinesData.InitializeDictionary();
         BardSettings.Build(settingFolder);
-        // 初始化QT （依赖了设置的数据）
         BuildQT();
-
         var rot = new Rotation(BardSlotResolverConfig.SlotResolvers)
         {
             TargetJob = Jobs.Bard,
@@ -144,10 +144,15 @@ public class BardRotationEntry : IRotationEntry
     // 构造函数里初始化QT
     public void BuildQT()
     {
-        BardDefinesData.InitializeDictionary();
         // JobViewSave是AE底层提供的QT设置存档类 在你自己的设置里定义即可
         // 第二个参数是你设置文件的Save类 第三个参数是QT窗口标题
         QT = new JobViewWindow(BardSettings.Instance.JobViewSave, BardSettings.Instance.Save, "Wotou Bard 诗人");
+        
+        var myJobViewSave = new JobViewSave();
+        myJobViewSave.ShowHotkey = BardSettings.Instance.ShowWardensPaeanPanel;
+        myJobViewSave.QtHotkeySize = new Vector2(BardSettings.Instance.WardensPaeanPanelIconSize, BardSettings.Instance.WardensPaeanPanelIconSize);
+        WardensPaeanPanel = new HotkeyWindow(myJobViewSave, "WardensPaeanPanel");
+        
         QT.SetUpdateAction(OnUIUpdate); // 设置QT中的Update回调 不需要就不设置
 
         //添加QT分页 第一个参数是分页标题 第二个是分页里的内容
@@ -197,8 +202,25 @@ public class BardRotationEntry : IRotationEntry
 
     public void OnUIUpdate()
     {
+        UpdateWardensPaeanPanel();
+        var myJobViewSave = new JobViewSave();
+        myJobViewSave.ShowHotkey = BardSettings.Instance.ShowWardensPaeanPanel;
+        myJobViewSave.QtHotkeySize = new Vector2(BardSettings.Instance.WardensPaeanPanelIconSize, BardSettings.Instance.WardensPaeanPanelIconSize);
+        WardensPaeanPanel?.DrawHotkeyWindow(new QtStyle(BardSettings.Instance.JobViewSave));
+        WardensPaeanPanel = new HotkeyWindow(myJobViewSave, "WardensPaeanPanel");
+        WardensPaeanPanel.HotkeyLineCount = 1;
         if (!BardSettings.Instance.IsReadInfoWindow04)
             InfoWindow.Draw();
+    }
+    
+    public static void UpdateWardensPaeanPanel()
+    {
+        PartyHelper.UpdateAllies();
+        for (var i = 0; i < PartyHelper.Party.Count; i++)
+        {
+            var index = i;
+            WardensPaeanPanel?.AddHotkey("净化: " + PartyHelper.Party[i].Name, new WardensPaeanHotkeyResolver(index));
+        }
     }
     
     private void DrawModeButton(string label, bool isDailyMode, Action onClickAction)
@@ -620,6 +642,9 @@ public class BardRotationEntry : IRotationEntry
                 ref BardSettings.Instance.UseBattleVoiceBeforeGcdTimeInMs, 500, 2000, "(毫秒)");
             BardUtil.RightInputInt("九天连箭最晚在下个GCD前多久使用",
                 ref BardSettings.Instance.EmpyrealArrowNotBeforeGcdTime, 0, 2000, "(毫秒)");
+            ImGui.Separator();
+            ImGui.Checkbox("显示快速光阴神面板", ref BardSettings.Instance.ShowWardensPaeanPanel);
+            ImGuiHelper.LeftInputInt("光阴神面板图标大小", ref BardSettings.Instance.WardensPaeanPanelIconSize, 10, 80);
             ImGui.Separator();
             ImGui.Checkbox("模仿绿玩手打循环（实验性功能）", ref BardSettings.Instance.ImitateGreenPlayer);
             if (ImGui.IsItemHovered())
