@@ -64,6 +64,7 @@ public class WardensPaeanHotkeyResolver : IHotkeyResolver
 
     public void DrawExternal(Vector2 size, bool isActive)
     {
+        SpellHelper.DrawSpellInfo(Core.Resolve<MemApiSpell>().CheckActionChange(this.SpellId).GetSpell(), size, isActive);
     }
 
     public int Check()
