@@ -14,6 +14,7 @@ public class DancerFanDanceAbility : ISlotResolver
 {
     private const uint FanDance = DancerDefinesData.Spells.FanDance;
     private const uint FanDance2 = DancerDefinesData.Spells.FanDance2;
+    private const uint FanDance3 = DancerDefinesData.Spells.FanDance3;
     private const uint QuadrupleTechnicalFinish = DancerDefinesData.Spells.QuadrupleTechnicalFinish;
     private const uint TechnicalStep = DancerDefinesData.Spells.TechnicalStep;
     private const uint Flourish = DancerDefinesData.Spells.Flourish;
@@ -36,6 +37,8 @@ public class DancerFanDanceAbility : ISlotResolver
             return -2;
         if (QuadrupleTechnicalFinish.RecentlyUsed(1500))
             return -3;
+        if (FanDance3.GetSpell().IsReadyWithCanCast())
+            return -40;
         
         if (DancerRotationEntry.QT.GetQt(QTKey.FinalBurst))
             return 100;
