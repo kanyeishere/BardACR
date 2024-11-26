@@ -216,6 +216,7 @@ public class BardRotationEntry : IRotationEntry
     public static void UpdateWardensPaeanPanel()
     {
         PartyHelper.UpdateAllies();
+        if (PartyHelper.Party.Count <= 1) return;
         for (var i = 0; i < PartyHelper.Party.Count; i++)
         {
             var index = i;
