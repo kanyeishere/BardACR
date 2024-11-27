@@ -11,4 +11,5 @@ public class QTKey
     public const string SaberDance = "剑舞";
     public const string FanDance = "扇舞";
     public const string StrongAlign = "强对齐";
+    public const string AutoCuringWaltz = "自动华尔兹";
 }

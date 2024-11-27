@@ -76,6 +76,7 @@ public class DancerRotationEntry : IRotationEntry
         new SlotResolverData(new DancerFanDance3Ability(), SlotMode.OffGcd),
         new SlotResolverData(new DancerFanDanceAbility(), SlotMode.OffGcd),
         new SlotResolverData(new DancerFanDance4Ability(), SlotMode.OffGcd),
+        new SlotResolverData(new DancerCuringWaltzAbility(), SlotMode.OffGcd),
     };
     
     public Rotation Build(string settingFolder)
@@ -146,6 +147,7 @@ public class DancerRotationEntry : IRotationEntry
         QT.AddTab("通用", DrawGeneral);
         QT.AddTab("Dev", DrawQtDev);
         
+        QT.AddQt(QTKey.UsePotion, false, "是否使用爆发药");
         QT.AddQt(QTKey.Aoe, true, "是否使用AOE");
         QT.AddQt(QTKey.StrongAlign, true, "不会因多打GCD而延后大舞，绝本有上天的阶段建议关闭");
         QT.AddQt(QTKey.TechnicalStep, true, "是否使用技巧舞步与进攻之探戈");
@@ -153,8 +155,8 @@ public class DancerRotationEntry : IRotationEntry
         QT.AddQt(QTKey.Flourish, true, "是否使用百花争艳");
         QT.AddQt(QTKey.SaberDance, true, "是否使用剑舞与拂晓舞");
         QT.AddQt(QTKey.FanDance, true, "是否使用扇舞");
+        QT.AddQt(QTKey.AutoCuringWaltz, true, "是否自动使用治疗之华尔兹");
         QT.AddQt(QTKey.FinalBurst, false, "是否倾泻资源");
-        QT.AddQt(QTKey.UsePotion, false, "是否使用爆发药");
         
         
         QT.AddHotkey("防击退", new MyNormalSpellHotKeyResolver(DancerDefinesData.Spells.ArmsLength, SpellTargetType.Target));
@@ -258,6 +260,9 @@ public class DancerRotationEntry : IRotationEntry
             if (!QT.GetQt("爆发药"))
                 ImGui.TextColored(new Vector4(0.7f, 0.8f, 0.0f, 1.0000f), "如果你希望使用爆发药，请在QT面板中开启爆发药开关");
             ImGui.Checkbox("起手吃爆发药", ref DancerSettings.Instance.UsePotionInOpener);
+            ImGui.Separator();
+            ImGui.Text("治疗之华尔兹范围：" + (DancerSettings.Instance.WaltzDistanceIsInternation ? "国际服 - 距离8米" : "国服 - 距离3米"));
+            ImGui.Checkbox("国际服", ref DancerSettings.Instance.WaltzDistanceIsInternation);
             ImGui.Separator();
             ImGui.BeginGroup(); // 开始一个整体分组
             ImGui.Checkbox("##DanceDistanceWarning", ref DancerSettings.Instance.DanceDistanceWarning);
