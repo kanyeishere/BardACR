@@ -154,7 +154,7 @@ public class DancerRotationEntry : IRotationEntry
         QT.AddQt(QTKey.SaberDance, true, "是否使用剑舞与拂晓舞");
         QT.AddQt(QTKey.FanDance, true, "是否使用扇舞");
         QT.AddQt(QTKey.FinalBurst, false, "是否倾泻资源");
-        QT.AddQt(QTKey.StrongAlign, true, "不会因为多打GCD而延后大舞，绝本中建议关闭");
+        QT.AddQt(QTKey.StrongAlign, true, "不会因多打GCD而延后大舞，绝本有上天的阶段建议关闭");
         
         
         QT.AddHotkey("防击退", new MyNormalSpellHotKeyResolver(DancerDefinesData.Spells.ArmsLength, SpellTargetType.Target));
