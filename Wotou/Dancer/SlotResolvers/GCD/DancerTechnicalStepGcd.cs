@@ -17,7 +17,7 @@ public class DancerTechnicalStepGcd : ISlotResolver
             return -1;
         if (!DancerRotationEntry.QT.GetQt(QTKey.TechnicalStep))
             return -1;
-        if (Core.Resolve<MemApiSpell>().GetCooldown(TechnicalStep).TotalMilliseconds > 2000)
+        if (Core.Resolve<MemApiSpell>().GetCooldown(TechnicalStep).TotalMilliseconds > 1000)
             return -1;
         if (Core.Resolve<JobApi_Dancer>().IsDancing)
             return -1;
