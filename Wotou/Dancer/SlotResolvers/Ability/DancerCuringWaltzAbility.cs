@@ -19,7 +19,7 @@ public class DancerCuringWaltzAbility : ISlotResolver
             return -2;
         var skillTarget = PartyHelper.CastableAlliesWithin10.Count(r => r.CurrentHp>0 &&
                                                                         (double)r.CurrentHp / r.MaxHp < 0.7 &&
-                                                                        ((r.DistanceToPlayer() <= 8 && DancerSettings.Instance.WaltzDistanceIsInternation)||
+                                                                        ((r.DistanceToPlayer() <= 5 && DancerSettings.Instance.WaltzDistanceIsInternation)||
                                                                          (r.DistanceToPlayer() <= 3 && !DancerSettings.Instance.WaltzDistanceIsInternation)));
         if (skillTarget < 4)
             return -3;

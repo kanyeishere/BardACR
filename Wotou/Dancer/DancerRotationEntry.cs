@@ -261,7 +261,7 @@ public class DancerRotationEntry : IRotationEntry
                 ImGui.TextColored(new Vector4(0.7f, 0.8f, 0.0f, 1.0000f), "如果你希望使用爆发药，请在QT面板中开启爆发药开关");
             ImGui.Checkbox("起手吃爆发药", ref DancerSettings.Instance.UsePotionInOpener);
             ImGui.Separator();
-            ImGui.Text("治疗之华尔兹范围：" + (DancerSettings.Instance.WaltzDistanceIsInternation ? "国际服 - 距离8米" : "国服 - 距离3米"));
+            ImGui.Text("治疗之华尔兹范围：" + (DancerSettings.Instance.WaltzDistanceIsInternation ? "国际服 - 距离5米" : "国服 - 距离3米"));
             ImGui.Checkbox("国际服", ref DancerSettings.Instance.WaltzDistanceIsInternation);
             ImGui.Separator();
             ImGui.BeginGroup(); // 开始一个整体分组
