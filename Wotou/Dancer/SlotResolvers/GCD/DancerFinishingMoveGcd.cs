@@ -37,6 +37,11 @@ public class DancerFinishingMoveGcd : ISlotResolver
             slot.Add(FinishingMove.GetSpell());
             return;
         }
+        if (FinishingMove.GetSpell().Cooldown.TotalMilliseconds <= DancerSettings.Instance.StandardStepCdTolerance)
+        {
+            slot.Add(FinishingMove.GetSpell());
+            return;
+        }
         if (StandardStep.GetSpell().IsReadyWithCanCast() || !Core.Me.HasAura(FinishingMoveReady))
         {
             slot.Add(StandardStep.GetSpell());
