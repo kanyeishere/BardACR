@@ -40,7 +40,7 @@ public class DancerTillanaGcd : ISlotResolver
             return 2;
         if (Core.Me.HasLocalPlayerAura(Devilment) && 
             !Core.Me.HasMyAuraWithTimeleft(Devilment, 3500) && 
-            Core.Resolve<JobApi_Dancer>().Esprit <= 35 && 
+            Core.Resolve<JobApi_Dancer>().Esprit <= 30 && 
             !Core.Me.HasAura(SilkenFlow) &&
             !Core.Me.HasAura(SilkenSymmetry))
             return 3;
