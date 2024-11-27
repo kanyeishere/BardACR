@@ -10,4 +10,5 @@ public class QTKey
     public const string FinalBurst = "倾泻资源";
     public const string SaberDance = "剑舞";
     public const string FanDance = "扇舞";
+    public const string StrongAlign = "强对齐";
 }

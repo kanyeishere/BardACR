@@ -17,11 +17,14 @@ public class DancerTechnicalStepGcd : ISlotResolver
             return -1;
         if (!DancerRotationEntry.QT.GetQt(QTKey.TechnicalStep))
             return -1;
-        if (Core.Resolve<MemApiSpell>().GetCooldown(TechnicalStep).TotalMilliseconds > 1000)
-            return -1;
         if (Core.Resolve<JobApi_Dancer>().IsDancing)
             return -1;
-        return 0;
+        if (TechnicalStep.IsUnlockWithCDCheck())
+            return 1;
+        if (Core.Resolve<MemApiSpell>().GetCooldown(TechnicalStep).TotalMilliseconds <= 2000 &&
+            DancerRotationEntry.QT.GetQt(QTKey.StrongAlign))
+            return 2;
+        return -10;
     }
 
     public void Build(Slot slot)
