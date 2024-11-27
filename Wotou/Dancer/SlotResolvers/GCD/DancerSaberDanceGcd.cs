@@ -14,6 +14,7 @@ public class DancerSaberDanceGcd : ISlotResolver
     private const uint SaberDance = DancerDefinesData.Spells.SaberDance;
     private const uint TechnicalStep = DancerDefinesData.Spells.TechnicalStep;
     private const uint StandardStep = DancerDefinesData.Spells.StandardStep;
+    private const uint Tillana = DancerDefinesData.Spells.Tillana;
     
     private const uint FlourishingFlow = DancerDefinesData.Buffs.FlourshingFlow;
     private const uint FlourishingSymmetry = DancerDefinesData.Buffs.FlourishingSymmetry;
@@ -32,6 +33,8 @@ public class DancerSaberDanceGcd : ISlotResolver
             return -4;*/
         if (DancerRotationEntry.QT.GetQt(QTKey.FinalBurst))
             return 1;
+        if (Tillana.GetSpell().IsReadyWithCanCast())
+            return 2;
         // 下一个技能是 需要跳舞的标准舞步 （而非结束动作）
         if (StandardStep.GetSpell().Cooldown.TotalMilliseconds < 3500 &&
             Core.Resolve<JobApi_Dancer>().Esprit >= 80 &&
