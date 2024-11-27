@@ -197,7 +197,7 @@ public class BardRotationEntry : IRotationEntry
             new MyNormalSpellHotKeyResolver(BardDefinesData.Spells.RepellingShot, SpellTargetType.Target));
         QT.AddHotkey("爆发药", new HotKeyResolver_Potion());
         QT.AddHotkey("极限技", new HotKeyResolver_LB());
-        QT.AddHotkey("停止自动移动", (IHotkeyResolver) new StopMoveHotkeyResolver());
+        QT.AddHotkey("停止自动移动", new StopMoveHotkeyResolver());
     }
 
     public void OnUIUpdate()

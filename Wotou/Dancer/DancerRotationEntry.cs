@@ -146,15 +146,15 @@ public class DancerRotationEntry : IRotationEntry
         QT.AddTab("通用", DrawGeneral);
         QT.AddTab("Dev", DrawQtDev);
         
-        QT.AddQt(QTKey.UsePotion, false, "是否使用爆发药");
         QT.AddQt(QTKey.Aoe, true, "是否使用AOE");
+        QT.AddQt(QTKey.StrongAlign, true, "不会因多打GCD而延后大舞，绝本有上天的阶段建议关闭");
         QT.AddQt(QTKey.TechnicalStep, true, "是否使用技巧舞步与进攻之探戈");
         QT.AddQt(QTKey.StandardStep, true, "是否使用标准舞步与结束动作");
         QT.AddQt(QTKey.Flourish, true, "是否使用百花争艳");
         QT.AddQt(QTKey.SaberDance, true, "是否使用剑舞与拂晓舞");
         QT.AddQt(QTKey.FanDance, true, "是否使用扇舞");
         QT.AddQt(QTKey.FinalBurst, false, "是否倾泻资源");
-        QT.AddQt(QTKey.StrongAlign, true, "不会因多打GCD而延后大舞，绝本有上天的阶段建议关闭");
+        QT.AddQt(QTKey.UsePotion, false, "是否使用爆发药");
         
         
         QT.AddHotkey("防击退", new MyNormalSpellHotKeyResolver(DancerDefinesData.Spells.ArmsLength, SpellTargetType.Target));
@@ -166,7 +166,7 @@ public class DancerRotationEntry : IRotationEntry
         QT.AddHotkey("前冲步", new MyNormalSpellHotKeyResolver(DancerDefinesData.Spells.EnAvant, SpellTargetType.Target));
         QT.AddHotkey("爆发药", new HotKeyResolver_Potion());
         QT.AddHotkey("极限技", new HotKeyResolver_LB());
-        QT.AddHotkey("停止自动移动", (IHotkeyResolver) new StopMoveHotkeyResolver());
+        QT.AddHotkey("停止自动移动", new StopMoveHotkeyResolver());
     }
     
     public static void UpdateDancerPartnerPanel()
