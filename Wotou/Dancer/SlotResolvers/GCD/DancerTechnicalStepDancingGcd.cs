@@ -35,8 +35,8 @@ public class DancerTechnicalStepDancingGcd: ISlotResolver
         if (Core.Me.HasAura(TechnicalStep) && Core.Resolve<JobApi_Dancer>().CompleteSteps == 4)
         {
             slot.Add(QuadrupleTechnicalFinish.GetSpell());
-            AI.Instance.BattleData.CurrGcdAbilityCount = 1;
             slot.Add(Devilment.GetSpell());
+            AI.Instance.BattleData.CurrGcdAbilityCount = 0;
             return;
         }
         slot.Add(Core.Resolve<JobApi_Dancer>().NextStep.GetSpell());
