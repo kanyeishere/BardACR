@@ -21,14 +21,18 @@ public class BardEmpyrealArrowAbility : ISlotResolver
             return -1;
         if (!EmpyrealArrow.GetSpell().IsReadyWithCanCast())
             return -1;
-        if (BattleVoice.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt("爆发"))
+        if (BattleVoice.GetSpell().Cooldown.TotalMilliseconds < 3000 && 
+            BardRotationEntry.QT.GetQt("爆发") &&
+            BattleVoice.IsUnlock())
             return -1;
-        if (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt("爆发"))
+        if (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < 3000 && 
+            BardRotationEntry.QT.GetQt("爆发") &&
+            RagingStrikes.IsUnlock())
             return -1;
-        if (BardRotationEntry.QT.GetQt("强对齐"))
+        /*if (BardRotationEntry.QT.GetQt("强对齐"))
             return 1;
         if (GCDHelper.GetGCDCooldown() < BardSettings.Instance.EmpyrealArrowNotBeforeGcdTime)
-            return -1;
+            return -1;*/
         return 1;
     }
 

@@ -63,18 +63,18 @@ public class BardRagingStrikesAbility : ISlotResolver
         {
             slot.Add(Spell.CreatePotion());
             slot.Add(RagingStrikes.GetSpell());
-            AI.Instance.BattleData.CurrGcdAbilityCount = 1;
+            AI.Instance.BattleData.CurrGcdAbilityCount = 0;
             return;
         }
         if (BardSettings.Instance.ImitateGreenPlayer)
         {
             slot.Add(LegGraze.GetSpell());
             slot.Add(RagingStrikes.GetSpell());
-            AI.Instance.BattleData.CurrGcdAbilityCount = 1;
+            AI.Instance.BattleData.CurrGcdAbilityCount = 0;
             return;
         }
         slot.Add(RagingStrikes.GetSpell());
-        AI.Instance.BattleData.CurrGcdAbilityCount = 1;
+        AI.Instance.BattleData.CurrGcdAbilityCount = 0;
         // 单插 
     }
 }

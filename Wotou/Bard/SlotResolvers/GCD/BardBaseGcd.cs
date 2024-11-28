@@ -79,6 +79,7 @@ public class BardBaseGcd : ISlotResolver
                                 BardBattleData.Instance.First120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds < 15000;
             if (conditionsMet)
             {
+                BardUtil.LogDebug("TotalStopTime","TotalStopTime: " + BardBattleData.Instance.TotalStopTime);
                 return -1;
             }
         }

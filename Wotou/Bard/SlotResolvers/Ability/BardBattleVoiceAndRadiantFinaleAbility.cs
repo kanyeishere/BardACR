@@ -49,5 +49,6 @@ public class BardBattleVoiceAndRadiantFinaleAbility: ISlotResolver
         slot.Add(BattleVoice.GetSpell());
         if (RadiantFinale.IsUnlock())
             slot.Add(RadiantFinale.GetSpell());
+        AI.Instance.BattleData.CurrGcdAbilityCount = 0;
     }
 }
