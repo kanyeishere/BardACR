@@ -26,6 +26,7 @@ public class DancerFanDanceAbility : ISlotResolver
     private const uint SilkenSymmetry = DancerDefinesData.Buffs.SilkenSymmetry;
     private const uint Devilment = DancerDefinesData.Buffs.Devilment;
     private const uint Medicated = DancerDefinesData.Buffs.Medicated;
+    private const uint ThreeFoldFanDance = DancerDefinesData.Buffs.ThreeFoldFanDance;
     
     public int Check()
     {
@@ -39,6 +40,8 @@ public class DancerFanDanceAbility : ISlotResolver
             return -3;
         if (FanDance3.GetSpell().IsReadyWithCanCast())
             return -40;
+        if (Core.Me.HasLocalPlayerAura(ThreeFoldFanDance))
+            return -41;
         
         if (DancerRotationEntry.QT.GetQt(QTKey.FinalBurst))
             return 100;

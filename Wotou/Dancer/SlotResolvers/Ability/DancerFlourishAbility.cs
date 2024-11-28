@@ -14,6 +14,7 @@ public class DancerFlourishAbility : ISlotResolver
     private const uint Flourish = DancerDefinesData.Spells.Flourish;
     private const uint TechnicalStep = DancerDefinesData.Spells.TechnicalStep;
     private const uint QuadrupleTechnicalFinish = DancerDefinesData.Spells.QuadrupleTechnicalFinish;
+    private const uint FanDance3 = DancerDefinesData.Spells.FanDance3;
     
     private const uint ThreeFoldFanDance = DancerDefinesData.Buffs.ThreeFoldFanDance;
     public int Check()
@@ -30,6 +31,8 @@ public class DancerFlourishAbility : ISlotResolver
             return -3;
         if (Core.Me.HasLocalPlayerAura(ThreeFoldFanDance))
             return -5;
+        if (FanDance3.GetSpell().IsReadyWithCanCast())
+            return -40;
         return 0;
     }
 
