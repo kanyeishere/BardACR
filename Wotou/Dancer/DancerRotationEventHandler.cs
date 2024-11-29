@@ -67,7 +67,7 @@ namespace Wotou.Dancer
                  (technicalStepSpell.Cooldown.TotalMilliseconds < 5000 &&
                   DancerRotationEntry.QT.GetQt(QTKey.TechnicalStep))) &&
                 target != null && 
-                Core.Me.Distance(target) > 14 &&
+                Core.Me.Distance(target) > 15 &&
                 DancerSettings.Instance.DanceDistanceWarning &&
                 currTimeInMs - _lastDanceWarningTime >= 10000) // 10秒内不重复提醒
             {
