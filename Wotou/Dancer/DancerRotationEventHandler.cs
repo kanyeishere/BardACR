@@ -63,8 +63,10 @@ namespace Wotou.Dancer
             var technicalStepSpell = DancerDefinesData.Spells.TechnicalStep.GetSpell();
             var target = Core.Me.GetCurrTarget();
             if (((standardStepSpell.Cooldown.TotalMilliseconds < 5000 && 
+                  standardStepSpell.IsUnlock() &&
                   DancerRotationEntry.QT.GetQt(QTKey.StandardStep)) ||
                  (technicalStepSpell.Cooldown.TotalMilliseconds < 5000 &&
+                  technicalStepSpell.IsUnlock() &&
                   DancerRotationEntry.QT.GetQt(QTKey.TechnicalStep))) &&
                 target != null && 
                 Core.Me.Distance(target) > 15 &&
