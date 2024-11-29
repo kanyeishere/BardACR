@@ -28,12 +28,14 @@ public class Bard2GOpener100 : IOpener
   private const uint Ladonsbite = BardDefinesData.Spells.Ladonsbite;
   private const uint RainOfDeath = BardDefinesData.Spells.RainofDeath;
   private const uint LegGraze = BardDefinesData.Spells.LegGraze;
+  private const uint RadiantEncore = BardDefinesData.Spells.RadiantEncore;
   
   private const uint HawkEyeBuff = BardDefinesData.Buffs.HawksEye;
   private const uint CausticBiteDot = BardDefinesData.Buffs.CausticBite;
   private const uint VenomousBiteDot = BardDefinesData.Buffs.VenomousBite;
   private const uint WindBiteDot = BardDefinesData.Buffs.Windbite;
   private const uint StormBiteDot = BardDefinesData.Buffs.Stormbite;
+  private const uint RadiantEncoreReady = BardDefinesData.Buffs.RadiantEncoreReady;
   
   public int StartCheck()
   {
@@ -139,7 +141,10 @@ public class Bard2GOpener100 : IOpener
 
   private static void Step3(Slot slot)
   {
-    slot.Add(GetBaseGcd());
+    if (RadiantEncore.IsUnlockWithCDCheck() || Core.Me.HasAura(RadiantEncoreReady))
+      slot.Add(RadiantEncore.GetSpell());
+    else
+      slot.Add(GetBaseGcd());
     if (EmpyrealArrow.IsUnlockWithCDCheck())
       slot.Add(EmpyrealArrow.GetSpell());
     // slot.Add(Barrage.GetSpell());
