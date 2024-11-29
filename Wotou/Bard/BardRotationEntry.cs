@@ -31,8 +31,12 @@ public class BardRotationEntry : IRotationEntry
 
     public string AuthorName { get; set; } = "Wotou";
     
-    private const string UpdateLog = "更新日志：11.26" +
-                                     "\n- 助力绝伊甸，推出快速光阴神面板";
+    private const string UpdateLog = "更新日志：11.29" +
+                                     "\n- 尝试修复一种非常罕见的鹰眼buff覆盖问题" +
+                                     "\n- 修改了在战斗中重新选中目标后，技能释放的顺序逻辑：" + 
+                                     "\n  - 重新选中目标后，会判断是否需要重新释放DOT，如不需要则打1或者触发1" +
+                                     "\n  - 然后判断是否有2层以上诗心释放完美音调" + 
+                                     "\n  - 最后会释放九天连箭";
     
     public Rotation Build(string settingFolder)
     {
