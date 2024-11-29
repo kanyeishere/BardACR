@@ -56,6 +56,7 @@ public class DancerFanDanceAbility : ISlotResolver
             TechnicalStep.IsUnlock())
             return -3;
         if (Flourish.GetSpell().Cooldown.TotalMilliseconds <= 1000 &&
+            DancerRotationEntry.QT.GetQt(QTKey.Flourish) &&
             Flourish.IsUnlock())
             return -6;
         if (Core.Resolve<JobApi_Dancer>().FourFoldFeathers > DancerSettings.Instance.FanDanceSaveStack  &&
