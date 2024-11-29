@@ -21,7 +21,7 @@ public class DancerTechnicalStepGcd : ISlotResolver
             return -1;
         if (TechnicalStep.IsUnlockWithCDCheck())
             return 1;
-        if (Core.Resolve<MemApiSpell>().GetCooldown(TechnicalStep).TotalMilliseconds <= 2000 &&
+        if (Core.Resolve<MemApiSpell>().GetCooldown(TechnicalStep).TotalMilliseconds <= 1500 &&
             DancerRotationEntry.QT.GetQt(QTKey.StrongAlign))
             return 2;
         return -10;
