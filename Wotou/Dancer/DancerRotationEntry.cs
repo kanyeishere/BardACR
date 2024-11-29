@@ -31,9 +31,8 @@ public class DancerRotationEntry : IRotationEntry
     
     public string AuthorName { get; set; } = "Wotou";
     
-    private const string UpdateLog =  "更新日志：11.24" +
-                                      "\n- 在团辅期当伶俐<=20时，使用提拉纳" + 
-                                      "\n- 在团辅期的最后1G，放宽伶俐阈值至<=30时，使用提拉纳" +
+    private const string UpdateLog =  "更新日志：11.30" +
+                                      "\n- 用户现在可以自定义使用提拉纳的伶俐阈值" + 
                                       "\n更新日志：11.17" +
                                       "\n- 降低团辅期第二次落幕舞的优先级" +
                                       "\n- 在团辅期的结束动作前1G时，不使用提拉纳" + 
@@ -250,9 +249,13 @@ public class DancerRotationEntry : IRotationEntry
                 ImGui.Checkbox("自动使用速行", ref DancerSettings.Instance.EnableAutoPeloton);
             }
             ImGui.Separator();
-            ImGuiHelper.LeftInputInt("倒计时提前使用小舞  (毫秒)", ref DancerSettings.Instance.OpenerStandardStepTime, 6500, 15000);
+            ImGuiHelper.LeftInputInt("倒计时提前使用标准舞步  (毫秒) ", ref DancerSettings.Instance.OpenerStandardStepTime, 6500, 15000);
             ImGui.Separator();
-            ImGuiHelper.LeftInputInt("非爆发期使用剑舞-伶俐阈值", ref DancerSettings.Instance.SaberDanceEspritThreshold, 50, 100);
+            ImGuiHelper.LeftInputInt("非爆发期使用剑舞-伶俐大于等于 ", ref DancerSettings.Instance.SaberDanceEspritThreshold, 50, 100);
+            ImGui.Separator();
+            ImGuiHelper.LeftInputInt("爆发期使用提拉纳-伶俐小于等于 ", ref DancerSettings.Instance.TillanaEspritThreshold, 0, 50);
+            ImGui.Separator();
+            ImGuiHelper.LeftInputInt("爆发最后1g提拉纳-伶俐小于等于", ref DancerSettings.Instance.TillanaLastGcdEspritThreshold, 0, 50);
             ImGui.Separator();
             /*ImGuiHelper.LeftInputInt("倒计时提前使用起手  (毫秒)", ref DancerSettings.Instance.OpenerTime, 0, 1000);
             ImGui.Separator();*/

@@ -170,7 +170,7 @@ public class BardRotationEntry : IRotationEntry
         QT.AddQt(QTKey.BurstWithWanderer, true, value => { OnClickBurstWithWandererQT(); });
         QT.SetQtToolTip("爆发是否对齐旅神");
         QT.AddQt(QTKey.StrongAlign, true, value => { OnClickStrongAlign(value); });
-        QT.SetQtToolTip("不会因为GCD时间变化而延后爆发，绝本中建议关闭");
+        QT.SetQtToolTip("不会因GCD时间变化而延后爆发，绝本有上天的阶段建议关闭");
         QT.AddQt(QTKey.Apex, true, "是否使用绝峰箭");
         QT.AddQt(QTKey.HeartBreak, true, "是否攒碎心箭进团辅");
         QT.AddQt(QTKey.DOT, true, "是否使用DOT");

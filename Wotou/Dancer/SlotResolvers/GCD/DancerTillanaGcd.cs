@@ -5,6 +5,7 @@ using AEAssist.Helper;
 using AEAssist.JobApi;
 using AEAssist.MemoryApi;
 using Wotou.Dancer.Data;
+using Wotou.Dancer.Setting;
 
 namespace Wotou.Dancer.GCD;
 
@@ -34,13 +35,13 @@ public class DancerTillanaGcd : ISlotResolver
              Core.Me.HasAura(LastDanceReady) && 
              DancerRotationEntry.QT.GetQt(QTKey.StandardStep))
             return -3;
-        if (Core.Resolve<JobApi_Dancer>().Esprit <= 20 && Core.Me.HasLocalPlayerAura(Devilment))
+        if (Core.Resolve<JobApi_Dancer>().Esprit <= DancerSettings.Instance.TillanaEspritThreshold && Core.Me.HasLocalPlayerAura(Devilment))
             return 1;
         if (Core.Resolve<JobApi_Dancer>().Esprit <= 40 && !Core.Me.HasLocalPlayerAura(Devilment))
             return 2;
         if (Core.Me.HasLocalPlayerAura(Devilment) && 
             !Core.Me.HasMyAuraWithTimeleft(Devilment, 2600) && 
-            Core.Resolve<JobApi_Dancer>().Esprit <= 30 && 
+            Core.Resolve<JobApi_Dancer>().Esprit <= DancerSettings.Instance.TillanaLastGcdEspritThreshold && 
             !Core.Me.HasAura(SilkenFlow) &&
             !Core.Me.HasAura(SilkenSymmetry))
             return 3;

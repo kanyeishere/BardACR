@@ -57,6 +57,8 @@ public class DancerSettings
     public int OpenerStandardStepTime = 15000; // 起手标准舞时间
     public int StandardStepCdTolerance = 600; // 标准舞CD容差
     public int SaberDanceEspritThreshold = 70; //剑舞阈值
+    public int TillanaEspritThreshold = 20; //提拉纳阈值
+    public int TillanaLastGcdEspritThreshold = 30; //提拉纳爆发期最后1G阈值
     
     public bool IsDailyMode = false; //false 表示高难模式，true 表示日随模式
     public bool EnableAutoPeloton  = true; // 是否在自动使用速行
