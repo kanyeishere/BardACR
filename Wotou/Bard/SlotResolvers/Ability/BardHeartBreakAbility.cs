@@ -44,11 +44,11 @@ public class BardHeartBreakAbility : ISlotResolver
             BardRotationEntry.QT.GetQt(QTKey.Sidewinder) &&
             Sidewinder.IsUnlock())
             return -5;
-        if (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < 1200 && 
+        if (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < 3000 && 
             BardRotationEntry.QT.GetQt("爆发") &&
             RagingStrikes.IsUnlock())
             return -6;
-        if (BattleVoice.GetSpell().Cooldown.TotalMilliseconds < 1200 && 
+        if (BattleVoice.GetSpell().Cooldown.TotalMilliseconds < 3000 && 
             BardRotationEntry.QT.GetQt("爆发") &&
             BattleVoice.IsUnlock())
             return -7;
