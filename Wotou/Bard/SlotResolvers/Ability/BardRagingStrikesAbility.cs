@@ -46,7 +46,7 @@ public class BardRagingStrikesAbility : ISlotResolver
         
         if (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds <= 640 &&
             BardSettings.Instance.ImitateGreenPlayer &&
-            GCDHelper.GetGCDCooldown() <= 640 + BardSettings.Instance.RagingStrikeBeforeGcdTime)
+            GCDHelper.GetGCDCooldown() <= 750 + BardSettings.Instance.RagingStrikeBeforeGcdTime)
             return 1;
         
         // 不使用爆发药
