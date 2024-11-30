@@ -34,13 +34,13 @@ public class BardHeartBreakAbility : ISlotResolver
             return -1;
         if (!Core.Resolve<MemApiSpell>().CheckActionChange(HeartBreak).GetSpell().IsReadyWithCanCast())
             return -2;
-        if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 1200 &&
+        if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 600 &&
             BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow) && 
             EmpyrealArrow.IsUnlock())
             return -3;
         if (EmpyrealArrow.RecentlyUsed(650))
             return -4;
-        if (Sidewinder.GetSpell().Cooldown.TotalMilliseconds < 1200 && 
+        if (Sidewinder.GetSpell().Cooldown.TotalMilliseconds < 600 && 
             BardRotationEntry.QT.GetQt(QTKey.Sidewinder) &&
             Sidewinder.IsUnlock())
             return -5;
@@ -52,7 +52,7 @@ public class BardHeartBreakAbility : ISlotResolver
             BardRotationEntry.QT.GetQt("爆发") &&
             BattleVoice.IsUnlock())
             return -7;
-        if (Barrage.GetSpell().Cooldown.TotalMilliseconds < 1200 && 
+        if (Barrage.GetSpell().Cooldown.TotalMilliseconds < 600 && 
             BardRotationEntry.QT.GetQt("爆发") &&
             Barrage.IsUnlock())
             return -8;
@@ -91,7 +91,7 @@ public class BardHeartBreakAbility : ISlotResolver
         if (Core.Resolve<JobApi_Bard>().Repertoire == 3 && Core.Resolve<JobApi_Bard>().ActiveSong == Song.WANDERER)
             return -12;
         
-        if (Core.Resolve<JobApi_Bard>().Repertoire == 2 && EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 2700 && EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds > 800 && !EmpyrealArrow.RecentlyUsed())
+        if (Core.Resolve<JobApi_Bard>().Repertoire == 2 && EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 2900 && !EmpyrealArrow.RecentlyUsed())
             return -15;
         
         // 设置保留碎心箭的层数 - 高难模式only
