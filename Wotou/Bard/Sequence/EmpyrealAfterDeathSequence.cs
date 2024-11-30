@@ -58,7 +58,7 @@ public class EmpyrealAfterDeathSequence: ISlotSequence
             Core.Resolve<JobApi_Bard>().SoulVoice >= 95 &&
             BardRotationEntry.QT.GetQt(QTKey.Apex) &&
             BardUtil.HasNoPartyBuff() &&
-            partyBuffCountdown >= 43)
+            partyBuffCountdown >= 39)
             slot.Add(ApexArrow.GetSpell());
         else if (!Core.Me.GetCurrTarget().HasLocalPlayerAura(WindBiteDot) &&
             !Core.Me.GetCurrTarget().HasLocalPlayerAura(StormBiteDot) &&

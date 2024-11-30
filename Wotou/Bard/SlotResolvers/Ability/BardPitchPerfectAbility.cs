@@ -44,7 +44,7 @@ public class BardPitchPerfectAbility : ISlotResolver
         if (Core.Resolve<JobApi_Bard>().Repertoire >= 1 && Core.Resolve<JobApi_Bard>().SongTimer < 1000)
             return 1;
         // 下一个窗口必须打EmpyrealArrow
-        if (Core.Resolve<JobApi_Bard>().Repertoire == 2 && EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 2470 && EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds > 800 && !EmpyrealArrow.RecentlyUsed())
+        if (Core.Resolve<JobApi_Bard>().Repertoire == 2 && EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 2300 && !EmpyrealArrow.RecentlyUsed())
             return 1;
         return -1;
     }

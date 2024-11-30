@@ -6,6 +6,7 @@ using AEAssist.CombatRoutine.Module;
 using AEAssist.CombatRoutine.Module.Opener;
 using AEAssist.Extension;
 using AEAssist.Helper;
+using AEAssist.JobApi;
 using AEAssist.MemoryApi;
 using Wotou.Bard.Data;
 using Wotou.Bard.Setting;
@@ -32,6 +33,7 @@ public class BardFROpener100 : IOpener
   private const uint RainOfDeath = BardDefinesData.Spells.RainofDeath;
   private const uint LegGraze = BardDefinesData.Spells.LegGraze;
   private const uint RadiantEncore = BardDefinesData.Spells.RadiantEncore;
+  private const uint PitchPerfect = BardDefinesData.Spells.PitchPerfect;
   
   private const uint HawkEyeBuff = BardDefinesData.Buffs.HawksEye;
   private const uint CausticBiteDot = BardDefinesData.Buffs.CausticBite;
@@ -150,6 +152,8 @@ public class BardFROpener100 : IOpener
       slot.Add(RadiantEncore.GetSpell());
     else
       slot.Add(GetBaseGcd());
+    if (Core.Resolve<JobApi_Bard>().Repertoire == 3)
+      slot.Add(PitchPerfect.GetSpell());
     // slot.Add(Barrage.GetSpell());
   }
 }

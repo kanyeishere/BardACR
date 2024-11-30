@@ -22,7 +22,7 @@ public class BardPitchPerfectMaxAbility : ISlotResolver
             return -1;
         if (Core.Resolve<JobApi_Bard>().ActiveSong != Wanderer)
             return -1;
-        if (Core.Resolve<JobApi_Bard>().Repertoire == 3  && Core.Resolve<JobApi_Bard>().SongTimer % 3000 < 1600)
+        if (Core.Resolve<JobApi_Bard>().Repertoire == 3  && Core.Resolve<JobApi_Bard>().SongTimer % 3000 < 2600)
             return 1;
         
         return -1;

@@ -91,6 +91,9 @@ public class BardHeartBreakAbility : ISlotResolver
         if (Core.Resolve<JobApi_Bard>().Repertoire == 3 && Core.Resolve<JobApi_Bard>().ActiveSong == Song.WANDERER)
             return -12;
         
+        if (Core.Resolve<JobApi_Bard>().Repertoire == 2 && EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 2700 && EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds > 800 && !EmpyrealArrow.RecentlyUsed())
+            return -15;
+        
         // 设置保留碎心箭的层数 - 高难模式only
         if ((Core.Resolve<MemApiSpell>().GetCharges(Core.Resolve<MemApiSpell>().CheckActionChange(HeartBreak)) <=
              BardSettings.Instance.HeartBreakSaveStack) && 

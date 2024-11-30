@@ -29,8 +29,9 @@ public class BardEmpyrealArrowGcd : ISlotResolver
             return 1;
         if (//BardRotationEntry.QT.GetQt("强对齐") && 
             EmpyrealArrow.IsUnlock() &&
-            EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds <= 650 &&
-            GCDHelper.GetGCDCooldown() < 700 &&
+            EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds <= 400 &&
+            GCDHelper.GetGCDCooldown() < 400 &&
+            EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds - GCDHelper.GetGCDCooldown() < 350 &&
             BardUtil.HasNoPartyBuff())
             return 1;
         return -5;

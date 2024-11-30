@@ -30,7 +30,7 @@ public class BardBaseGcd : ISlotResolver
     // 返回>=0表示检测通过 即将调用Build方法
     public int Check()
     {
-        const int gcdAnimationTime = 650;
+        const int gcdAnimationTime = 400;
         // 非团辅期间，高难模式下，九天不延后，延后gcd
         if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < gcdAnimationTime &&
             //BardRotationEntry.QT.GetQt("强对齐") &&
@@ -66,20 +66,21 @@ public class BardBaseGcd : ISlotResolver
 
         if (futureConditionsMet && BardBattleData.Instance.TotalStopTime == 0)
         {
-            BardBattleData.Instance.TotalStopTime = futureEmpyrealArrowCooldown - (2200 * 2 + 2080 + gcdAnimationTime);
+            BardBattleData.Instance.TotalStopTime = futureEmpyrealArrowCooldown - (2200 * 2 + 2080 + gcdAnimationTime) - 150;
         }
         if (BardBattleData.Instance.TotalStopTime > 0 && 
             BardBattleData.Instance.GcdCountDown <= 3)
         {
             var currentGcdIndex = BardBattleData.Instance.GcdCountDown + 2;
             var empyrealArrowCooldown = EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds;
-            BardBattleData.Instance.RestStopTime = (empyrealArrowCooldown - 2200 * 2 - gcdAnimationTime) % 2080;
+            BardBattleData.Instance.RestStopTime = (empyrealArrowCooldown - 2200 * 2 - gcdAnimationTime) % 2080 - 150;
             var conditionsMet = BardBattleData.Instance.RestStopTime  >=
                                 (BardBattleData.Instance.TotalStopTime) * (currentGcdIndex - 1)/5 &&
                                 BardBattleData.Instance.First120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds < 15000;
             if (conditionsMet)
             {
                 BardUtil.LogDebug("TotalStopTime","TotalStopTime: " + BardBattleData.Instance.TotalStopTime);
+                BardUtil.LogDebug("RestStopTime","RestStopTime: " + BardBattleData.Instance.RestStopTime);
                 return -1;
             }
         }

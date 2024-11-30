@@ -66,7 +66,7 @@ public class BardSongAbility : ISlotResolver
             BardRotationEntry.QT.GetQt("对齐旅神") &&
             BardBattleData.Instance.First120SBuffSpellId == RagingStrikes &&
             BardBattleData.Instance.First120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds <= 2200 + 640 &&
-            BardBattleData.Instance.Second120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds <= 2200 * 2 - 600 + 640
+            BardBattleData.Instance.Second120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds <= 2200 * 2 + 640 - 550 
            )
         {
             BardUtil.LogDebug("切歌", "第一个开的120秒buff是猛者强击，爆发切歌条件满足");
@@ -92,7 +92,7 @@ public class BardSongAbility : ISlotResolver
             BardRotationEntry.QT.GetQt("对齐旅神") &&
             BardBattleData.Instance.First120SBuffSpellId == RagingStrikes &&
             BardBattleData.Instance.First120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds <= 2200 &&
-            BardBattleData.Instance.Second120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds <= 2200 * 2 - 600
+            BardBattleData.Instance.Second120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds <= 2200 * 2 - 550 
             )
         {
             BardUtil.LogDebug("切歌", "第一个开的120秒buff是猛者强击，爆发切歌条件满足");
