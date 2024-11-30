@@ -26,9 +26,15 @@ public class BardRagingStrikesAbility : ISlotResolver
         
         // 第一个120s技能是RagingStrikes，且剩下的两个120s技能中有一个技能的CD大于当前GCDDuration
         if (BardBattleData.Instance.First120SBuffSpellId == RagingStrikes &&
+            !BardSettings.Instance.ImitateGreenPlayer &&
             (BardBattleData.Instance.Second120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds > GCDHelper.GetGCDDuration() - 650 ||
-             BardBattleData.Instance.Third120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds > GCDHelper.GetGCDDuration())
-            )
+             BardBattleData.Instance.Third120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds > GCDHelper.GetGCDDuration()))
+            return -1;
+        
+        if (BardBattleData.Instance.First120SBuffSpellId == RagingStrikes &&
+            BardSettings.Instance.ImitateGreenPlayer &&
+            (BardBattleData.Instance.Second120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds > GCDHelper.GetGCDDuration() - 650 + 650 ||
+             BardBattleData.Instance.Third120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds > GCDHelper.GetGCDDuration()))
             return -1;
         
         // 第一个120s技能是BattleVoice，且BattleVoice的CD小于2s，不使用RagingStrikes以免抢占BattleVoice的CD
@@ -44,9 +50,9 @@ public class BardRagingStrikesAbility : ISlotResolver
             GCDHelper.GetGCDCooldown() <= BardSettings.Instance.RagingStrikeBeforeGcdTime + BardSettings.Instance.PotionBeforeGcdTime)
             return 1;
         
-        if (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds <= 640 &&
+        if (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds <= 650 &&
             BardSettings.Instance.ImitateGreenPlayer &&
-            GCDHelper.GetGCDCooldown() <= 750 + BardSettings.Instance.RagingStrikeBeforeGcdTime)
+            GCDHelper.GetGCDCooldown() <= 650 + BardSettings.Instance.RagingStrikeBeforeGcdTime)
             return 1;
         
         // 不使用爆发药
