@@ -33,7 +33,7 @@ public class BardBaseGcd : ISlotResolver
         const int gcdAnimationTime = 400;
         // 非团辅期间，高难模式下，九天不延后，延后gcd
         if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < gcdAnimationTime &&
-            //BardRotationEntry.QT.GetQt("强对齐") &&
+            BardRotationEntry.QT.GetQt("强对齐") &&
             BardUtil.HasNoPartyBuff() &&
             EmpyrealArrow.IsUnlock() &&
             BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow) &&

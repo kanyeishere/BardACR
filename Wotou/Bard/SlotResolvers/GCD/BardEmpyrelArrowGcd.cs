@@ -22,6 +22,8 @@ public class BardEmpyrealArrowGcd : ISlotResolver
             return -4;
         if (!BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow))
             return -3;
+        if (!BardRotationEntry.QT.GetQt("强对齐"))
+            return -5;
             // 当前无团辅buff
         if (//BardRotationEntry.QT.GetQt("强对齐") && 
             EmpyrealArrow.IsUnlockWithCDCheck() &&
