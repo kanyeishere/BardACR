@@ -133,8 +133,7 @@ public class BardFROpener100 : IOpener
       return;
     }
     slot.Add(RagingStrikes.GetSpell());
-    if (EmpyrealArrow.IsUnlockWithCDCheck())
-      slot.Add(EmpyrealArrow.GetSpell());
+    slot.Add(EmpyrealArrow.GetSpell());
   }
 
   private static void Step2(Slot slot)
