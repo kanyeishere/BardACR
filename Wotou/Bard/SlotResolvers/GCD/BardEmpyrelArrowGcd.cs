@@ -14,9 +14,9 @@ public class BardEmpyrealArrowGcd : ISlotResolver
 
     public int Check()
     {
-        if (BattleVoice.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt("爆发"))
+        if (BattleVoice.GetSpell().Cooldown.TotalMilliseconds < 3000 && BardRotationEntry.QT.GetQt("爆发"))
             return -1;
-        if (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt("爆发"))
+        if (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < 3000 && BardRotationEntry.QT.GetQt("爆发"))
             return -2;
         if (AI.Instance.BattleData.CurrBattleTimeInMs < 3000)
             return -4;
@@ -25,6 +25,12 @@ public class BardEmpyrealArrowGcd : ISlotResolver
             // 当前无团辅buff
         if (//BardRotationEntry.QT.GetQt("强对齐") && 
             EmpyrealArrow.IsUnlockWithCDCheck() &&
+            BardUtil.HasNoPartyBuff())
+            return 1;
+        if (//BardRotationEntry.QT.GetQt("强对齐") && 
+            EmpyrealArrow.IsUnlock() &&
+            EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds <= 650 &&
+            GCDHelper.GetGCDCooldown() < 700 &&
             BardUtil.HasNoPartyBuff())
             return 1;
         return -5;

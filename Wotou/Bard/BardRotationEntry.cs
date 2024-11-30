@@ -31,7 +31,14 @@ public class BardRotationEntry : IRotationEntry
 
     public string AuthorName { get; set; } = "Wotou";
     
-    private const string UpdateLog = "更新日志：11.29" +
+    private const string UpdateLog = "更新日志：11.30" +
+                                     "\n- 添加绝伊甸特化起手" +
+                                     "\n- 修改了在战斗转场后，重新选中目标时，技能释放的顺序逻辑：" + 
+                                     "\n  - 首先判断灵魂之声是否满100且处于非爆发期，如果通过则打Apex" +
+                                     "\n  - 其次会判断是否需要重新释放DOT，如不需要则打1或者触发1" +
+                                     "\n  - 然后判断是否有2层以上诗心释放完美音调" + 
+                                     "\n  - 最后会释放九天连箭" +
+                                     "\n更新日志：11.29" +
                                      "\n- 尝试修复一种非常罕见的鹰眼buff覆盖问题" +
                                      "\n- 修改了在战斗转场后，重新选中目标时，技能释放的顺序逻辑：" + 
                                      "\n  - 重新选中目标后，会判断是否需要重新释放DOT，如不需要则打1或者触发1" +
@@ -100,6 +107,8 @@ public class BardRotationEntry : IRotationEntry
                 return new Bard3GOpener100();
             case 1:
                 return new Bard2GOpener100();
+            case 2:
+                return new BardFROpener100();
         }
         return new Bard3GOpener100();
     }
@@ -585,6 +594,9 @@ public class BardRotationEntry : IRotationEntry
                 case 1:
                     opener = "70-100级 2G团辅起手";
                     break;
+                case 2:
+                    opener = "绝伊甸专用起手";
+                    break;
             }
 
             if (ImGui.BeginCombo("起手选择", opener))
@@ -593,6 +605,8 @@ public class BardRotationEntry : IRotationEntry
                     BardSettings.Instance.Opener = 0;
                 if (ImGui.Selectable("70-100级 2G团辅起手"))
                     BardSettings.Instance.Opener = 1;
+                if (ImGui.Selectable("绝伊甸专用起手"))
+                    BardSettings.Instance.Opener = 2;
                 ImGui.EndCombo();
             }
 

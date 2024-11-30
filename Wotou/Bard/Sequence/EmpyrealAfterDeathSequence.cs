@@ -7,6 +7,7 @@ using AEAssist.JobApi;
 using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.JobGauge.Enums;
 using Wotou.Bard.Data;
+using Wotou.Bard.Utility;
 
 namespace Wotou.Bard.Sequence;
 
@@ -22,6 +23,7 @@ public class EmpyrealAfterDeathSequence: ISlotSequence
     private const uint WindBite = BardDefinesData.Spells.Windbite;
     private const uint VenomousBite = BardDefinesData.Spells.VenomousBite;
     private const uint PitchPerfect = BardDefinesData.Spells.PitchPerfect;
+    private const uint ApexArrow = BardDefinesData.Spells.ApexArrow;
     
     private const uint HawkEyeBuff = BardDefinesData.Buffs.HawksEye;
     private const uint BarrageBuff = BardDefinesData.Buffs.Barrage;
@@ -30,8 +32,6 @@ public class EmpyrealAfterDeathSequence: ISlotSequence
     private const uint VenomousBiteDot = BardDefinesData.Buffs.VenomousBite;
     private const uint CausticBiteDot = BardDefinesData.Buffs.CausticBite;
     private const Song Wanderer = Song.WANDERER;
-
-    //private const uint WanderersMinuet = BardDefinesData.Spells.TheWanderersMinuet;
     
     public int StartCheck()
     {
@@ -40,8 +40,8 @@ public class EmpyrealAfterDeathSequence: ISlotSequence
         if (EmpyrealArrow.IsUnlock() &&
             EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 800 &&
             BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow) &&
-            //!WanderersMinuet.IsUnlockWithCDCheck() &&
-            GCDHelper.GetGCDCooldown() == 0)
+            GCDHelper.GetGCDCooldown() == 0 && 
+            BardUtil.HasNoPartyBuff())
             return 1;
         return -1;
     }
@@ -53,18 +53,27 @@ public class EmpyrealAfterDeathSequence: ISlotSequence
     
     private static void Step0(Slot slot)
     {
-        if (!Core.Me.GetCurrTarget().HasLocalPlayerAura(WindBiteDot) &&
-            !Core.Me.GetCurrTarget().HasLocalPlayerAura(StormBiteDot))
+        var partyBuffCountdown  = BardBattleData.Instance.First120SBuffSpellId.GetSpell().Cooldown.TotalSeconds;
+        if (!BardBattleData.Instance.HasUseApexArrowInCurrentNonBurstingPeriod &&
+            Core.Resolve<JobApi_Bard>().SoulVoice >= 95 &&
+            BardRotationEntry.QT.GetQt(QTKey.Apex) &&
+            BardUtil.HasNoPartyBuff() &&
+            partyBuffCountdown >= 43)
+            slot.Add(ApexArrow.GetSpell());
+        else if (!Core.Me.GetCurrTarget().HasLocalPlayerAura(WindBiteDot) &&
+            !Core.Me.GetCurrTarget().HasLocalPlayerAura(StormBiteDot) &&
+            BardRotationEntry.QT.GetQt(QTKey.DOT))
             slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(WindBite).GetSpell());
         else if (!Core.Me.GetCurrTarget().HasLocalPlayerAura(CausticBiteDot) && 
-                 !Core.Me.GetCurrTarget().HasLocalPlayerAura(VenomousBiteDot))
+                 !Core.Me.GetCurrTarget().HasLocalPlayerAura(VenomousBiteDot) &&
+                 BardRotationEntry.QT.GetQt(QTKey.DOT))
             slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(VenomousBite).GetSpell());
         else
             slot.Add(GetBaseGcd());
         if (Core.Resolve<JobApi_Bard>().Repertoire >= 2 && 
             Core.Resolve<JobApi_Bard>().ActiveSong == Wanderer)
             slot.Add(PitchPerfect.GetSpell());
-        slot.Add(EmpyrealArrow.GetSpell());
+        //slot.Add(EmpyrealArrow.GetSpell());
     }
     
     private static Spell GetBaseGcd()

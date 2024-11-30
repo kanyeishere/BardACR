@@ -84,7 +84,7 @@ public class BardHeartBreakAbility : ISlotResolver
         if (BardUtil.HasAllPartyBuff())
             return 2;
         
-        if (BardRotationEntry.QT.GetQt("攒碎心箭") && BardUtil.PartyBuffWillBeReadyIn(28000))
+        if (BardRotationEntry.QT.GetQt("攒碎心箭") && BardUtil.PartyBuffWillBeReadyIn(28500))
             return -11;
         
         // 旅神期间，不和三层诗心的完美音调冲突

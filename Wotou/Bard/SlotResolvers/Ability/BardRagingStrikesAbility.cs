@@ -26,7 +26,7 @@ public class BardRagingStrikesAbility : ISlotResolver
         
         // 第一个120s技能是RagingStrikes，且剩下的两个120s技能中有一个技能的CD大于当前GCDDuration
         if (BardBattleData.Instance.First120SBuffSpellId == RagingStrikes &&
-            (BardBattleData.Instance.Second120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds > GCDHelper.GetGCDDuration() ||
+            (BardBattleData.Instance.Second120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds > GCDHelper.GetGCDDuration() - 600||
              BardBattleData.Instance.Third120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds > GCDHelper.GetGCDDuration())
             )
             return -1;

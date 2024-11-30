@@ -54,7 +54,7 @@ public static class BardUtil
     
     public static bool PartyBuffWillBeReadyIn(int ms)
     {
-        return BattleVoice.GetSpell().Cooldown.TotalMilliseconds <= ms || RagingStrikes.GetSpell().Cooldown.TotalMilliseconds <= ms;
+        return BattleVoice.GetSpell().Cooldown.TotalMilliseconds <= ms && RagingStrikes.GetSpell().Cooldown.TotalMilliseconds <= ms;
     }
     
     public static Song GetSongBySpell(uint song)
