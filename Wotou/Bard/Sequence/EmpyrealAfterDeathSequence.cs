@@ -45,6 +45,13 @@ public class EmpyrealAfterDeathSequence: ISlotSequence
             return 1;
         return -1;
     }
+    
+    public int StopCheck(int index)
+    { 
+        if (BardUtil.HasAnyPartyBuff())
+            return 1;
+        return -1;
+    }
 
     public List<Action<Slot>> Sequence { get; } = new List<Action<Slot>>
     {
