@@ -16,6 +16,7 @@ public class BardNaturesMinneAbility : ISlotResolver
     private const uint BattleVoice = BardDefinesData.Spells.BattleVoice;
     private const uint RagingStrikes = BardDefinesData.Spells.RagingStrikes;
     private const uint EmpyrealArrow = BardDefinesData.Spells.EmpyrealArrow;
+    private const uint WanderersMinuet = BardDefinesData.Spells.TheWanderersMinuet;
     
     public int Check()
     {
@@ -29,22 +30,22 @@ public class BardNaturesMinneAbility : ISlotResolver
             BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow) && EmpyrealArrow.IsUnlock())
             return -1;
         //爆发期不三插
-        if ((!BardRotationEntry.QT.GetQt("对齐旅神") || 
-             !BardRotationEntry.QT.GetQt(QTKey.Song) || 
-             Core.Resolve<JobApi_Bard>().ActiveSong == Song.WANDERER) &&
-            !(BardBattleData.Instance.First120SBuffSpellId == RagingStrikes && 
-              RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < 2000) &&
-            BardRotationEntry.QT.GetQt("爆发") &&
-            BattleVoice.GetSpell().IsReadyWithCanCast() &&
-            !(BardBattleData.Instance.First120SBuffSpellId == BattleVoice &&
-              (BardBattleData.Instance.Third120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds >
-               GCDHelper.GetGCDDuration() + 
-               BardSettings.Instance.UseBattleVoiceBeforeGcdTimeInMs -
-               BardSettings.Instance.RagingStrikeBeforeGcdTime || 
-               BardBattleData.Instance.Second120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds >
-               GCDHelper.GetGCDDuration() + 
-               BardSettings.Instance.UseBattleVoiceBeforeGcdTimeInMs -
-               BardSettings.Instance.RagingStrikeBeforeGcdTime)))
+        if ((BattleVoice.GetSpell().Cooldown.TotalMilliseconds < 2000 && 
+             BardRotationEntry.QT.GetQt("爆发")) 
+            || 
+            (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < 2000 && 
+             BardRotationEntry.QT.GetQt("爆发") && 
+             BardSettings.Instance.ImitateGreenPlayer)
+            ||
+            (WanderersMinuet.GetSpell().Cooldown.TotalMilliseconds <= 2000 && 
+             GCDHelper.GetGCDCooldown() <= BardSettings.Instance.WandererBeforeGcdTime + 1500 && 
+             BardSettings.Instance.ImitateGreenPlayer &&
+             BardRotationEntry.QT.GetQt("爆发") && 
+             BardRotationEntry.QT.GetQt("对齐旅神") &&
+             BardBattleData.Instance.First120SBuffSpellId == BattleVoice &&
+             BardBattleData.Instance.First120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds <= 2200 - 600 + 1500 &&
+             BardBattleData.Instance.Third120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds <= 2200 * 2 + 1500)
+            )
             return -1;
         
         if (PartyHelper.CastableParty.Any(characterAgent => 
