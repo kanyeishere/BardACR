@@ -136,6 +136,10 @@ public class BardSongAbility : ISlotResolver
             BardRotationEntry.QT.GetQt("对齐旅神"))
             slot.Add(FootGraze.GetSpell());
         slot.Add(spell);
+        if (spell.Id == WanderersMinuet && 
+            BardRotationEntry.QT.GetQt("爆发") && 
+            BardRotationEntry.QT.GetQt("对齐旅神"))
+            AI.Instance.BattleData.CurrGcdAbilityCount = 0;
     }
     
     private Spell GetSpell()
