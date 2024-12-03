@@ -249,16 +249,17 @@ public class DancerRotationEntry : IRotationEntry
                 ImGui.Checkbox("自动使用速行", ref DancerSettings.Instance.EnableAutoPeloton);
             }
             ImGui.Separator();
-            ImGuiHelper.LeftInputInt("倒计时提前使用标准舞步  (毫秒) ", ref DancerSettings.Instance.OpenerStandardStepTime, 6500, 15000);
+            UiHelper.RightInputInt("倒计时提前使用小舞", ref DancerSettings.Instance.OpenerStandardStepTime, 6500, 15000, "(毫秒)");
             ImGui.Separator();
-            ImGuiHelper.LeftInputInt("非爆发期使用剑舞-伶俐大于等于 ", ref DancerSettings.Instance.SaberDanceEspritThreshold, 50, 100);
+            UiHelper.RightInputInt("倒计时提前使用起手", ref DancerSettings.Instance.OpenerTime, 0, 1000, "(毫秒)");
             ImGui.Separator();
-            ImGuiHelper.LeftInputInt("爆发期使用提拉纳-伶俐小于等于 ", ref DancerSettings.Instance.TillanaEspritThreshold, 0, 50);
+            UiHelper.RightInputInt("非爆发期使用剑舞", ref DancerSettings.Instance.SaberDanceEspritThreshold, 50, 100,"大于等于");
             ImGui.Separator();
-            ImGuiHelper.LeftInputInt("爆发最后1g提拉纳-伶俐小于等于", ref DancerSettings.Instance.TillanaLastGcdEspritThreshold, 0, 50);
+            UiHelper.RightInputInt("爆发期使用提拉纳", ref DancerSettings.Instance.TillanaEspritThreshold, 0, 50,"小于等于");
             ImGui.Separator();
-            /*ImGuiHelper.LeftInputInt("倒计时提前使用起手  (毫秒)", ref DancerSettings.Instance.OpenerTime, 0, 1000);
-            ImGui.Separator();*/
+            UiHelper.RightInputInt("爆发最后1G使用提拉纳", ref DancerSettings.Instance.TillanaLastGcdEspritThreshold, 0, 50,"小于等于");
+            ImGui.Separator();
+            
             ImGui.Text("爆发药设置：" + (DancerSettings.Instance.UsePotionInOpener ? "起手吃" : "2分钟爆发吃"));
             if (!QT.GetQt("爆发药"))
                 ImGui.TextColored(new Vector4(0.7f, 0.8f, 0.0f, 1.0000f), "如果你希望使用爆发药，请在QT面板中开启爆发药开关");

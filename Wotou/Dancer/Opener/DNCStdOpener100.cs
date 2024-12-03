@@ -58,7 +58,7 @@ namespace Wotou.Dancer.Opener
             countDownHandler.AddAction(DancerSettings.Instance.OpenerStandardStepTime - 2500, DancerUtil.GetStep);
             if (DancerRotationEntry.QT.GetQt(QTKey.UsePotion) && DancerSettings.Instance.UsePotionInOpener)
                 countDownHandler.AddPotionAction(1000);
-            //countDownHandler.AddAction(DancerSettings.Instance.OpenerTime, DancerDefinesData.Spells.DoubleStandardFinish);
+            countDownHandler.AddAction(DancerSettings.Instance.OpenerTime, DancerDefinesData.Spells.DoubleStandardFinish);
         }
 
         private static void Step0(Slot slot)

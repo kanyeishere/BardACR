@@ -651,13 +651,13 @@ public class BardRotationEntry : IRotationEntry
         if (ImGui.CollapsingHeader("   高级设置"))
         {
             ImGui.TextColored(new Vector4(1, 0.7f, 0, 1), "除非你明白你要做什么，不然请别动这几项\n建议仅在受网络延迟与动画锁影响，爆发期打不满或者卡GCD时，再做调整");
-            BardUtil.RightInputInt("非起手的旅神歌在下个GCD前多久使用", ref BardSettings.Instance.WandererBeforeGcdTime,
+            UiHelper.RightInputInt("非起手的旅神歌在下个GCD前多久使用", ref BardSettings.Instance.WandererBeforeGcdTime,
                 500, 2000, "(毫秒)");
-            BardUtil.RightInputInt("爆发药水的动画持续时间",
+            UiHelper.RightInputInt("爆发药水的动画持续时间",
                 ref BardSettings.Instance.PotionBeforeGcdTime, 500, 2000, "(毫秒)");
-            BardUtil.RightInputInt("猛者强击在下个GCD前多久使用",
+            UiHelper.RightInputInt("猛者强击在下个GCD前多久使用",
                 ref BardSettings.Instance.RagingStrikeBeforeGcdTime, 500, 2000, "(毫秒)");
-            BardUtil.RightInputInt("战斗之声和光明神在下个GCD前多久使用",
+            UiHelper.RightInputInt("战斗之声和光明神在下个GCD前多久使用",
                 ref BardSettings.Instance.UseBattleVoiceBeforeGcdTimeInMs, 500, 2000, "(毫秒)");
             /*BardUtil.RightInputInt("九天连箭最晚在下个GCD前多久使用",
                 ref BardSettings.Instance.EmpyrealArrowNotBeforeGcdTime, 0, 2000, "(毫秒)");*/
