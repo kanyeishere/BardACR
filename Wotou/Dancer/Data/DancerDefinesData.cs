@@ -20,6 +20,7 @@ public class DancerDefinesData
             DancePartner = 1824,
             Devilment = 1825,
             ShieldSamba = 1826,
+            Improvisation = 1827,
             FlourishingSymmetry = 3017,
             FlourshingFlow = 3018,
             SilkenFlow = 2694,

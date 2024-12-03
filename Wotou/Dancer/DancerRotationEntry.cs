@@ -101,6 +101,30 @@ public class DancerRotationEntry : IRotationEntry
         rot.AddTriggerAction(new DancerFeatherSaveAction());
         rot.AddTriggerCondition(new DancerFeatherCondition());
         rot.AddTriggerCondition(new DancerEspritCondition());
+
+        rot.AddCanUseHighPrioritySlotCheck((mode, slot) =>
+        {
+            if (mode == SlotMode.OffGcd)
+            {
+                if (slot.Actions.Count == 2 &&
+                    slot.Actions.ToArray()[0].Spell.Id == DancerDefinesData.Spells.Improvisation &&
+                    GCDHelper.GetGCDCooldown() < 1600)
+                    return -1;
+                if (slot.Actions.Count > 1 &&
+                    slot.Actions.ToArray()[1].Spell.Id == DancerDefinesData.Spells.ImprovisationFinish  &&
+                    DancerDefinesData.Spells.Improvisation.RecentlyUsed(1600) &&
+                    !DancerDefinesData.Spells.Improvisation.RecentlyUsed(1000) &&
+                    !Core.Me.HasLocalPlayerAura(DancerDefinesData.Buffs.Improvisation)
+                    )
+                {
+                    LogHelper.Print("not use ImprovisationFinish");
+                    slot.Actions.Dequeue();
+                    return -1;
+                }
+            }
+            return 1;
+        });
+        
         return rot;
     }
 
