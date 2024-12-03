@@ -65,15 +65,16 @@ public class BardHeartBreakAbility : ISlotResolver
         var wandererSongDuration = BardSettings.Instance.WandererSongDuration * 1000;
         if (Core.Resolve<JobApi_Bard>().ActiveSong == Song.WANDERER &&
             (double)Core.Resolve<JobApi_Bard>().SongTimer < 45600.0 - wandererSongDuration && 
-            Core.Resolve<JobApi_Bard>().Repertoire >= 1)
+            MagesBallad.GetSpell().Cooldown.TotalMilliseconds <= 1200 &&
+            BardRotationEntry.QT.GetQt(QTKey.Song))
             return -100;
         
         // 不和切军神歌冲突
         var mageSongDuration = BardSettings.Instance.MageSongDuration * 1000;
         if (Core.Resolve<JobApi_Bard>().ActiveSong == BardUtil.GetSongBySpell(MagesBallad) &&
             (double)Core.Resolve<JobApi_Bard>().SongTimer < 45600.0 - mageSongDuration &&
-            ArmysPaeon.GetSpell().IsReadyWithCanCast() &&
-            (GCDHelper.GetGCDCooldown() > 530))
+            ArmysPaeon.GetSpell().Cooldown.TotalMilliseconds <= 600 &&
+            BardRotationEntry.QT.GetQt(QTKey.Song))
             return -10;
         
         // 满三层碎心箭，使用
