@@ -28,9 +28,7 @@ public class BardPitchPerfectAbility : ISlotResolver
             return -1;
         /*if (PitchPerfect.RecentlyUsed())
             return -1;*/
-        if (EmpyrealArrow.RecentlyUsed() && GCDHelper.GetGCDCooldown() <= 750)
-            return -1;
-        if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 700 &&
+        if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 650 &&
            BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow) && EmpyrealArrow.IsUnlock())
             return -1;
         if (Core.Resolve<JobApi_Bard>().Repertoire == 3)

@@ -23,11 +23,11 @@ public class BardHeartBreakMaxChargeAbility : ISlotResolver
     {
         if (GCDHelper.GetGCDCooldown() <= 650)
             return -1;
-        if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow) && EmpyrealArrow.IsUnlock())
+        if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 650 && BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow) && EmpyrealArrow.IsUnlock())
             return -1;
-        if (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt("爆发") && RagingStrikes.IsUnlock())
+        if (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < 3000 && BardRotationEntry.QT.GetQt("爆发") && RagingStrikes.IsUnlock())
             return -1;
-        if (BattleVoice.GetSpell().Cooldown.TotalMilliseconds < 1200 && BardRotationEntry.QT.GetQt("爆发") && BattleVoice.IsUnlock())
+        if (BattleVoice.GetSpell().Cooldown.TotalMilliseconds < 3000 && BardRotationEntry.QT.GetQt("爆发") && BattleVoice.IsUnlock())
             return -1;
         if (Core.Resolve<MemApiSpell>().GetCharges(Core.Resolve<MemApiSpell>().CheckActionChange(HeartBreak)) >= Core.Resolve<MemApiSpell>().GetMaxCharges(Core.Resolve<MemApiSpell>().CheckActionChange(HeartBreak)) - 0.1)
             return 1;

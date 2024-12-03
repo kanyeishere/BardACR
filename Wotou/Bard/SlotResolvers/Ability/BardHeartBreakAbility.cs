@@ -34,13 +34,13 @@ public class BardHeartBreakAbility : ISlotResolver
             return -1;
         if (!Core.Resolve<MemApiSpell>().CheckActionChange(HeartBreak).GetSpell().IsReadyWithCanCast())
             return -2;
-        if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 600 &&
+        if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 650 &&
             BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow) && 
             EmpyrealArrow.IsUnlock())
             return -3;
         if (EmpyrealArrow.RecentlyUsed(650))
             return -4;
-        if (Sidewinder.GetSpell().Cooldown.TotalMilliseconds < 600 && 
+        if (Sidewinder.GetSpell().Cooldown.TotalMilliseconds < 650 && 
             BardRotationEntry.QT.GetQt(QTKey.Sidewinder) &&
             Sidewinder.IsUnlock())
             return -5;
@@ -52,7 +52,7 @@ public class BardHeartBreakAbility : ISlotResolver
             BardRotationEntry.QT.GetQt("爆发") &&
             BattleVoice.IsUnlock())
             return -7;
-        if (Barrage.GetSpell().Cooldown.TotalMilliseconds < 600 && 
+        if (Barrage.GetSpell().Cooldown.TotalMilliseconds < 650 && 
             BardRotationEntry.QT.GetQt("爆发") &&
             Barrage.IsUnlock())
             return -8;
