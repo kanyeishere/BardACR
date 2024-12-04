@@ -49,10 +49,10 @@ public class DancerRotationEntry : IRotationEntry
     {
         new SlotResolverData(new DancerLastDanceHighGcd(), SlotMode.Gcd), //马上到期的落幕舞
         new SlotResolverData(new DancerFinishingMoveGcd(), SlotMode.Gcd),
-        new SlotResolverData(new DancerStandardStepDancingGcd(), SlotMode.Gcd),
-        new SlotResolverData(new DancerStandardStepGcd(), SlotMode.Gcd),
         new SlotResolverData(new DancerTechnicalStepDancingGcd(), SlotMode.Gcd),
         new SlotResolverData(new DancerTechnicalStepGcd(), SlotMode.Gcd),
+        new SlotResolverData(new DancerStandardStepDancingGcd(), SlotMode.Gcd),
+        new SlotResolverData(new DancerStandardStepGcd(), SlotMode.Gcd),
         new SlotResolverData(new Dancer1GBeforeTechStepGcd(), SlotMode.Gcd),
        
         new SlotResolverData(new DancerStarfallDanceHighGCD(), SlotMode.Gcd), // 快过期的流星舞
