@@ -33,7 +33,7 @@ public class WardensPaeanHotkeyResolver : IHotkeyResolver
             return;
         ImGui.Image(textureWrap.ImGuiHandle, size1);
         
-        if (SpellId.GetSpell().Cooldown.TotalMilliseconds > 0 || Core.Resolve<JobApi_Dancer>().IsDancing)
+        if (SpellId.GetSpell().Cooldown.TotalMilliseconds > 0)
         {
             // Use ImGui.GetItemRectMin() and ImGui.GetItemRectMax() for exact icon bounds
             Vector2 overlayMin = ImGui.GetItemRectMin();
