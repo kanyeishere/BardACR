@@ -67,7 +67,8 @@ public class DancerFanDanceAbility : ISlotResolver
             return 0;
         if (Core.Me.HasLocalPlayerAura(Devilment))
             return 1;
-        if (Core.Me.HasLocalPlayerAura(Medicated))
+        if (Core.Me.HasLocalPlayerAura(Medicated) &&
+            TechnicalStep.GetSpell().Cooldown.TotalMilliseconds >= 10000)
             return 1;
         if (!DevilmentSpell.IsUnlock())
             return 22;
