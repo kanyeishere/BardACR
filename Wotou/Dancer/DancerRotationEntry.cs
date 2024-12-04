@@ -31,15 +31,8 @@ public class DancerRotationEntry : IRotationEntry
     
     public string AuthorName { get; set; } = "Wotou";
     
-    private const string UpdateLog =  "更新日志：11.30" +
-                                      "\n- 用户现在可以自定义使用提拉纳的伶俐阈值" + 
-                                      "\n更新日志：11.17" +
-                                      "\n- 降低团辅期第二次落幕舞的优先级" +
-                                      "\n- 在团辅期的结束动作前1G时，不使用提拉纳" + 
-                                      "\n- 在团辅期的结束动作前2G且有落幕舞buff时，不使用提拉纳" + 
-                                      "\n- 在团辅期的最后1G，放宽伶俐阈值至<=40时，使用提拉纳" +
-                                      "\n- 提高非团辅期的剑舞优先级，现在会优先于落幕舞" +
-                                      "\n- 修改起手，减少伶俐溢出的可能";
+    private const string UpdateLog =  "更新日志：12.05" +
+                                      "\n- 当大舞小舞同时可以使用时，现在会优先使用大舞（绝伊甸P5起手）" ;
     
     public void Dispose()
     {
