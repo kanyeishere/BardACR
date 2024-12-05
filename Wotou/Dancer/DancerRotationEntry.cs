@@ -18,6 +18,7 @@ using Wotou.Dancer.Setting;
 using Wotou.Dancer.Trigger;
 using ImGuiNET;
 using Wotou.Common;
+using Wotou.Dancer.Sequence;
 using Wotou.Dancer.Triggers;
 using Wotou.Dancer.Utility;
 
@@ -31,7 +32,9 @@ public class DancerRotationEntry : IRotationEntry
     
     public string AuthorName { get; set; } = "Wotou";
     
-    private const string UpdateLog =  "更新日志：12.05" +
+    private const string UpdateLog =   "更新日志：12.05v02" +
+                                       "\n- 当大舞小舞同时可以使用时，现在会依次使用大舞探戈-GCD百花扇3-结束动作（绝伊甸P5起手）" +
+                                       "\n 更新日志：12.05" +
                                       "\n- 当大舞小舞同时可以使用时，现在会优先使用大舞（绝伊甸P5起手）" ;
     
     public void Dispose()
@@ -41,9 +44,9 @@ public class DancerRotationEntry : IRotationEntry
     private List<SlotResolverData> SlotResolvers = new()
     {
         new SlotResolverData(new DancerLastDanceHighGcd(), SlotMode.Gcd), //马上到期的落幕舞
-        new SlotResolverData(new DancerFinishingMoveGcd(), SlotMode.Gcd),
         new SlotResolverData(new DancerTechnicalStepDancingGcd(), SlotMode.Gcd),
         new SlotResolverData(new DancerTechnicalStepGcd(), SlotMode.Gcd),
+        new SlotResolverData(new DancerFinishingMoveGcd(), SlotMode.Gcd),
         new SlotResolverData(new DancerStandardStepDancingGcd(), SlotMode.Gcd),
         new SlotResolverData(new DancerStandardStepGcd(), SlotMode.Gcd),
         new SlotResolverData(new Dancer1GBeforeTechStepGcd(), SlotMode.Gcd),
@@ -94,6 +97,7 @@ public class DancerRotationEntry : IRotationEntry
         rot.AddTriggerAction(new DancerFeatherSaveAction());
         rot.AddTriggerCondition(new DancerFeatherCondition());
         rot.AddTriggerCondition(new DancerEspritCondition());
+        rot.AddSlotSequences(new TechnicalStandardStepSequence());
 
         rot.AddCanUseHighPrioritySlotCheck((mode, slot) =>
         {
