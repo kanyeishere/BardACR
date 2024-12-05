@@ -58,11 +58,15 @@ public class TechnicalStandardStepSequence: ISlotSequence
     private static void Step0(Slot slot)
     {
         slot.Add(TechnicalStep.GetSpell());
+        slot.Wait2NextGcd = true;
         slot.Add(Core.Resolve<JobApi_Dancer>().NextStep.GetSpell());
+        slot.Wait2NextGcd = true;
         slot.Add(Core.Resolve<JobApi_Dancer>().NextStep.GetSpell());
         if (DancerRotationEntry.QT.GetQt(QTKey.UsePotion) && ItemHelper.CheckCurrJobPotion())
             slot.Add(Spell.CreatePotion());
+        slot.Wait2NextGcd = true;
         slot.Add(Core.Resolve<JobApi_Dancer>().NextStep.GetSpell());
+        slot.Wait2NextGcd = true;
         slot.Add(Core.Resolve<JobApi_Dancer>().NextStep.GetSpell());
         slot.Add(QuadrupleTechnicalFinish.GetSpell());
         if (Devilment.IsUnlockWithCDCheck())

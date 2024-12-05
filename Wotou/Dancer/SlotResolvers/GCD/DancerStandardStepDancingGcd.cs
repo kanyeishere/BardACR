@@ -32,10 +32,11 @@ public class DancerStandardStepDancingGcd : ISlotResolver
         if (Core.Me.HasAura(StandardStep) && Core.Resolve<JobApi_Dancer>().CompleteSteps == 2)
         {
             slot.Add(DoubleStandardFinish.GetSpell());
-            AI.Instance.BattleData.CurrGcdAbilityCount = 1;
+            AI.Instance.BattleData.CurrGcdAbilityCount = 0;
             return;
         }
+        slot.Wait2NextGcd = true;
         slot.Add(Core.Resolve<JobApi_Dancer>().NextStep.GetSpell());
-        AI.Instance.BattleData.CurrGcdAbilityCount = 1;
+        AI.Instance.BattleData.CurrGcdAbilityCount = 0;
     }
 }

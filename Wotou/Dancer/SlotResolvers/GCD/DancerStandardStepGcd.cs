@@ -25,8 +25,8 @@ public class DancerStandardStepGcd : ISlotResolver
             return -2;
         if (Core.Resolve<JobApi_Dancer>().IsDancing)
             return -3;
-        if (Core.Me.HasLocalPlayerAura(Devilment) && !Core.Me.HasMyAuraWithTimeleft(Devilment, 3500))
-            return -4;
+        /*if (Core.Me.HasLocalPlayerAura(Devilment) && !Core.Me.HasMyAuraWithTimeleft(Devilment, 3500))
+            return -4;*/
         if (StandardStep.GetSpell().Cooldown.TotalMilliseconds <= DancerSettings.Instance.StandardStepCdTolerance)
             return 1;
         if (!StandardStep.GetSpell().IsReadyWithCanCast())

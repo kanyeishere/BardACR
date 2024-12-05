@@ -39,6 +39,7 @@ public class DancerTechnicalStepDancingGcd: ISlotResolver
             AI.Instance.BattleData.CurrGcdAbilityCount = 0;
             return;
         }
+        slot.Wait2NextGcd = true;
         slot.Add(Core.Resolve<JobApi_Dancer>().NextStep.GetSpell());
         if (Core.Me.HasAura(TechnicalStep) && Core.Resolve<JobApi_Dancer>().CompleteSteps == 2)
         {
@@ -47,5 +48,6 @@ public class DancerTechnicalStepDancingGcd: ISlotResolver
             if (DancerRotationEntry.QT.GetQt(QTKey.UsePotion) && ItemHelper.CheckCurrJobPotion())
                 slot.Add(Spell.CreatePotion());
         }
+        AI.Instance.BattleData.CurrGcdAbilityCount = 0;
     }
 }

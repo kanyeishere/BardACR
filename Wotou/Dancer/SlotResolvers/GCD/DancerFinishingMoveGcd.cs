@@ -25,9 +25,9 @@ public class DancerFinishingMoveGcd : ISlotResolver
             return -20;
         if (FinishingMove.GetSpell().Cooldown.TotalMilliseconds <= DancerSettings.Instance.StandardStepCdTolerance)
             return 1;
-        if (!FinishingMove.GetSpell().IsReadyWithCanCast())
-            return -10;
-        return 0;
+        if (FinishingMove.GetSpell().IsReadyWithCanCast())
+            return 10;
+        return -10;
     }
 
     public void Build(Slot slot)

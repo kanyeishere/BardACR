@@ -120,30 +120,8 @@ namespace Wotou.Dancer.Utility
             return null;
         }
 
-        public static Spell? GetStep()
+        public static Spell GetStep()
         {
-            if (Core.Me.GetCurrTarget().CanAttack())
-            {
-                if (Core.Me.HasAura(DancerDefinesData.Buffs.StandardStep) && Core.Resolve<JobApi_Dancer>().CompleteSteps == 2)
-                {
-                    return DancerDefinesData.Spells.DoubleStandardFinish.GetSpell();
-                }
-                if (Core.Resolve<JobApi_Dancer>().IsDancing && Core.Resolve<JobApi_Dancer>().CompleteSteps == 4)
-                {
-                    return null;
-                }
-            }
-            else
-            {
-                if (Core.Me.HasAura(DancerDefinesData.Buffs.StandardStep) && Core.Resolve<JobApi_Dancer>().CompleteSteps == 2)
-                {
-                    return null;
-                }
-                if (Core.Resolve<JobApi_Dancer>().CompleteSteps == 4)
-                {
-                    return null;
-                }
-            }
             return Core.Resolve<JobApi_Dancer>().NextStep.GetSpell();
         }
     }
