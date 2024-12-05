@@ -34,7 +34,7 @@ public class BardHeartBreakAbility : ISlotResolver
             return -1;
         if (!Core.Resolve<MemApiSpell>().CheckActionChange(HeartBreak).GetSpell().IsReadyWithCanCast())
             return -2;
-        if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 650 &&
+        if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 1000 &&
             BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow) && 
             EmpyrealArrow.IsUnlock())
             return -3;
