@@ -51,7 +51,9 @@ public class BardApexMaxGcd : ISlotResolver
              !target.HasMyAuraWithTimeleft(VenomousBiteDot, 8000) || !target.HasMyAuraWithTimeleft(WindBiteDot, 8000)) &&
             (target.HasLocalPlayerAura(CausticBiteDot) || target.HasLocalPlayerAura(VenomousBiteDot)) && 
             (target.HasLocalPlayerAura(StormBiteDot) || target.HasLocalPlayerAura(WindBiteDot)) &&
-            Core.Resolve<JobApi_Bard>().SoulVoice >= 95)
+            Core.Resolve<JobApi_Bard>().SoulVoice >= 95 &&
+            !BardBattleData.Instance.HasUseApexArrowInCurrentNonBurstingPeriod && 
+            partyBuffCountdown >= 43)
             return 1;
         return -1;
     }
