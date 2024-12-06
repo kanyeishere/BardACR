@@ -166,6 +166,11 @@ namespace Wotou.Dancer
             DancerRotationEntry.UpdateDancerPartnerPanel();
             SmartUseHighPrioritySlot();
             
+            if (Core.Me.IsMoving())
+                Core.Resolve<MemApiMove>().CancelMove();
+            if (Core.Resolve<MemApiMove>().IsMoving())
+                Core.Resolve<MemApiMove>().CancelMove();
+            
             if (DancerSettings.Instance.IsDailyMode)
             {
                 

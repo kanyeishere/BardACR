@@ -25,6 +25,11 @@ public class BardRotationEventHandler : IRotationEventHandler
         BardRotationEntry.UpdateWardensPaeanPanel();
         SmartUseHighPrioritySlot();
         
+        if (Core.Me.IsMoving())
+            Core.Resolve<MemApiMove>().CancelMove();
+        if (Core.Resolve<MemApiMove>().IsMoving())
+            Core.Resolve<MemApiMove>().CancelMove();
+        
         if (!BardUtil.IsSongOrderNormal())
         {
             BardRotationEntry.QT.SetQt("对齐旅神", false);
