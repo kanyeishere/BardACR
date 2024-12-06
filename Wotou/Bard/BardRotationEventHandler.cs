@@ -10,6 +10,7 @@ using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.JobGauge.Enums;
 using Dalamud.Utility;
 using Wotou.Bard.Utility;
+using Wotou.Common;
 
 namespace Wotou.Bard;
 
@@ -284,6 +285,8 @@ public class BardRotationEventHandler : IRotationEventHandler
         }
         if (BardSettings.Instance.WelcomeVoice)
             ChatHelper.SendMessage("/pdr tts 你好，欢迎你使用窝头诗人");
+        TimeLineUpdater.UpdateFiles("https://raw.githubusercontent.com/kanyeishere/ACR-Timeline/refs/heads/main/Wotou-BardMaster.json");
+
     }
 
     public void OnExitRotation()
