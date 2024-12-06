@@ -1,5 +1,6 @@
 using AEAssist;
 using AEAssist.CombatRoutine.Module;
+using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.JobApi;
 using Wotou.Bard.Data;
@@ -12,6 +13,11 @@ public class BardApexMaxGcd : ISlotResolver
     private const uint ApexArrow = BardDefinesData.Spells.ApexArrow;
     private const uint RagingStrikes = BardDefinesData.Spells.RagingStrikes;
     private const uint BattleVoice = BardDefinesData.Spells.BattleVoice;
+    
+    private const uint CausticBiteDot = BardDefinesData.Buffs.CausticBite;
+    private const uint StormBiteDot = BardDefinesData.Buffs.Stormbite;
+    private const uint VenomousBiteDot = BardDefinesData.Buffs.VenomousBite;
+    private const uint WindBiteDot = BardDefinesData.Buffs.Windbite;
     
     public int Check()
     {
@@ -35,6 +41,17 @@ public class BardApexMaxGcd : ISlotResolver
         if (RagingStrikes.RecentlyUsed(10000) &&
             BattleVoice.RecentlyUsed(10000) &&
             Core.Resolve<JobApi_Bard>().SoulVoice == 100)
+            return 1;
+        
+        // dot剩余8秒以下，且绝峰箭能量快满了
+        var target = Core.Me.GetCurrTarget();
+        if (target == null)
+            return -1;
+        if ((!target.HasMyAuraWithTimeleft(CausticBiteDot, 8000) || !target.HasMyAuraWithTimeleft(StormBiteDot, 8000) ||
+             !target.HasMyAuraWithTimeleft(VenomousBiteDot, 8000) || !target.HasMyAuraWithTimeleft(WindBiteDot, 8000)) &&
+            (target.HasLocalPlayerAura(CausticBiteDot) || target.HasLocalPlayerAura(VenomousBiteDot)) && 
+            (target.HasLocalPlayerAura(StormBiteDot) || target.HasLocalPlayerAura(WindBiteDot)) &&
+            Core.Resolve<JobApi_Bard>().SoulVoice >= 95)
             return 1;
         return -1;
     }
