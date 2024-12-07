@@ -38,9 +38,9 @@ public class TechnicalStandardStepSequence: ISlotSequence
             return -1;
         if (!StandardStep.IsUnlockWithCDCheck())
             return -2;
-        if (DancerRotationEntry.QT.GetQt(QTKey.TechnicalStep))
+        if (!DancerRotationEntry.QT.GetQt(QTKey.TechnicalStep))
             return -3;
-        if (DancerRotationEntry.QT.GetQt(QTKey.StandardStep))
+        if (!DancerRotationEntry.QT.GetQt(QTKey.StandardStep))
             return -4;
         return 1;
     }
