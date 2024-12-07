@@ -137,8 +137,9 @@ public class ClosedPositionHotkeyResolver : IHotkeyResolver
                 // 确保不发送空行
                 if (!string.IsNullOrWhiteSpace(line))
                 {
+                    var number = index + 1;
                     // 替换 <t> 为目标的名称并发送每行消息
-                    var formattedLine = line.Replace("<t>", PartyHelper.Party[index].Name.ToString());
+                    var formattedLine = line.Replace("<t>", "<" + number + ">");
                     ChatHelper.SendMessage(formattedLine);
                 }
             }
