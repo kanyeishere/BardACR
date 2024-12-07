@@ -7,6 +7,7 @@ using AEAssist.JobApi;
 using AEAssist.MemoryApi;
 using Wotou.Dancer.Data;
 using Dalamud.Game.ClientState.Objects.Types;
+using Wotou.Common;
 using Wotou.Dancer.Setting;
 using Wotou.Dancer.Utility;
 
@@ -103,6 +104,7 @@ namespace Wotou.Dancer
             }
             if (DancerSettings.Instance.WelcomeVoice)
                 ChatHelper.SendMessage("/pdr tts 你好，欢迎你使用窝头舞者");
+            TimeLineUpdater.UpdateFiles("https://raw.githubusercontent.com/kanyeishere/ACR-Timeline/refs/heads/main/Wotou-DancerMaster.json");
         }
 
         public void OnExitRotation()
