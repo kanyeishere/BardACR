@@ -25,7 +25,7 @@ public class DancerFlourishAbility : ISlotResolver
             return -4;
         if (!DancerRotationEntry.QT.GetQt(QTKey.Flourish))
             return -1;
-        if (TechnicalStep.GetSpell().Cooldown.TotalMilliseconds < 15000)
+        if (TechnicalStep.GetSpell().Cooldown.TotalMilliseconds < 15000 && DancerRotationEntry.QT.GetQt(QTKey.TechnicalStep))
             return -2;
         if (QuadrupleTechnicalFinish.RecentlyUsed(1500))
             return -3;
