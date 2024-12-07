@@ -53,27 +53,52 @@ public class TechnicalStandardStepSequence: ISlotSequence
         Step0,
         Step1,
         Step2,
+        Step3,
+        Step4,
+        Step5,
+        Step6,
+        Step7
     };
     
     private static void Step0(Slot slot)
     {
         slot.Add(TechnicalStep.GetSpell());
+    }
+
+    private static void Step1(Slot slot)
+    {
         slot.Wait2NextGcd = true;
         slot.Add(Core.Resolve<JobApi_Dancer>().NextStep.GetSpell());
+    }
+    
+    private static void Step2(Slot slot)
+    {
         slot.Wait2NextGcd = true;
         slot.Add(Core.Resolve<JobApi_Dancer>().NextStep.GetSpell());
-        if (DancerRotationEntry.QT.GetQt(QTKey.UsePotion) && ItemHelper.CheckCurrJobPotion())
-            slot.Add(Spell.CreatePotion());
+    }
+    
+    private static void Step3(Slot slot)
+    {
         slot.Wait2NextGcd = true;
         slot.Add(Core.Resolve<JobApi_Dancer>().NextStep.GetSpell());
+    }
+    
+    private static void Step4(Slot slot)
+    {
         slot.Wait2NextGcd = true;
         slot.Add(Core.Resolve<JobApi_Dancer>().NextStep.GetSpell());
+    }
+
+    private static void Step5(Slot slot)
+    {
         slot.Add(QuadrupleTechnicalFinish.GetSpell());
         if (Devilment.IsUnlockWithCDCheck())
             slot.Add(Devilment.GetSpell());
     }
+    
+     
 
-    private static void Step1(Slot slot)
+    private static void Step6(Slot slot)
     {
         if (LastDance.GetSpell().IsReadyWithCanCast())
             slot.Add(LastDance.GetSpell());
@@ -102,7 +127,7 @@ public class TechnicalStandardStepSequence: ISlotSequence
         _hasUsedFanDance3 = false;
     }
 
-    private static void Step2(Slot slot)
+    private static void Step7(Slot slot)
     {
         if (Core.Resolve<JobApi_Dancer>().Esprit >= 70)
             slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(SaberDance).GetSpell());
