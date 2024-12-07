@@ -202,9 +202,7 @@ namespace Wotou.Dancer
                     }
                 }
                 
-                if (DancerSettings.Instance.EnableAutoDancing && 
-                    Core.Resolve<MemApiDuty>().InMission && 
-                    DancerDefinesData.Spells.StandardStep.IsUnlockWithCDCheck())
+                if (DancerSettings.Instance.EnableAutoDancing && Core.Resolve<MemApiDuty>().InMission)
                 {
                     var nearbyEnemies = TargetHelper.GetNearbyEnemyCount(35);
                     if (nearbyEnemies > 0 && DancerDefinesData.Spells.StandardStep.GetSpell().IsReadyWithCanCast())
