@@ -138,32 +138,6 @@ namespace Wotou.Dancer
 
                 }
             }
-            else if (!Core.Me.HasLocalPlayerAura(DancerDefinesData.Buffs.ClosedPosition) && 
-                     PartyHelper.Party.Count > 1 && 
-                     DancerSettings.Instance.IsDailyMode &&
-                     DancerSettings.Instance.EnableAutoDancePartner &&
-                     DancerDefinesData.Spells.ClosedPosition.IsUnlock() && 
-                     DancerDefinesData.Spells.ClosedPosition.GetSpell().IsReadyWithCanCast())
-            {
-                IBattleChara targetPlayer = PartyHelper.Party[^1];
-                foreach (var player in PartyHelper.Party)
-                {
-                    if (player != Core.Me && jobPriorities.TryGetValue(player.CurrentJob(), out var playerPriority) && playerPriority <= jobPriorities[targetPlayer.CurrentJob()])
-                    {
-                        if (targetPlayer.CurrentJob() == player.CurrentJob() && targetPlayer.MaxHp >= player.MaxHp)
-                        {
-                            break;
-                        }
-                        else
-                        {
-                            targetPlayer = player;
-                        }
-                    }
-                }
-                if (!targetPlayer.IsDead) {
-                    await new Spell(DancerDefinesData.Spells.ClosedPosition,targetPlayer).Cast();
-                }
-            }
         }
 
         public async Task OnPreCombat()
@@ -231,6 +205,32 @@ namespace Wotou.Dancer
                     }
                     else
                         _randomTime = TimeHelper.Now() + RandomHelper.RandomInt(1000, 2000);
+                }
+                
+                if (!Core.Me.HasLocalPlayerAura(DancerDefinesData.Buffs.ClosedPosition) && 
+                    PartyHelper.Party.Count > 1 && 
+                    DancerSettings.Instance.EnableAutoDancePartner && 
+                    DancerDefinesData.Spells.ClosedPosition.IsUnlockWithCDCheck())
+                {
+                    LogHelper.Print("寻找舞伴");
+                    IBattleChara targetPlayer = PartyHelper.Party[^1];
+                    foreach (var player in PartyHelper.Party)
+                    {
+                        if (player != Core.Me && jobPriorities.TryGetValue(player.CurrentJob(), out var playerPriority) && playerPriority <= jobPriorities[targetPlayer.CurrentJob()])
+                        {
+                            if (targetPlayer.CurrentJob() == player.CurrentJob() && targetPlayer.MaxHp >= player.MaxHp)
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                targetPlayer = player;
+                            }
+                        }
+                    }
+                    if (!targetPlayer.IsDead) {
+                        await new Spell(DancerDefinesData.Spells.ClosedPosition,targetPlayer).Cast();
+                    }
                 }
             }
         }

@@ -32,10 +32,10 @@ public class DancerRotationEntry : IRotationEntry
     
     public string AuthorName { get; set; } = "Wotou";
     
-    private const string UpdateLog =   "更新日志：12.05v02" +
-                                       "\n- 当大舞小舞同时可以使用时，现在会依次使用大舞探戈-GCD百花扇3-结束动作（绝伊甸P5起手）" +
-                                       "\n 更新日志：12.05" +
-                                      "\n- 当大舞小舞同时可以使用时，现在会优先使用大舞（绝伊甸P5起手）" ;
+    private const string UpdateLog = "\n 更新日志：12.08" +
+                                     "\n- 日随模式添加自动舞伴功能" + 
+                                     "\n更新日志：12.05v02" +
+                                     "\n- 当大舞小舞同时可以使用时，现在会依次使用大舞探戈-GCD百花扇3-结束动作";
     
     public void Dispose()
     {
@@ -265,11 +265,11 @@ public class DancerRotationEntry : IRotationEntry
             if (DancerSettings.Instance.IsDailyMode)
             {
                 ImGui.Separator();
-                ImGui.Checkbox("自动完成舞步", ref DancerSettings.Instance.EnableAutoDancing);
+                ImGui.Checkbox("自动舞步", ref DancerSettings.Instance.EnableAutoDancing);
                 ImGui.SameLine();
-                ImGui.Checkbox("自动使用速行", ref DancerSettings.Instance.EnableAutoPeloton);
+                ImGui.Checkbox("自动速行", ref DancerSettings.Instance.EnableAutoPeloton);
                 ImGui.SameLine();
-                ImGui.Checkbox("自动绑定舞伴", ref DancerSettings.Instance.EnableAutoDancePartner);
+                ImGui.Checkbox("自动舞伴", ref DancerSettings.Instance.EnableAutoDancePartner);
             }
             ImGui.Separator();
             UiHelper.RightInputInt("倒计时提前使用小舞", ref DancerSettings.Instance.OpenerStandardStepTime, 6500, 15000, "(毫秒)");
