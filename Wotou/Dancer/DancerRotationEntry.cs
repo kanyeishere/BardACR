@@ -32,7 +32,7 @@ public class DancerRotationEntry : IRotationEntry
     
     public string AuthorName { get; set; } = "Wotou";
     
-    private const string UpdateLog = "\n 更新日志：12.08" +
+    private const string UpdateLog = "更新日志：12.08" +
                                      "\n- 日随模式添加自动舞伴功能" + 
                                      "\n更新日志：12.05v02" +
                                      "\n- 当大舞小舞同时可以使用时，现在会依次使用大舞探戈-GCD百花扇3-结束动作";
