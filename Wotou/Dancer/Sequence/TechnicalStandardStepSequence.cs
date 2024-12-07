@@ -38,6 +38,10 @@ public class TechnicalStandardStepSequence: ISlotSequence
             return -1;
         if (!StandardStep.IsUnlockWithCDCheck())
             return -2;
+        if (DancerRotationEntry.QT.GetQt(QTKey.TechnicalStep))
+            return -3;
+        if (DancerRotationEntry.QT.GetQt(QTKey.StandardStep))
+            return -4;
         return 1;
     }
     
@@ -120,7 +124,7 @@ public class TechnicalStandardStepSequence: ISlotSequence
             slot.Add(FanDance3.GetSpell());
             _hasUsedFanDance3 = true;
         }
-        if (Flourish.GetSpell().IsReadyWithCanCast())
+        if (Flourish.GetSpell().IsReadyWithCanCast() && DancerRotationEntry.QT.GetQt(QTKey.Flourish))
             slot.Add(Flourish.GetSpell());
         if (!_hasUsedFanDance3 && FanDance3.GetSpell().IsReadyWithCanCast())
             slot.Add(FanDance3.GetSpell());
