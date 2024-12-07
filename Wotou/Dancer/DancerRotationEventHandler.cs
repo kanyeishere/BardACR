@@ -138,7 +138,12 @@ namespace Wotou.Dancer
 
                 }
             }
-            else if (DancerRotationEntry.QT.GetQt("自动舞伴") && !Core.Me.HasLocalPlayerAura(DancerDefinesData.Buffs.ClosedPosition) && PartyHelper.Party.Count > 1 && DancerDefinesData.Spells.ClosedPosition.IsUnlock() && DancerDefinesData.Spells.ClosedPosition.GetSpell().IsReadyWithCanCast())
+            else if (!Core.Me.HasLocalPlayerAura(DancerDefinesData.Buffs.ClosedPosition) && 
+                     PartyHelper.Party.Count > 1 && 
+                     DancerSettings.Instance.IsDailyMode &&
+                     DancerSettings.Instance.EnableAutoDancePartner &&
+                     DancerDefinesData.Spells.ClosedPosition.IsUnlock() && 
+                     DancerDefinesData.Spells.ClosedPosition.GetSpell().IsReadyWithCanCast())
             {
                 IBattleChara targetPlayer = PartyHelper.Party[^1];
                 foreach (var player in PartyHelper.Party)

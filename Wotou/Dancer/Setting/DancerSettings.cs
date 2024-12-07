@@ -63,6 +63,7 @@ public class DancerSettings
     public bool IsDailyMode = false; //false 表示高难模式，true 表示日随模式
     public bool EnableAutoPeloton  = true; // 是否在自动使用速行
     public bool EnableAutoDancing = true; // 是否在自动使用舞步
+    public bool EnableAutoDancePartner = true; // 是否在自动使用舞伴
     
     public bool IsReadInfoWindow04 = false;
     

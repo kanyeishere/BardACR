@@ -268,6 +268,8 @@ public class DancerRotationEntry : IRotationEntry
                 ImGui.Checkbox("自动完成舞步", ref DancerSettings.Instance.EnableAutoDancing);
                 ImGui.SameLine();
                 ImGui.Checkbox("自动使用速行", ref DancerSettings.Instance.EnableAutoPeloton);
+                ImGui.SameLine();
+                ImGui.Checkbox("自动绑定舞伴", ref DancerSettings.Instance.EnableAutoDancePartner);
             }
             ImGui.Separator();
             UiHelper.RightInputInt("倒计时提前使用小舞", ref DancerSettings.Instance.OpenerStandardStepTime, 6500, 15000, "(毫秒)");
