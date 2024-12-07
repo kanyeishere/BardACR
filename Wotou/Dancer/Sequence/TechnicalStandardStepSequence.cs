@@ -126,13 +126,13 @@ public class TechnicalStandardStepSequence: ISlotSequence
         }
         if (Flourish.GetSpell().IsReadyWithCanCast() && DancerRotationEntry.QT.GetQt(QTKey.Flourish))
             slot.Add(Flourish.GetSpell());
-        if (!_hasUsedFanDance3 && FanDance3.GetSpell().IsReadyWithCanCast())
-            slot.Add(FanDance3.GetSpell());
-        _hasUsedFanDance3 = false;
     }
 
     private static void Step7(Slot slot)
     {
+        if (!_hasUsedFanDance3 && FanDance3.GetSpell().IsReadyWithCanCast())
+            slot.Add(FanDance3.GetSpell());
+        _hasUsedFanDance3 = false;
         if (Core.Resolve<JobApi_Dancer>().Esprit >= 70)
             slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(SaberDance).GetSpell());
         else
