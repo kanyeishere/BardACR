@@ -47,10 +47,10 @@ public class BardApexMaxGcd : ISlotResolver
         var target = Core.Me.GetCurrTarget();
         if (target == null)
             return -1;
-        if ((!target.HasMyAuraWithTimeleft(CausticBiteDot, 8000) || !target.HasMyAuraWithTimeleft(StormBiteDot, 8000) ||
-             !target.HasMyAuraWithTimeleft(VenomousBiteDot, 8000) || !target.HasMyAuraWithTimeleft(WindBiteDot, 8000)) &&
-            (target.HasLocalPlayerAura(CausticBiteDot) || target.HasLocalPlayerAura(VenomousBiteDot)) && 
-            (target.HasLocalPlayerAura(StormBiteDot) || target.HasLocalPlayerAura(WindBiteDot)) &&
+        if (((target.HasLocalPlayerAura(CausticBiteDot) && !target.HasMyAuraWithTimeleft(CausticBiteDot, 8000)) ||
+             (target.HasLocalPlayerAura(StormBiteDot) && !target.HasMyAuraWithTimeleft(StormBiteDot, 8000)) ||
+             (target.HasLocalPlayerAura(VenomousBiteDot) && !target.HasMyAuraWithTimeleft(VenomousBiteDot, 8000)) ||
+             (target.HasLocalPlayerAura(WindBiteDot) && !target.HasMyAuraWithTimeleft(WindBiteDot, 8000))) &&
             Core.Resolve<JobApi_Bard>().SoulVoice >= 95 &&
             !BardBattleData.Instance.HasUseApexArrowInCurrentNonBurstingPeriod && 
             partyBuffCountdown >= 43)
