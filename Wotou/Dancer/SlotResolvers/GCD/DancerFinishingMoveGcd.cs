@@ -23,6 +23,8 @@ public class DancerFinishingMoveGcd : ISlotResolver
             return -1;
         if (!Core.Me.HasAura(FinishingMoveReady))
             return -20;
+        if (!FinishingMove.GetSpell().IsUnlock())
+            return -101;
         if (FinishingMove.GetSpell().Cooldown.TotalMilliseconds <= DancerSettings.Instance.StandardStepCdTolerance)
             return 1;
         if (FinishingMove.GetSpell().IsReadyWithCanCast())
