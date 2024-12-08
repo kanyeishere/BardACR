@@ -24,6 +24,8 @@ public class DancerTillanaGcd : ISlotResolver
     {
         if (!Tillana.GetSpell().IsReadyWithCanCast())
             return -1;
+        if (!Tillana.IsUnlockWithCDCheck())
+            return -10;
         // 不在小舞前1G使用 
         if  (Core.Resolve<MemApiSpell>().CheckActionChange(StandardStep).GetSpell().Cooldown.TotalMilliseconds < 
              2 * GCDHelper.GetGCDDuration() - 1000 && 
