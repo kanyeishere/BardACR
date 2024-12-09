@@ -22,7 +22,7 @@ public class BardApexGcd : ISlotResolver
     
     public int Check()
     {
-        if (!BardRotationEntry.QT.GetQt("绝峰箭"))
+        if (!BardRotationEntry.QT.GetQt(QTKey.Apex))
             return -1;
         
         // 日常模式下，90能量释放绝峰箭

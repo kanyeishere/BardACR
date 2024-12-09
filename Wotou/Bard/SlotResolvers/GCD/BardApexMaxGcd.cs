@@ -21,7 +21,7 @@ public class BardApexMaxGcd : ISlotResolver
     
     public int Check()
     {
-        if (!BardRotationEntry.QT.GetQt("绝峰箭"))
+        if (!BardRotationEntry.QT.GetQt(QTKey.Apex))
             return -1;
         if (!BardRotationEntry.QT.GetQt("爆发"))
             return -1;

@@ -13,7 +13,7 @@ public class BardApexWithoutBurstingQtGcd : ISlotResolver
     
     public int Check()
     {
-        if (!BardRotationEntry.QT.GetQt("绝峰箭"))
+        if (!BardRotationEntry.QT.GetQt(QTKey.Apex))
             return -1;
         // 本文件只处理未开启爆发QT时，满能量的绝峰箭
         if (BardRotationEntry.QT.GetQt("爆发"))
