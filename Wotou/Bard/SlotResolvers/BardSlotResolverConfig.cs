@@ -12,11 +12,11 @@ public static class BardSlotResolverConfig
             new SlotResolverData(new BardEmpyrealArrowGcd(), SlotMode.Always),
 
             // gcd队列
+            new SlotResolverData(new BardBlastArrowMaxGcd(), SlotMode.Gcd),
             new SlotResolverData(new BardIronJawsGcd(), SlotMode.Gcd),
             new SlotResolverData(new BardApexMaxGcd(), SlotMode.Gcd),
             new SlotResolverData(new BardDotGcd(), SlotMode.Gcd),
             new SlotResolverData(new BardApexWithoutBurstingQtGcd(), SlotMode.Gcd),
-            new SlotResolverData(new BardBlastArrowMaxGcd(), SlotMode.Gcd),
             new SlotResolverData(new BardRefulgentArrowMaxGcd(), SlotMode.Gcd),
             new SlotResolverData(new BardApexGcd(), SlotMode.Gcd),
             new SlotResolverData(new BardBlastArrowGcd(), SlotMode.Gcd),

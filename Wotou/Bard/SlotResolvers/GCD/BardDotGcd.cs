@@ -17,7 +17,9 @@ public class BardDotGcd : ISlotResolver
     private static readonly uint[] 风dotBuffs = [BardDefinesData.Buffs.Windbite, BardDefinesData.Buffs.Stormbite];
     private const uint VenomousBite = BardDefinesData.Spells.VenomousBite;
     private const uint WindBite = BardDefinesData.Spells.Windbite;
-
+    
+    private const uint HawkEyeBuff = BardDefinesData.Buffs.HawksEye;
+    private const uint BarrageBuff = BardDefinesData.Buffs.Barrage;
     
     public int Check()
     {
@@ -30,6 +32,8 @@ public class BardDotGcd : ISlotResolver
             return -1;
         if (!TargetHelper.IsBoss(target) && !BardSettings.Instance.ApplyDotOnTrashMobs && BardSettings.Instance.IsDailyMode)
             return -1;
+        if (Core.Me.HasAura(HawkEyeBuff) || Core.Me.HasAura(BarrageBuff))
+            return -25;
         if (!HasAnyDot(target, 风dotBuffs) && WindBite.IsUnlock())
             return 1;
         if (!HasAnyDot(target, 毒dotBuffs) && VenomousBite.IsUnlock())
