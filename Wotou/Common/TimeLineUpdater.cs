@@ -76,7 +76,22 @@ namespace Wotou.Common
               }
             }
             else
-              LogHelper.Print("时间轴", fileName + " 已是最新版本");
+            {
+              if (await TimeLineUpdater.DownloadTimeLine(timeLine.DownloadUrl, filePath))
+              {
+                LogHelper.Print("时间轴", fileName + " 更新成功");
+                if (timeLine.UpdateInfo != "")
+                  LogHelper.Print("时间轴", "更新日志：" + timeLine.UpdateInfo);
+              }
+              else
+              {
+                LogHelper.Print("时间轴", "时间轴更新失败！请检查github网络连接！");
+                baseDir = (string) null;
+                triggerlinesDir = (string) null;
+                files = (string[]) null;
+                return;
+              }
+            }
             string[] strArray = files;
             for (int index = 0; index < strArray.Length; ++index)
             {
