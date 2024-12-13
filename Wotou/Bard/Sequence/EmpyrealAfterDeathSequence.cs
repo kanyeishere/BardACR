@@ -37,8 +37,7 @@ public class EmpyrealAfterDeathSequence: ISlotSequence
     {
         if (AI.Instance.BattleData.CurrBattleTimeInMs < 5000)
             return -9;
-        if (EmpyrealArrow.IsUnlock() &&
-            EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 800 &&
+        if (EmpyrealArrow.IsUnlockWithCDCheck() &&
             BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow) &&
             GCDHelper.GetGCDCooldown() == 0 && 
             BardUtil.HasNoPartyBuff())
