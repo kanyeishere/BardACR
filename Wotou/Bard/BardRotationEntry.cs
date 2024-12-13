@@ -189,12 +189,14 @@ public class BardRotationEntry : IRotationEntry
         QT.AddQt(QTKey.Debug, false, "是否打印调试信息");
         QT.AddQt(QTKey.EmpyrealArrow, true, "是否使用九天");
         QT.AddQt(QTKey.Sidewinder, true, "是否使用侧风");
+        QT.AddQt(QTKey.EmpyrealArrowBeforeGcd, false, "Boss上天后，落地第一个技能是否使用九天");
         if(BardSettings.Instance.JobViewSave.QtUnVisibleList.Count == 0 )
         {
             BardSettings.Instance.JobViewSave.QtUnVisibleList.Add("Debug");
             BardSettings.Instance.JobViewSave.QtUnVisibleList.Add(QTKey.EmpyrealArrow);
             BardSettings.Instance.JobViewSave.QtUnVisibleList.Add(QTKey.Sidewinder);
         }
+        BardSettings.Instance.JobViewSave.QtUnVisibleList.Add(QTKey.EmpyrealArrowBeforeGcd);
 
         // 添加快捷按钮 (带技能图标)
         QT.AddHotkey("防击退", new MyNormalSpellHotKeyResolver(BardDefinesData.Spells.ArmsLength, 

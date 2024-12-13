@@ -56,9 +56,33 @@ public class EmpyrealAfterDeathSequence: ISlotSequence
     public List<Action<Slot>> Sequence { get; } = new List<Action<Slot>>
     {
         Step0,
+        Step1,
+        Step2,
+        Step3
     };
     
     private static void Step0(Slot slot)
+    {
+        if (BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrowBeforeGcd))
+        {
+            if (Core.Resolve<JobApi_Bard>().Repertoire == 3 &&
+                Core.Resolve<JobApi_Bard>().ActiveSong == Wanderer)
+                slot.Add(PitchPerfect.GetSpell());
+            slot.Add(EmpyrealArrow.GetSpell());
+        } 
+    }
+    
+    private static void Step1(Slot slot)
+    {
+        if (BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrowBeforeGcd))
+        {
+            if (Core.Resolve<JobApi_Bard>().Repertoire == 3 &&
+                Core.Resolve<JobApi_Bard>().ActiveSong == Wanderer)
+                slot.Add(PitchPerfect.GetSpell());
+        }
+    }
+    
+    private static void Step2(Slot slot)
     {
         var partyBuffCountdown  = BardBattleData.Instance.First120SBuffSpellId.GetSpell().Cooldown.TotalSeconds;
         if (!BardBattleData.Instance.HasUseApexArrowInCurrentNonBurstingPeriod &&
@@ -77,10 +101,14 @@ public class EmpyrealAfterDeathSequence: ISlotSequence
             slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(VenomousBite).GetSpell());
         else
             slot.Add(GetBaseGcd());
+    }
+
+    private static void Step3(Slot slot)
+    {
         if (Core.Resolve<JobApi_Bard>().Repertoire >= 2 && 
-            Core.Resolve<JobApi_Bard>().ActiveSong == Wanderer)
+            Core.Resolve<JobApi_Bard>().ActiveSong == Wanderer &&
+            !BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrowBeforeGcd))
             slot.Add(PitchPerfect.GetSpell());
-        //slot.Add(EmpyrealArrow.GetSpell());
     }
     
     private static Spell GetBaseGcd()
