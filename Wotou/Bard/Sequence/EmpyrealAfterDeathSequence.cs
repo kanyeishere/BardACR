@@ -64,7 +64,7 @@ public class EmpyrealAfterDeathSequence: ISlotSequence
     {
         if (BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrowBeforeGcd))
         {
-            if (Core.Resolve<JobApi_Bard>().Repertoire == 3 &&
+            if (Core.Resolve<JobApi_Bard>().Repertoire >= 2 &&
                 Core.Resolve<JobApi_Bard>().ActiveSong == Wanderer)
                 slot.Add(PitchPerfect.GetSpell());
             slot.Add(EmpyrealArrow.GetSpell());
