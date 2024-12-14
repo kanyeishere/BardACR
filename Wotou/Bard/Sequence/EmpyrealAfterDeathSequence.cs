@@ -55,7 +55,7 @@ public class EmpyrealAfterDeathSequence: ISlotSequence
     public List<Action<Slot>> Sequence { get; } = new List<Action<Slot>>
     {
         Step0,
-        Step1,
+        //Step1,
         Step2,
         Step3
     };
@@ -64,9 +64,9 @@ public class EmpyrealAfterDeathSequence: ISlotSequence
     {
         if (BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrowBeforeGcd))
         {
-            if (Core.Resolve<JobApi_Bard>().Repertoire >= 2 &&
+            /*if (Core.Resolve<JobApi_Bard>().Repertoire >= 2 &&
                 Core.Resolve<JobApi_Bard>().ActiveSong == Wanderer)
-                slot.Add(PitchPerfect.GetSpell());
+                slot.Add(PitchPerfect.GetSpell());*/
             slot.Add(EmpyrealArrow.GetSpell());
         } 
     }
@@ -107,6 +107,9 @@ public class EmpyrealAfterDeathSequence: ISlotSequence
         if (Core.Resolve<JobApi_Bard>().Repertoire >= 2 && 
             Core.Resolve<JobApi_Bard>().ActiveSong == Wanderer &&
             !BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrowBeforeGcd))
+            slot.Add(PitchPerfect.GetSpell());
+        else if (Core.Resolve<JobApi_Bard>().Repertoire == 3 &&
+            Core.Resolve<JobApi_Bard>().ActiveSong == Wanderer)
             slot.Add(PitchPerfect.GetSpell());
     }
     
