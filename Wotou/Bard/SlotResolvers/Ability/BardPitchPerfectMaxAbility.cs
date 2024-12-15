@@ -20,6 +20,8 @@ public class BardPitchPerfectMaxAbility : ISlotResolver
     {
         if (GCDHelper.GetGCDCooldown() <= 650)
             return -1;
+        if (!PitchPerfect.IsUnlock())
+            return -2;
         if (Core.Resolve<JobApi_Bard>().ActiveSong != Wanderer)
             return -1;
         if (Core.Resolve<JobApi_Bard>().Repertoire == 3  && Core.Resolve<JobApi_Bard>().SongTimer % 3000 < 2600)

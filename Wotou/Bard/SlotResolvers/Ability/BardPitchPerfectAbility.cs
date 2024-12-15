@@ -24,6 +24,8 @@ public class BardPitchPerfectAbility : ISlotResolver
     {
         if (GCDHelper.GetGCDCooldown() <= 650)
             return -1;
+        if (!PitchPerfect.IsUnlock())
+            return -2;
         if (Core.Resolve<JobApi_Bard>().ActiveSong != Wanderer)
             return -1;
         /*if (PitchPerfect.RecentlyUsed())
