@@ -70,7 +70,8 @@ public class BardFROpener100 : IOpener
     /*BardBattleData.Instance.UseCountdown = true;
     countDownHandler.AddAction(BardSettings.Instance.OpenerTime, Core.Resolve<MemApiSpell>().CheckActionChange(WindBite));*/
     if (BardRotationEntry.QT.GetQt("爆发药") && BardSettings.Instance.UsePotionInOpener)
-      countDownHandler.AddAction(1000, Spell.CreatePotion);
+      countDownHandler.AddAction(1700, Spell.CreatePotion);
+    countDownHandler.AddAction(1100, GetHeartBreakSpell);
   }
 
   private static Spell GetBaseGcd()
@@ -101,13 +102,15 @@ public class BardFROpener100 : IOpener
         !Core.Resolve<MemApiSpell>().CheckActionChange(WindBite).RecentlyUsed(3000) &&
         !Core.Resolve<MemApiSpell>().CheckActionChange(StormBite).RecentlyUsed(3000))
       slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(WindBite).GetSpell());
+    
+    slot.Add(EmpyrealArrow.GetSpell());
+    
     if (BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).IsUnlockWithCDCheck())
       slot.Add(BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).GetSpell());
     else if (BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).IsUnlockWithCDCheck())
       slot.Add(BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).GetSpell());
     else if (BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).IsUnlockWithCDCheck())
       slot.Add(BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).GetSpell());
-    slot.Add(EmpyrealArrow.GetSpell());
   }
 
   private static void Step1(Slot slot)
@@ -119,8 +122,7 @@ public class BardFROpener100 : IOpener
     }
     else
       slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(VenomousBite).GetSpell());
-    slot.Add(GetHeartBreakSpell());
-    slot.Add(RagingStrikes.GetSpell());
+    slot.Add2NdWindowAbility(RagingStrikes.GetSpell());
   }
 
   private static void Step2(Slot slot)
