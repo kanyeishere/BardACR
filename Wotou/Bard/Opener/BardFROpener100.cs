@@ -91,8 +91,8 @@ public class BardFROpener100 : IOpener
   private static Spell GetHeartBreakSpell()
   {
     if (TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget(), 25, 8) > 1  && BardRotationEntry.QT.GetQt("AOE"))
-      return Core.Resolve<MemApiSpell>().CheckActionChange(RainOfDeath).GetSpell();
-    return Core.Resolve<MemApiSpell>().CheckActionChange(HeartBreak).GetSpell();
+      return Core.Resolve<MemApiSpell>().CheckActionChange(RainOfDeath).GetSpell(0);
+    return Core.Resolve<MemApiSpell>().CheckActionChange(HeartBreak).GetSpell(0);
   }
 
   private static void Step0(Slot slot)
