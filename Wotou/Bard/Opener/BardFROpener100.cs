@@ -70,8 +70,7 @@ public class BardFROpener100 : IOpener
     /*BardBattleData.Instance.UseCountdown = true;
     countDownHandler.AddAction(BardSettings.Instance.OpenerTime, Core.Resolve<MemApiSpell>().CheckActionChange(WindBite));*/
     if (BardRotationEntry.QT.GetQt("爆发药") && BardSettings.Instance.UsePotionInOpener)
-      countDownHandler.AddAction(1700, Spell.CreatePotion);
-    countDownHandler.AddAction(1100, GetHeartBreakSpell);
+      countDownHandler.AddAction(1000, Spell.CreatePotion);
   }
 
   private static Spell GetBaseGcd()
@@ -122,7 +121,8 @@ public class BardFROpener100 : IOpener
     }
     else
       slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(VenomousBite).GetSpell());
-    slot.Add2NdWindowAbility(RagingStrikes.GetSpell());
+    slot.Add(GetHeartBreakSpell());
+    slot.Add(RagingStrikes.GetSpell());
   }
 
   private static void Step2(Slot slot)
