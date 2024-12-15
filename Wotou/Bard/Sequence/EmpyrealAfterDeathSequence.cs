@@ -24,6 +24,7 @@ public class EmpyrealAfterDeathSequence: ISlotSequence
     private const uint VenomousBite = BardDefinesData.Spells.VenomousBite;
     private const uint PitchPerfect = BardDefinesData.Spells.PitchPerfect;
     private const uint ApexArrow = BardDefinesData.Spells.ApexArrow;
+    private const uint IronJaws = BardDefinesData.Spells.IronJaws;
     
     private const uint HawkEyeBuff = BardDefinesData.Buffs.HawksEye;
     private const uint BarrageBuff = BardDefinesData.Buffs.Barrage;
@@ -98,6 +99,16 @@ public class EmpyrealAfterDeathSequence: ISlotSequence
                  !Core.Me.GetCurrTarget().HasLocalPlayerAura(VenomousBiteDot) &&
                  BardRotationEntry.QT.GetQt(QTKey.DOT))
             slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(VenomousBite).GetSpell());
+        else if (Core.Me.GetCurrTarget() != null &&
+                 ((Core.Me.GetCurrTarget().HasLocalPlayerAura(CausticBiteDot) &&
+                   !Core.Me.GetCurrTarget().HasMyAuraWithTimeleft(CausticBiteDot, 5500)) ||
+                  (Core.Me.GetCurrTarget().HasLocalPlayerAura(StormBiteDot) &&
+                   !Core.Me.GetCurrTarget().HasMyAuraWithTimeleft(StormBiteDot, 5500)) ||
+                  (Core.Me.GetCurrTarget().HasLocalPlayerAura(VenomousBiteDot) &&
+                   !Core.Me.GetCurrTarget().HasMyAuraWithTimeleft(VenomousBiteDot, 5500)) ||
+                  (Core.Me.GetCurrTarget().HasLocalPlayerAura(WindBiteDot) &&
+                   !Core.Me.GetCurrTarget().HasMyAuraWithTimeleft(WindBiteDot, 5500))))
+            slot.Add(IronJaws.GetSpell());
         else
             slot.Add(GetBaseGcd());
     }
