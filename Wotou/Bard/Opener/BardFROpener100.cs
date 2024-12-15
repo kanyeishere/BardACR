@@ -107,7 +107,7 @@ public class BardFROpener100 : IOpener
       slot.Add(BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).GetSpell());
     else if (BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).IsUnlockWithCDCheck())
       slot.Add(BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).GetSpell());
-    slot.Add(GetHeartBreakSpell());
+    slot.Add(EmpyrealArrow.GetSpell());
   }
 
   private static void Step1(Slot slot)
@@ -119,8 +119,8 @@ public class BardFROpener100 : IOpener
     }
     else
       slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(VenomousBite).GetSpell());
+    slot.Add(GetHeartBreakSpell());
     slot.Add(RagingStrikes.GetSpell());
-    slot.Add(EmpyrealArrow.GetSpell());
   }
 
   private static void Step2(Slot slot)
