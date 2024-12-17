@@ -13,8 +13,8 @@ public static class QTKey
     public const string NatureMinne = "大地神";
     public const string Debug = "Debug";
     public const string StrongAlign = "强对齐";
-    public const string EmpyrealArrow = "九天";
-    public const string Sidewinder = "侧风";
+    public const string EmpyrealArrow = "九天连箭";
+    public const string Sidewinder = "侧风诱导箭";
     public const string EmpyrealArrowBeforeGcd = "九天前置";
     public const string BurstWithWanderer = "对齐旅神";
     

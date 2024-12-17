@@ -195,8 +195,8 @@ public class BardRotationEntry : IRotationEntry
             BardSettings.Instance.JobViewSave.QtUnVisibleList.Add("Debug");
             BardSettings.Instance.JobViewSave.QtUnVisibleList.Add(QTKey.EmpyrealArrow);
             BardSettings.Instance.JobViewSave.QtUnVisibleList.Add(QTKey.Sidewinder);
+            BardSettings.Instance.JobViewSave.QtUnVisibleList.Add(QTKey.EmpyrealArrowBeforeGcd);
         }
-        BardSettings.Instance.JobViewSave.QtUnVisibleList.Add(QTKey.EmpyrealArrowBeforeGcd);
 
         // 添加快捷按钮 (带技能图标)
         QT.AddHotkey("防击退", new MyNormalSpellHotKeyResolver(BardDefinesData.Spells.ArmsLength, 
