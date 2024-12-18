@@ -272,7 +272,7 @@ public class BardRotationEventHandler : IRotationEventHandler
                 ChatHelper.SendMessage("/e 警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭");
                 ChatHelper.SendMessage("/e <se.1>");
             }
-            else
+            else if (BardSettings.Instance.WelcomeVoice)
                 Core.Resolve<MemApiChatMessage>()
                     .Toast2("欢迎使用窝头的诗人ACR", 1, 5000);
         } catch (MissingFieldException ex)
