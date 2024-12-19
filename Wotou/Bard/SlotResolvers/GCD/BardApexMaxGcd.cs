@@ -34,6 +34,7 @@ public class BardApexMaxGcd : ISlotResolver
         var partyBuffCountdown  = BardBattleData.Instance.First120SBuffSpellId.GetSpell().Cooldown.TotalSeconds;
         if (!BardBattleData.Instance.HasUseApexArrowInCurrentNonBurstingPeriod &&
             Core.Resolve<JobApi_Bard>().SoulVoice == 100 && 
+            BardUtil.HasNoPartyBuff() &&
             partyBuffCountdown >= 43)
             return 1;
         
