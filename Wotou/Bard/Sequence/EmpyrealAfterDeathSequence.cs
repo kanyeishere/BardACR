@@ -91,6 +91,17 @@ public class EmpyrealAfterDeathSequence: ISlotSequence
             BardUtil.HasNoPartyBuff() &&
             partyBuffCountdown >= 39)
             slot.Add(ApexArrow.GetSpell());
+        
+        // 绝伊甸 p1 & p2 特化
+        if (!BardBattleData.Instance.HasUseApexArrowInCurrentNonBurstingPeriod &&
+            Core.Resolve<MemApiZoneInfo>().GetCurrTerrId() == 1238 &&  
+            Core.Resolve<MemApiZoneInfo>().GetWeatherId() <= 3 && 
+            Core.Resolve<JobApi_Bard>().SoulVoice >= 80 &&
+            BardRotationEntry.QT.GetQt(QTKey.Apex) &&
+            BardUtil.HasNoPartyBuff() &&
+            partyBuffCountdown >= 39)
+            slot.Add(ApexArrow.GetSpell());
+        
         else if (!Core.Me.GetCurrTarget().HasLocalPlayerAura(WindBiteDot) &&
             !Core.Me.GetCurrTarget().HasLocalPlayerAura(StormBiteDot) &&
             BardRotationEntry.QT.GetQt(QTKey.DOT))
