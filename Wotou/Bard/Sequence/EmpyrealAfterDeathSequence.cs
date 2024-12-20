@@ -93,7 +93,7 @@ public class EmpyrealAfterDeathSequence: ISlotSequence
             slot.Add(ApexArrow.GetSpell());
         
         // 绝伊甸 p1 & p2 特化
-        if (!BardBattleData.Instance.HasUseApexArrowInCurrentNonBurstingPeriod &&
+        else if (!BardBattleData.Instance.HasUseApexArrowInCurrentNonBurstingPeriod &&
             Core.Resolve<MemApiZoneInfo>().GetCurrTerrId() == 1238 &&  
             Core.Resolve<MemApiZoneInfo>().GetWeatherId() <= 3 && 
             Core.Resolve<JobApi_Bard>().SoulVoice >= 80 &&
