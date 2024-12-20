@@ -201,7 +201,7 @@ public class BardRotationEntry : IRotationEntry
         // 添加快捷按钮 (带技能图标)
         QT.AddHotkey("防击退", new MyNormalSpellHotKeyResolver(BardDefinesData.Spells.ArmsLength, 
             SpellTargetType.Target));
-        QT.AddHotkey("续毒", new MyNormalSpellHotKeyResolver(BardDefinesData.Spells.IronJaws, 
+        QT.AddHotkey("续毒", new IronJawsHotkeyResolver(BardDefinesData.Spells.IronJaws, 
             SpellTargetType.Target));
         QT.AddHotkey("内丹",
             new MyNormalSpellHotKeyResolver(BardDefinesData.Spells.SecondWind, SpellTargetType.Target));
