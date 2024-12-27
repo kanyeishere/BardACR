@@ -17,6 +17,4 @@ public static class QTKey
     public const string Sidewinder = "侧风诱导箭";
     public const string EmpyrealArrowBeforeGcd = "九天前置";
     public const string BurstWithWanderer = "对齐旅神";
-    
-    public const string UsePotionAsap = "爆发药CD好了就吃";
 }

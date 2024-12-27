@@ -3,12 +3,13 @@ using Wotou.Bard.Data;
 using AEAssist;
 using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
+using AEAssist.CombatRoutine.View.JobView;
+using AEAssist.CombatRoutine.View.JobView.HotkeyResolver;
 using AEAssist.Extension;
 using AEAssist.Helper;
-using AEAssist.JobApi;
 using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.JobGauge.Enums;
-using Dalamud.Utility;
+using Dalamud.Game.Command;
 using Wotou.Bard.Utility;
 using Wotou.Common;
 
@@ -286,9 +287,150 @@ public class BardRotationEventHandler : IRotationEventHandler
         if (BardSettings.Instance.WelcomeVoice)
             ChatHelper.SendMessage("/pdr tts 你好，欢迎你使用窝头诗人");
         TimeLineUpdater.UpdateFiles("https://raw.githubusercontent.com/kanyeishere/ACR-Timeline/refs/heads/main/Wotou-BardMaster.json");
+        
+        try
+        {
+            ECHelper.Commands.RemoveHandler("/Wotou_BRD");
+        }
+        catch (Exception)
+        {
+            // ignored
+        }
+
+        // 注册命令
+        ECHelper.Commands.AddHandler("/Wotou_BRD", new CommandInfo(BardCommandHandler));
 
     }
+    
+    private void BardCommandHandler(string command, string args)
+    {
+        if (string.IsNullOrWhiteSpace(args))
+        {
+            LogHelper.Print("Wotou_BRD 命令无效，请提供参数。");
+            return;
+        }
+        
+        // 将参数转换为小写，以实现不区分大小写的匹配
+        string lowerArgs = args.Trim().ToLower();
 
+        // 检查是否是 QTKey + "_qt" 格式的命令
+        if (lowerArgs.EndsWith("_qt"))
+        {
+            // 提取 QTKey 部分，保持原始大小写以匹配 QTKey 常量
+            string keyPart = lowerArgs.Substring(0, lowerArgs.Length - 3); // 去除 "_qt"
+
+            // 尝试匹配 QTKey 常量
+            string matchedKey = GetMatchingQtKey(keyPart);
+            if (matchedKey != null)
+            {
+                ToggleQtSetting(matchedKey);
+                return;
+            }
+            else
+            {
+                LogHelper.Print($"未知 QTKey 参数: {keyPart}");
+                return;
+            }
+        }
+
+        switch (lowerArgs)
+        {
+            case "hello":
+                LogHelper.Print("你好！这是一条测试消息！");
+                break;
+
+            case "防击退_hk":
+                ExecuteHotkey(new MyNormalSpellHotKeyResolver(BardDefinesData.Spells.ArmsLength, SpellTargetType.Target));
+                break;
+
+            case "续毒_hk":
+                ExecuteHotkey(new IronJawsHotkeyResolver(BardDefinesData.Spells.IronJaws, SpellTargetType.Target));
+                break;
+
+            case "内丹_hk":
+                ExecuteHotkey(new MyNormalSpellHotKeyResolver(BardDefinesData.Spells.SecondWind, SpellTargetType.Target));
+                break;
+
+            case "行吟_hk":
+                ExecuteHotkey(new MyNormalSpellHotKeyResolver(BardDefinesData.Spells.Troubadour, SpellTargetType.Target));
+                break;
+
+            case "大地神_hk":
+                ExecuteHotkey(new MyNormalSpellHotKeyResolver(BardDefinesData.Spells.NaturesMinne, SpellTargetType.Target));
+                break;
+
+            case "疾跑_hk":
+                ExecuteHotkey(new HotKeyResolver_疾跑());
+                break;
+
+            case "后跳_hk":
+                ExecuteHotkey(new MyNormalSpellHotKeyResolver(BardDefinesData.Spells.RepellingShot, SpellTargetType.Target));
+                break;
+
+            case "爆发药_hk":
+                ExecuteHotkey(new HotKeyResolver_Potion());
+                break;
+
+            case "极限技_hk":
+                ExecuteHotkey(new HotKeyResolver_LB());
+                break;
+
+            case "停止自动移动_hk":
+                ExecuteHotkey(new StopMoveHotkeyResolver());
+                break;
+
+            default:
+                LogHelper.Print($"未知参数: {args}");
+                break;
+        }
+    }
+    
+    private void ExecuteHotkey(IHotkeyResolver resolver)
+    {
+        if (resolver == null)
+        {
+            LogHelper.Print("快捷键解析器未正确初始化。");
+            return;
+        }
+
+        if (resolver.Check() >= 0)
+        {
+            resolver.Run();
+        }
+        else
+        {
+            LogHelper.Print("无法执行该快捷键命令，可能条件不满足或技能不可用。");
+        }
+    }
+    
+    private string GetMatchingQtKey(string keyPart)
+    {
+        // 遍历 QTKey 类中的所有常量
+        var qtKeys = typeof(QTKey).GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.FlattenHierarchy)
+            .Where(fi => fi.IsLiteral && !fi.IsInitOnly && fi.FieldType == typeof(string))
+            .Select(fi => (string)fi.GetValue(null))
+            .ToList();
+
+        // 查找匹配的 key（忽略大小写）
+        foreach (var qtKey in qtKeys)
+        {
+            if (string.Equals(qtKey, keyPart, StringComparison.OrdinalIgnoreCase))
+            {
+                return qtKey;
+            }
+        }
+
+        return null; // 未找到匹配的 QTKey
+    }
+
+    private void ToggleQtSetting(string qtKey)
+    {
+        bool currentValue = BardRotationEntry.QT.GetQt(qtKey);
+        BardRotationEntry.QT.SetQt(qtKey, !currentValue);
+
+        LogHelper.Print($"QT \"{qtKey}\" 已设置为 {(!currentValue).ToString().ToLower()}。");
+    }
+    
     public void OnExitRotation()
     {
     }
