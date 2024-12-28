@@ -1,12 +1,15 @@
 ﻿using AEAssist;
 using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
+using AEAssist.CombatRoutine.View.JobView;
+using AEAssist.CombatRoutine.View.JobView.HotkeyResolver;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.JobApi;
 using AEAssist.MemoryApi;
 using Wotou.Dancer.Data;
 using Dalamud.Game.ClientState.Objects.Types;
+using Dalamud.Game.Command;
 using Wotou.Common;
 using Wotou.Dancer.Setting;
 using Wotou.Dancer.Utility;
@@ -16,6 +19,8 @@ namespace Wotou.Dancer
     public class DancerRotationEventHandler : IRotationEventHandler
     {
         private long _randomTime = 0;
+        private Dictionary<string, string> qtKeyDictionary;
+        private Dictionary<string, string?> hotkeyDictionary;
 
         private static Dictionary<Jobs, int> jobPriorities = new(){
             { Jobs.Viper, 1 },
@@ -107,10 +112,60 @@ namespace Wotou.Dancer
             if (DancerSettings.Instance.WelcomeVoice)
                 ChatHelper.SendMessage("/pdr tts 你好，欢迎你使用窝头舞者");
             TimeLineUpdater.UpdateFiles("https://raw.githubusercontent.com/kanyeishere/ACR-Timeline/refs/heads/main/Wotou-DancerMaster.json");
+            
+            ECHelper.Commands.AddHandler("/Wotou_DNC", new CommandInfo(DancerCommandHandler));
+            
+            qtKeyDictionary = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var fi in typeof(QTKey).GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.FlattenHierarchy))
+            {
+                if (fi.IsLiteral && !fi.IsInitOnly && fi.FieldType == typeof(string))
+                {
+                    string value = fi.GetValue(null).ToString();
+                    string key = value.ToLower();
+                    string fieldName = fi.Name.ToLower();
+
+                    // 添加中文键
+                    if (!qtKeyDictionary.ContainsKey(key))
+                    {
+                        qtKeyDictionary.Add(key, value);
+                    }
+
+                    // 添加英文键
+                    if (!qtKeyDictionary.ContainsKey(fieldName))
+                    {
+                        qtKeyDictionary.Add(fieldName, value);
+                    }
+                }
+            }
+
+            hotkeyDictionary = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase)
+            {
+                { "防击退", "ArmsLength" },
+                { "armslength", "ArmsLength" },
+                { "内丹", "SecondWind" },
+                { "secondwind", "SecondWind" },
+                { "桑巴", "ShieldSamba" },
+                { "shieldsamba", "ShieldSamba" },
+                { "华尔兹", "CuringWaltz" },
+                { "curingwaltz", "CuringWaltz" },
+                { "秒开关即兴", "Improvisation" },
+                { "improvisation", "Improvisation" },
+                { "疾跑", "Run" },
+                { "run", "Run" },
+                { "前冲步", "EnAvant" },
+                { "enavant", "EnAvant" },
+                { "爆发药", "Potion" },
+                { "potion", "Potion" },
+                { "极限技", "LimitBreak" },
+                { "limitbreak", "LimitBreak" },
+                { "停止自动移动", "StopMove" },
+                { "stopmove", "StopMove" }
+            };
         }
 
         public void OnExitRotation()
         {
+            ECHelper.Commands.RemoveHandler("/Wotou_DNC");
         }
 
         public async Task OnNoTarget()
@@ -259,6 +314,99 @@ namespace Wotou.Dancer
         public void OnTerritoryChanged()
         {
             DancerRotationEntry.UpdateDancerPartnerPanel();
+        }
+        
+        private void DancerCommandHandler(string command, string args)
+        {
+            if (string.IsNullOrWhiteSpace(args))
+            {
+                LogHelper.Print("Wotou_DNC 命令无效，请提供参数。");
+                return;
+            }
+
+            // 将参数转换为小写
+            var lowerArgs = args.Trim().ToLower();
+
+            // 检查是否是 QTKey + "_qt" 格式的命令
+            if (lowerArgs.EndsWith("_qt"))
+            {
+                var keyPart = lowerArgs.Substring(0, lowerArgs.Length - 3); // 去除 "_qt"
+                var matchedKey = GetMatchingQtKey(keyPart);
+                ToggleQtSetting(matchedKey);
+                return;
+            }
+
+            // 检查是否是 Hotkey + "_hk" 格式的命令
+            else if (lowerArgs.EndsWith("_hk"))
+            {
+                string keyPart = lowerArgs.Substring(0, lowerArgs.Length - 3); // 去除 "_hk"
+                if (hotkeyDictionary.TryGetValue(keyPart.ToLower(), out var matchedHotkey))
+                {
+                    ExecuteHotkey(GetHotkeyResolver(matchedHotkey));
+                    return;
+                }
+                else
+                {
+                    ChatHelper.SendMessage($"未知 Hotkey 参数: {keyPart}");
+                    return;
+                }
+            }
+
+            ChatHelper.SendMessage($"未知参数: {args}");
+        }
+        
+        private string GetMatchingQtKey(string keyPart)
+        {
+            string lowerKeyPart = keyPart.ToLower();
+            if (qtKeyDictionary.TryGetValue(lowerKeyPart, out string matchedKey))
+            {
+                return matchedKey;
+            }
+            return null;
+        }
+        
+        private IHotkeyResolver? GetHotkeyResolver(string? hotkey)
+        {
+            return hotkey switch
+            {
+                "ArmsLength" => new MyNormalSpellHotKeyResolver(DancerDefinesData.Spells.ArmsLength, SpellTargetType.Target),
+                "SecondWind" => new MyNormalSpellHotKeyResolver(DancerDefinesData.Spells.SecondWind, SpellTargetType.Self),
+                "ShieldSamba" => new MyNormalSpellHotKeyResolver(DancerDefinesData.Spells.ShieldSamba, SpellTargetType.Self),
+                "CuringWaltz" => new MyNormalSpellHotKeyResolver(DancerDefinesData.Spells.CuringWaltz, SpellTargetType.Self),
+                "Improvisation" => new ImprovisationHotkeyResolver(),
+                "Run" => new HotKeyResolver_疾跑(),
+                "EnAvant" => new MyNormalSpellHotKeyResolver(DancerDefinesData.Spells.EnAvant, SpellTargetType.Target),
+                "Potion" => new HotKeyResolver_Potion(),
+                "LimitBreak" => new HotKeyResolver_LB(),
+                "StopMove" => new StopMoveHotkeyResolver(),
+                _ => null // 如果找不到匹配的 Hotkey，返回 null
+            };
+        }
+
+        private void ExecuteHotkey(IHotkeyResolver? resolver)
+        {
+            if (resolver == null)
+            {
+                LogHelper.Print("快捷键解析器未正确初始化。");
+                return;
+            }
+
+            if (resolver.Check() >= 0)
+            {
+                resolver.Run();
+            }
+            else
+            {
+                LogHelper.Print("无法执行该快捷键命令，可能条件不满足或技能不可用。");
+            }
+        }
+        
+        private void ToggleQtSetting(string qtKey)
+        {
+            bool currentValue = DancerRotationEntry.QT.GetQt(qtKey);
+            DancerRotationEntry.QT.SetQt(qtKey, !currentValue);
+
+            LogHelper.Print($"QT \"{qtKey}\" 已设置为 {(!currentValue).ToString().ToLower()}。");
         }
 
         private void SmartUseHighPrioritySlot()

@@ -459,6 +459,7 @@ public class BardRotationEventHandler : IRotationEventHandler
     
     public void OnExitRotation()
     {
+        ECHelper.Commands.RemoveHandler("/Wotou_BRD");
     }
 
     public void OnTerritoryChanged()
