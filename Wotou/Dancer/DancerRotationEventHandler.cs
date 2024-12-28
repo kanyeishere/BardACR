@@ -242,7 +242,7 @@ namespace Wotou.Dancer
                 
                 if (DancerSettings.Instance.EnableAutoDancing && Core.Resolve<MemApiDuty>().IsBoundByDuty())
                 {
-                    var nearbyEnemies = TargetHelper.GetNearbyEnemyCount(35);
+                    var nearbyEnemies = TargetHelper.GetNearbyEnemyCount(30);
                     if (nearbyEnemies > 0 && DancerDefinesData.Spells.StandardStep.GetSpell().IsReadyWithCanCast())
                     {
                         await DancerDefinesData.Spells.StandardStep.GetSpell().Cast();
