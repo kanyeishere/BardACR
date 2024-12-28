@@ -16,6 +16,8 @@ public class BardBarrageAbility : ISlotResolver
     {
         if (GCDHelper.GetGCDCooldown() <= 650)
             return -1;
+        if (!Barrage.GetSpell().IsReadyWithCanCast())
+            return -1;
         if (!BardRotationEntry.QT.GetQt("爆发"))
             return -1;
         if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 650 && BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow) && EmpyrealArrow.IsUnlock())
@@ -28,8 +30,6 @@ public class BardBarrageAbility : ISlotResolver
             BardRotationEntry.QT.GetQt("爆发") &&
             BattleVoice.IsUnlock())
             return -7;
-        if (!Barrage.GetSpell().IsReadyWithCanCast())
-            return -1;
         if (BardUtil.HasAllPartyBuff())
             return 1;
         return -1;

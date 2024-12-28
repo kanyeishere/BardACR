@@ -243,7 +243,7 @@ namespace Wotou.Dancer
         {
             DancerRotationEntry.UpdateDancerPartnerPanel();
             DancerBattleData.Instance = new DancerBattleData();
-            DancerRotationEntry.QT.Reset();
+            //DancerRotationEntry.QT.Reset();
             
             //重置扇舞保留层数
             DancerSettings.Instance.FanDanceSaveStack = 3;

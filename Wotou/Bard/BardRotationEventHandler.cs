@@ -21,7 +21,8 @@ namespace Wotou.Bard;
 public class BardRotationEventHandler : IRotationEventHandler
 {
     private long _randomTime = 0;
-    
+    private Dictionary<string, string> qtKeyDictionary;
+    private Dictionary<string, string?> hotkeyDictionary;    
     public async Task OnPreCombat()
     {
         BardRotationEntry.UpdateWardensPaeanPanel();
@@ -73,7 +74,7 @@ public class BardRotationEventHandler : IRotationEventHandler
     public void OnResetBattle()
     {
         BardRotationEntry.UpdateWardensPaeanPanel();
-        BardRotationEntry.QT.Reset();
+        //BardRotationEntry.QT.Reset();
         BardBattleData.Instance = new BardBattleData();
         
         // 重置碎心箭保留层数
@@ -299,7 +300,53 @@ public class BardRotationEventHandler : IRotationEventHandler
 
         // 注册命令
         ECHelper.Commands.AddHandler("/Wotou_BRD", new CommandInfo(BardCommandHandler));
+        
+        qtKeyDictionary = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var fi in typeof(QTKey).GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.FlattenHierarchy))
+        {
+            if (fi.IsLiteral && !fi.IsInitOnly && fi.FieldType == typeof(string))
+            {
+                string value = fi.GetValue(null).ToString();
+                string key = value.ToLower();
+                string fieldName = fi.Name.ToLower();
 
+                // 添加中文键
+                if (!qtKeyDictionary.ContainsKey(key))
+                {
+                    qtKeyDictionary.Add(key, value);
+                }
+
+                // 添加英文键
+                if (!qtKeyDictionary.ContainsKey(fieldName))
+                {
+                    qtKeyDictionary.Add(fieldName, value);
+                }
+            }
+        }
+
+        hotkeyDictionary = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase)
+        {
+            { "防击退", "ArmsLength" },
+            { "armslength", "ArmsLength" },
+            { "续毒", "IronJaws" },
+            { "ironjaws", "IronJaws" },
+            { "内丹", "SecondWind" },
+            { "secondwind", "SecondWind" },
+            { "行吟", "Troubadour" },
+            { "troubadour", "Troubadour" },
+            { "大地神", "NaturesMinne" },
+            { "naturesminne", "NaturesMinne" },
+            { "疾跑", "Run" },
+            { "run", "Run" },
+            { "后跳", "RepellingShot" },
+            { "repellingshot", "RepellingShot" },
+            { "爆发药", "Potion" },
+            { "potion", "Potion" },
+            { "极限技", "LimitBreak" },
+            { "limitbreak", "LimitBreak" },
+            { "停止自动移动", "StopMove" },
+            { "stopmove", "StopMove" }
+        };
     }
     
     private void BardCommandHandler(string command, string args)
@@ -311,81 +358,52 @@ public class BardRotationEventHandler : IRotationEventHandler
         }
         
         // 将参数转换为小写，以实现不区分大小写的匹配
-        string lowerArgs = args.Trim().ToLower();
+        var lowerArgs = args.Trim().ToLower();
 
         // 检查是否是 QTKey + "_qt" 格式的命令
         if (lowerArgs.EndsWith("_qt"))
         {
             // 提取 QTKey 部分，保持原始大小写以匹配 QTKey 常量
-            string keyPart = lowerArgs.Substring(0, lowerArgs.Length - 3); // 去除 "_qt"
+            var keyPart = lowerArgs.Substring(0, lowerArgs.Length - 3); // 去除 "_qt"
 
             // 尝试匹配 QTKey 常量
-            string matchedKey = GetMatchingQtKey(keyPart);
-            if (matchedKey != null)
+            var matchedKey = GetMatchingQtKey(keyPart);
+            ToggleQtSetting(matchedKey);
+            return;
+        }
+
+        // 检查是否是 Hotkey + "_hk" 格式的命令
+        else if (lowerArgs.EndsWith("_hk"))
+        {
+            string keyPart = lowerArgs.Substring(0, lowerArgs.Length - 3); // 去除 "_hk"
+
+            // 尝试匹配 Hotkey
+            if (hotkeyDictionary.TryGetValue(keyPart.ToLower(), out var matchedHotkey))
             {
-                ToggleQtSetting(matchedKey);
+                ExecuteHotkey(GetHotkeyResolver(matchedHotkey));
                 return;
             }
             else
             {
-                LogHelper.Print($"未知 QTKey 参数: {keyPart}");
+                ChatHelper.SendMessage($"未知 Hotkey 参数: {keyPart}");
                 return;
             }
         }
 
+        // 处理其他命令
         switch (lowerArgs)
         {
             case "hello":
-                LogHelper.Print("你好！这是一条测试消息！");
-                break;
-
-            case "防击退_hk":
-                ExecuteHotkey(new MyNormalSpellHotKeyResolver(BardDefinesData.Spells.ArmsLength, SpellTargetType.Target));
-                break;
-
-            case "续毒_hk":
-                ExecuteHotkey(new IronJawsHotkeyResolver(BardDefinesData.Spells.IronJaws, SpellTargetType.Target));
-                break;
-
-            case "内丹_hk":
-                ExecuteHotkey(new MyNormalSpellHotKeyResolver(BardDefinesData.Spells.SecondWind, SpellTargetType.Target));
-                break;
-
-            case "行吟_hk":
-                ExecuteHotkey(new MyNormalSpellHotKeyResolver(BardDefinesData.Spells.Troubadour, SpellTargetType.Target));
-                break;
-
-            case "大地神_hk":
-                ExecuteHotkey(new MyNormalSpellHotKeyResolver(BardDefinesData.Spells.NaturesMinne, SpellTargetType.Target));
-                break;
-
-            case "疾跑_hk":
-                ExecuteHotkey(new HotKeyResolver_疾跑());
-                break;
-
-            case "后跳_hk":
-                ExecuteHotkey(new MyNormalSpellHotKeyResolver(BardDefinesData.Spells.RepellingShot, SpellTargetType.Target));
-                break;
-
-            case "爆发药_hk":
-                ExecuteHotkey(new HotKeyResolver_Potion());
-                break;
-
-            case "极限技_hk":
-                ExecuteHotkey(new HotKeyResolver_LB());
-                break;
-
-            case "停止自动移动_hk":
-                ExecuteHotkey(new StopMoveHotkeyResolver());
+                ChatHelper.SendMessage("你好！这是一条测试消息！");
                 break;
 
             default:
-                LogHelper.Print($"未知参数: {args}");
+                ChatHelper.SendMessage($"未知参数: {args}");
                 break;
         }
     }
     
-    private void ExecuteHotkey(IHotkeyResolver resolver)
+    private void ExecuteHotkey(IHotkeyResolver? resolver)
     {
         if (resolver == null)
         {
@@ -403,24 +421,32 @@ public class BardRotationEventHandler : IRotationEventHandler
         }
     }
     
+    private IHotkeyResolver? GetHotkeyResolver(string? hotkey)
+    {
+        return hotkey switch
+        {
+            "ArmsLength" => new MyNormalSpellHotKeyResolver(BardDefinesData.Spells.ArmsLength, SpellTargetType.Target),
+            "IronJaws" => new IronJawsHotkeyResolver(BardDefinesData.Spells.IronJaws, SpellTargetType.Target),
+            "SecondWind" => new MyNormalSpellHotKeyResolver(BardDefinesData.Spells.SecondWind, SpellTargetType.Target),
+            "Troubadour" => new MyNormalSpellHotKeyResolver(BardDefinesData.Spells.Troubadour, SpellTargetType.Target),
+            "NaturesMinne" => new MyNormalSpellHotKeyResolver(BardDefinesData.Spells.NaturesMinne, SpellTargetType.Target),
+            "Run" => new HotKeyResolver_疾跑(),
+            "RepellingShot" => new MyNormalSpellHotKeyResolver(BardDefinesData.Spells.RepellingShot, SpellTargetType.Target),
+            "Potion" => new HotKeyResolver_Potion(),
+            "LimitBreak" => new HotKeyResolver_LB(),
+            "StopMove" => new StopMoveHotkeyResolver(),
+            _ => null
+        };
+    }
+    
     private string GetMatchingQtKey(string keyPart)
     {
-        // 遍历 QTKey 类中的所有常量
-        var qtKeys = typeof(QTKey).GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.FlattenHierarchy)
-            .Where(fi => fi.IsLiteral && !fi.IsInitOnly && fi.FieldType == typeof(string))
-            .Select(fi => (string)fi.GetValue(null))
-            .ToList();
-
-        // 查找匹配的 key（忽略大小写）
-        foreach (var qtKey in qtKeys)
+        string lowerKeyPart = keyPart.ToLower();
+        if (qtKeyDictionary.TryGetValue(lowerKeyPart, out string matchedKey))
         {
-            if (string.Equals(qtKey, keyPart, StringComparison.OrdinalIgnoreCase))
-            {
-                return qtKey;
-            }
+            return matchedKey;
         }
-
-        return null; // 未找到匹配的 QTKey
+        return null;
     }
 
     private void ToggleQtSetting(string qtKey)
