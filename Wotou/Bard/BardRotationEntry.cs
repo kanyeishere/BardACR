@@ -130,7 +130,7 @@ public class BardRotationEntry : IRotationEntry
         }
     }
 
-    private void OnClickBurstQT()
+    private static void OnClickBurstQT()
     {
         if (QT.GetQt("强对齐"))
         {
@@ -139,7 +139,7 @@ public class BardRotationEntry : IRotationEntry
         }
     }
 
-    private void OnClickBurstWithWandererQT()
+    private static void OnClickBurstWithWandererQT()
     {
         if (!BardUtil.IsSongOrderNormal())
         {
@@ -228,6 +228,8 @@ public class BardRotationEntry : IRotationEntry
         WardensPaeanPanel.HotkeyLineCount = 1;
         if (!BardSettings.Instance.IsReadInfoWindow04)
             InfoWindow.Draw();
+        if (BardSettings.Instance.IsOpenCommandWindow)
+            BardCommandWindow.Draw();
     }
     
     public static void UpdateWardensPaeanPanel()
@@ -278,6 +280,11 @@ public class BardRotationEntry : IRotationEntry
             ImGui.Separator();
             ImGui.Text(UpdateLog);
             ImGui.Separator();
+            if (ImGui.Button("查看指令"))
+            {
+                BardSettings.Instance.IsOpenCommandWindow = true;
+            }
+            ImGui.SameLine();
             if (ImGui.Button("反馈问题"))
             {
                 string url = "https://discord.com/channels/1191648233454313482/1296269368224911461";  

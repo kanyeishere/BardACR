@@ -162,6 +162,8 @@ public class DancerRotationEntry : IRotationEntry
             DancePartnerPanel.HotkeyLineCount = 1;
             if (!DancerSettings.Instance.IsReadInfoWindow04)
                 InfoWindow.Draw();
+            if (DancerSettings.Instance.IsOpenCommandWindow)
+                DancerCommandWindow.Draw();
         });
         
         QT.AddTab("通用", DrawGeneral);
@@ -237,6 +239,11 @@ public class DancerRotationEntry : IRotationEntry
             ImGui.Separator();
             ImGui.Text(UpdateLog);
             ImGui.Separator();
+            if (ImGui.Button("查看指令"))
+            {
+                DancerSettings.Instance.IsOpenCommandWindow = true;
+            }
+            ImGui.SameLine();
             if (ImGui.Button("反馈问题"))
             {
                 string url = "https://discord.com/channels/1191648233454313482/1296269368224911461";  

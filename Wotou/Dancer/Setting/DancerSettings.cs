@@ -67,6 +67,8 @@ public class DancerSettings
     
     public bool IsReadInfoWindow04 = false;
     
+    public bool IsOpenCommandWindow = true;
+    
     // 扇舞保留层数
     public int FanDanceSaveStack = 3;
     
