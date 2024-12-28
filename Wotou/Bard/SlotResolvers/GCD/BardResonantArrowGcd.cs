@@ -15,8 +15,6 @@ public class BardResonantArrowGcd : ISlotResolver
     
     public int Check()
     {
-        if (!BardRotationEntry.QT.GetQt("爆发"))
-            return -1;
         if (!Core.Me.HasLocalPlayerAura(ResonantArrowReady))
             return -1;
         if (BardUtil.HasAllPartyBuff())
