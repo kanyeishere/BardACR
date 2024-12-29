@@ -30,19 +30,20 @@ namespace Wotou.Dancer
             { Jobs.Reaper, 5 },
             { Jobs.Samurai, 6},
             { Jobs.Ninja, 7},
-            { Jobs.Summoner, 8},
-            { Jobs.Dragoon, 9},
-            { Jobs.Machinist, 10},
-            { Jobs.Bard, 11},
-            { Jobs.Dancer, 12},
-            { Jobs.DarkKnight, 13},
-            { Jobs.Gunbreaker, 14},
-            { Jobs.Paladin, 15},
-            { Jobs.Warrior, 16},
-            { Jobs.Sage, 17},
-            { Jobs.WhiteMage, 18},
-            { Jobs.Scholar, 19},
-            { Jobs.Astrologian, 20}
+            { Jobs.RedMage, 8},
+            { Jobs.Summoner, 9},
+            { Jobs.Dragoon, 10},
+            { Jobs.Machinist, 11},
+            { Jobs.Bard, 12},
+            { Jobs.Dancer, 13},
+            { Jobs.DarkKnight, 14},
+            { Jobs.Gunbreaker, 15},
+            { Jobs.Paladin, 16},
+            { Jobs.Warrior, 17},
+            { Jobs.Sage, 18},
+            { Jobs.WhiteMage, 19},
+            { Jobs.Scholar, 20},
+            { Jobs.Astrologian, 21}
         };
         public void AfterSpell(Slot slot, Spell spell)
         {
