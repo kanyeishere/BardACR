@@ -210,6 +210,8 @@ public class BardRotationEntry : IRotationEntry
         QT.AddHotkey("大地神",
             new MyNormalSpellHotKeyResolver(BardDefinesData.Spells.NaturesMinne, SpellTargetType.Target));
         QT.AddHotkey("疾跑", new HotKeyResolver_疾跑());
+        QT.AddHotkey("绝峰箭", new ApexArrowHotkeyResolver(BardDefinesData.Spells.ApexArrow, 
+            SpellTargetType.Target));
         QT.AddHotkey("后跳",
             new MyNormalSpellHotKeyResolver(BardDefinesData.Spells.RepellingShot, SpellTargetType.Target));
         QT.AddHotkey("爆发药", new HotKeyResolver_Potion());

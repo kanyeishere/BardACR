@@ -345,7 +345,9 @@ public class BardRotationEventHandler : IRotationEventHandler
             { "极限技", "LimitBreak" },
             { "limitbreak", "LimitBreak" },
             { "停止自动移动", "StopMove" },
-            { "stopmove", "StopMove" }
+            { "stopmove", "StopMove" },
+            { "绝峰箭", "ApexArrow"},
+            { "apexarrow", "ApexArrow"}
         };
     }
     
@@ -435,6 +437,7 @@ public class BardRotationEventHandler : IRotationEventHandler
             "Potion" => new HotKeyResolver_Potion(),
             "LimitBreak" => new HotKeyResolver_LB(),
             "StopMove" => new StopMoveHotkeyResolver(),
+            "ApexArrow" => new ApexArrowHotkeyResolver(BardDefinesData.Spells.ApexArrow, SpellTargetType.Target),
             _ => null
         };
     }
