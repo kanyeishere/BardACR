@@ -95,7 +95,6 @@ public class BardCommandWindow
         {
             BardSettings.Instance.IsOpenCommandWindow = false;
             BardSettings.Instance.Save();
-            DancerSettings.Instance.Save();
         }
 
         ImGui.End();
