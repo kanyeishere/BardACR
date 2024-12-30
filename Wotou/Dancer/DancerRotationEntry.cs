@@ -32,10 +32,7 @@ public class DancerRotationEntry : IRotationEntry
     
     public string AuthorName { get; set; } = "Wotou";
     
-    private const string UpdateLog = "更新日志：12.08" +
-                                     "\n- 日随模式添加自动舞伴功能" + 
-                                     "\n更新日志：12.05v02" +
-                                     "\n- 当大舞小舞同时可以使用时，现在会依次使用大舞探戈-GCD百花扇3-结束动作";
+    private const string UpdateLog = "";
     
     public void Dispose()
     {
@@ -231,14 +228,17 @@ public class DancerRotationEntry : IRotationEntry
         ImGui.PushStyleColor(ImGuiCol.Border, new Vector4(1f,0.36f,0.54f, 1));
         if (ImGui.CollapsingHeader("   重要说明"))
         {
-            ImGui.Text("舞者ACR - 技速推荐2.50\n本ACR所用的是固定4小舞循环，技速推荐2.50\n如果有小舞延后现象的，可以改用2.49技速\n请在 FuckAnimationLock 插件中勾选减少爆发药后摇");
+            ImGui.Text("舞者ACR - 技速推荐2.50\n本ACR所用的是固定4小舞循环，技速推荐2.50\n如小舞有延后，可用2.49技速，或开启Gcd偏移优化\n请在 FuckAnimationLock 插件中勾选减少爆发药后摇");
             ImGui.Text("插件地址:");
             ImGui.SameLine();
             var hyperlink = new Hyperlink("FuckAnimationLock", "https://github.com/NiGuangOwO/DalamudPlugins");
             hyperlink.Render();
             ImGui.Separator();
-            ImGui.Text(UpdateLog);
-            ImGui.Separator();
+            if (UpdateLog != "")
+            {
+                ImGui.Text(UpdateLog);
+                ImGui.Separator();
+            }
             if (ImGui.Button("查看指令"))
             {
                 DancerSettings.Instance.IsOpenCommandWindow = true;

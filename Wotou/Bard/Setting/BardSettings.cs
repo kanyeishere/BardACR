@@ -62,7 +62,7 @@ public class BardSettings
     public int UseBattleVoiceBeforeGcdTimeInMs = 1350; //战斗之声和光明神在下个GCD前多久使用（毫秒）
     public int RagingStrikeBeforeGcdTime = 600; //猛者强击在下个GCD前多久使用（毫秒）
     public int WandererBeforeGcdTime = 600; //非起手的贤者歌在下个GCD有多久使用（毫秒）
-    public int PotionBeforeGcdTime = 800; // 爆发药水的动画持续时间（毫秒）
+    public int PotionBeforeGcdTime = 700; // 爆发药水的动画持续时间（毫秒）
     //public int EmpyrealArrowNotBeforeGcdTime = 500; // 九天连箭最晚在下个GCD前多久使用（毫秒）
     
     public bool NaturesMinneWithRecitation = true; // 大地神对齐秘策

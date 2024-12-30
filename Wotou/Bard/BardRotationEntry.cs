@@ -31,19 +31,7 @@ public class BardRotationEntry : IRotationEntry
 
     public string AuthorName { get; set; } = "Wotou";
     
-    private const string UpdateLog = "更新日志：11.30" +
-                                     "\n- 添加绝伊甸特化起手" +
-                                     "\n- 修改了在战斗转场后，重新选中目标时，技能释放的顺序逻辑：" + 
-                                     "\n  - 首先判断灵魂之声是否满100且处于非爆发期，如果通过则打Apex" +
-                                     "\n  - 其次会判断是否需要重新释放DOT，如不需要则打1或者触发1" +
-                                     "\n  - 然后判断是否有2层以上诗心释放完美音调" + 
-                                     "\n  - 最后会释放九天连箭" +
-                                     "\n更新日志：11.29" +
-                                     "\n- 尝试修复一种非常罕见的鹰眼buff覆盖问题" +
-                                     "\n- 修改了在战斗转场后，重新选中目标时，技能释放的顺序逻辑：" + 
-                                     "\n  - 重新选中目标后，会判断是否需要重新释放DOT，如不需要则打1或者触发1" +
-                                     "\n  - 然后判断是否有2层以上诗心释放完美音调" + 
-                                     "\n  - 最后会释放九天连箭";
+    private const string UpdateLog = "";
     
     public Rotation Build(string settingFolder)
     {
@@ -274,14 +262,17 @@ public class BardRotationEntry : IRotationEntry
         
         if (ImGui.CollapsingHeader("   重要说明"))
         {
-            ImGui.Text("诗人ACR\n适配技速2.48-2.50\n精细调整过能力技插入窗口，所以请在fuck插件中适当降低动画锁\n直到连续两个能力技插入间隔在620ms以下（可在FFLogs上查）");
+            ImGui.Text("诗人ACR\n适配技速2.48-2.50\n请在 FuckAnimationLock 中开启三插");
             ImGui.Text("插件地址:");
             ImGui.SameLine();
             var hyperlink = new Hyperlink("FuckAnimationLock", "https://github.com/NiGuangOwO/DalamudPlugins");
             hyperlink.Render();
             ImGui.Separator();
-            ImGui.Text(UpdateLog);
-            ImGui.Separator();
+            if (UpdateLog != "")
+            {
+                ImGui.Text(UpdateLog);
+                ImGui.Separator();
+            }
             if (ImGui.Button("查看指令"))
             {
                 BardSettings.Instance.IsOpenCommandWindow = true;
@@ -431,7 +422,7 @@ public class BardRotationEntry : IRotationEntry
                     ImGui.SameLine();
                     ImGui.Button("\u2195");
                     ImGui.SameLine();
-                    ImGui.Text("\u2190 拖动调整歌轴顺序");
+                    ImGui.Text("\u2190 拖动调整顺序");
                     ImGui.SameLine();
                     ImGui.Dummy(new Vector2(100f, 0.0f));
                     ImGui.PopID();

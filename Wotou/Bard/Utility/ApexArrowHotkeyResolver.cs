@@ -49,10 +49,7 @@ public class ApexArrowHotkeyResolver: IHotkeyResolver
 
     public void DrawExternal(Vector2 size, bool isActive)
     {
-        if (Core.Resolve<JobApi_Bard>().SoulVoice >= 20)
-            SpellHelper.DrawSpellInfo(Core.Resolve<MemApiSpell>().CheckActionChange(this.SpellId).GetSpell(), size, true);
-        else
-            SpellHelper.DrawSpellInfo(Core.Resolve<MemApiSpell>().CheckActionChange(this.SpellId).GetSpell(), size, false);
+        SpellHelper.DrawSpellInfo(Core.Resolve<MemApiSpell>().CheckActionChange(this.SpellId).GetSpell(), size, isActive);
     }
 
     public int Check()
