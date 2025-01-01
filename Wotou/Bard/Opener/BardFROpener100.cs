@@ -46,6 +46,8 @@ public class BardFROpener100 : IOpener
   {
     if (BardSettings.Instance.IsDailyMode)
       return -1;
+    if (AI.Instance.BattleData.CurrBattleTimeInMs > 3000L)
+      return -9;
     if (!Barrage.GetSpell().IsReadyWithCanCast() || 
         !RagingStrikes.GetSpell().IsReadyWithCanCast() || 
         !BattleVoice.GetSpell().IsReadyWithCanCast() ||

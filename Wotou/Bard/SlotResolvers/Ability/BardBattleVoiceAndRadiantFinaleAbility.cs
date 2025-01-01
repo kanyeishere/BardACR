@@ -5,6 +5,7 @@ using AEAssist.JobApi;
 using Dalamud.Game.ClientState.JobGauge.Enums;
 using Wotou.Bard.Data;
 using Wotou.Bard.Setting;
+using Wotou.Bard.Utility;
 
 namespace Wotou.Bard.SlotResolvers.Ability;
 
@@ -40,6 +41,7 @@ public class BardBattleVoiceAndRadiantFinaleAbility: ISlotResolver
              - BardSettings.Instance.RagingStrikeBeforeGcdTime)
             )
             return -1;
+        BardUtil.LogDebug("GcdCooldown 1: ",GCDHelper.GetGCDCooldown().ToString());
         return 1;
     }
 
@@ -49,5 +51,6 @@ public class BardBattleVoiceAndRadiantFinaleAbility: ISlotResolver
         if (RadiantFinale.IsUnlock())
             slot.Add(RadiantFinale.GetSpell());
         AI.Instance.BattleData.CurrGcdAbilityCount = 0;
+        BardUtil.LogDebug("GcdCooldown 2: ",GCDHelper.GetGCDCooldown().ToString());
     }
 }

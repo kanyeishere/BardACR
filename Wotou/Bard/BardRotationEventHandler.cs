@@ -244,6 +244,9 @@ public class BardRotationEventHandler : IRotationEventHandler
         
         if (spell.Id == BardDefinesData.Spells.RagingStrikes)
             BardBattleData.Instance.HasUseIronJawsInCurrentBursting = false;
+        
+        if (spell.Id == BardDefinesData.Spells.BattleVoice)
+            BardUtil.LogDebug("GcdCooldown 3: ",GCDHelper.GetGCDCooldown().ToString());
     }
 
     public void OnBattleUpdate(int currTimeInMs)
