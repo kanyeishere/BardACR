@@ -18,7 +18,7 @@ public class BardRefulgentArrowMaxGcd : ISlotResolver
     
     public int Check()
     {
-        if (Core.Me.HasLocalPlayerAura(BarrageBuff) && (!Core.Me.HasMyAuraWithTimeleft(BarrageBuff, 5500)))
+        if (Core.Me.HasLocalPlayerAura(BarrageBuff) && !Core.Me.HasMyAuraWithTimeleft(BarrageBuff, 3000))
             return 1;
         return -1;
     }

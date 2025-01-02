@@ -14,7 +14,7 @@ public class BardBarrageAbility : ISlotResolver
     
     public int Check()
     {
-        if (GCDHelper.GetGCDCooldown() <= 650)
+        if (GCDHelper.GetGCDCooldown() <= 620)
             return -1;
         if (!Barrage.GetSpell().IsReadyWithCanCast())
             return -1;

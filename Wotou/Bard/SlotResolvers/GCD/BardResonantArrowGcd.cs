@@ -19,7 +19,7 @@ public class BardResonantArrowGcd : ISlotResolver
             return -1;
         if (BardUtil.HasAllPartyBuff())
             return 1;
-        if (Core.Me.HasLocalPlayerAura(ResonantArrowReady) && !Core.Me.HasMyAuraWithTimeleft(ResonantArrowReady, 3000))
+        if (Core.Me.HasLocalPlayerAura(ResonantArrowReady) && !Core.Me.HasMyAuraWithTimeleft(ResonantArrowReady, 10000))
             return 1;
         return -1;
     }

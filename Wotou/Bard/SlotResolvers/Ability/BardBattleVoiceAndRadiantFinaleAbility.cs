@@ -41,6 +41,8 @@ public class BardBattleVoiceAndRadiantFinaleAbility: ISlotResolver
              - BardSettings.Instance.RagingStrikeBeforeGcdTime)
             )
             return -1;
+        BardUtil.LogDebug("GCDDuration 1: ",GCDHelper.GetGCDDuration().ToString());
+        BardUtil.LogDebug("ElapsedGCD 1: ",GCDHelper.GetElapsedGCD().ToString());
         BardUtil.LogDebug("GcdCooldown 1: ",GCDHelper.GetGCDCooldown().ToString());
         return 1;
     }
