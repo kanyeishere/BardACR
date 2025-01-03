@@ -33,10 +33,7 @@ public class DancerCommandWindow
     public static void Draw()
     {
         if (!DancerSettings.Instance.IsOpenCommandWindow)
-        {
-            DancerSettings.Instance.Save();
             return;
-        }
 
         ImGuiViewportPtr mainViewport = ImGui.GetMainViewport();
         //ImGui.SetNextWindowPos(new Vector2(mainViewport.Pos.X + mainViewport.Size.X / 2f, mainViewport.Pos.Y + mainViewport.Size.Y / 2f), ImGuiCond.Always, new Vector2(0.5f, 0.5f));
