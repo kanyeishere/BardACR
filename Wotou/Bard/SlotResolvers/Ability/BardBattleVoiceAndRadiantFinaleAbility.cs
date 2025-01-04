@@ -52,6 +52,8 @@ public class BardBattleVoiceAndRadiantFinaleAbility: ISlotResolver
         slot.Add(BattleVoice.GetSpell());
         if (RadiantFinale.IsUnlock())
             slot.Add(RadiantFinale.GetSpell());
+        if (Core.Me.Level < 90)
+            slot.Add(RagingStrikes.GetSpell());
         AI.Instance.BattleData.CurrGcdAbilityCount = 0;
         BardUtil.LogDebug("GcdCooldown 2: ",GCDHelper.GetGCDCooldown().ToString());
     }

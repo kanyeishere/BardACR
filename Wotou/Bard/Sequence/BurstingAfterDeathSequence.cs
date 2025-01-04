@@ -32,6 +32,7 @@ public class BurstingAfterDeathSequence: ISlotSequence
             return -9;
         if (EmpyrealArrow.IsUnlockWithCDCheck() && 
             WanderersMinuet.IsUnlockWithCDCheck() &&
+            GCDHelper.GetGCDCooldown() == 0 && 
             //BardRotationEntry.QT.GetQt(QTKey.StrongAlign) &&
             BardRotationEntry.QT.GetQt(QTKey.BurstWithWanderer) &&
             BardRotationEntry.QT.GetQt(QTKey.Song))

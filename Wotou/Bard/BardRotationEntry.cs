@@ -97,6 +97,8 @@ public class BardRotationEntry : IRotationEntry
                 return new Bard2GOpener100();
             case 2:
                 return new BardFROpener100();
+            case 3:
+                return new Bard3GOpener7080();
         }
         return new Bard3GOpener100();
     }
@@ -593,24 +595,29 @@ public class BardRotationEntry : IRotationEntry
             switch (BardSettings.Instance.Opener)
             {
                 case 0:
-                    opener = "70-100级 3G团辅起手";
+                    opener = "90-100级 3G团辅起手";
                     break;
                 case 1:
-                    opener = "70-100级 2G团辅起手";
+                    opener = "90-100级 2G团辅起手";
                     break;
                 case 2:
                     opener = "绝伊甸专用起手";
+                    break;
+                case 3:
+                    opener = "70-80级 3G团辅起手";
                     break;
             }
 
             if (ImGui.BeginCombo("起手选择", opener))
             {
-                if (ImGui.Selectable("70-100级 3G团辅起手"))
+                if (ImGui.Selectable("90-100级 3G团辅起手"))
                     BardSettings.Instance.Opener = 0;
-                if (ImGui.Selectable("70-100级 2G团辅起手"))
+                if (ImGui.Selectable("90-100级 2G团辅起手"))
                     BardSettings.Instance.Opener = 1;
                 if (ImGui.Selectable("绝伊甸专用起手"))
                     BardSettings.Instance.Opener = 2;
+                if (ImGui.Selectable("70-80级 3G团辅起手"))
+                    BardSettings.Instance.Opener = 3;
                 ImGui.EndCombo();
             }
 

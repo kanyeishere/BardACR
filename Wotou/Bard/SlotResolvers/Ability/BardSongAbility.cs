@@ -20,6 +20,7 @@ public class BardSongAbility : ISlotResolver
     private const uint RagingStrikes = BardDefinesData.Spells.RagingStrikes;
     private const uint BattleVoice = BardDefinesData.Spells.BattleVoice;
     private const uint EmpyrealArrow = BardDefinesData.Spells.EmpyrealArrow;
+    private const uint RadiantFinale = BardDefinesData.Spells.RadiantFinale;
     private const uint FootGraze = BardDefinesData.Spells.FootGraze;
     
     public int Check()
@@ -34,6 +35,7 @@ public class BardSongAbility : ISlotResolver
         if (!BardRotationEntry.QT.GetQt("唱歌"))
             return -1;
         if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 1000 
+            && Core.Me.Level >= 90
             && BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow)
             && Core.Resolve<JobApi_Bard>().ActiveSong != Song.MAGE) //除了贤者切军神 
             return -1;
@@ -47,9 +49,36 @@ public class BardSongAbility : ISlotResolver
         if (WanderersMinuet.RecentlyUsed() || MagesBallad.RecentlyUsed() || ArmysPaeon.RecentlyUsed())
             return -1;
         
+        // 90级以下 使用爆发药时
         if (WanderersMinuet.GetSpell().Cooldown.TotalMilliseconds <= 640 && 
             GCDHelper.GetGCDCooldown() <= BardSettings.Instance.WandererBeforeGcdTime + 640 && 
-            BardSettings.Instance.ImitateGreenPlayer &&
+            Core.Me.Level < 90 &&
+            BardRotationEntry.QT.GetQt("爆发药") &&
+            ItemHelper.CheckCurrJobPotion() &&
+            BardRotationEntry.QT.GetQt("爆发") && 
+            BardRotationEntry.QT.GetQt("对齐旅神") &&
+            BattleVoice.GetSpell().Cooldown.TotalMilliseconds <= 2200 - 600 + 640)
+        {
+            BardUtil.LogDebug("切歌", "90级以下使用爆发药，第一个开的120秒buff是战斗之声，爆发切歌条件满足");
+            return 120;
+        }
+        
+        if (WanderersMinuet.GetSpell().IsReadyWithCanCast() && 
+            GCDHelper.GetGCDCooldown() <= BardSettings.Instance.WandererBeforeGcdTime && 
+            Core.Me.Level < 90 &&
+            !(BardRotationEntry.QT.GetQt("爆发药") &&
+             ItemHelper.CheckCurrJobPotion()) &&
+            BardRotationEntry.QT.GetQt("爆发") && 
+            BardRotationEntry.QT.GetQt("对齐旅神") &&
+            BattleVoice.GetSpell().Cooldown.TotalMilliseconds <= 2200 - 600)
+        {
+            BardUtil.LogDebug("切歌", "90级以下不使用爆发药，第一个开的120秒buff是战斗之声，爆发切歌条件满足");
+            return 120;
+        }
+        
+        if (WanderersMinuet.GetSpell().Cooldown.TotalMilliseconds <= 640 && 
+            GCDHelper.GetGCDCooldown() <= BardSettings.Instance.WandererBeforeGcdTime + 640 && 
+            Core.Me.Level >= 90 &&
             BardRotationEntry.QT.GetQt("爆发") && 
             BardRotationEntry.QT.GetQt("对齐旅神") &&
             BardBattleData.Instance.First120SBuffSpellId == BattleVoice &&
@@ -63,6 +92,7 @@ public class BardSongAbility : ISlotResolver
         if (WanderersMinuet.GetSpell().Cooldown.TotalMilliseconds <= 640 && 
             GCDHelper.GetGCDCooldown() <= BardSettings.Instance.WandererBeforeGcdTime + 640 && 
             BardSettings.Instance.ImitateGreenPlayer &&
+            Core.Me.Level >= 90 &&
             BardRotationEntry.QT.GetQt("爆发") && 
             BardRotationEntry.QT.GetQt("对齐旅神") &&
             BardBattleData.Instance.First120SBuffSpellId == RagingStrikes &&
@@ -78,6 +108,7 @@ public class BardSongAbility : ISlotResolver
         if (WanderersMinuet.GetSpell().IsReadyWithCanCast() && 
             GCDHelper.GetGCDCooldown() <= BardSettings.Instance.WandererBeforeGcdTime && 
             BardRotationEntry.QT.GetQt("爆发") && 
+            Core.Me.Level >= 90 &&
             BardRotationEntry.QT.GetQt("对齐旅神") &&
             BardBattleData.Instance.First120SBuffSpellId == BattleVoice &&
             BardBattleData.Instance.First120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds <= 2200 - 600 &&
@@ -90,6 +121,7 @@ public class BardSongAbility : ISlotResolver
         if (WanderersMinuet.GetSpell().IsReadyWithCanCast() && 
             GCDHelper.GetGCDCooldown() <= BardSettings.Instance.WandererBeforeGcdTime && 
             BardRotationEntry.QT.GetQt("爆发") && 
+            Core.Me.Level >= 90 &&
             BardRotationEntry.QT.GetQt("对齐旅神") &&
             BardBattleData.Instance.First120SBuffSpellId == RagingStrikes &&
             BardBattleData.Instance.First120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds <= 2200 &&
@@ -133,9 +165,17 @@ public class BardSongAbility : ISlotResolver
         BardUtil.LogDebug("切歌", $"当前歌曲：{Core.Resolve<JobApi_Bard>().ActiveSong}, 下一首歌曲：{BardUtil.GetSongBySpell(spell.Id)}, 当前歌曲剩余时间：{Core.Resolve<JobApi_Bard>().SongTimer}");
         if (spell.Id == WanderersMinuet && 
             BardSettings.Instance.ImitateGreenPlayer &&
+            Core.Me.Level >= 90 &&
             BardRotationEntry.QT.GetQt("爆发") && 
             BardRotationEntry.QT.GetQt("对齐旅神"))
             slot.Add(FootGraze.GetSpell());
+        if (spell.Id == WanderersMinuet && 
+            Core.Me.Level < 90 &&
+            BardRotationEntry.QT.GetQt("爆发药") &&
+            ItemHelper.CheckCurrJobPotion() &&
+            BardRotationEntry.QT.GetQt("爆发") && 
+            BardRotationEntry.QT.GetQt("对齐旅神"))
+            slot.Add(Spell.CreatePotion());
         slot.Add(spell);
         if (spell.Id == WanderersMinuet && 
             BardRotationEntry.QT.GetQt("爆发") && 
