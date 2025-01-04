@@ -31,7 +31,9 @@ public class BardRotationEntry : IRotationEntry
 
     public string AuthorName { get; set; } = "Wotou";
     
-    private const string UpdateLog = "";
+    private const string UpdateLog = "更新日志 0104" +
+                                     "\n- 添加70-80级起手" +
+                                     "\n- 添加70-80级高难特化循环";
     
     public Rotation Build(string settingFolder)
     {

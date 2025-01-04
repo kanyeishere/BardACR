@@ -22,8 +22,8 @@ public class BardRagingStrikesAbility : ISlotResolver
         if (BardRotationEntry.QT.GetQt("对齐旅神") && 
             Core.Resolve<JobApi_Bard>().ActiveSong != Song.WANDERER)
             return -1;
-        // 90级以下，猛者与战斗之声一起使用，不在这里处理
-        if (Core.Me.Level < 90)
+        // 90级以下，高难模式下，猛者与战斗之声一起使用，不在这里处理
+        if (Core.Me.Level < 90 && !BardSettings.Instance.IsDailyMode)
             return -1;
         
         // 第一个120s技能是RagingStrikes，且剩下的两个120s技能中有一个技能的CD大于当前GCDDuration
