@@ -79,6 +79,7 @@ public class BardSongAbility : ISlotResolver
         if (WanderersMinuet.GetSpell().Cooldown.TotalMilliseconds <= 640 && 
             GCDHelper.GetGCDCooldown() <= BardSettings.Instance.WandererBeforeGcdTime + 640 && 
             Core.Me.Level >= 90 &&
+            BardSettings.Instance.ImitateGreenPlayer &&
             BardRotationEntry.QT.GetQt("爆发") && 
             BardRotationEntry.QT.GetQt("对齐旅神") &&
             BardBattleData.Instance.First120SBuffSpellId == BattleVoice &&
