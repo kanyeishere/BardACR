@@ -104,8 +104,8 @@ public class Bard3GOpener7080 : IOpener
       slot.Add(BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).GetSpell());
     else if (BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).IsUnlockWithCDCheck())
       slot.Add(BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).GetSpell());
-    if (BardRotationEntry.QT.GetQt("爆发药") && BardSettings.Instance.UsePotionInOpener)
-      slot.Add(Spell.CreatePotion());
+    if (EmpyrealArrow.IsUnlockWithCDCheck())
+      slot.Add(EmpyrealArrow.GetSpell());
   }
 
   private static void Step1(Slot slot)
@@ -117,8 +117,8 @@ public class Bard3GOpener7080 : IOpener
     }
     else
       slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(VenomousBite).GetSpell());
-    if (EmpyrealArrow.IsUnlockWithCDCheck())
-      slot.Add(EmpyrealArrow.GetSpell());
+    if (BardRotationEntry.QT.GetQt("爆发药") && BardSettings.Instance.UsePotionInOpener)
+      slot.Add(Spell.CreatePotion());
     slot.Add(GetHeartBreakSpell());
   }
 
