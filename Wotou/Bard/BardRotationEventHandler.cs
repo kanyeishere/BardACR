@@ -94,6 +94,12 @@ public class BardRotationEventHandler : IRotationEventHandler
             BardRotationEntry.QT.SetQt("对齐旅神", false);
             BardRotationEntry.QT.SetQt("攒碎心箭", false);
         }
+        
+        // reset QT
+        foreach (var (key, value) in BardRotationEntry.DefaultQTValues)
+        {
+            BardRotationEntry.QT.SetQt(key, value.DefaultValue);
+        }
     }
 
     public async Task OnNoTarget()

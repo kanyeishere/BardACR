@@ -35,6 +35,24 @@ public class BardRotationEntry : IRotationEntry
                                      "\n- 添加70-80级起手" +
                                      "\n- 添加70-80级高难特化循环";
     
+    public static readonly Dictionary<string, (bool DefaultValue, string Description, Action<bool>? Callback)> DefaultQTValues = new()
+    {
+        { QTKey.Aoe, (true, "是否使用AOE", null) },
+        { QTKey.Burst, (true, "控制猛者，双团辅及纷乱箭的使用", value => { OnClickBurstQT(); }) },
+        { QTKey.BurstWithWanderer, (true, "爆发是否对齐旅神", value => { OnClickBurstWithWandererQT(); }) },
+        { QTKey.StrongAlign, (true, "不会因GCD时间变化而延后爆发，绝本有上天的阶段建议关闭", value => { OnClickStrongAlign(value); }) },
+        { QTKey.Apex, (true, "是否使用绝峰箭", null) },
+        { QTKey.HeartBreak, (true, "是否攒碎心箭进团辅", null) },
+        { QTKey.DOT, (true, "是否使用DOT", null) },
+        { QTKey.Song, (true, "是否使用歌曲", null) },
+        { QTKey.NatureMinne, (true, "大地神自动对齐秘策/活化/中间学派", null) },
+        { QTKey.UsePotion, (false, "是否使用爆发药水", null) },
+        { QTKey.Debug, (false, "是否打印调试信息", null) },
+        { QTKey.EmpyrealArrow, (true, "是否使用九天", null) },
+        { QTKey.Sidewinder, (true, "是否使用侧风", null) },
+        { QTKey.EmpyrealArrowBeforeGcd, (false, "Boss上天后，落地第一个技能是否使用九天", null) }
+    };
+    
     public Rotation Build(string settingFolder)
     {
         BardDefinesData.InitializeDictionary();
@@ -105,7 +123,7 @@ public class BardRotationEntry : IRotationEntry
         return new Bard3GOpener100();
     }
 
-    private void OnClickStrongAlign(bool value)
+    private static void OnClickStrongAlign(bool value)
     {
         if (!BardUtil.IsSongOrderNormal())
         {
@@ -165,23 +183,20 @@ public class BardRotationEntry : IRotationEntry
         QT.AddTab("Dev", DrawQtDev);
 
         // 添加QT开关 第二个参数是默认值 (开or关) 第三个参数是鼠标悬浮时的tips
-        QT.AddQt(QTKey.Aoe, true, "是否使用AOE");
-        QT.AddQt(QTKey.Burst, true, value => { OnClickBurstQT(); });
-        QT.SetQtToolTip("控制猛者，双团辅及纷乱箭的使用");
-        QT.AddQt(QTKey.BurstWithWanderer, true, value => { OnClickBurstWithWandererQT(); });
-        QT.SetQtToolTip("爆发是否对齐旅神");
-        QT.AddQt(QTKey.StrongAlign, true, value => { OnClickStrongAlign(value); });
-        QT.SetQtToolTip("不会因GCD时间变化而延后爆发，绝本有上天的阶段建议关闭");
-        QT.AddQt(QTKey.Apex, true, "是否使用绝峰箭");
-        QT.AddQt(QTKey.HeartBreak, true, "是否攒碎心箭进团辅");
-        QT.AddQt(QTKey.DOT, true, "是否使用DOT");
-        QT.AddQt(QTKey.Song, true, "是否使用歌曲");
-        QT.AddQt(QTKey.NatureMinne, true, "大地神自动对齐秘策/活化/中间学派");
-        QT.AddQt(QTKey.UsePotion, false, "是否使用爆发药水");
-        QT.AddQt(QTKey.Debug, false, "是否打印调试信息");
-        QT.AddQt(QTKey.EmpyrealArrow, true, "是否使用九天");
-        QT.AddQt(QTKey.Sidewinder, true, "是否使用侧风");
-        QT.AddQt(QTKey.EmpyrealArrowBeforeGcd, false, "Boss上天后，落地第一个技能是否使用九天");
+        foreach (var (key, value) in DefaultQTValues)
+        {
+            if (value.Callback != null)
+            {
+                QT.AddQt(key, value.DefaultValue, value.Callback);
+            }
+            else
+            {
+                QT.AddQt(key, value.DefaultValue, value.Description);
+            }
+            // 设置工具提示
+            QT.SetQtToolTip(value.Description);
+        }
+
         if(BardSettings.Instance.JobViewSave.QtUnVisibleList.Count == 0 )
         {
             BardSettings.Instance.JobViewSave.QtUnVisibleList.Add("Debug");

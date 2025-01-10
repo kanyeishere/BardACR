@@ -305,6 +305,13 @@ namespace Wotou.Dancer
             DancerSettings.Instance.FanDanceSaveStack = 3;
             
             _randomTime = 0;
+            
+            // 手动维护所有 QT 默认值
+
+            foreach (var (key, value) in DancerRotationEntry.DefaultQTValues)
+            {
+                DancerRotationEntry.QT.SetQt(key, value.DefaultValue);
+            }
         }
 
         public void OnSpellCastSuccess(Slot slot, Spell spell)
