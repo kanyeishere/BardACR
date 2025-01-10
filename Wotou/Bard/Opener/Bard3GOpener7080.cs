@@ -51,7 +51,7 @@ public class Bard3GOpener7080 : IOpener
         !BattleVoice.GetSpell().IsReadyWithCanCast() ||
         Core.Resolve<MemApiSpell>().GetCooldown(BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong)).TotalSeconds > 0.0)
       return -4;
-    return !BardRotationEntry.QT.GetQt("爆发") || !BardRotationEntry.QT.GetQt("唱歌") ? -10 : 0;
+    return 0;
   }
 
   public int StopCheck() => -1;
