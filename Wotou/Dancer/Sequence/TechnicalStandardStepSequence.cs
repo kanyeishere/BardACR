@@ -135,7 +135,9 @@ public class TechnicalStandardStepSequence: ISlotSequence
         _hasUsedFanDance3 = false;
         if (Core.Resolve<JobApi_Dancer>().Esprit >= 70)
             slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(SaberDance).GetSpell());
-        else
+        else if (Core.Me.Level >= 100)
             slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(FinishingMove).GetSpell());
+        else
+            slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(StandardStep).GetSpell());
     }
 }
