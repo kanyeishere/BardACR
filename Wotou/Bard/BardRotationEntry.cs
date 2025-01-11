@@ -284,7 +284,7 @@ public class BardRotationEntry : IRotationEntry
     
     public void DrawQtDefaults(JobViewWindow jobViewWindow)
     {
-        ImGui.Text("在这里设置 Bard 的默认 Qt 值：");
+        ImGui.Text("在这里设置 Qt 的默认值：");
 
         foreach (var (key, value) in DefaultQTValues)
         {
