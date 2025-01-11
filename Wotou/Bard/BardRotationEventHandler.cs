@@ -95,10 +95,16 @@ public class BardRotationEventHandler : IRotationEventHandler
             BardRotationEntry.QT.SetQt("攒碎心箭", false);
         }
         
-        // reset QT
+        // 重置 QT 值
         foreach (var (key, value) in BardRotationEntry.DefaultQTValues)
         {
-            BardRotationEntry.QT.SetQt(key, value.DefaultValue);
+            // 检查用户自定义值，优先使用用户定义值
+            bool qtValue = BardSettings.Instance.UserDefinedQtValues.ContainsKey(key)
+                ? BardSettings.Instance.UserDefinedQtValues[key]
+                : value.DefaultValue;
+
+            // 设置 QT 值
+            BardRotationEntry.QT.SetQt(key, qtValue);
         }
     }
 

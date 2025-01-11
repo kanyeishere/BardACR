@@ -34,20 +34,6 @@ public class DancerRotationEntry : IRotationEntry
     
     private const string UpdateLog = "";
     
-    public static readonly Dictionary<string, (bool DefaultValue, string Description)> DefaultQTValues = new()
-    {
-        { QTKey.UsePotion, (false, "是否使用爆发药") },
-        { QTKey.Aoe, (true, "是否使用AOE") },
-        { QTKey.StrongAlign, (true, "不会因多打GCD而延后大舞，绝本有上天的阶段建议关闭") },
-        { QTKey.TechnicalStep, (true, "是否使用技巧舞步与进攻之探戈") },
-        { QTKey.StandardStep, (true, "是否使用标准舞步与结束动作") },
-        { QTKey.Flourish, (true, "是否使用百花争艳") },
-        { QTKey.SaberDance, (true, "是否使用剑舞与拂晓舞") },
-        { QTKey.FanDance, (true, "是否使用扇舞") },
-        { QTKey.AutoCuringWaltz, (true, "是否自动使用治疗之华尔兹") },
-        { QTKey.FinalBurst, (false, "是否倾泻资源") }
-    };
-    
     public void Dispose()
     {
     }
@@ -149,6 +135,8 @@ public class DancerRotationEntry : IRotationEntry
     // 构造函数里初始化QT
     public void BuildQT(string settingFolder)
     {
+        DancerSettings.Instance.InitializeQtValues();
+
         // JobViewSave是AE底层提供的QT设置存档类 在你自己的设置里定义即可
         // 第二个参数是你设置文件的Save类 第三个参数是QT窗口标题
         QT = new JobViewWindow(DancerSettings.Instance.JobViewSave, DancerSettings.Instance.Save, "Wotou");
@@ -179,10 +167,15 @@ public class DancerRotationEntry : IRotationEntry
         
         QT.AddTab("通用", DrawGeneral);
         QT.AddTab("Dev", DrawQtDev);
+        QT.AddTab("Qt默认值", DrawQtDefaults);
         
-        foreach (var (key, value) in DefaultQTValues)
+        foreach (var (key, value) in DancerSettings.Instance.DefaultQtValues)
         {
-            QT.AddQt(key, value.DefaultValue, value.Description);
+            bool initialValue = DancerSettings.Instance.CustomQtValues.ContainsKey(key)
+                ? DancerSettings.Instance.CustomQtValues[key]
+                : value.DefaultValue;
+
+            QT.AddQt(key, initialValue, value.Description);
         }
         
         
@@ -375,6 +368,32 @@ public class DancerRotationEntry : IRotationEntry
             ImGui.Separator();
         }
         ImGui.PopStyleColor(2);
+    }
+    
+    public void DrawQtDefaults(JobViewWindow jobViewWindow)
+    {
+        ImGui.Text("在这里设置 Qt 的默认值：");
+
+        foreach (var (key, value) in DancerSettings.Instance.DefaultQtValues)
+        {
+            bool currentValue = DancerSettings.Instance.CustomQtValues[key];
+
+            if (ImGui.Checkbox($"{key}##{key}", ref currentValue))
+            {
+                DancerSettings.Instance.CustomQtValues[key] = currentValue;
+                DancerSettings.Instance.Save();
+            }
+        }
+
+        ImGui.Separator();
+
+        if (ImGui.Button("重置##1"))
+        {
+            DancerSettings.Instance.CustomQtValues.Clear();
+            DancerSettings.Instance.Save();
+        }
+        ImGui.SameLine();
+        if (ImGui.Button("保存##1")) DancerSettings.Instance.Save();
     }
 
     public void OnDrawSetting(){

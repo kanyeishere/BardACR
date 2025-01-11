@@ -71,6 +71,38 @@ public class DancerSettings
     
     // 扇舞保留层数
     public int FanDanceSaveStack = 3;
+
+    // 原始的 QT 默认值字典
+    public readonly Dictionary<string, (bool DefaultValue, string Description)> DefaultQtValues = new()
+    {
+        { QTKey.UsePotion, (false, "是否使用爆发药") },
+        { QTKey.Aoe, (true, "是否使用AOE") },
+        { QTKey.StrongAlign, (true, "不会因多打GCD而延后大舞，绝本有上天的阶段建议关闭") },
+        { QTKey.TechnicalStep, (true, "是否使用技巧舞步与进攻之探戈") },
+        { QTKey.StandardStep, (true, "是否使用标准舞步与结束动作") },
+        { QTKey.Flourish, (true, "是否使用百花争艳") },
+        { QTKey.SaberDance, (true, "是否使用剑舞与拂晓舞") },
+        { QTKey.FanDance, (true, "是否使用扇舞") },
+        { QTKey.AutoCuringWaltz, (true, "是否自动使用治疗之华尔兹") },
+        { QTKey.FinalBurst, (false, "是否倾泻资源") }
+    };
+    
+    // 用户自定义的 QT 配置值
+    public Dictionary<string, bool> CustomQtValues { get; private set; } = new();
+
+    /// <summary>
+    /// 初始化用户自定义的 QT 值。如果没有自定义值，则使用默认值。
+    /// </summary>
+    public void InitializeQtValues()
+    {
+        foreach (var (key, value) in DefaultQtValues)
+        {
+            if (!CustomQtValues.ContainsKey(key))
+            {
+                CustomQtValues[key] = value.DefaultValue;
+            }
+        }
+    }
     
     public JobViewSave JobViewSave = new JobViewSave()
     {

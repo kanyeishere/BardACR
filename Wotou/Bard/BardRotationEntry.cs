@@ -181,19 +181,27 @@ public class BardRotationEntry : IRotationEntry
         //添加QT分页 第一个参数是分页标题 第二个是分页里的内容
         QT.AddTab("通用", DrawQtGeneral);
         QT.AddTab("Dev", DrawQtDev);
+        QT.AddTab("Qt默认值", DrawQtDefaults);
 
         // 添加QT开关 第二个参数是默认值 (开or关) 第三个参数是鼠标悬浮时的tips
+        // 初始化 QT 选项
         foreach (var (key, value) in DefaultQTValues)
         {
+            bool initialValue = value.DefaultValue;
+            
+            if (BardSettings.Instance.UserDefinedQtValues.ContainsKey(key))
+            {
+                initialValue = BardSettings.Instance.UserDefinedQtValues[key];
+            }
+            
             if (value.Callback != null)
             {
-                QT.AddQt(key, value.DefaultValue, value.Callback);
+                QT.AddQt(key, initialValue, value.Callback);
             }
             else
             {
-                QT.AddQt(key, value.DefaultValue, value.Description);
+                QT.AddQt(key, initialValue, value.Description);
             }
-            // 设置工具提示
             QT.SetQtToolTip(value.Description);
         }
 
@@ -272,6 +280,37 @@ public class BardRotationEntry : IRotationEntry
         // 在 Push/Pop 操作之后，处理按钮点击事件
         if (buttonClicked)
             onClickAction?.Invoke();
+    }
+    
+    public void DrawQtDefaults(JobViewWindow jobViewWindow)
+    {
+        ImGui.Text("在这里设置 Bard 的默认 Qt 值：");
+
+        foreach (var (key, value) in DefaultQTValues)
+        {
+            bool currentValue = BardSettings.Instance.UserDefinedQtValues.ContainsKey(key)
+                ? BardSettings.Instance.UserDefinedQtValues[key]
+                : value.DefaultValue;
+
+            if (ImGui.Checkbox($"{key}##{key}", ref currentValue))
+            {
+                BardSettings.Instance.UserDefinedQtValues[key] = currentValue;
+                BardSettings.Instance.Save();
+            }
+        }
+
+        ImGui.Separator();
+
+        if (ImGui.Button("重置##Reset"))
+        {
+            BardSettings.Instance.UserDefinedQtValues.Clear(); // 清空用户定义值
+            BardSettings.Instance.Save();
+        }
+        ImGui.SameLine();
+        if (ImGui.Button("保存##Save"))
+        {
+            BardSettings.Instance.Save();
+        }
     }
 
     public void DrawQtGeneral(JobViewWindow jobViewWindow)

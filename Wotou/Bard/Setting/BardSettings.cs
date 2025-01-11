@@ -83,6 +83,8 @@ public class BardSettings
     
     public bool IsOpenCommandWindow = true; // 是否开启指令窗口
     
+    public Dictionary<string, bool> UserDefinedQtValues = new(); // 用户自定义QT值
+    
     public JobViewSave JobViewSave = new JobViewSave()
     {
         MainColor = new(0f, 0.3012f, 0.2306f, 1f),
