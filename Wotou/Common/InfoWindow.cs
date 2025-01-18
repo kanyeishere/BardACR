@@ -17,11 +17,12 @@ public class InfoWindow
             return;
         if (DancerSettings.Instance.IsReadInfoWindow04)
             return;
+        return;
         ImGuiViewportPtr mainViewport = ImGui.GetMainViewport();
         ImGui.SetNextWindowPos(new Vector2(mainViewport.Pos.X + mainViewport.Size.X / 2f, mainViewport.Pos.Y + mainViewport.Size.Y / 2f), ImGuiCond.Always, new Vector2(0.5f, 0.5f));
         ImGui.SetNextWindowSize(new Vector2(800f, 800f), ImGuiCond.Always);
         ImGui.SetNextWindowFocus();
-        ImGui.Begin("", ref InfoWindow.isWindowOpen, ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.AlwaysAutoResize);
+        ImGui.Begin("", ref InfoWindow.isWindowOpen);
         ImGui.TextColored(new Vector4(1f, 0.5f, 0.0f, 1f), "特别说明");
         ImGui.Separator();
         ImGui.TextColored(new Vector4(1f, 0.5f, 0.0f, 1f), "本次更新了M4S诗人6分钟爆发-落地诗心的精修轴v1125.01（是的，又又又又更新了）");
