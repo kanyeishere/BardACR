@@ -1,6 +1,8 @@
 using System.Diagnostics;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using AEAssist;
 using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.CombatRoutine.Module.Opener;
@@ -8,6 +10,7 @@ using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.CombatRoutine.View.JobView.HotkeyResolver;
 using AEAssist.GUI;
 using AEAssist.Helper;
+using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.JobGauge.Enums;
 using Dalamud.Interface;
 using ImGuiNET;
@@ -784,6 +787,17 @@ public class BardRotationEntry : IRotationEntry
     
     public void DrawQtDev(JobViewWindow jobViewWindow)
     {
+        Vector3 vector3 = Core.Resolve<MemApiMove>().MousePos();
+        DefaultInterpolatedStringHandler interpolatedStringHandler = new DefaultInterpolatedStringHandler(12, 3);
+        interpolatedStringHandler.AppendLiteral("鼠标坐标: (");
+        interpolatedStringHandler.AppendFormatted<float>(vector3.X);
+        interpolatedStringHandler.AppendLiteral(", ");
+        interpolatedStringHandler.AppendFormatted<float>(vector3.Y);
+        interpolatedStringHandler.AppendLiteral(", ");
+        interpolatedStringHandler.AppendFormatted<float>(vector3.Z);
+        interpolatedStringHandler.AppendLiteral(")");
+        ImGui.Text(interpolatedStringHandler.ToStringAndClear());
+        ImGui.Separator();
         ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0.0f, 0.0f, 0.0f, 0.0f));
         ImGui.PushStyleColor(ImGuiCol.Border, new Vector4(0.4314f, 0.6667f, 0.5569f, 1));
         ImGui.Text("请输入技能名，以搜索对应id：");
