@@ -22,28 +22,39 @@ namespace Wotou.Dancer
         private Dictionary<string, string> qtKeyDictionary;
         private Dictionary<string, string?> hotkeyDictionary;
 
-        private static Dictionary<Jobs, int> jobPriorities = new(){
-            { Jobs.Viper, 1 },
-            { Jobs.Monk, 2 },
-            { Jobs.Pictomancer, 3 },
-            { Jobs.BlackMage, 4 },
-            { Jobs.Reaper, 5 },
-            { Jobs.Samurai, 6},
-            { Jobs.Ninja, 7},
-            { Jobs.Dragoon, 8},
-            { Jobs.RedMage, 9},
-            { Jobs.Summoner, 10},
-            { Jobs.Machinist, 11},
-            { Jobs.Bard, 12},
-            { Jobs.Dancer, 13},
-            { Jobs.DarkKnight, 14},
-            { Jobs.Gunbreaker, 15},
-            { Jobs.Paladin, 16},
-            { Jobs.Warrior, 17},
-            { Jobs.Sage, 18},
-            { Jobs.WhiteMage, 19},
-            { Jobs.Scholar, 20},
-            { Jobs.Astrologian, 21}
+        private static Dictionary<Jobs, int> jobPriorities = new()
+        {
+            { Jobs.Viper, 1 },           // 蝰蛇剑士，优先级最高
+            { Jobs.Pictomancer, 2 },     // 绘灵法师，高优先级支援职业
+            { Jobs.Monk, 3 },            // 高输出近战职业
+            { Jobs.BlackMage, 4 },       // 高输出法系职业
+            { Jobs.Reaper, 5 },          // 强力近战职业
+            { Jobs.Samurai, 6 },         // 高爆发近战职业
+            { Jobs.Ninja, 7 },           // 兼具支援和爆发能力
+            { Jobs.Dragoon, 8 },         // 稳定的近战输出
+            { Jobs.RedMage, 9 },         // 灵活的法系职业
+            { Jobs.Summoner, 10 },       // 持续高输出的召唤职业
+            { Jobs.Machinist, 11 },      // 高爆发远程职业
+            { Jobs.Bard, 12 },           // 兼具支援和输出的远程职业
+            { Jobs.Dancer, 13 },         // 舞伴职业，低优先级自身
+            { Jobs.BlueMage, 14 },       // 特殊职业，低优先级
+            { Jobs.DarkKnight, 15 },     // 坦克职业
+            { Jobs.Gunbreaker, 16 },     // 坦克职业
+            { Jobs.Paladin, 17 },        // 坦克职业
+            { Jobs.Warrior, 18 },        // 坦克职业
+            { Jobs.Sage, 19 },           // 治疗职业
+            { Jobs.WhiteMage, 20 },      // 治疗职业
+            { Jobs.Scholar, 21 },        // 治疗职业
+            { Jobs.Astrologian, 22 },    // 治疗职业
+            { Jobs.Pugilist, 23 },       // 格斗家，基础职业，最高优先级
+            { Jobs.Thaumaturge, 24 },    // 咒术师，基础职业，次高优先级
+            { Jobs.Archer, 25 },         // 弓箭手，基础职业，第三优先级
+            { Jobs.Rogue, 26 },          // 双剑师，基础职业，第四优先级
+            { Jobs.Arcanist, 27 },       // 秘术师，基础职业，第五优先级
+            { Jobs.Gladiator, 28 },      // 剑术师，基础职业
+            { Jobs.Marauder, 29 },       // 斧术师，基础职业
+            { Jobs.Lancer, 30 },         // 枪术师，基础职业
+            { Jobs.Conjurer, 31 },       // 幻术师，基础职业
         };
         public void AfterSpell(Slot slot, Spell spell)
         {
