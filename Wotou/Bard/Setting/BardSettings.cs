@@ -85,6 +85,20 @@ public class BardSettings
     
     public Dictionary<string, bool> UserDefinedQtValues = new(); // 用户自定义QT值
     
+    /// <summary>
+    /// 初始化用户自定义的 QT 值。如果没有自定义值，则使用默认值。
+    /// </summary>
+    public void InitializeQtValues()
+    {
+        foreach (var (key, value) in BardRotationEntry.DefaultQTValues)
+        {
+            if (!UserDefinedQtValues.ContainsKey(key))
+            {
+                UserDefinedQtValues[key] = value.DefaultValue;
+            }
+        }
+    }
+    
     public JobViewSave JobViewSave = new JobViewSave()
     {
         MainColor = new(0f, 0.3012f, 0.2306f, 1f),

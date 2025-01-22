@@ -169,15 +169,26 @@ public class DancerRotationEntry : IRotationEntry
         QT.AddTab("Dev", DrawQtDev);
         QT.AddTab("Qt默认值", DrawQtDefaults);
         
-        foreach (var (key, value) in DancerSettings.Instance.DefaultQtValues)
+        // 初始化 QT 选项
+        foreach (var (key, value) in DefaultQTValues)
         {
-            bool initialValue = DancerSettings.Instance.CustomQtValues.ContainsKey(key)
-                ? DancerSettings.Instance.CustomQtValues[key]
-                : value.DefaultValue;
-
-            QT.AddQt(key, initialValue, value.Description);
+            bool initialValue = value.DefaultValue;
+            
+            if (DancerSettings.Instance.UserDefinedQtValues.ContainsKey(key))
+            {
+                initialValue = DancerSettings.Instance.UserDefinedQtValues[key];
+            }
+            
+            if (value.Callback != null)
+            {
+                QT.AddQt(key, initialValue, value.Callback);
+            }
+            else
+            {
+                QT.AddQt(key, initialValue, value.Description);
+            }
+            QT.SetQtToolTip(value.Description);
         }
-        
         
         QT.AddHotkey("防击退", new MyNormalSpellHotKeyResolver(DancerDefinesData.Spells.ArmsLength, SpellTargetType.Target));
         QT.AddHotkey("内丹", new MyNormalSpellHotKeyResolver(DancerDefinesData.Spells.SecondWind, SpellTargetType.Self));
@@ -374,26 +385,31 @@ public class DancerRotationEntry : IRotationEntry
     {
         ImGui.Text("在这里设置 Qt 的默认值：");
 
-        foreach (var (key, value) in DancerSettings.Instance.DefaultQtValues)
+        foreach (var (key, value) in DefaultQTValues)
         {
-            bool currentValue = DancerSettings.Instance.CustomQtValues[key];
+            bool currentValue = DancerSettings.Instance.UserDefinedQtValues.ContainsKey(key)
+                ? DancerSettings.Instance.UserDefinedQtValues[key]
+                : value.DefaultValue;
 
             if (ImGui.Checkbox($"{key}##{key}", ref currentValue))
             {
-                DancerSettings.Instance.CustomQtValues[key] = currentValue;
+                DancerSettings.Instance.UserDefinedQtValues[key] = currentValue;
                 DancerSettings.Instance.Save();
             }
         }
 
         ImGui.Separator();
 
-        if (ImGui.Button("重置##1"))
+        if (ImGui.Button("重置##Reset"))
         {
-            DancerSettings.Instance.CustomQtValues.Clear();
+            DancerSettings.Instance.UserDefinedQtValues.Clear(); // 清空用户定义值
             DancerSettings.Instance.Save();
         }
         ImGui.SameLine();
-        if (ImGui.Button("保存##1")) DancerSettings.Instance.Save();
+        if (ImGui.Button("保存##Save"))
+        {
+            DancerSettings.Instance.Save();
+        }
     }
 
     public void OnDrawSetting(){
@@ -437,4 +453,18 @@ public class DancerRotationEntry : IRotationEntry
         ImGui.Separator();
         ImGui.PopStyleColor(2);
     }
+
+    public static readonly Dictionary<string, (bool DefaultValue, string Description, Action<bool>? Callback)> DefaultQTValues = new()
+    {
+        { QTKey.UsePotion, (false, "是否使用爆发药", null) },
+        { QTKey.Aoe, (true, "是否使用AOE", null) },
+        { QTKey.StrongAlign, (true, "不会因多打GCD而延后大舞，绝本有上天的阶段建议关闭", null) },
+        { QTKey.TechnicalStep, (true, "是否使用技巧舞步与进攻之探戈", null) },
+        { QTKey.StandardStep, (true, "是否使用标准舞步与结束动作", null) },
+        { QTKey.Flourish, (true, "是否使用百花争艳", null) },
+        { QTKey.SaberDance, (true, "是否使用剑舞与拂晓舞", null) },
+        { QTKey.FanDance, (true, "是否使用扇舞", null) },
+        { QTKey.AutoCuringWaltz, (true, "是否自动使用治疗之华尔兹", null) },
+        { QTKey.FinalBurst, (false, "是否倾泻资源", null) }
+    };
 }

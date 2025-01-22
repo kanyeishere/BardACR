@@ -167,6 +167,7 @@ public class BardRotationEntry : IRotationEntry
     // 构造函数里初始化QT
     public void BuildQT()
     {
+        BardSettings.Instance.InitializeQtValues();
         // JobViewSave是AE底层提供的QT设置存档类 在你自己的设置里定义即可
         // 第二个参数是你设置文件的Save类 第三个参数是QT窗口标题
         QT = new JobViewWindow(BardSettings.Instance.JobViewSave, BardSettings.Instance.Save, "Wotou Bard 诗人");

@@ -318,12 +318,11 @@ namespace Wotou.Dancer
             _randomTime = 0;
             
             // 根据用户的自定义设置或默认值，重置所有 QT
-            foreach (var key in DancerSettings.Instance.DefaultQtValues.Keys)
+            foreach (var key in DancerRotationEntry.DefaultQTValues.Keys)
             {
-                // 从 CustomQtValues 获取用户配置的值；如果没有配置，则使用默认值
-                bool qtValue = DancerSettings.Instance.CustomQtValues.TryGetValue(key, out var customValue)
+                bool qtValue = DancerSettings.Instance.UserDefinedQtValues.TryGetValue(key, out var customValue)
                     ? customValue
-                    : DancerSettings.Instance.DefaultQtValues[key].DefaultValue;
+                    : DancerRotationEntry.DefaultQTValues[key].DefaultValue;
 
                 DancerRotationEntry.QT.SetQt(key, qtValue);
             }
