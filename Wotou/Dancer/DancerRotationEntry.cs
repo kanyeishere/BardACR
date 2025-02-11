@@ -380,7 +380,7 @@ public class DancerRotationEntry : IRotationEntry
             ImGuiHelper.LeftInputInt("舞伴面板图标大小", ref DancerSettings.Instance.DancePartnerPanelIconSize, 10, 80);
             ImGui.Separator();
             ImGui.Checkbox("显示前冲步面板 - 镜头面向控制前冲步", ref DancerSettings.Instance.ShowEnAvantPanel);
-            ImGuiHelper.LeftInputInt("前冲步面板图标大小", ref DancerSettings.Instance.DancePartnerPanelIconSize, 10, 80);
+            ImGuiHelper.LeftInputInt("前冲步面板图标大小", ref DancerSettings.Instance.EnAvantPanelIconSize, 10, 80);
             ImGui.Separator();
             ImGui.Checkbox("是否启用舞伴宏", ref DancerSettings.Instance.UseDancePartnerMacro);
             ImGui.InputTextMultiline("", ref DancerSettings.Instance.DancePartnerMacroText, 1000, new Vector2(-1, ImGui.GetTextLineHeight() * 6));
