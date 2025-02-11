@@ -44,7 +44,9 @@ public class DancerSettings
     
     public bool UsePotionInOpener = false; // 是否在开场使用药水
     public bool ShowDancePartnerPanel = true; // 是否显示舞者配偶面板
+    public bool ShowEnAvantPanel = true; // 是否显示前跳面板
     public int DancePartnerPanelIconSize = 47; // 舞者配偶面板图标大小
+    public int EnAvantPanelIconSize = 47; // 前跳面板图标大小
     public bool UseDancePartnerMacro = true; // 是否使用舞伴宏
     public bool WelcomeVoice = true; // 是否开启欢迎声音
     public bool DanceDistanceWarning = true; // 是否开启舞步距离警告
