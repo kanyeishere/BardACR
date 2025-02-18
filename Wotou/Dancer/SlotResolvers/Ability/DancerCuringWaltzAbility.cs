@@ -17,10 +17,9 @@ public class DancerCuringWaltzAbility : ISlotResolver
             return -1;
         if (!DancerRotationEntry.QT.GetQt(QTKey.AutoCuringWaltz))
             return -2;
-        var skillTarget = PartyHelper.CastableAlliesWithin10.Count(r => r.CurrentHp>0 &&
+        var skillTarget = PartyHelper.CastableAlliesWithin10.Count(r => r.CurrentHp > 0 &&
                                                                         (double)r.CurrentHp / r.MaxHp < 0.7 &&
-                                                                        ((r.DistanceToPlayer() <= 5 && DancerSettings.Instance.WaltzDistanceIsInternation)||
-                                                                         (r.DistanceToPlayer() <= 3 && !DancerSettings.Instance.WaltzDistanceIsInternation)));
+                                                                        r.DistanceToPlayer() <= 5);
         if (skillTarget < 4)
             return -3;
         return 1;
