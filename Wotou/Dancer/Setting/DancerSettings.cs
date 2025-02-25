@@ -73,6 +73,8 @@ public class DancerSettings
     // 扇舞保留层数
     public int FanDanceSaveStack = 3;
     
+    public List<string> StoredParty = [];
+    
     // 用户自定义的 QT 配置值
     public Dictionary<string, bool> UserDefinedQtValues { get; private set; } = new();
 

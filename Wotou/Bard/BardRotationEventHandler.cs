@@ -1,3 +1,5 @@
+using System.Security.Cryptography;
+using System.Text;
 using Wotou.Bard.Setting;
 using Wotou.Bard.Data;
 using AEAssist;
@@ -22,11 +24,15 @@ public class BardRotationEventHandler : IRotationEventHandler
 {
     private long _randomTime = 0;
     private Dictionary<string, string> qtKeyDictionary;
-    private Dictionary<string, string?> hotkeyDictionary;    
+    private Dictionary<string, string?> hotkeyDictionary; 
+    
     public async Task OnPreCombat()
     {
         BardRotationEntry.UpdateWardensPaeanPanel();
         SmartUseHighPrioritySlot();
+        
+        if (LowVipRestrictor.IsRestrictedZoneForLowVip() && !LowVipRestrictor.IsInStaticParty(BardSettings.Instance.StoredParty))
+            PlayerOptions.Instance.Stop = true;
         
         if (Core.Me.IsMoving())
             Core.Resolve<MemApiMove>().CancelMove();
@@ -264,6 +270,10 @@ public class BardRotationEventHandler : IRotationEventHandler
     public void OnBattleUpdate(int currTimeInMs)
     {
         SmartUseHighPrioritySlot();
+        
+        if (LowVipRestrictor.IsRestrictedZoneForLowVip() && !LowVipRestrictor.IsInStaticParty(BardSettings.Instance.StoredParty))
+            PlayerOptions.Instance.Stop = true;
+        
         if (!BardUtil.IsSongOrderNormal())
         {
             BardRotationEntry.QT.SetQt("对齐旅神", false);
@@ -483,6 +493,15 @@ public class BardRotationEventHandler : IRotationEventHandler
     public void OnTerritoryChanged()
     {
         BardRotationEntry.UpdateWardensPaeanPanel();
+        
+        if (LowVipRestrictor.IsRestrictedZoneForLowVip())
+        {
+            if (BardSettings.Instance.StoredParty.Count <= 7)
+            {
+                BardSettings.Instance.StoredParty = PartyHelper.Party.Select(player => LowVipRestrictor.ComputeMd5Hash(player.Name.ToString())).ToList();
+                BardSettings.Instance.Save();
+            }
+        }
     }
     
     private void SmartUseHighPrioritySlot()

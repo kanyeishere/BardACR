@@ -84,6 +84,8 @@ public class BardSettings
     public bool IsOpenCommandWindow = true; // 是否开启指令窗口
     
     public Dictionary<string, bool> UserDefinedQtValues = new(); // 用户自定义QT值
+
+    public List<string> StoredParty = [];
     
     /// <summary>
     /// 初始化用户自定义的 QT 值。如果没有自定义值，则使用默认值。

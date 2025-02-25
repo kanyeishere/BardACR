@@ -67,6 +67,10 @@ namespace Wotou.Dancer
         public void OnBattleUpdate(int currTimeInMs)
         {
             SmartUseHighPrioritySlot();
+                    
+            if (LowVipRestrictor.IsRestrictedZoneForLowVip() && !LowVipRestrictor.IsInStaticParty(DancerSettings.Instance.StoredParty))
+                PlayerOptions.Instance.Stop = true;
+            
             if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3)
             {
                 LogHelper.PrintError("警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭");
@@ -215,6 +219,9 @@ namespace Wotou.Dancer
         {
             DancerRotationEntry.UpdateDancerPartnerPanel();
             SmartUseHighPrioritySlot();
+               
+            if (LowVipRestrictor.IsRestrictedZoneForLowVip() && !LowVipRestrictor.IsInStaticParty(DancerSettings.Instance.StoredParty))
+                PlayerOptions.Instance.Stop = true;
             
             if (Core.Me.IsMoving())
                 Core.Resolve<MemApiMove>().CancelMove();
@@ -336,6 +343,15 @@ namespace Wotou.Dancer
         public void OnTerritoryChanged()
         {
             DancerRotationEntry.UpdateDancerPartnerPanel();
+            
+            if (LowVipRestrictor.IsRestrictedZoneForLowVip())
+            {
+                if (DancerSettings.Instance.StoredParty.Count <= 7)
+                {
+                    DancerSettings.Instance.StoredParty = PartyHelper.Party.Select(player => LowVipRestrictor.ComputeMd5Hash(player.Name.ToString())).ToList();
+                    DancerSettings.Instance.Save();
+                }
+            }
         }
         
         private void DancerCommandHandler(string command, string args)
