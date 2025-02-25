@@ -13,7 +13,7 @@ public class InfoWindow
     {
         if (!InfoWindow.isWindowOpen)
             return;
-        if (BardSettings.Instance.IsReadInfoWindow05)
+        if (BardSettings.Instance.IsReadInfoWindow077)
             return;
         if (DancerSettings.Instance.IsReadInfoWindow077)
             return;
@@ -33,7 +33,7 @@ public class InfoWindow
         if (ImGui.Button("已知悉"))
         {
             InfoWindow.isWindowOpen = false;
-            BardSettings.Instance.IsReadInfoWindow05 = true;
+            BardSettings.Instance.IsReadInfoWindow077 = true;
             DancerSettings.Instance.IsReadInfoWindow077 = true;
             BardSettings.Instance.Save();
             DancerSettings.Instance.Save();
