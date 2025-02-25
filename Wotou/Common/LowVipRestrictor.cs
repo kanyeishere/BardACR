@@ -12,7 +12,7 @@ public class LowVipRestrictor
     public static bool IsRestrictedZoneForLowVip()
     {
         uint currentZoneId = Core.Resolve<MemApiZoneInfo>().GetCurrTerrId();
-        return currentZoneId == 1238 && (Share.VIP.Level == VIPLevel.Normal || Share.VIP.Level == VIPLevel.VIP1);
+        return currentZoneId == 1238 && Share.VIP.Level == VIPLevel.Normal;
     }
     
     public static bool IsInStaticParty(List<string> storedStaticPartyHashes)
@@ -24,8 +24,8 @@ public class LowVipRestrictor
         
         int matchCount = currentPartyHashes.Count(hash => storedStaticPartyHashes.Contains(hash));
 
-        // 如果匹配的成员数量 >= 4，判定为固定队，否则为野队
-        return matchCount >= 4;
+        // 如果匹配的成员数量 >= 2，判定为固定队，否则为野队
+        return matchCount >= 2;
     }
     
     public static string ComputeMd5Hash(string input)
