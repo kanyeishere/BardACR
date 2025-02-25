@@ -455,7 +455,6 @@ namespace Wotou.Dancer
                 DancerBattleData.Instance.HotkeyUseHighPrioritySlot = true;
             else
                 DancerBattleData.Instance.HotkeyUseHighPrioritySlot = false;
-
         }
     }
 }

@@ -79,7 +79,7 @@ public class BardSettings
     public int WardensPaeanPanelIconSize = 47; // 光阴神面板图标大小
 
     
-    public bool IsReadInfoWindow04 = false;
+    public bool IsReadInfoWindow05 = false;
     
     public bool IsOpenCommandWindow = true; // 是否开启指令窗口
     
