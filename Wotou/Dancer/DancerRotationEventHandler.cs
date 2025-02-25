@@ -219,6 +219,15 @@ namespace Wotou.Dancer
         {
             DancerRotationEntry.UpdateDancerPartnerPanel();
             SmartUseHighPrioritySlot();
+            
+            if (LowVipRestrictor.IsRestrictedZoneForLowVip())
+            {
+                if (DancerSettings.Instance.StoredParty.Count <= 7)
+                {
+                    DancerSettings.Instance.StoredParty = PartyHelper.Party.Select(player => LowVipRestrictor.ComputeMd5Hash(player.Name.ToString())).ToList();
+                    DancerSettings.Instance.Save();
+                }
+            }
                
             if (LowVipRestrictor.IsRestrictedZoneForLowVip() && !LowVipRestrictor.IsInStaticParty(DancerSettings.Instance.StoredParty))
                 PlayerOptions.Instance.Stop = true;

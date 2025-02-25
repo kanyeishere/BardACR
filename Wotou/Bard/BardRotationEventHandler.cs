@@ -31,6 +31,15 @@ public class BardRotationEventHandler : IRotationEventHandler
         BardRotationEntry.UpdateWardensPaeanPanel();
         SmartUseHighPrioritySlot();
         
+        if (LowVipRestrictor.IsRestrictedZoneForLowVip())
+        {
+            if (BardSettings.Instance.StoredParty.Count <= 7)
+            {
+                BardSettings.Instance.StoredParty = PartyHelper.Party.Select(player => LowVipRestrictor.ComputeMd5Hash(player.Name.ToString())).ToList();
+                BardSettings.Instance.Save();
+            }
+        }
+        
         if (LowVipRestrictor.IsRestrictedZoneForLowVip() && !LowVipRestrictor.IsInStaticParty(BardSettings.Instance.StoredParty))
             PlayerOptions.Instance.Stop = true;
         
