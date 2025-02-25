@@ -12,7 +12,7 @@ public class LowVipRestrictor
     public static bool IsRestrictedZoneForLowVip()
     {
         uint currentZoneId = Core.Resolve<MemApiZoneInfo>().GetCurrTerrId();
-        return currentZoneId == 1238 && Share.VIP.Level == VIPLevel.Normal;
+        return currentZoneId == 1238 && (Share.VIP.Level == VIPLevel.Normal || Share.VIP.Level == VIPLevel.VIP1);
     }
     
     public static bool IsInStaticParty(List<string> storedStaticPartyHashes)

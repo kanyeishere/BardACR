@@ -25,7 +25,7 @@ public class InfoWindow
         ImGui.TextColored(new Vector4(1f, 0.5f, 0.0f, 1f), "重要提醒");
         ImGui.Separator();
         ImGui.TextWrapped("首次进入光暗未来绝境战（绝伊甸）后，系统将自动记录当前队伍成员信息");
-        ImGui.TextWrapped("目前，Lv < 1 的用户，仅允许与已记录的固定队队员组队时使用本ACR");
+        ImGui.TextWrapped("目前，Lv <= 1 的用户，仅允许与已记录的固定队队员组队时使用本ACR");
         ImGui.TextWrapped("所以请确保首次进入副本时，与你的固定队队员一同进本！");
         ImGui.TextWrapped("此纪录一旦保存，将无法更改！请谨慎操作！");
         
