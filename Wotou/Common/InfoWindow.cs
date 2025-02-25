@@ -19,7 +19,7 @@ public class InfoWindow
             return;
         ImGuiViewportPtr mainViewport = ImGui.GetMainViewport();
         ImGui.SetNextWindowPos(new Vector2(mainViewport.Pos.X + mainViewport.Size.X / 2f, mainViewport.Pos.Y + mainViewport.Size.Y / 2f), ImGuiCond.Always, new Vector2(0.5f, 0.5f));
-        ImGui.SetNextWindowSize(new Vector2(400, 500), ImGuiCond.Always);
+        ImGui.SetNextWindowSize(new Vector2(450, 400), ImGuiCond.Always);
         ImGui.SetNextWindowFocus();
         ImGui.Begin("", ref InfoWindow.isWindowOpen);
         ImGui.TextColored(new Vector4(1f, 0.5f, 0.0f, 1f), "重要提醒");
