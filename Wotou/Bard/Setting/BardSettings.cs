@@ -87,6 +87,8 @@ public class BardSettings
 
     public List<string> StoredParty = [];
     
+    public string UnlockPassword = ""; // 解锁密码
+    
     /// <summary>
     /// 初始化用户自定义的 QT 值。如果没有自定义值，则使用默认值。
     /// </summary>

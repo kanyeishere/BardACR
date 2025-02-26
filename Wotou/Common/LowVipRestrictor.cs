@@ -4,6 +4,8 @@ using AEAssist;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
 using AEAssist.Verify;
+using Wotou.Bard.Setting;
+using Wotou.Dancer.Setting;
 
 namespace Wotou.Common;
 
@@ -11,8 +13,13 @@ public class LowVipRestrictor
 {
     public static bool IsRestrictedZoneForLowVip()
     {
-        uint currentZoneId = Core.Resolve<MemApiZoneInfo>().GetCurrTerrId();
-        return currentZoneId == 1238 && Share.VIP.Level == VIPLevel.Normal;
+        var currentZoneId = Core.Resolve<MemApiZoneInfo>().GetCurrTerrId();
+        return currentZoneId == 1238 && 
+               Share.VIP.Level == VIPLevel.Normal &&
+               !BardSettings.Instance.UnlockPassword.Equals("whosyourdaddy", 
+                   StringComparison.OrdinalIgnoreCase) &&
+               !DancerSettings.Instance.UnlockPassword.Equals("whosyourdaddy", 
+                   StringComparison.OrdinalIgnoreCase);
     }
     
     public static bool IsInStaticParty(List<string> storedStaticPartyHashes)
@@ -22,7 +29,7 @@ public class LowVipRestrictor
             .Select(player => ComputeMd5Hash(player.Name.ToString()))
             .ToList();
         
-        int matchCount = currentPartyHashes.Count(hash => storedStaticPartyHashes.Contains(hash));
+        var matchCount = currentPartyHashes.Count(hash => storedStaticPartyHashes.Contains(hash));
 
         // 如果匹配的成员数量 >= 2，判定为固定队，否则为野队
         return matchCount >= 2;

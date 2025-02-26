@@ -465,6 +465,12 @@ public class DancerRotationEntry : IRotationEntry
         ImGui.Separator();
         ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0.0f, 0.0f, 0.0f, 0.0f));
         ImGui.PushStyleColor(ImGuiCol.Border, new Vector4(1f,0.36f,0.54f, 1));
+        ImGui.Text("神秘代码：");
+        if (ImGui.InputText("##UnlockPassword", ref DancerSettings.Instance.UnlockPassword, 100))
+        {
+            DancerSettings.Instance.Save();
+        }
+        ImGui.Separator();
         ImGui.Text("请输入技能名，以搜索对应id：");
         if (ImGui.InputText("##SearchQuery", ref searchQuery, 100))
         {

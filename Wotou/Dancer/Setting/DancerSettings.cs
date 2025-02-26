@@ -75,6 +75,8 @@ public class DancerSettings
     
     public List<string> StoredParty = [];
     
+    public string UnlockPassword = ""; // 解锁密码
+    
     // 用户自定义的 QT 配置值
     public Dictionary<string, bool> UserDefinedQtValues { get; private set; } = new();
 
