@@ -3,6 +3,7 @@ using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
+using AEAssist.JobApi;
 using Dalamud.Game.ClientState.Objects.Types;
 using Wotou.Bard.Data;
 using Wotou.Bard.Utility;
@@ -67,7 +68,7 @@ public class BardIronJawsGcd : ISlotResolver
         if (target.HasMyAuraWithTimeleft(CausticBiteDot, 5500) && target.HasMyAuraWithTimeleft(StormBiteDot, 5500) || 
             target.HasMyAuraWithTimeleft(VenomousBiteDot, 5500) && target.HasMyAuraWithTimeleft(WindBiteDot, 5500))
             return -1;
-        if (!Core.Me.HasLocalPlayerAura(HawksEyeBuff))
+        if (!Core.Me.HasLocalPlayerAura(HawksEyeBuff) && !(Core.Resolve<JobApi_Bard>().SoulVoice == 100 && BardRotationEntry.QT.GetQt(QTKey.Apex)))
             return 1;
         
         if (target.HasMyAuraWithTimeleft(CausticBiteDot, 3000) && target.HasMyAuraWithTimeleft(StormBiteDot, 3000) ||
