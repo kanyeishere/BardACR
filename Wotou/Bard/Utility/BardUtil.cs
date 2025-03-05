@@ -1,11 +1,11 @@
 using System.Globalization;
 using System.Numerics;
 using AEAssist;
+using AEAssist.CombatRoutine;
 using AEAssist.Extension;
 using AEAssist.Helper;
+using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.JobGauge.Enums;
-using Dalamud.Interface;
-using ImGuiNET;
 using Wotou.Bard.Data;
 using Wotou.Bard.Setting;
 
@@ -16,10 +16,16 @@ public static class BardUtil
     private const uint BattleVoiceBuff = BardDefinesData.Buffs.BattleVoice;
     private const uint RagingStrikesBuff = BardDefinesData.Buffs.RagingStrikes;
     private const uint RadiantFinaleBuff = BardDefinesData.Buffs.RadiantFinale;
+    private const uint HawkEyeBuff = BardDefinesData.Buffs.HawksEye;
+    private const uint BarrageBuff = BardDefinesData.Buffs.Barrage;
     
     private const uint BattleVoice = BardDefinesData.Spells.BattleVoice;
     private const uint RagingStrikes = BardDefinesData.Spells.RagingStrikes;
     private const uint RadiantFinale = BardDefinesData.Spells.RadiantFinale;
+    private const uint BurstShot = BardDefinesData.Spells.BurstShot;
+    private const uint RefulgentArrow = BardDefinesData.Spells.RefulgentArrow;
+    private const uint Ladonsbite = BardDefinesData.Spells.Ladonsbite;
+    private const uint Shadowbite = BardDefinesData.Spells.Shadowbite;
     
     private static bool IsRadiantFinaleConditionMet()
     {
@@ -98,4 +104,24 @@ public static class BardUtil
     
     public static bool IsSongOrderNormal() => BardSettings.Instance.FirstSong == Song.WANDERER && BardSettings.Instance.SecondSong == Song.MAGE && BardSettings.Instance.ThirdSong == Song.ARMY;
     
+    public static Spell GetBaseGcd()
+    {
+        if (Core.Me.HasAura(HawkEyeBuff) || Core.Me.HasAura(BarrageBuff))
+        {
+            if (Core.Me.HasAura(BarrageBuff) && 
+                TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget(), 25,5) <= 3 )
+                return Core.Resolve<MemApiSpell>().CheckActionChange(RefulgentArrow).GetSpell();
+            if (TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget(), 25,5) > 1 && 
+                BardRotationEntry.QT.GetQt("AOE") && 
+                Core.Resolve<MemApiSpell>().CheckActionChange(Shadowbite).IsUnlock())
+                return Core.Resolve<MemApiSpell>().CheckActionChange(Shadowbite).GetSpell();
+            return Core.Resolve<MemApiSpell>().CheckActionChange(RefulgentArrow).GetSpell();
+        }
+        
+        if (TargetHelper.GetEnemyCountInsideSector(Core.Me, Core.Me.GetCurrTarget(), 12, 90) > 1 &&
+            BardRotationEntry.QT.GetQt("AOE") &&
+            Core.Resolve<MemApiSpell>().CheckActionChange(Ladonsbite).IsUnlock())
+            return Core.Resolve<MemApiSpell>().CheckActionChange(Ladonsbite).GetSpell();
+        return Core.Resolve<MemApiSpell>().CheckActionChange(BurstShot).GetSpell();
+    }
 }

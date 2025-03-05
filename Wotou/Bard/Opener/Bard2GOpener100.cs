@@ -70,16 +70,7 @@ public class Bard2GOpener100 : IOpener
 
   private static Spell GetBaseGcd()
   {
-    if (Core.Me.HasAura(HawkEyeBuff))
-    {
-      if (TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget(), 25,5) > 1 && BardRotationEntry.QT.GetQt("AOE"))
-        return Core.Resolve<MemApiSpell>().CheckActionChange(Shadowbite).GetSpell();
-      return Core.Resolve<MemApiSpell>().CheckActionChange(RefulgentArrow).GetSpell();
-    }
-      
-    if (TargetHelper.GetEnemyCountInsideSector(Core.Me, Core.Me.GetCurrTarget(), 12, 90) > 1  && BardRotationEntry.QT.GetQt("AOE"))
-      return Core.Resolve<MemApiSpell>().CheckActionChange(Ladonsbite).GetSpell();
-    return Core.Resolve<MemApiSpell>().CheckActionChange(BurstShot).GetSpell();
+    return BardUtil.GetBaseGcd();
   }
   
   private static Spell GetHeartBreakSpell()

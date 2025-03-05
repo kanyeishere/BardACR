@@ -5,6 +5,7 @@ using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
 using Wotou.Bard.Data;
+using Wotou.Bard.Utility;
 
 namespace Wotou.Bard.Sequence;
 
@@ -47,16 +48,7 @@ public class BurstingAfterDeathSequence: ISlotSequence
     
     private static Spell GetBaseGcd()
     {
-        if (Core.Me.HasAura(HawkEyeBuff))
-        {
-            if (TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget(), 25,5) > 1 && BardRotationEntry.QT.GetQt("AOE"))
-                return Core.Resolve<MemApiSpell>().CheckActionChange(Shadowbite).GetSpell();
-            return Core.Resolve<MemApiSpell>().CheckActionChange(RefulgentArrow).GetSpell();
-        }
-      
-        if (TargetHelper.GetEnemyCountInsideSector(Core.Me, Core.Me.GetCurrTarget(), 12, 90) > 1  && BardRotationEntry.QT.GetQt("AOE"))
-            return Core.Resolve<MemApiSpell>().CheckActionChange(Ladonsbite).GetSpell();
-        return Core.Resolve<MemApiSpell>().CheckActionChange(BurstShot).GetSpell();
+        return BardUtil.GetBaseGcd();
     }
     
     private static void Step0(Slot slot)
