@@ -30,17 +30,17 @@ public static class BardUtil
     private static bool IsRadiantFinaleConditionMet()
     {
         // 检查技能是否已解锁：如果未解锁，直接返回true。如果已解锁，检查是否有Radiant Finale的Buff效果
-        return !RadiantFinale.IsUnlock() || Core.Me.HasLocalPlayerAura(RadiantFinaleBuff);
+        return !RadiantFinale.IsLevelEnough() || Core.Me.HasLocalPlayerAura(RadiantFinaleBuff);
     }
     
     private static bool IsBattleVoiceConditionMet()
     {
-        return !BattleVoice.IsUnlock() || Core.Me.HasAura(BattleVoiceBuff);
+        return !BattleVoice.IsLevelEnough() || Core.Me.HasAura(BattleVoiceBuff);
     }
     
     private static bool IsRagingStrikesConditionMet()
     {
-        return !RagingStrikes.IsUnlock() || Core.Me.HasAura(RagingStrikesBuff);
+        return !RagingStrikes.IsLevelEnough() || Core.Me.HasAura(RagingStrikesBuff);
     }
     
     public static bool HasAllPartyBuff()
