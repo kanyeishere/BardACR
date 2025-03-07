@@ -34,7 +34,8 @@ public class BardCommandWindow
         ("QT", "/Wotou_BRD 九天连箭_qt", "/Wotou_BRD empyrrealarrow_qt"),
         ("QT", "/Wotou_BRD 侧风诱导箭_qt", "/Wotou_BRD sidewinder_qt"),
         ("QT", "/Wotou_BRD 九天前置_qt", "/Wotou_BRD empyrrealarrowbeforegcd_qt"),
-        ("QT", "/Wotou_BRD 对齐旅神_qt", "/Wotou_BRD burstwithwanderer_qt")
+        ("QT", "/Wotou_BRD 对齐旅神_qt", "/Wotou_BRD burstwithwanderer_qt"),
+        ("QT", "/Wotou_BRD 清空鹰眼_qt", "/Wotou_BRD clearhawkeyesbuffbeforedots_qt")
     };
 
 
