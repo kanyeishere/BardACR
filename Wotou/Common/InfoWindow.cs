@@ -13,9 +13,9 @@ public class InfoWindow
     {
         if (!InfoWindow.isWindowOpen)
             return;
-        if (BardSettings.Instance.IsReadInfoWindow079)
+        if (BardSettings.Instance.IsReadInfoWindow080)
             return;
-        if (DancerSettings.Instance.IsReadInfoWindow079)
+        if (DancerSettings.Instance.IsReadInfoWindow080)
             return;
         ImGuiViewportPtr mainViewport = ImGui.GetMainViewport();
         ImGui.SetNextWindowPos(new Vector2(mainViewport.Pos.X + mainViewport.Size.X / 2f, mainViewport.Pos.Y + mainViewport.Size.Y / 2f), ImGuiCond.Always, new Vector2(0.5f, 0.5f));
@@ -39,8 +39,8 @@ public class InfoWindow
         if (ImGui.Button("已知悉"))
         {
             InfoWindow.isWindowOpen = false;
-            BardSettings.Instance.IsReadInfoWindow079 = true;
-            DancerSettings.Instance.IsReadInfoWindow079 = true;
+            BardSettings.Instance.IsReadInfoWindow080 = true;
+            DancerSettings.Instance.IsReadInfoWindow080 = true;
             BardSettings.Instance.Save();
             DancerSettings.Instance.Save();
         }

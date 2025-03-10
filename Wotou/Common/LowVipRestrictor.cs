@@ -16,9 +16,9 @@ public class LowVipRestrictor
         var currentZoneId = Core.Resolve<MemApiZoneInfo>().GetCurrTerrId();
         return currentZoneId == 1238 && 
                Share.VIP.Level == VIPLevel.Normal &&
-               !BardSettings.Instance.UnlockPassword.Equals("whosyourdaddy", 
+               !ComputeMd5Hash(BardSettings.Instance.UnlockPassword).Equals("1b629ab7c628adc4e40705010ac745f3", 
                    StringComparison.OrdinalIgnoreCase) &&
-               !DancerSettings.Instance.UnlockPassword.Equals("whosyourdaddy", 
+               !ComputeMd5Hash(DancerSettings.Instance.UnlockPassword).Equals("1b629ab7c628adc4e40705010ac745f3", 
                    StringComparison.OrdinalIgnoreCase);
     }
     
@@ -30,8 +30,6 @@ public class LowVipRestrictor
             .ToList();
         
         var matchCount = currentPartyHashes.Count(hash => storedStaticPartyHashes.Contains(hash));
-
-        // 如果匹配的成员数量 >= 2，判定为固定队，否则为野队
         return matchCount >= 2;
     }
     

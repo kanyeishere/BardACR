@@ -68,7 +68,7 @@ namespace Wotou.Dancer
         {
             SmartUseHighPrioritySlot();
                     
-            if (LowVipRestrictor.IsRestrictedZoneForLowVip() && !LowVipRestrictor.IsInStaticParty(DancerSettings.Instance.StoredParty))
+            if (LowVipRestrictor.IsRestrictedZoneForLowVip() && !LowVipRestrictor.IsInStaticParty(DancerSettings.Instance.Qwerty))
                 PlayerOptions.Instance.Stop = true;
             
             if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3)
@@ -222,14 +222,14 @@ namespace Wotou.Dancer
             
             if (LowVipRestrictor.IsRestrictedZoneForLowVip())
             {
-                if (DancerSettings.Instance.StoredParty.Count <= 7)
+                if (DancerSettings.Instance.Qwerty.Count <= 7)
                 {
-                    DancerSettings.Instance.StoredParty = PartyHelper.Party.Select(player => LowVipRestrictor.ComputeMd5Hash(player.Name.ToString())).ToList();
+                    DancerSettings.Instance.Qwerty = PartyHelper.Party.Select(player => LowVipRestrictor.ComputeMd5Hash(player.Name.ToString())).ToList();
                     DancerSettings.Instance.Save();
                 }
             }
                
-            if (LowVipRestrictor.IsRestrictedZoneForLowVip() && !LowVipRestrictor.IsInStaticParty(DancerSettings.Instance.StoredParty))
+            if (LowVipRestrictor.IsRestrictedZoneForLowVip() && !LowVipRestrictor.IsInStaticParty(DancerSettings.Instance.Qwerty))
                 PlayerOptions.Instance.Stop = true;
             
             if (Core.Me.IsMoving())
@@ -355,9 +355,9 @@ namespace Wotou.Dancer
             
             if (LowVipRestrictor.IsRestrictedZoneForLowVip())
             {
-                if (DancerSettings.Instance.StoredParty.Count <= 7)
+                if (DancerSettings.Instance.Qwerty.Count <= 7)
                 {
-                    DancerSettings.Instance.StoredParty = PartyHelper.Party.Select(player => LowVipRestrictor.ComputeMd5Hash(player.Name.ToString())).ToList();
+                    DancerSettings.Instance.Qwerty = PartyHelper.Party.Select(player => LowVipRestrictor.ComputeMd5Hash(player.Name.ToString())).ToList();
                     DancerSettings.Instance.Save();
                 }
             }
