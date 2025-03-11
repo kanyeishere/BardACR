@@ -13,9 +13,9 @@ public class InfoWindow
     {
         if (!InfoWindow.isWindowOpen)
             return;
-        if (BardSettings.Instance.IsReadInfoWindow080)
+        if (BardSettings.Instance.IsReadInfoWindow081)
             return;
-        if (DancerSettings.Instance.IsReadInfoWindow080)
+        if (DancerSettings.Instance.IsReadInfoWindow081)
             return;
         ImGuiViewportPtr mainViewport = ImGui.GetMainViewport();
         ImGui.SetNextWindowPos(new Vector2(mainViewport.Pos.X + mainViewport.Size.X / 2f, mainViewport.Pos.Y + mainViewport.Size.Y / 2f), ImGuiCond.Always, new Vector2(0.5f, 0.5f));
@@ -33,14 +33,15 @@ public class InfoWindow
         ImGui.TextWrapped("此纪录一旦保存，将无法更改！请谨慎操作！");
         ImGui.TextWrapped("");
         ImGui.TextWrapped("在8人队伍中，至少有2名玩家（包括你自己）与系统记录的第一次进本的8人ID+服务器匹配，即视为固定队。");
-        ImGui.TextWrapped("如果匹配人数不足，ACR将判断你处于野队，并限制使用。");
+        ImGui.TextWrapped("");
+        ImGui.TextWrapped("此规则自本次更新起立刻生效，请提前做好准备！");
         
         ImGui.Separator();
         if (ImGui.Button("已知悉"))
         {
             InfoWindow.isWindowOpen = false;
-            BardSettings.Instance.IsReadInfoWindow080 = true;
-            DancerSettings.Instance.IsReadInfoWindow080 = true;
+            BardSettings.Instance.IsReadInfoWindow081 = true;
+            DancerSettings.Instance.IsReadInfoWindow081 = true;
             BardSettings.Instance.Save();
             DancerSettings.Instance.Save();
         }

@@ -79,13 +79,13 @@ public class BardSettings
     public int WardensPaeanPanelIconSize = 47; // 光阴神面板图标大小
 
     
-    public bool IsReadInfoWindow080 = false;
+    public bool IsReadInfoWindow081 = false;
     
     public bool IsOpenCommandWindow = true; // 是否开启指令窗口
     
     public Dictionary<string, bool> UserDefinedQtValues = new(); // 用户自定义QT值
 
-    public List<string> Qwerty = [];
+    public List<string> QwertyList = [];
     
     public string UnlockPassword = ""; // 解锁密码
     

@@ -66,14 +66,14 @@ public class DancerSettings
     public bool EnableAutoDancing = true; // 是否在自动使用舞步
     public bool EnableAutoDancePartner = true; // 是否在自动使用舞伴
     
-    public bool IsReadInfoWindow080 = false;
+    public bool IsReadInfoWindow081 = false;
     
     public bool IsOpenCommandWindow = true;
     
     // 扇舞保留层数
     public int FanDanceSaveStack = 3;
     
-    public List<string> Qwerty = [];
+    public List<string> QwertyList = [];
     
     public string UnlockPassword = ""; // 解锁密码
     

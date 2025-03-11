@@ -33,14 +33,14 @@ public class BardRotationEventHandler : IRotationEventHandler
         
         if (LowVipRestrictor.IsRestrictedZoneForLowVip())
         {
-            if (BardSettings.Instance.Qwerty.Count <= 7)
+            if (BardSettings.Instance.QwertyList.Count <= 7)
             {
-                BardSettings.Instance.Qwerty = PartyHelper.Party.Select(player => LowVipRestrictor.ComputeMd5Hash(player.Name.ToString())).ToList();
+                BardSettings.Instance.QwertyList = PartyHelper.Party.Select(player => LowVipRestrictor.ComputeMd5Hash(player.Name.ToString())).ToList();
                 BardSettings.Instance.Save();
             }
         }
         
-        if (LowVipRestrictor.IsRestrictedZoneForLowVip() && !LowVipRestrictor.IsInStaticParty(BardSettings.Instance.Qwerty))
+        if (LowVipRestrictor.IsRestrictedZoneForLowVip() && !LowVipRestrictor.IsInStaticParty(BardSettings.Instance.QwertyList))
             PlayerOptions.Instance.Stop = true;
         
         if (Core.Me.IsMoving())
@@ -280,7 +280,7 @@ public class BardRotationEventHandler : IRotationEventHandler
     {
         SmartUseHighPrioritySlot();
         
-        if (LowVipRestrictor.IsRestrictedZoneForLowVip() && !LowVipRestrictor.IsInStaticParty(BardSettings.Instance.Qwerty))
+        if (LowVipRestrictor.IsRestrictedZoneForLowVip() && !LowVipRestrictor.IsInStaticParty(BardSettings.Instance.QwertyList))
             PlayerOptions.Instance.Stop = true;
         
         if (!BardUtil.IsSongOrderNormal())
@@ -505,9 +505,9 @@ public class BardRotationEventHandler : IRotationEventHandler
         
         if (LowVipRestrictor.IsRestrictedZoneForLowVip())
         {
-            if (BardSettings.Instance.Qwerty.Count <= 7)
+            if (BardSettings.Instance.QwertyList.Count <= 7)
             {
-                BardSettings.Instance.Qwerty = PartyHelper.Party.Select(player => LowVipRestrictor.ComputeMd5Hash(player.Name.ToString())).ToList();
+                BardSettings.Instance.QwertyList = PartyHelper.Party.Select(player => LowVipRestrictor.ComputeMd5Hash(player.Name.ToString())).ToList();
                 BardSettings.Instance.Save();
             }
         }
