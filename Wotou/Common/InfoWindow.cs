@@ -13,13 +13,13 @@ public class InfoWindow
     {
         if (!InfoWindow.isWindowOpen)
             return;
-        if (BardSettings.Instance.IsReadInfoWindow081)
+        if (BardSettings.Instance.IsReadInfoWindow082)
             return;
-        if (DancerSettings.Instance.IsReadInfoWindow081)
+        if (DancerSettings.Instance.IsReadInfoWindow082)
             return;
         ImGuiViewportPtr mainViewport = ImGui.GetMainViewport();
-        ImGui.SetNextWindowPos(new Vector2(mainViewport.Pos.X + mainViewport.Size.X / 2f, mainViewport.Pos.Y + mainViewport.Size.Y / 2f), ImGuiCond.Always, new Vector2(0.5f, 0.5f));
-        ImGui.SetNextWindowSize(new Vector2(600, 400), ImGuiCond.Always);
+        ImGui.SetNextWindowPos(new Vector2(mainViewport.Pos.X + mainViewport.Size.X / 2f, mainViewport.Pos.Y + mainViewport.Size.Y / 2f));
+        ImGui.SetNextWindowSize(new Vector2(600, 400));
         ImGui.SetNextWindowFocus();
         ImGui.Begin("", ref InfoWindow.isWindowOpen);
         ImGui.TextColored(new Vector4(1f, 0.5f, 0.0f, 1f), "重要提醒");
@@ -41,8 +41,8 @@ public class InfoWindow
         if (ImGui.Button("已知悉"))
         {
             InfoWindow.isWindowOpen = false;
-            BardSettings.Instance.IsReadInfoWindow081 = true;
-            DancerSettings.Instance.IsReadInfoWindow081 = true;
+            BardSettings.Instance.IsReadInfoWindow082 = true;
+            DancerSettings.Instance.IsReadInfoWindow082 = true;
             BardSettings.Instance.Save();
             DancerSettings.Instance.Save();
         }
