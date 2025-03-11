@@ -33,6 +33,7 @@ public class InfoWindow
         ImGui.TextWrapped("此纪录一旦保存，将无法更改！请谨慎操作！");
         ImGui.TextWrapped("");
         ImGui.TextWrapped("在8人队伍中，至少有2名玩家（包括你自己）与系统记录的第一次进本的8人ID+服务器匹配，即视为固定队。");
+        ImGui.TextWrapped("每个职业的 Wotou ACR 可绑定一个固定队，独立计算，不互相影响。");
         ImGui.TextWrapped("");
         ImGui.TextWrapped("此规则自本次更新起立刻生效，请提前做好准备！");
         
