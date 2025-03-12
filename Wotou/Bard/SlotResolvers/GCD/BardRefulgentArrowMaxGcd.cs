@@ -30,7 +30,7 @@ public class BardRefulgentArrowMaxGcd : ISlotResolver
 
     private static Spell GetGcd()
     {
-        if (TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget(), 25,5) > 1  && BardRotationEntry.QT.GetQt("AOE"))
+        if (TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget(), 25,5) > 3  && BardRotationEntry.QT.GetQt("AOE"))
             return Core.Resolve<MemApiSpell>().CheckActionChange(Shadowbite).GetSpell();
         return Core.Resolve<MemApiSpell>().CheckActionChange(RefulgentArrow).GetSpell();
     }
