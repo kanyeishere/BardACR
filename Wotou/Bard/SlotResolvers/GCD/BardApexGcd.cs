@@ -25,6 +25,9 @@ public class BardApexGcd : ISlotResolver
         if (!BardRotationEntry.QT.GetQt(QTKey.Apex))
             return -1;
         
+        if (ApexArrow.RecentlyUsed(5000))
+            return -1;
+        
         // 日常模式下，90能量释放绝峰箭
         if (BardSettings.Instance.IsDailyMode &&
             Core.Resolve<JobApi_Bard>().SoulVoice >= 90)

@@ -10,6 +10,8 @@ public class BardBattleData
     
     public Song LastSong = Song.NONE;
     
+    public long LastSongTime = 0;
+    
     public int WandererTimes = 0;
     
     public bool UseCountdown = false;

@@ -26,6 +26,9 @@ public class BardApexMaxGcd : ISlotResolver
         if (!BardRotationEntry.QT.GetQt("爆发"))
             return -1;
         
+        if (ApexArrow.RecentlyUsed(5000))
+            return -1;
+        
         // 本文件只处理满能量的绝峰箭
         if (BardUtil.HasAllPartyBuff() &&
             Core.Resolve<JobApi_Bard>().SoulVoice == 100)

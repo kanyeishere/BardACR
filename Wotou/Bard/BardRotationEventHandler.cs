@@ -269,6 +269,11 @@ public class BardRotationEventHandler : IRotationEventHandler
             _ => BardBattleData.Instance.LastSong
         };
         
+        if (spell.Id == BardDefinesData.Spells.TheWanderersMinuet ||
+            spell.Id == BardDefinesData.Spells.MagesBallad ||
+            spell.Id == BardDefinesData.Spells.ArmysPaeon)
+            BardBattleData.Instance.LastSongTime = AI.Instance.BattleData.CurrBattleTimeInMs;
+        
         if (spell.Id == BardDefinesData.Spells.RagingStrikes)
             BardBattleData.Instance.HasUseIronJawsInCurrentBursting = false;
         

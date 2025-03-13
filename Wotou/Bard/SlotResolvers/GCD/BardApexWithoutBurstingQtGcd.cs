@@ -15,6 +15,8 @@ public class BardApexWithoutBurstingQtGcd : ISlotResolver
     {
         if (!BardRotationEntry.QT.GetQt(QTKey.Apex))
             return -1;
+        if (ApexArrow.RecentlyUsed(5000))
+            return -1;
         // 本文件只处理未开启爆发QT时，满能量的绝峰箭
         if (BardRotationEntry.QT.GetQt("爆发"))
             return -1;
