@@ -26,6 +26,10 @@ public class DancerTillanaGcd : ISlotResolver
             return -1;
         if (!Tillana.IsUnlockWithCDCheck())
             return -10;
+        if (Core.Me.HasLocalPlayerAura(FlourishingFinish) && !Core.Me.HasMyAuraWithTimeleft(FlourishingFinish, 3000))
+            return 4;
+        if (TargetHelper.GetNearbyEnemyCount(15) == 0)
+            return -20;
         // 不在小舞前1G使用 
         if  (Core.Resolve<MemApiSpell>().CheckActionChange(StandardStep).GetSpell().Cooldown.TotalMilliseconds < 
              2 * GCDHelper.GetGCDDuration() - 1000 && 
@@ -47,8 +51,6 @@ public class DancerTillanaGcd : ISlotResolver
             !Core.Me.HasAura(SilkenFlow) &&
             !Core.Me.HasAura(SilkenSymmetry))
             return 3;
-        if (Core.Me.HasLocalPlayerAura(FlourishingFinish) && !Core.Me.HasMyAuraWithTimeleft(FlourishingFinish, 3000))
-            return 4;
         return -1;
     }
 
