@@ -19,8 +19,8 @@ public class InfoWindow
             return;
         ImGuiViewportPtr mainViewport = ImGui.GetMainViewport();
         ImGui.SetNextWindowPos(new Vector2(mainViewport.Pos.X + mainViewport.Size.X / 2f, mainViewport.Pos.Y + mainViewport.Size.Y / 2f));
-        //ImGui.SetNextWindowSize(new Vector2(600, 500));
-        ImGui.SetNextWindowFocus();
+        ImGui.SetNextWindowSize(new Vector2(600, 500));
+        //ImGui.SetNextWindowFocus();
         ImGui.Begin("", ref InfoWindow.isWindowOpen);
         ImGui.Begin("0319.01 时间轴更新日志", ref isWindowOpen, ImGuiWindowFlags.NoCollapse);
 
