@@ -13,36 +13,40 @@ public class InfoWindow
     {
         if (!InfoWindow.isWindowOpen)
             return;
-        if (BardSettings.Instance.IsReadInfoWindow082)
+        if (BardSettings.Instance.IsReadInfoWindow045)
             return;
-        if (DancerSettings.Instance.IsReadInfoWindow082)
+        if (DancerSettings.Instance.IsReadInfoWindow045)
             return;
         ImGuiViewportPtr mainViewport = ImGui.GetMainViewport();
         ImGui.SetNextWindowPos(new Vector2(mainViewport.Pos.X + mainViewport.Size.X / 2f, mainViewport.Pos.Y + mainViewport.Size.Y / 2f));
-        ImGui.SetNextWindowSize(new Vector2(600, 500));
+        //ImGui.SetNextWindowSize(new Vector2(600, 500));
         ImGui.SetNextWindowFocus();
         ImGui.Begin("", ref InfoWindow.isWindowOpen);
-        ImGui.TextColored(new Vector4(1f, 0.5f, 0.0f, 1f), "重要提醒");
+        ImGui.Begin("0319.01 时间轴更新日志", ref isWindowOpen, ImGuiWindowFlags.NoCollapse);
+
+        ImGui.TextColored(new Vector4(1f, 0.5f, 0.0f, 1f), "诗人更新");
         ImGui.Separator();
-        ImGui.TextWrapped("首次进入光暗未来绝境战（绝伊甸）后，ACR将自动记录当前队伍成员信息");
-        ImGui.TextWrapped("绝伊甸开放后首月内，Lv < 1 的用户，仅允许与已记录的固定队队员组队时使用本ACR");
-        ImGui.TextWrapped("所以请确保首次进入副本时，与你的固定队队员一同进本！");
-        ImGui.TextWrapped("");
-        ImGui.TextWrapped("更重要的是，如果你在国际服和国服都有角色，系统会记录你第一次进本时的队友名单。");
-        ImGui.TextWrapped("这意味着，如果你在国际服先进入了副本，那么你的国服账号将无法使用 ACR，请谨慎选择！");
-        ImGui.TextWrapped("此纪录一旦保存，将无法更改！请谨慎操作！");
-        ImGui.TextWrapped("");
-        ImGui.TextWrapped("在8人队伍中，至少有2名玩家（包括你自己）与系统记录的第一次进本的8人ID+服务器匹配，即视为固定队。");
-        ImGui.TextWrapped("每个职业的 Wotou ACR 可绑定一个固定队，独立计算，不互相影响。");
-        ImGui.TextWrapped("");
-        ImGui.TextWrapped("此规则自本次更新起立刻生效，请提前做好准备！");
+        ImGui.BulletText("P2 第一次行吟略微延后，以保证钢铁的情况下，能覆盖全员。");
+        ImGui.BulletText("P2 开头的光阴神默认开启。");
+        ImGui.BulletText("P2.5 光水晶现在会根据玩家在时间轴界面选择的职能，自动切换目标（旧版是根据距离判断）。");
+        ImGui.BulletText("P3 一运添加中火无损移速修改功能（需要 DR 测试码，否则仅会自动开疾跑，时间较为紧张）。");
+        ImGui.BulletText("P4 取消血量差强制双目标切换，仅保留双目标续毒功能。");
+
+        ImGui.Text("");
+        ImGui.TextColored(new Vector4(1f, 0.5f, 0.0f, 1f), "舞者更新");
+        ImGui.Separator();
+        ImGui.BulletText("P2 第一次桑巴略微延后，以保证钢铁的情况下，能覆盖全员。");
+        ImGui.BulletText("P2.5 光水晶现在会根据玩家在时间轴界面选择的职能，自动切换目标（旧版是根据距离判断）。");
+        ImGui.BulletText("P3 一运添加中火无损移速修改功能（需要 DR 测试码，否则仅会自动开疾跑，时间较为紧张）。");
+        ImGui.BulletText("P4 团辅延后 1 秒，保证大舞能打到双目标。");
+
         
         ImGui.Separator();
         if (ImGui.Button("已知悉"))
         {
             InfoWindow.isWindowOpen = false;
-            BardSettings.Instance.IsReadInfoWindow082 = true;
-            DancerSettings.Instance.IsReadInfoWindow082 = true;
+            BardSettings.Instance.IsReadInfoWindow045 = true;
+            DancerSettings.Instance.IsReadInfoWindow045 = true;
             BardSettings.Instance.Save();
             DancerSettings.Instance.Save();
         }
