@@ -297,6 +297,8 @@ namespace Wotou.Dancer
                 if (!Core.Me.HasLocalPlayerAura(DancerDefinesData.Buffs.ClosedPosition) && 
                     PartyHelper.Party.Count > 1 && 
                     DancerSettings.Instance.EnableAutoDancePartner && 
+                    Core.Resolve<MemApiDuty>().InMission &&
+                    !Core.Resolve<MemApiDuty>().IsOver &&
                     DancerDefinesData.Spells.ClosedPosition.IsUnlockWithCDCheck())
                 {
                     LogHelper.Print("寻找舞伴");
