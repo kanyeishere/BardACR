@@ -190,7 +190,7 @@ public class DancerRotationEntry : IRotationEntry
             EnAvantPanel = new HotkeyWindow(enAvantJobViewSave, "Custom DNC En Avant HotkeyWindow");
             EnAvantPanel.HotkeyLineCount = 3;
             
-            if (!DancerSettings.Instance.IsReadInfoWindow045)
+            if (!DancerSettings.Instance.IsReadInfoWindow046)
                 InfoWindow.Draw();
             if (DancerSettings.Instance.IsOpenCommandWindow)
                 DancerCommandWindow.Draw();
