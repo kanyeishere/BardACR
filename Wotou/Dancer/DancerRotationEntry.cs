@@ -190,7 +190,7 @@ public class DancerRotationEntry : IRotationEntry
             EnAvantPanel = new HotkeyWindow(enAvantJobViewSave, "Custom DNC En Avant HotkeyWindow");
             EnAvantPanel.HotkeyLineCount = 3;
             
-            if (!DancerSettings.Instance.IsReadInfoWindow046)
+            if (!DancerSettings.Instance.IsReadInfoWindow042)
                 InfoWindow.Draw();
             if (DancerSettings.Instance.IsOpenCommandWindow)
                 DancerCommandWindow.Draw();
@@ -326,11 +326,11 @@ public class DancerRotationEntry : IRotationEntry
             ImGui.Separator();
             UiHelper.RightInputInt("倒计时提前使用起手", ref DancerSettings.Instance.OpenerTime, 0, 1000, "(毫秒)");
             ImGui.Separator();
-            UiHelper.RightInputInt("非爆发期使用剑舞", ref DancerSettings.Instance.SaberDanceEspritThreshold, 50, 100,"大于等于");
+            UiHelper.RightInputInt("非爆发期使用剑舞", ref DancerSettings.Instance.SaberDanceEspritThreshold, 50, 100,"大于等于", 5);
             ImGui.Separator();
-            UiHelper.RightInputInt("爆发期使用提拉纳", ref DancerSettings.Instance.TillanaEspritThreshold, 0, 50,"小于等于");
+            UiHelper.RightInputInt("爆发期使用提拉纳", ref DancerSettings.Instance.TillanaEspritThreshold, 0, 50,"小于等于", 5);
             ImGui.Separator();
-            UiHelper.RightInputInt("爆发最后1G使用提拉纳", ref DancerSettings.Instance.TillanaLastGcdEspritThreshold, 0, 50,"小于等于");
+            UiHelper.RightInputInt("爆发最后1G使用提拉纳", ref DancerSettings.Instance.TillanaLastGcdEspritThreshold, 0, 50,"小于等于", 5);
             ImGui.Separator();
             
             ImGui.Text("爆发药设置：" + (DancerSettings.Instance.UsePotionInOpener ? "起手吃" : "2分钟爆发吃"));
