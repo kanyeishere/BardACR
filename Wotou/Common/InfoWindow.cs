@@ -38,7 +38,8 @@ public class InfoWindow
         ImGui.Separator();
         ImGui.BulletText("P2 第一次桑巴略微延后，以保证钢铁的情况下，能覆盖全员。");
         ImGui.BulletText("P2.5 光水晶现在会根据玩家在时间轴界面选择的职能，自动切换目标（旧版是根据距离判断）。");
-        ImGui.BulletText("P3 一运添加中火无损移速修改功能（需要 DR 测试码，否则仅会自动开疾跑，时间较为紧张）。");
+        ImGui.BulletText("P3 一运添加中火无损移速修改功能:");
+        ImGui.BulletText(" - 需要 DR 测试码 / 猫盒激活权限，并开启移速功能，否则仅会自动开疾跑，时间较紧张");
         ImGui.BulletText("P4 团辅延后 1 秒，保证大舞能打到双目标。");
 
         
