@@ -22,6 +22,9 @@
             <HintPath>..\..\..\..\Games\XIVLauncherCN\Roaming\addon\Hooks\10.0.0.15\Dalamud.dll</HintPath>
             <Private>False</Private>
         </Reference>
+        <Reference Include="ECommons">
+          <HintPath>A:\AE3.0\AEAssistCNVersion\AEAssist\ECommons.dll</HintPath>
+        </Reference>
         <Reference Include="FFXIVClientStructs">
           <HintPath>C:\Users\Yiwei\AppData\Roaming\XIVLauncherCN\addon\Hooks\dev\FFXIVClientStructs.dll</HintPath>
         </Reference>
