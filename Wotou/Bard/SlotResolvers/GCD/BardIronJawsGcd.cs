@@ -25,6 +25,7 @@ public class BardIronJawsGcd : ISlotResolver
     private const uint BattleVoiceBuff = BardDefinesData.Buffs.BattleVoice;
     private const uint RagingStrikesBuff = BardDefinesData.Buffs.RagingStrikes;
     private const uint HawksEyeBuff = BardDefinesData.Buffs.HawksEye;
+    private const uint BarrageBuff = BardDefinesData.Buffs.Barrage;
     
     public int Check()
     {
@@ -38,6 +39,9 @@ public class BardIronJawsGcd : ISlotResolver
         if (target == null)
             return -1;
         if (!HasAnyDot(target, 风dotBuffs) || !HasAnyDot(target, 毒dotBuffs))
+            return -1;
+        
+        if (Core.Me.HasLocalPlayerAura(BarrageBuff) && !Core.Me.HasMyAuraWithTimeleft(BarrageBuff, 3000))
             return -1;
         
         // 爆发期截毒
