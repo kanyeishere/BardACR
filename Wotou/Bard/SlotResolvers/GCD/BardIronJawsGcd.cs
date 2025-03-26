@@ -26,6 +26,8 @@ public class BardIronJawsGcd : ISlotResolver
     private const uint RagingStrikesBuff = BardDefinesData.Buffs.RagingStrikes;
     private const uint HawksEyeBuff = BardDefinesData.Buffs.HawksEye;
     private const uint BarrageBuff = BardDefinesData.Buffs.Barrage;
+    private const uint RadiantEncoreReady = BardDefinesData.Buffs.RadiantEncoreReady;
+    private const uint ResonantArrowReady = BardDefinesData.Buffs.ResonantArrowReady;
     
     public int Check()
     {
@@ -42,6 +44,10 @@ public class BardIronJawsGcd : ISlotResolver
             return -1;
         
         if (Core.Me.HasLocalPlayerAura(BarrageBuff) && !Core.Me.HasMyAuraWithTimeleft(BarrageBuff, 3000))
+            return -1;
+        if (Core.Me.HasLocalPlayerAura(RadiantEncoreReady) && !Core.Me.HasMyAuraWithTimeleft(RadiantEncoreReady, 3000))
+            return -1;
+        if (Core.Me.HasLocalPlayerAura(ResonantArrowReady) && !Core.Me.HasMyAuraWithTimeleft(ResonantArrowReady, 3000))
             return -1;
         
         // 爆发期截毒

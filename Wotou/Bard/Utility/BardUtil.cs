@@ -106,17 +106,18 @@ public static class BardUtil
     
     public static Spell GetBaseGcd()
     {
-        if (Core.Me.HasAura(HawkEyeBuff) || Core.Me.HasAura(BarrageBuff))
+        if (Core.Me.HasAura(BarrageBuff))
         {
-            if (Core.Me.HasAura(HawkEyeBuff) && TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget(), 25,5) > 1 && 
+            if (TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget(), 25,5) > 3 && 
                 BardRotationEntry.QT.GetQt("AOE") && 
                 Core.Resolve<MemApiSpell>().CheckActionChange(Shadowbite).IsUnlock())
                 return Core.Resolve<MemApiSpell>().CheckActionChange(Shadowbite).GetSpell();
-            if (Core.Me.HasAura(BarrageBuff) && 
-                TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget(), 25,5) <= 3 )
-                return Core.Resolve<MemApiSpell>().CheckActionChange(RefulgentArrow).GetSpell();
-            if (!Core.Me.HasAura(BarrageBuff) && 
-                TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget(), 25,5) > 3 && 
+            return Core.Resolve<MemApiSpell>().CheckActionChange(RefulgentArrow).GetSpell();
+        }
+        
+        if (Core.Me.HasAura(HawkEyeBuff))
+        {
+            if (TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget(), 25,5) > 1 && 
                 BardRotationEntry.QT.GetQt("AOE") && 
                 Core.Resolve<MemApiSpell>().CheckActionChange(Shadowbite).IsUnlock())
                 return Core.Resolve<MemApiSpell>().CheckActionChange(Shadowbite).GetSpell();
