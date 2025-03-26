@@ -10,6 +10,8 @@ namespace Wotou.Bard.SlotResolvers.GCD;
 public class BardResonantArrowGcd : ISlotResolver
 {
     private const uint ResonantArrow = BardDefinesData.Spells.ResonantArrow;
+    private const uint BattleVoice = BardDefinesData.Spells.BattleVoice;
+    private const uint RagingStrikes = BardDefinesData.Spells.RagingStrikes;
     
     private const uint ResonantArrowReady = BardDefinesData.Buffs.ResonantArrowReady;
     private const uint BarrageBuff = BardDefinesData.Buffs.Barrage;
@@ -22,6 +24,9 @@ public class BardResonantArrowGcd : ISlotResolver
         if (Core.Me.HasLocalPlayerAura(BarrageBuff) && !Core.Me.HasMyAuraWithTimeleft(BarrageBuff, 3000))
             return -1;
         if (BardUtil.HasAllPartyBuff())
+            return 1;
+        if (RagingStrikes.RecentlyUsed(30000) &&
+            BattleVoice.RecentlyUsed(30000))
             return 1;
         if (Core.Me.HasLocalPlayerAura(ResonantArrowReady) && !Core.Me.HasMyAuraWithTimeleft(ResonantArrowReady, 10000))
             return 1;
