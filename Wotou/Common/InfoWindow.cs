@@ -13,9 +13,8 @@ public class InfoWindow
     {
         if (!InfoWindow.isWindowOpen)
             return;
-        if (BardSettings.Instance.IsReadInfoWindow049)
-            return;
-        if (DancerSettings.Instance.IsReadInfoWindow049)
+        if (BardSettings.Instance.IsReadInfoWindow049 && 
+            DancerSettings.Instance.IsReadInfoWindow049)
             return;
         ImGuiViewportPtr mainViewport = ImGui.GetMainViewport();
         ImGui.SetNextWindowPos(new Vector2(mainViewport.Pos.X + mainViewport.Size.X / 2f, mainViewport.Pos.Y + mainViewport.Size.Y / 2f));
