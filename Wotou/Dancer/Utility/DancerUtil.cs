@@ -27,7 +27,7 @@ namespace Wotou.Dancer.Utility
         public static bool CanUseAoeCombo()
         {
             return DancerRotationEntry.QT.GetQt(QTKey.Aoe) &&
-                   ((TargetHelper.GetNearbyEnemyCount(5) > 1 && Core.Me.Level >= 94) ||
+                   ((TargetHelper.GetNearbyEnemyCount(5) > 2 && Core.Me.Level >= 94) ||
                     (TargetHelper.GetNearbyEnemyCount(5) > 1) && Core.Me.Level < 94);
         }
         
