@@ -137,6 +137,7 @@ public class BardDefinesData
           skillDictionary.Add(field.Name, (uint)field.GetValue(null));
         }
       }
+      skillDictionary.Add("3级巧力之宝药", 45996);
       skillDictionary.Add("2级巧力之宝药", 44163);
       skillDictionary.Add("1级巧力之宝药", 44158);
       skillDictionary.Add("8级巧力之幻药", 39728);
