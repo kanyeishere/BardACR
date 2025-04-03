@@ -387,6 +387,26 @@ public class DancerRotationEntry : IRotationEntry
             ImGui.Separator();
             if (ImGui.Button("保存界面设置")) DancerSettings.Instance.Save();
         }
+        
+        ImGui.Separator();
+        if (ImGui.CollapsingHeader("   时间轴更新"))
+        {
+            ImGui.Separator();
+            foreach (var timeline in TimeLineUpdater.jsonData)
+            {
+                bool selected = DancerSettings.Instance.SelectedTimeLinesForUpdate.TryGetValue(timeline.Name, out bool isSelected) && isSelected;
+                if (ImGui.Checkbox(timeline.Name, ref selected))
+                {
+                    DancerSettings.Instance.SelectedTimeLinesForUpdate[timeline.Name] = selected;
+                    DancerSettings.Instance.Save();
+                }
+                ImGui.Separator();
+            }
+            if (ImGui.Button("保存时间轴设置"))
+                DancerSettings.Instance.Save();
+            ImGui.Separator();
+        }
+        
         ImGui.Separator();
         if (ImGui.CollapsingHeader("   技能队列"))
         {

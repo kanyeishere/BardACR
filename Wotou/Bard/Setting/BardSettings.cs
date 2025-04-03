@@ -89,6 +89,8 @@ public class BardSettings
     
     public string UnlockPassword = ""; // 解锁密码
     
+    public Dictionary<string, bool> SelectedTimeLinesForUpdate = new();
+    
     /// <summary>
     /// 初始化用户自定义的 QT 值。如果没有自定义值，则使用默认值。
     /// </summary>
