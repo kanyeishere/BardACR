@@ -66,6 +66,8 @@ public class DancerSettings
     public bool EnableAutoDancing = true; // 是否在自动使用舞步
     public bool EnableAutoDancePartner = true; // 是否在自动使用舞伴
     
+    public bool IsInternationalServer = false; // 是否国际服
+    
     public bool IsReadInfoWindow047 = false;
     
     public bool IsOpenCommandWindow = true;

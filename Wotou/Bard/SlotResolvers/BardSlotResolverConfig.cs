@@ -32,6 +32,7 @@ public static class BardSlotResolverConfig
             // offGcd队列
             new SlotResolverData(new BardEmpyrealArrowAbility(), SlotMode.OffGcd),
             new SlotResolverData(new BardSongMaxAbility(), SlotMode.OffGcd),
+            new SlotResolverData(new BardPotionAbility(), SlotMode.OffGcd),
             new SlotResolverData(new BardRagingStrikesAbility(), SlotMode.OffGcd),
             new SlotResolverData(new BardBattleVoiceAndRadiantFinaleAbility(), SlotMode.OffGcd),
             new SlotResolverData(new BardPitchPerfectMaxAbility(), SlotMode.OffGcd),

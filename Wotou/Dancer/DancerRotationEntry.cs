@@ -338,6 +338,9 @@ public class DancerRotationEntry : IRotationEntry
                 ImGui.TextColored(new Vector4(0.7f, 0.8f, 0.0f, 1.0000f), "如果你希望使用爆发药，请在QT面板中开启爆发药开关");
             ImGui.Checkbox("起手吃爆发药", ref DancerSettings.Instance.UsePotionInOpener);
             ImGui.Separator();
+            ImGui.Text("AOE设置：" + (DancerSettings.Instance.IsInternationalServer ? "国际服" : "国服"));
+            ImGui.Checkbox("国际服", ref DancerSettings.Instance.IsInternationalServer);
+            ImGui.Separator();
             ImGui.BeginGroup(); // 开始一个整体分组
             ImGui.Checkbox("##DanceDistanceWarning", ref DancerSettings.Instance.DanceDistanceWarning);
             ImGui.SameLine();
