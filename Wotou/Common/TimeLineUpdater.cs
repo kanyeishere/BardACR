@@ -7,6 +7,8 @@ using System.IO;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Wotou.Bard.Setting;
+using Wotou.Dancer.Setting;
 
 #nullable enable
 namespace Wotou.Common
@@ -23,10 +25,10 @@ namespace Wotou.Common
   }
   public static class TimeLineUpdater
   {
-    private static List<TimeLineInfo>? jsonData;
+    public static List<TimeLineInfo>? jsonData;
     private static string _jsonUrl;
 
-    public static async Task UpdateFiles(string jsonUrl)
+    public static async Task UpdateFiles(string jsonUrl, Dictionary<string, bool> selectedTimeLines)
     {
       TimeLineUpdater._jsonUrl = jsonUrl;
       await TimeLineUpdater.DownloadJson();
@@ -56,6 +58,10 @@ namespace Wotou.Common
           files = Directory.GetFiles(triggerlinesDir, "*.json", SearchOption.TopDirectoryOnly);
           foreach (TimeLineInfo timeLine in TimeLineUpdater.jsonData)
           {
+            if (!selectedTimeLines.TryGetValue(timeLine.Name, out bool isSelected) || !isSelected)
+            {
+              continue; // 没有勾选，不下载
+            }
             string fileName = timeLine.Name + "v" + timeLine.Version;
             string filePath = Path.Combine(triggerlinesDir, fileName) + ".json";
             if (!File.Exists(filePath))
@@ -109,6 +115,26 @@ namespace Wotou.Common
         TimeLineUpdater.jsonData = JsonSerializer.Deserialize<List<TimeLineInfo>>(_jsonData);
         _jsonData = (string) null;
         client = (HttpClient) null;
+        
+        if (_jsonUrl.ToLower().Contains("bard"))
+        {
+          foreach (var item in jsonData)
+          {
+            if (!BardSettings.Instance.SelectedTimeLinesForUpdate.ContainsKey(item.Name))
+              BardSettings.Instance.SelectedTimeLinesForUpdate[item.Name] = true;
+          }
+          BardSettings.Instance.Save();
+        }
+        
+        if  (_jsonUrl.ToLower().Contains("dancer"))
+        {
+          foreach (var item in jsonData)
+          {
+            if (!DancerSettings.Instance.SelectedTimeLinesForUpdate.ContainsKey(item.Name))
+              DancerSettings.Instance.SelectedTimeLinesForUpdate[item.Name] = true;
+          }
+          DancerSettings.Instance.Save();
+        }
       }
       catch (Exception ex1)
       {
