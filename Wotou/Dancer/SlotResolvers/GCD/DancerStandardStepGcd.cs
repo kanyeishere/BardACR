@@ -16,6 +16,7 @@ public class DancerStandardStepGcd : ISlotResolver
     
     private const uint FinishingMoveReady = DancerDefinesData.Buffs.FinishingMoveReady;
     private const uint Devilment = DancerDefinesData.Buffs.Devilment;
+    private const uint TechnicalFinish = DancerDefinesData.Buffs.TechnicalFinish;
     
     public int Check()
     {
@@ -29,6 +30,16 @@ public class DancerStandardStepGcd : ISlotResolver
             return -4;
         /*if (Core.Me.HasLocalPlayerAura(Devilment) && !Core.Me.HasMyAuraWithTimeleft(Devilment, 3500))
             return -4;*/
+        
+        if (Core.Me.HasAura(TechnicalFinish) && 
+            !Core.Me.HasMyAuraWithTimeleft(TechnicalFinish, 3700) && 
+            Core.Me.Level == 90)
+            return -1;
+        if (Core.Me.HasAura(Devilment) &&
+            !Core.Me.HasMyAuraWithTimeleft(Devilment, 3700) && 
+            Core.Me.Level == 90)
+            return -1;
+        
         if (StandardStep.GetSpell().Cooldown.TotalMilliseconds <= DancerSettings.Instance.StandardStepCdTolerance)
             return 1;
         if (!StandardStep.GetSpell().IsReadyWithCanCast())
