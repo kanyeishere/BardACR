@@ -2,6 +2,7 @@ using AEAssist;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Helper;
 using AEAssist.JobApi;
+using Dalamud.Game.ClientState.JobGauge.Enums;
 using Wotou.Bard.Data;
 using Wotou.Bard.Setting;
 
@@ -12,6 +13,7 @@ public class BardEmpyrealArrowAbility : ISlotResolver
     private const uint EmpyrealArrow = BardDefinesData.Spells.EmpyrealArrow;
     private const uint BattleVoice = BardDefinesData.Spells.BattleVoice;
     private const uint RagingStrikes = BardDefinesData.Spells.RagingStrikes;
+    private const Song Wanderer = Song.WANDERER;
     
     public int Check()
     {
@@ -28,6 +30,8 @@ public class BardEmpyrealArrowAbility : ISlotResolver
         if (RagingStrikes.GetSpell().Cooldown.TotalMilliseconds < 3000 && 
             BardRotationEntry.QT.GetQt("爆发") &&
             RagingStrikes.IsUnlock())
+            return -1;
+        if (Core.Resolve<JobApi_Bard>().ActiveSong == Wanderer && Core.Resolve<JobApi_Bard>().Repertoire == 3)
             return -1;
         /*if (BardRotationEntry.QT.GetQt("强对齐"))
             return 1;
