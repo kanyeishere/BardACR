@@ -1,5 +1,5 @@
-using System.Security.Cryptography;
-using System.Text;
+using System.Numerics;
+using System.Text.RegularExpressions;
 using Wotou.Bard.Setting;
 using Wotou.Bard.Data;
 using AEAssist;
@@ -26,10 +26,40 @@ public class BardRotationEventHandler : IRotationEventHandler
     private Dictionary<string, string> qtKeyDictionary;
     private Dictionary<string, string?> hotkeyDictionary; 
     
+    private void HandleMovingToTarget()
+    {
+        var _targetPosition = BardBattleData.Instance.TargetPosition;
+        var offset = 0.05f;
+        if (_targetPosition != null)
+        {
+            var targetPosition = (Vector3)_targetPosition;
+            
+            Core.Resolve<MemApiMove>().MoveToTarget(targetPosition);
+            
+            var currentPos = Core.Me.Position;
+            
+            float dx = targetPosition.X - currentPos.X;
+            float dz = targetPosition.Z - currentPos.Z;
+            float distance = MathF.Sqrt(dx * dx + dz * dz);
+            
+            if (distance > offset)
+            {
+                Core.Resolve<MemApiMove>().MoveToTarget(targetPosition);
+            }
+            else
+            {
+                // 到达目标位置，停止移动
+                Core.Resolve<MemApiMove>().CancelMove();
+                BardBattleData.Instance.TargetPosition = null; // 清除目标位置
+            }
+        }
+    }
+    
     public async Task OnPreCombat()
     {
         BardRotationEntry.UpdateWardensPaeanPanel();
         SmartUseHighPrioritySlot();
+        // HandleMovingToTarget();
         
         /*if (LowVipRestrictor.IsRestrictedZoneForLowVip())
         {
@@ -47,6 +77,8 @@ public class BardRotationEventHandler : IRotationEventHandler
             Core.Resolve<MemApiMove>().CancelMove();
         if (Core.Resolve<MemApiMove>().IsMoving())
             Core.Resolve<MemApiMove>().CancelMove();
+
+        
         
         if (!BardUtil.IsSongOrderNormal())
         {
@@ -284,6 +316,7 @@ public class BardRotationEventHandler : IRotationEventHandler
     public void OnBattleUpdate(int currTimeInMs)
     {
         SmartUseHighPrioritySlot();
+        HandleMovingToTarget();
         
         /*if (LowVipRestrictor.IsRestrictedZoneForLowVip() && !LowVipRestrictor.IsInStaticParty(BardSettings.Instance.QwertyList))
             PlayerOptions.Instance.Stop = true;*/
@@ -437,6 +470,41 @@ public class BardRotationEventHandler : IRotationEventHandler
             case "hello":
                 ChatHelper.SendMessage("你好！这是一条测试消息！");
                 break;
+            case var move when move.StartsWith("moveto", StringComparison.OrdinalIgnoreCase):
+            {
+                // 匹配格式 moveTo (x,y,z) 或 moveTo(x,y,z)（可带空格）
+                var match = Regex.Match(move, @"moveto\s*\(\s*(-?\d+(\.\d+)?)\s*,\s*(-?\d+(\.\d+)?)\s*,\s*(-?\d+(\.\d+)?)\s*\)(?:\s+delay\s+(\d+))?", RegexOptions.IgnoreCase);
+                
+                if (match.Success)
+                {
+                    float x = float.Parse(match.Groups[1].Value);
+                    float y = float.Parse(match.Groups[3].Value);
+                    float z = float.Parse(match.Groups[5].Value);
+                    
+                    var delay = 0;
+                    if (match.Groups[7].Success)
+                        delay = int.Parse(match.Groups[7].Value);
+                    
+                    Vector3 target = new Vector3(x, y, z);
+
+                    _ = Task.Run(async () =>
+                    {
+                        LogHelper.Print($"延迟 {delay}ms 后移动到坐标: ({x}, {y}, {z})");
+
+                        if (delay > 0)
+                            await Task.Delay(delay);
+
+                        BardBattleData.Instance.TargetPosition = target;
+                        Core.Resolve<MemApiMove>().MoveToTarget(target);
+                    });
+                }
+                else
+                {
+                    LogHelper.PrintError("坐标格式错误，正确格式示例：/Wotou_BRD moveTo (100.5, 0, 92.8)");
+                }
+
+                break;
+            }
 
             default:
                 ChatHelper.SendMessage($"未知参数: {args}");

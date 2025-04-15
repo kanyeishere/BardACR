@@ -1,10 +1,9 @@
 using System.Numerics;
 using AEAssist;
 using AEAssist.CombatRoutine.View.JobView;
-using AEAssist.Helper;
 using AEAssist.MemoryApi;
-using Dalamud.Interface.Textures.TextureWraps;
 using ImGuiNET;
+using Wotou.Bard.Data;
 
 namespace Wotou.Common;
 
@@ -30,5 +29,6 @@ public class StopMoveHotkeyResolver : IHotkeyResolver
     public void Run()
     {
         Core.Resolve<MemApiMove>().CancelMove();
+        BardBattleData.Instance.TargetPosition = null;
     }
 }

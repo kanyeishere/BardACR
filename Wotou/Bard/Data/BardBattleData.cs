@@ -1,3 +1,4 @@
+using System.Numerics;
 using Dalamud.Game.ClientState.JobGauge.Enums;
 
 namespace Wotou.Bard.Data;
@@ -9,6 +10,8 @@ public class BardBattleData
     public static BardBattleData Instance = new();
     
     public Song LastSong = Song.NONE;
+    
+    public Vector3? TargetPosition = null;
     
     public long LastSongTime = 0;
     
