@@ -505,6 +505,53 @@ public class BardRotationEventHandler : IRotationEventHandler
 
                 break;
             }
+            
+            case var follow when follow.StartsWith("follow", StringComparison.OrdinalIgnoreCase):
+            {
+                // 匹配格式：follow ID for 3000 或 follow ID for 3000 delay 1500
+                var match = Regex.Match(args, @"^follow\s+(\d+)\s+for\s+(\d+)(?:\s+delay\s+(\d+))?$", RegexOptions.IgnoreCase);
+
+                if (match.Success)
+                {
+                    if (!uint.TryParse(match.Groups[1].Value, out uint entityId))
+                    {
+                        LogHelper.PrintError("无法解析 EntityId！");
+                        break;
+                    }
+
+                    int duration = int.Parse(match.Groups[2].Value);
+                    int delay = match.Groups[3].Success ? int.Parse(match.Groups[3].Value) : 0;
+
+                    var target = PartyHelper.Party.FirstOrDefault(p => p.EntityId == entityId);
+                    if (target == null)
+                    {
+                        LogHelper.PrintError($"找不到 ID 为 {entityId} 的小队成员！");
+                        break;
+                    }
+
+                    LogHelper.Print($"将在 {delay} 毫秒后开始跟随 {entityId}，持续 {duration} 毫秒。");
+
+                    _ = Task.Run(async () =>
+                    {
+                        if (delay > 0)
+                            await Task.Delay(delay);
+
+                        var startTime = DateTime.UtcNow;
+                        while ((DateTime.UtcNow - startTime).TotalMilliseconds < duration)
+                        {
+                            Core.Resolve<MemApiMove>().MoveToTarget(target.Position);
+                        }
+
+                        LogHelper.Print($"已停止跟随 {entityId}。");
+                    });
+                }
+                else
+                {
+                    LogHelper.PrintError("格式错误，示例：/Wotou_BRD follow 266637666 for 3000 delay 1500");
+                }
+
+                break;
+            }
 
             default:
                 ChatHelper.SendMessage($"未知参数: {args}");

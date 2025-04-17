@@ -8,6 +8,7 @@ using AEAssist.CombatRoutine.Module;
 using AEAssist.CombatRoutine.Module.Opener;
 using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.CombatRoutine.View.JobView.HotkeyResolver;
+using AEAssist.Extension;
 using AEAssist.GUI;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
@@ -819,6 +820,9 @@ public class BardRotationEntry : IRotationEntry
         interpolatedStringHandler.AppendFormatted<float>(vector3.Z);
         interpolatedStringHandler.AppendLiteral(")");
         ImGui.Text(interpolatedStringHandler.ToStringAndClear());
+        ImGui.Separator();
+        ImGui.Text("当前玩家 Entity ID: " + Core.Me.EntityId);
+        ImGui.Text("当前目标 Entity ID: " + Core.Me.GetCurrTarget()?.EntityId);
         ImGui.Separator();
         ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0.0f, 0.0f, 0.0f, 0.0f));
         ImGui.PushStyleColor(ImGuiCol.Border, new Vector4(0.4314f, 0.6667f, 0.5569f, 1));
