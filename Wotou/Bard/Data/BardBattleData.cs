@@ -16,6 +16,8 @@ public class BardBattleData
     
     public IBattleChara? FollowingTarget = null;
     
+    public bool IsFollowing = false;
+    
     public long LastSongTime = 0;
     
     public int WandererTimes = 0;

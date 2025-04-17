@@ -537,17 +537,21 @@ public class BardRotationEventHandler : IRotationEventHandler
                             await Task.Delay(delay);
 
                         var startTime = DateTime.UtcNow;
+                        BardBattleData.Instance.IsFollowing = true;
                         while ((DateTime.UtcNow - startTime).TotalMilliseconds < duration)
                         {
                             if (BardBattleData.Instance.FollowingTarget == null || BardBattleData.Instance.FollowingTarget.IsDead)
                             {
                                 LogHelper.Print($"跟随目标 {entityId} 不存在或者已被清除，停止跟随。");
+                                BardBattleData.Instance.IsFollowing = false;
                                 break;
                             }
                             Core.Resolve<MemApiMove>().MoveToTarget(BardBattleData.Instance.FollowingTarget.Position);
+                            BardBattleData.Instance.IsFollowing = true;
                         }
 
                         LogHelper.Print($"已停止跟随 {entityId}。");
+                        BardBattleData.Instance.IsFollowing = false;
                     });
                 }
                 else
