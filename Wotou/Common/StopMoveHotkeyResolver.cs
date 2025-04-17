@@ -30,5 +30,6 @@ public class StopMoveHotkeyResolver : IHotkeyResolver
     {
         Core.Resolve<MemApiMove>().CancelMove();
         BardBattleData.Instance.TargetPosition = null;
+        BardBattleData.Instance.FollowingTarget = null;
     }
 }

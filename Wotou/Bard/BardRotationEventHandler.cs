@@ -521,9 +521,9 @@ public class BardRotationEventHandler : IRotationEventHandler
 
                     int duration = int.Parse(match.Groups[2].Value);
                     int delay = match.Groups[3].Success ? int.Parse(match.Groups[3].Value) : 0;
-
-                    var target = PartyHelper.Party.FirstOrDefault(p => p.EntityId == entityId);
-                    if (target == null)
+                    
+                    BardBattleData.Instance.FollowingTarget = PartyHelper.Party.FirstOrDefault(p => p.EntityId == entityId);
+                    if (BardBattleData.Instance.FollowingTarget == null)
                     {
                         LogHelper.PrintError($"找不到 ID 为 {entityId} 的小队成员！");
                         break;
@@ -539,7 +539,12 @@ public class BardRotationEventHandler : IRotationEventHandler
                         var startTime = DateTime.UtcNow;
                         while ((DateTime.UtcNow - startTime).TotalMilliseconds < duration)
                         {
-                            Core.Resolve<MemApiMove>().MoveToTarget(target.Position);
+                            if (BardBattleData.Instance.FollowingTarget == null || BardBattleData.Instance.FollowingTarget.IsDead)
+                            {
+                                LogHelper.Print($"跟随目标 {entityId} 不存在或者已被清除，停止跟随。");
+                                break;
+                            }
+                            Core.Resolve<MemApiMove>().MoveToTarget(BardBattleData.Instance.FollowingTarget.Position);
                         }
 
                         LogHelper.Print($"已停止跟随 {entityId}。");
