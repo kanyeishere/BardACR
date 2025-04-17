@@ -77,6 +77,7 @@ public class BardSettings
  
     public bool ShowWardensPaeanPanel = true; // 是否显示光阴神面板
     public int WardensPaeanPanelIconSize = 47; // 光阴神面板图标大小
+    public bool IsWardensPanelLocked = false; // 是否锁定光阴神面板位置
 
     
     public bool IsReadInfoWindow047 = false;

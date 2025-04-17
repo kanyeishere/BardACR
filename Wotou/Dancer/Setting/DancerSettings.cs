@@ -47,6 +47,8 @@ public class DancerSettings
     public bool ShowEnAvantPanel = true; // 是否显示前跳面板
     public int DancePartnerPanelIconSize = 47; // 舞者配偶面板图标大小
     public int EnAvantPanelIconSize = 47; // 前跳面板图标大小
+    public bool isDancePartnerPanelLocked = false; // 是否锁定舞配面板
+    public bool isEnAvantPanelLocked = false; // 是否锁定前跳面板
     public bool UseDancePartnerMacro = true; // 是否使用舞伴宏
     public bool WelcomeVoice = true; // 是否开启欢迎声音
     public bool DanceDistanceWarning = true; // 是否开启舞步距离警告

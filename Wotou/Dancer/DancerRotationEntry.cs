@@ -165,6 +165,7 @@ public class DancerRotationEntry : IRotationEntry
             var myJobViewSave = new JobViewSave();
             myJobViewSave.QtHotkeySize = new Vector2(DancerSettings.Instance.DancePartnerPanelIconSize, DancerSettings.Instance.DancePartnerPanelIconSize);
             myJobViewSave.ShowHotkey = DancerSettings.Instance.ShowDancePartnerPanel;
+            myJobViewSave.LockWindow = DancerSettings.Instance.isDancePartnerPanelLocked;
             DancePartnerPanel.DrawHotkeyWindow(new QtStyle(DancerSettings.Instance.JobViewSave));
             DancePartnerPanel = new HotkeyWindow(myJobViewSave, "Custom DNC HotkeyWindow");
             DancePartnerPanel.HotkeyLineCount = 1;
@@ -186,6 +187,7 @@ public class DancerRotationEntry : IRotationEntry
             var enAvantJobViewSave = new JobViewSave();
             enAvantJobViewSave.QtHotkeySize = new Vector2(DancerSettings.Instance.EnAvantPanelIconSize, DancerSettings.Instance.EnAvantPanelIconSize);
             enAvantJobViewSave.ShowHotkey = DancerSettings.Instance.ShowEnAvantPanel;
+            enAvantJobViewSave.LockWindow = DancerSettings.Instance.isEnAvantPanelLocked;
             EnAvantPanel.DrawHotkeyWindow(new QtStyle(DancerSettings.Instance.JobViewSave));
             EnAvantPanel = new HotkeyWindow(enAvantJobViewSave, "Custom DNC En Avant HotkeyWindow");
             EnAvantPanel.HotkeyLineCount = 3;
@@ -378,9 +380,11 @@ public class DancerRotationEntry : IRotationEntry
         {
             ImGui.Checkbox("显示快速舞伴切换面板", ref DancerSettings.Instance.ShowDancePartnerPanel);
             ImGuiHelper.LeftInputInt("图标大小", ref DancerSettings.Instance.DancePartnerPanelIconSize, 10, 80);
+            ImGui.Checkbox("锁定舞伴面板", ref DancerSettings.Instance.isDancePartnerPanelLocked);
             ImGui.Separator();
             ImGui.Checkbox("显示前冲步面板 - 镜头面向控制前冲步", ref DancerSettings.Instance.ShowEnAvantPanel);
             ImGuiHelper.LeftInputInt("图标大小", ref DancerSettings.Instance.EnAvantPanelIconSize, 10, 80);
+            ImGui.Checkbox("锁定前冲步面板", ref DancerSettings.Instance.isEnAvantPanelLocked);
             ImGui.Separator();
             ImGui.Checkbox("是否启用舞伴宏", ref DancerSettings.Instance.UseDancePartnerMacro);
             ImGui.InputTextMultiline("", ref DancerSettings.Instance.DancePartnerMacroText, 1000, new Vector2(-1, ImGui.GetTextLineHeight() * 6));

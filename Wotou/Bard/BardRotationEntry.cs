@@ -245,6 +245,7 @@ public class BardRotationEntry : IRotationEntry
         var myJobViewSave = new JobViewSave();
         myJobViewSave.ShowHotkey = BardSettings.Instance.ShowWardensPaeanPanel;
         myJobViewSave.QtHotkeySize = new Vector2(BardSettings.Instance.WardensPaeanPanelIconSize, BardSettings.Instance.WardensPaeanPanelIconSize);
+        myJobViewSave.LockWindow = BardSettings.Instance.IsWardensPanelLocked;
         WardensPaeanPanel?.DrawHotkeyWindow(new QtStyle(BardSettings.Instance.JobViewSave));
         WardensPaeanPanel = new HotkeyWindow(myJobViewSave, "WardensPaeanPanel");
         WardensPaeanPanel.HotkeyLineCount = 1;
@@ -736,6 +737,7 @@ public class BardRotationEntry : IRotationEntry
             ImGui.Separator();
             ImGui.Checkbox("显示快速光阴神面板", ref BardSettings.Instance.ShowWardensPaeanPanel);
             ImGuiHelper.LeftInputInt("光阴神面板图标大小", ref BardSettings.Instance.WardensPaeanPanelIconSize, 10, 80);
+            ImGui.Checkbox("锁定光阴神面板", ref BardSettings.Instance.IsWardensPanelLocked);
             ImGui.Separator();
             ImGui.Checkbox("模仿绿玩手打循环（实验性功能）", ref BardSettings.Instance.ImitateGreenPlayer);
             if (ImGui.IsItemHovered())
