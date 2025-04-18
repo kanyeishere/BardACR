@@ -83,6 +83,10 @@ public class DancerSettings
     
     public Dictionary<string, bool> SelectedTimeLinesForUpdate = new();
     
+    public bool M6SAutoTarget = false; // 是否自动选择M6S目标
+    
+    public int M6SAutoTargetCount = 1; 
+    
     // 用户自定义的 QT 配置值
     public Dictionary<string, bool> UserDefinedQtValues { get; private set; } = new();
 
