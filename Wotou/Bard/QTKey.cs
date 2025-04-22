@@ -18,4 +18,5 @@ public static class QTKey
     public const string EmpyrealArrowBeforeGcd = "九天前置";
     public const string BurstWithWanderer = "对齐旅神";
     public const string ClearHawkEyesBuffBeforeDots = "清空鹰眼";
+    public const string AutoWardensPaean = "自动驱散";
 }

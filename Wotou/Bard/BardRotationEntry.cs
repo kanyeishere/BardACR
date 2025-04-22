@@ -55,7 +55,8 @@ public class BardRotationEntry : IRotationEntry
         { QTKey.EmpyrealArrow, (true, "是否使用九天", null) },
         { QTKey.Sidewinder, (true, "是否使用侧风", null) },
         { QTKey.EmpyrealArrowBeforeGcd, (false, "Boss上天后，落地第一个技能是否使用九天", null) },
-        { QTKey.ClearHawkEyesBuffBeforeDots, (true, "在上毒前是否清空鹰眼Buff", null) }
+        { QTKey.ClearHawkEyesBuffBeforeDots, (true, "在上毒前是否清空鹰眼Buff", null) },
+        { QTKey.AutoWardensPaean, (true, "是否开启自动驱散", null) },
     };
     
     public Rotation Build(string settingFolder)
