@@ -763,18 +763,25 @@ public class BardRotationEntry : IRotationEntry
         if (ImGui.CollapsingHeader("   时间轴更新"))
         {
             ImGui.Separator();
-            foreach (var timeline in TimeLineUpdater.jsonData)
+            if (TimeLineUpdater.jsonData == null)
             {
-                bool selected = BardSettings.Instance.SelectedTimeLinesForUpdate.TryGetValue(timeline.Name, out bool isSelected) && isSelected;
-                if (ImGui.Checkbox(timeline.Name, ref selected))
-                {
-                    BardSettings.Instance.SelectedTimeLinesForUpdate[timeline.Name] = selected;
-                    BardSettings.Instance.Save();
-                }
-                ImGui.Separator();
+                ImGui.TextColored(new Vector4(1, 0.7f, 0, 1), "时间轴数据未加载，请检查 Github 是否能正常访问");
             }
-            if (ImGui.Button("保存时间轴设置"))
-                BardSettings.Instance.Save();
+            else
+            {
+                foreach (var timeline in TimeLineUpdater.jsonData)
+                {
+                    bool selected = BardSettings.Instance.SelectedTimeLinesForUpdate.TryGetValue(timeline.Name, out bool isSelected) && isSelected;
+                    if (ImGui.Checkbox(timeline.Name, ref selected))
+                    {
+                        BardSettings.Instance.SelectedTimeLinesForUpdate[timeline.Name] = selected;
+                        BardSettings.Instance.Save();
+                    }
+                    ImGui.Separator();
+                }
+                if (ImGui.Button("保存时间轴设置"))
+                    BardSettings.Instance.Save();
+            }
             ImGui.Separator();
         }
 

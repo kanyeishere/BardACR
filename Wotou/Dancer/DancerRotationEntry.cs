@@ -396,18 +396,25 @@ public class DancerRotationEntry : IRotationEntry
         if (ImGui.CollapsingHeader("   时间轴更新"))
         {
             ImGui.Separator();
-            foreach (var timeline in TimeLineUpdater.jsonData)
+            if (TimeLineUpdater.jsonData == null)
             {
-                bool selected = DancerSettings.Instance.SelectedTimeLinesForUpdate.TryGetValue(timeline.Name, out bool isSelected) && isSelected;
-                if (ImGui.Checkbox(timeline.Name, ref selected))
-                {
-                    DancerSettings.Instance.SelectedTimeLinesForUpdate[timeline.Name] = selected;
-                    DancerSettings.Instance.Save();
-                }
-                ImGui.Separator();
+                ImGui.TextColored(new Vector4(1, 0.7f, 0, 1), "时间轴数据未加载，请检查 Github 是否能正常访问");
             }
-            if (ImGui.Button("保存时间轴设置"))
-                DancerSettings.Instance.Save();
+            else
+            {
+                foreach (var timeline in TimeLineUpdater.jsonData)
+                {
+                    bool selected = DancerSettings.Instance.SelectedTimeLinesForUpdate.TryGetValue(timeline.Name, out bool isSelected) && isSelected;
+                    if (ImGui.Checkbox(timeline.Name, ref selected))
+                    {
+                        DancerSettings.Instance.SelectedTimeLinesForUpdate[timeline.Name] = selected;
+                        DancerSettings.Instance.Save();
+                    }
+                    ImGui.Separator();
+                }
+                if (ImGui.Button("保存时间轴设置"))
+                    DancerSettings.Instance.Save();
+            }
             ImGui.Separator();
         }
         

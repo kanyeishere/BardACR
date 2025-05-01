@@ -43,6 +43,7 @@ public static class BardSlotResolverConfig
             new SlotResolverData(new BardSongAbility(), SlotMode.OffGcd),
             new SlotResolverData(new BardSongSpecialOrderAbility(), SlotMode.OffGcd),
             new SlotResolverData(new BardHeartBreakAbility(), SlotMode.OffGcd),
-            new SlotResolverData(new BardNaturesMinneAbility(), SlotMode.OffGcd),            
+            new SlotResolverData(new BardNaturesMinneAbility(), SlotMode.OffGcd),   
+            new SlotResolverData(new BardTheWardensPaeanAbility(), SlotMode.OffGcd),
         };
     }
