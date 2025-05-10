@@ -80,7 +80,7 @@ public class BardSettings
     public bool IsWardensPanelLocked = false; // 是否锁定光阴神面板位置
 
     
-    public bool IsReadInfoWindow047 = false;
+    public bool IsReadInfoWindow08 = false;
     
     public bool IsOpenCommandWindow = true; // 是否开启指令窗口
     

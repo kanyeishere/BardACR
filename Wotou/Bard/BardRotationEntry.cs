@@ -251,7 +251,7 @@ public class BardRotationEntry : IRotationEntry
         WardensPaeanPanel?.DrawHotkeyWindow(new QtStyle(BardSettings.Instance.JobViewSave));
         WardensPaeanPanel = new HotkeyWindow(myJobViewSave, "WardensPaeanPanel");
         WardensPaeanPanel.HotkeyLineCount = 1;
-        if (!BardSettings.Instance.IsReadInfoWindow047)
+        if (!BardSettings.Instance.IsReadInfoWindow08)
             InfoWindow.Draw();
         if (BardSettings.Instance.IsOpenCommandWindow)
             BardCommandWindow.Draw();

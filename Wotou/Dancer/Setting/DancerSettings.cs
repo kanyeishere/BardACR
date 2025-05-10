@@ -70,7 +70,7 @@ public class DancerSettings
     
     public bool IsInternationalServer = false; // 是否国际服
     
-    public bool IsReadInfoWindow047 = false;
+    public bool IsReadInfoWindow08 = false;
     
     public bool IsOpenCommandWindow = true;
     
