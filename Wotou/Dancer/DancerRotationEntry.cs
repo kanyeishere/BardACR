@@ -116,7 +116,7 @@ public class DancerRotationEntry : IRotationEntry
                     )
                 {
                     LogHelper.Print("not use ImprovisationFinish");
-                    slot.Actions.Dequeue();
+                    slot.Actions.RemoveAt(0);
                     return -1;
                 }
             }
