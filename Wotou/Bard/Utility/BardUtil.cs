@@ -126,6 +126,7 @@ public static class BardUtil
         
         if (TargetHelper.GetEnemyCountInsideSector(Core.Me, Core.Me.GetCurrTarget(), 12, 90) > 1 &&
             BardRotationEntry.QT.GetQt("AOE") &&
+            Core.Me.GetCurrTarget().DistanceToPlayer() <= 12 &&
             Core.Resolve<MemApiSpell>().CheckActionChange(Ladonsbite).IsUnlock())
             return Core.Resolve<MemApiSpell>().CheckActionChange(Ladonsbite).GetSpell();
         return Core.Resolve<MemApiSpell>().CheckActionChange(BurstShot).GetSpell();
