@@ -102,24 +102,28 @@ public class EmpyrealAfterDeathSequence: ISlotSequence
             partyBuffCountdown >= 39)
             slot.Add(ApexArrow.GetSpell());
         
-        else if (!Core.Me.GetCurrTarget().HasLocalPlayerAura(WindBiteDot) &&
-            !Core.Me.GetCurrTarget().HasLocalPlayerAura(StormBiteDot) &&
-            BardRotationEntry.QT.GetQt(QTKey.DOT))
-            slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(WindBite).GetSpell());
-        else if (!Core.Me.GetCurrTarget().HasLocalPlayerAura(CausticBiteDot) && 
-                 !Core.Me.GetCurrTarget().HasLocalPlayerAura(VenomousBiteDot) &&
-                 BardRotationEntry.QT.GetQt(QTKey.DOT))
-            slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(VenomousBite).GetSpell());
-        else if (Core.Me.GetCurrTarget() != null &&
-                 ((Core.Me.GetCurrTarget().HasLocalPlayerAura(CausticBiteDot) &&
-                   !Core.Me.GetCurrTarget().HasMyAuraWithTimeleft(CausticBiteDot, 5500)) ||
-                  (Core.Me.GetCurrTarget().HasLocalPlayerAura(StormBiteDot) &&
-                   !Core.Me.GetCurrTarget().HasMyAuraWithTimeleft(StormBiteDot, 5500)) ||
-                  (Core.Me.GetCurrTarget().HasLocalPlayerAura(VenomousBiteDot) &&
-                   !Core.Me.GetCurrTarget().HasMyAuraWithTimeleft(VenomousBiteDot, 5500)) ||
-                  (Core.Me.GetCurrTarget().HasLocalPlayerAura(WindBiteDot) &&
-                   !Core.Me.GetCurrTarget().HasMyAuraWithTimeleft(WindBiteDot, 5500))))
-            slot.Add(IronJaws.GetSpell());
+        else if (!BardBattleData.Instance.DotBlackList.Contains(Core.Me.GetCurrTarget().DataId) && 
+                 !DotBlacklistHelper.IsBlackList(Core.Me.GetCurrTarget()))
+        {
+            if (!Core.Me.GetCurrTarget().HasLocalPlayerAura(WindBiteDot) &&
+                !Core.Me.GetCurrTarget().HasLocalPlayerAura(StormBiteDot) &&
+                BardRotationEntry.QT.GetQt(QTKey.DOT))
+                slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(WindBite).GetSpell());
+            else if (!Core.Me.GetCurrTarget().HasLocalPlayerAura(CausticBiteDot) &&
+                     !Core.Me.GetCurrTarget().HasLocalPlayerAura(VenomousBiteDot) &&
+                     BardRotationEntry.QT.GetQt(QTKey.DOT))
+                slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(VenomousBite).GetSpell());
+            else if (Core.Me.GetCurrTarget() != null &&
+                     ((Core.Me.GetCurrTarget().HasLocalPlayerAura(CausticBiteDot) &&
+                       !Core.Me.GetCurrTarget().HasMyAuraWithTimeleft(CausticBiteDot, 5500)) ||
+                      (Core.Me.GetCurrTarget().HasLocalPlayerAura(StormBiteDot) &&
+                       !Core.Me.GetCurrTarget().HasMyAuraWithTimeleft(StormBiteDot, 5500)) ||
+                      (Core.Me.GetCurrTarget().HasLocalPlayerAura(VenomousBiteDot) &&
+                       !Core.Me.GetCurrTarget().HasMyAuraWithTimeleft(VenomousBiteDot, 5500)) ||
+                      (Core.Me.GetCurrTarget().HasLocalPlayerAura(WindBiteDot) &&
+                       !Core.Me.GetCurrTarget().HasMyAuraWithTimeleft(WindBiteDot, 5500))))
+                slot.Add(IronJaws.GetSpell());
+        }
         else
             slot.Add(GetBaseGcd());
     }

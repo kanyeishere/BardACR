@@ -58,6 +58,9 @@ public class BurstingAfterDeathSequence: ISlotSequence
             !Core.Me.GetCurrTarget().HasLocalPlayerAura(StormBiteDot) &&
             BardRotationEntry.QT.GetQt(QTKey.DOT))
             slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(StormBite).GetSpell());
+        else if (BardBattleData.Instance.DotBlackList.Contains(Core.Me.GetCurrTarget().DataId) ||
+                 DotBlacklistHelper.IsBlackList(Core.Me.GetCurrTarget()))
+            slot.Add(GetBaseGcd());
         else if (!Core.Me.GetCurrTarget().HasLocalPlayerAura(VenomousBiteDot) &&
                  !Core.Me.GetCurrTarget().HasLocalPlayerAura(CausticBiteDot) &&
                  BardRotationEntry.QT.GetQt(QTKey.DOT))

@@ -24,6 +24,8 @@ public class BardBattleData
     
     public bool UseCountdown = false;
     
+    public HashSet<uint> DotBlackList = new HashSet<uint>();
+    
     public bool HasFirst120SBuff = false;
     
     public bool HasSecond120SBuff = false;

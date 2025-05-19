@@ -34,6 +34,8 @@ public class BardDotGcd : ISlotResolver
             return -1;
         if (DotBlacklistHelper.IsBlackList(target))
             return -1;
+        if (BardBattleData.Instance.DotBlackList.Contains(target.DataId))
+            return -1;
         if (!TargetHelper.IsBoss(target) && !BardSettings.Instance.ApplyDotOnTrashMobs && BardSettings.Instance.IsDailyMode)
             return -1;
         /*if (Core.Me.HasAura(HawkEyeBuff) || Core.Me.HasAura(BarrageBuff))

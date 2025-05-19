@@ -40,6 +40,10 @@ public class BardIronJawsGcd : ISlotResolver
         var target = Core.Me.GetCurrTarget();
         if (target == null)
             return -1;
+        if (DotBlacklistHelper.IsBlackList(target))
+            return -1;
+        if (BardBattleData.Instance.DotBlackList.Contains(target.DataId))
+            return -1;
         if (!HasAnyDot(target, 风dotBuffs) || !HasAnyDot(target, 毒dotBuffs))
             return -1;
         
