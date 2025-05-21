@@ -125,6 +125,8 @@ public class EmpyrealAfterDeathSequence: ISlotSequence
                       (Core.Me.GetCurrTarget().HasLocalPlayerAura(WindBiteDot) &&
                        !Core.Me.GetCurrTarget().HasMyAuraWithTimeleft(WindBiteDot, 5500))))
                 slot.Add(IronJaws.GetSpell());
+            else
+                slot.Add(GetBaseGcd());
         }
         else
             slot.Add(GetBaseGcd());

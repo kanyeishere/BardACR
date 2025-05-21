@@ -74,9 +74,23 @@ public class BardRotationEventHandler : IRotationEventHandler
             PlayerOptions.Instance.Stop = true;*/
         
         if (Core.Me.IsMoving())
+        {
             Core.Resolve<MemApiMove>().CancelMove();
+            BardBattleData.Instance.TargetPosition = null;
+            if (BardBattleData.Instance.IsFollowing)
+            {
+                BardBattleData.Instance.FollowingTarget = null;
+            }
+        }
         if (Core.Resolve<MemApiMove>().IsMoving())
+        {
             Core.Resolve<MemApiMove>().CancelMove();
+            BardBattleData.Instance.TargetPosition = null;
+            if (BardBattleData.Instance.IsFollowing)
+            {
+                BardBattleData.Instance.FollowingTarget = null;
+            }
+        }
 
         
         
