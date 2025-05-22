@@ -33,6 +33,8 @@ public class BardPitchPerfectAbility : ISlotResolver
         if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 650 &&
            BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow) && EmpyrealArrow.IsUnlock())
             return -1;
+        if (TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget(), 25,5) < BardBattleData.Instance.PitchPerfectMinEnemyCount)
+            return -1;
         if (Core.Resolve<JobApi_Bard>().Repertoire == 3)
             return 1;
         // 旅神歌最后一跳诗心
@@ -48,7 +50,7 @@ public class BardPitchPerfectAbility : ISlotResolver
             EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 2300 && 
             EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds > 600 && 
             !EmpyrealArrow.RecentlyUsed() &&
-            Core.Resolve<JobApi_Bard>().SongTimer >= 2950)
+            Core.Resolve<JobApi_Bard>().SongTimer >= 3000)
             return 1;
         return -1;
     }

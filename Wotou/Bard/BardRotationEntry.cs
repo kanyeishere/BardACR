@@ -86,6 +86,7 @@ public class BardRotationEntry : IRotationEntry
         rot.AddTriggerAction(new BardSongOrderAction());
         rot.AddTriggerAction(new BardHeartBreakSaveAction());
         rot.AddTriggerAction(new BardDotBlacklistAction());
+        rot.AddTriggerAction(new BardPitchPerfectMinCountAction());
 
         // 添加时间轴控制
         rot.AddTriggerCondition(new BardSongTimerCondition());

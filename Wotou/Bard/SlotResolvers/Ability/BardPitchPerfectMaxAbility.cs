@@ -24,6 +24,8 @@ public class BardPitchPerfectMaxAbility : ISlotResolver
             return -2;
         if (Core.Resolve<JobApi_Bard>().ActiveSong != Wanderer)
             return -1;
+        if (TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget(), 25,5) < BardBattleData.Instance.PitchPerfectMinEnemyCount)
+            return -1;
         if (Core.Resolve<JobApi_Bard>().Repertoire == 3  && Core.Resolve<JobApi_Bard>().SongTimer % 3000 < 2600)
             return 1;
         

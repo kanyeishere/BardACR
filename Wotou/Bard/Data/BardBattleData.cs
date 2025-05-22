@@ -23,6 +23,8 @@ public class BardBattleData
     public int WandererTimes = 0;
     
     public bool UseCountdown = false;
+
+    public int PitchPerfectMinEnemyCount = 0;
     
     public HashSet<uint> DotBlackList = new HashSet<uint>();
     
