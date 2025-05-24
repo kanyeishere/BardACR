@@ -108,27 +108,39 @@ public static class BardUtil
     {
         if (Core.Me.HasAura(BarrageBuff))
         {
-            if (TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget(), 25,5) > 3 && 
-                BardRotationEntry.QT.GetQt("AOE") && 
+            if (TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget(), 25, 5) > 3 &&
+                BardRotationEntry.QT.GetQt("AOE") &&
                 Core.Resolve<MemApiSpell>().CheckActionChange(Shadowbite).IsUnlock())
-                return Core.Resolve<MemApiSpell>().CheckActionChange(Shadowbite).GetSpell();
+                return GetSmartAoeSpell(Shadowbite, 4);
             return Core.Resolve<MemApiSpell>().CheckActionChange(RefulgentArrow).GetSpell();
         }
-        
+
         if (Core.Me.HasAura(HawkEyeBuff))
         {
-            if (TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget(), 25,5) > 1 && 
-                BardRotationEntry.QT.GetQt("AOE") && 
+            if (TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget(), 25, 5) > 1 &&
+                BardRotationEntry.QT.GetQt("AOE") &&
                 Core.Resolve<MemApiSpell>().CheckActionChange(Shadowbite).IsUnlock())
-                return Core.Resolve<MemApiSpell>().CheckActionChange(Shadowbite).GetSpell();
+                return GetSmartAoeSpell(Shadowbite, 2);
             return Core.Resolve<MemApiSpell>().CheckActionChange(RefulgentArrow).GetSpell();
         }
-        
+
         if (TargetHelper.GetEnemyCountInsideSector(Core.Me, Core.Me.GetCurrTarget(), 12, 90) > 1 &&
             BardRotationEntry.QT.GetQt("AOE") &&
             Core.Me.GetCurrTarget().DistanceToPlayer() <= 12 &&
             Core.Resolve<MemApiSpell>().CheckActionChange(Ladonsbite).IsUnlock())
-            return Core.Resolve<MemApiSpell>().CheckActionChange(Ladonsbite).GetSpell();
+            return GetSmartAoeSpell(Ladonsbite, 2);
         return Core.Resolve<MemApiSpell>().CheckActionChange(BurstShot).GetSpell();
+    }
+    
+    public static Spell GetSmartAoeSpell(uint spellId, int minTargetCount, float maxDistance = 25)
+    {
+        if (!BardRotationEntry.QT.GetQt(QTKey.SmartAoeTarget))
+            return Core.Resolve<MemApiSpell>().CheckActionChange(spellId).GetSpell();
+
+        var target = TargetHelper.GetMostCanTargetObjects(spellId, minTargetCount);
+        if (target != null && target.IsValid() && target.DistanceToPlayer() <= maxDistance)
+            return Core.Resolve<MemApiSpell>().CheckActionChange(spellId).GetSpell(target);
+
+        return Core.Resolve<MemApiSpell>().CheckActionChange(spellId).GetSpell();
     }
 }

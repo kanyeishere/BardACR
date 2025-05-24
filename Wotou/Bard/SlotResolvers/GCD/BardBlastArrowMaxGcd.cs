@@ -3,6 +3,7 @@ using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using Wotou.Bard.Data;
+using Wotou.Bard.Utility;
 
 namespace Wotou.Bard.SlotResolvers.GCD;
 
@@ -23,6 +24,6 @@ public class BardBlastArrowMaxGcd : ISlotResolver
 
     public void Build(Slot slot)
     {
-        slot.Add(BlastArrow.GetSpell());
+        slot.Add(BardUtil.GetSmartAoeSpell(BlastArrow, 1));
     }
 }

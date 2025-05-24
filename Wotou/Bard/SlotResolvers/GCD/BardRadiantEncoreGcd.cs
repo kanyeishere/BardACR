@@ -54,6 +54,6 @@ public class BardRadiantEncoreGcd : ISlotResolver
 
     public void Build(Slot slot)
     {
-        slot.Add(RadiantEncore.GetSpell());
+        slot.Add(BardUtil.GetSmartAoeSpell(RadiantEncore, 1));
     }
 }

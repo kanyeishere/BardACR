@@ -62,7 +62,8 @@ public class ApexArrowHotkeyResolver: IHotkeyResolver
 
     public new void Run()
     {
-        Spell spell = Core.Resolve<MemApiSpell>().CheckActionChange(this.SpellId).GetSpell(this.TargetType);
+        // var spell = Core.Resolve<MemApiSpell>().CheckActionChange(this.SpellId).GetSpell(this.TargetType);
+        var spell = BardUtil.GetSmartAoeSpell(this.SpellId, 1);
         if (!BardBattleData.Instance.HotkeyUseHighPrioritySlot)
         {
             if (AI.Instance.BattleData.NextSlot == null)

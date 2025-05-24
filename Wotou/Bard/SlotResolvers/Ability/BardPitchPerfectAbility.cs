@@ -7,6 +7,7 @@ using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.JobGauge.Enums;
 using Wotou.Bard.Data;
 using Wotou.Bard.Setting;
+using Wotou.Bard.Utility;
 
 namespace Wotou.Bard.SlotResolvers.Ability;
 
@@ -55,6 +56,6 @@ public class BardPitchPerfectAbility : ISlotResolver
         return -1;
     }
     
-    public void Build(Slot slot) => slot.Add(PitchPerfect.GetSpell());
+    public void Build(Slot slot) => slot.Add(BardUtil.GetSmartAoeSpell(PitchPerfect, 1));
 
 }

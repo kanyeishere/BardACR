@@ -64,6 +64,6 @@ public class BardApexMaxGcd : ISlotResolver
 
     public void Build(Slot slot)
     {
-        slot.Add(ApexArrow.GetSpell());
+        slot.Add(BardUtil.GetSmartAoeSpell(ApexArrow, 1));
     }
 }

@@ -37,6 +37,7 @@ public class BardCommandWindow
         ("QT", "/Wotou_BRD 对齐旅神_qt", "/Wotou_BRD burstwithwanderer_qt"),
         ("QT", "/Wotou_BRD 清空鹰眼_qt", "/Wotou_BRD clearhawkeyesbuffbeforedots_qt"),
         ("QT", "/Wotou_BRD 自动驱散_qt", "/Wotou_BRD autowardenspaean_qt"),
+        ("QT", "/Wotou_BRD 智能AOE目标_qt", "/Wotou_BRD smartaoetarget_qt"),
     };
 
 

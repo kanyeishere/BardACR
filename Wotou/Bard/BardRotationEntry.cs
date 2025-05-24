@@ -57,6 +57,7 @@ public class BardRotationEntry : IRotationEntry
         { QTKey.EmpyrealArrowBeforeGcd, (false, "Boss上天后，落地第一个技能是否使用九天", null) },
         { QTKey.ClearHawkEyesBuffBeforeDots, (true, "在上毒前是否清空鹰眼Buff", null) },
         { QTKey.AutoWardensPaean, (true, "是否开启自动驱散", null) },
+        { QTKey.SmartAoeTarget, (false, "是否智能选择AOE目标", null) }
     };
     
     public Rotation Build(string settingFolder)
@@ -374,6 +375,7 @@ public class BardRotationEntry : IRotationEntry
                 QT.SetQt("强对齐", false);
                 QT.SetQt("对齐旅神", false);
                 QT.SetQt("攒碎心箭", false);
+                QT.SetQt(QTKey.SmartAoeTarget, true);
             });
             ImGui.SameLine();
             DrawModeButton("高难模式", false, () =>
@@ -383,6 +385,7 @@ public class BardRotationEntry : IRotationEntry
                 QT.SetQt("强对齐", true);
                 QT.SetQt("对齐旅神", true);
                 QT.SetQt("攒碎心箭", true);
+                QT.SetQt(QTKey.SmartAoeTarget, false);
             });
             if (BardSettings.Instance.IsDailyMode)
             {

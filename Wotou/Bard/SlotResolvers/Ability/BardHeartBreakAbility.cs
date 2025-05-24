@@ -112,7 +112,7 @@ public class BardHeartBreakAbility : ISlotResolver
         if (TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget(), 25, 8) > 1  && 
             BardRotationEntry.QT.GetQt("AOE") && 
             Core.Resolve<MemApiSpell>().CheckActionChange(RainOfDeath).IsUnlock())
-            return Core.Resolve<MemApiSpell>().CheckActionChange(RainOfDeath).GetSpell();
+            return BardUtil.GetSmartAoeSpell(RainOfDeath, 1);
         return Core.Resolve<MemApiSpell>().CheckActionChange(HeartBreak).GetSpell();
     }
 

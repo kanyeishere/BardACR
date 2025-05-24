@@ -3,6 +3,7 @@ using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using Wotou.Bard.Data;
+using Wotou.Bard.Utility;
 
 namespace Wotou.Bard.SlotResolvers.GCD;
 
@@ -23,6 +24,6 @@ public class BardRadiantEncoreMaxGcd : ISlotResolver
 
     public void Build(Slot slot)
     {
-        slot.Add(RadiantEncore.GetSpell());
+        slot.Add(BardUtil.GetSmartAoeSpell(RadiantEncore, 1));
     }
 }

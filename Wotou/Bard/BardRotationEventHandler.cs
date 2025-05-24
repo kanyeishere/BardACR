@@ -105,6 +105,7 @@ public class BardRotationEventHandler : IRotationEventHandler
             BardRotationEntry.QT.SetQt("强对齐", false);
             BardRotationEntry.QT.SetQt("对齐旅神", false);
             BardRotationEntry.QT.SetQt("攒碎心箭", false);
+            BardRotationEntry.QT.SetQt(QTKey.SmartAoeTarget, true);
             
             if (BardSettings.Instance.EnableAutoPeloton && 
                 Core.Me.IsMoving() &&

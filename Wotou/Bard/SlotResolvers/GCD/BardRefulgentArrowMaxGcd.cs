@@ -5,6 +5,7 @@ using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
 using Wotou.Bard.Data;
+using Wotou.Bard.Utility;
 
 namespace Wotou.Bard.SlotResolvers.GCD;
 
@@ -31,7 +32,7 @@ public class BardRefulgentArrowMaxGcd : ISlotResolver
     private static Spell GetGcd()
     {
         if (TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget(), 25,5) > 3  && BardRotationEntry.QT.GetQt("AOE"))
-            return Core.Resolve<MemApiSpell>().CheckActionChange(Shadowbite).GetSpell();
+            return BardUtil.GetSmartAoeSpell(Shadowbite, 4);
         return Core.Resolve<MemApiSpell>().CheckActionChange(RefulgentArrow).GetSpell();
     }
 }

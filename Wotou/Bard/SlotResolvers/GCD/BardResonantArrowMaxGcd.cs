@@ -25,6 +25,6 @@ public class BardResonantArrowMaxGcd : ISlotResolver
 
     public void Build(Slot slot)
     {
-        slot.Add(ResonantArrow.GetSpell());
+        slot.Add(BardUtil.GetSmartAoeSpell(ResonantArrow, 1));
     }
 }
