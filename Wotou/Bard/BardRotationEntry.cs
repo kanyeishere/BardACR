@@ -94,6 +94,8 @@ public class BardRotationEntry : IRotationEntry
         rot.AddTriggerCondition(new BardActiveSongCondition());
         rot.AddTriggerCondition(new BardSoulVoiceCondition());
         rot.AddTriggerCondition(new BardRepertoireCondition());
+        rot.AddTriggerCondition(new TargetInRangeCondition());
+        rot.AddTriggerCondition(new TargetNotInRangeCondition());
 
         return rot;
     }
