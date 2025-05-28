@@ -68,7 +68,7 @@ namespace Wotou.Dancer
         {
             SmartUseHighPrioritySlot();
 
-            if (DancerSettings.Instance.M6SAutoTarget)
+            if (DancerSettings.Instance.M6SAutoTarget && Core.Resolve<MemApiZoneInfo>().GetCurrTerrId() == 1259)
             {
                 Core.Me.SetTarget(AutoTarget());
             }
