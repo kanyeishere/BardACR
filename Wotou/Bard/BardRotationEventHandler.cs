@@ -150,13 +150,6 @@ public class BardRotationEventHandler : IRotationEventHandler
             BardRotationEntry.QT.SetQt("强对齐", false);
         }
         
-        if (BardSettings.Instance.IsDailyMode)
-        {
-            BardRotationEntry.QT.SetQt("强对齐", false);
-            BardRotationEntry.QT.SetQt("对齐旅神", false);
-            BardRotationEntry.QT.SetQt("攒碎心箭", false);
-        }
-        
         // 重置 QT 值
         foreach (var (key, value) in BardRotationEntry.DefaultQTValues)
         {
@@ -167,6 +160,14 @@ public class BardRotationEventHandler : IRotationEventHandler
 
             // 设置 QT 值
             BardRotationEntry.QT.SetQt(key, qtValue);
+        }
+        
+        if (BardSettings.Instance.IsDailyMode)
+        {
+            BardRotationEntry.QT.SetQt("强对齐", false);
+            BardRotationEntry.QT.SetQt("对齐旅神", false);
+            BardRotationEntry.QT.SetQt("攒碎心箭", false);
+            BardRotationEntry.QT.SetQt(QTKey.SmartAoeTarget, true);
         }
     }
 

@@ -244,6 +244,7 @@ namespace Wotou.Dancer
             
             if (DancerSettings.Instance.IsDailyMode)
             {
+                DancerRotationEntry.QT.SetQt(QTKey.SmartAoeTarget, true);
                 
                 if (Core.Resolve<JobApi_Dancer>().IsDancing && DancerSettings.Instance.EnableAutoDancing)
                 {
@@ -348,6 +349,11 @@ namespace Wotou.Dancer
                     : DancerRotationEntry.DefaultQTValues[key].DefaultValue;
 
                 DancerRotationEntry.QT.SetQt(key, qtValue);
+            }
+
+            if (DancerSettings.Instance.IsDailyMode)
+            {
+                DancerRotationEntry.QT.SetQt(QTKey.SmartAoeTarget, true);
             }
         }
 
