@@ -127,5 +127,17 @@ namespace Wotou.Dancer.Utility
         {
             return Core.Resolve<JobApi_Dancer>().NextStep.GetSpell();
         }
+        
+        public static Spell GetSmartAoeSpell(uint spellId, int minTargetCount, float maxDistance = 25)
+        {
+            if (!DancerRotationEntry.QT.GetQt(QTKey.SmartAoeTarget))
+                return Core.Resolve<MemApiSpell>().CheckActionChange(spellId).GetSpell();
+
+            var target = TargetHelper.GetMostCanTargetObjects(spellId, minTargetCount);
+            if (target != null && target.IsValid() && target.DistanceToPlayer() <= maxDistance)
+                return Core.Resolve<MemApiSpell>().CheckActionChange(spellId).GetSpell(target);
+
+            return Core.Resolve<MemApiSpell>().CheckActionChange(spellId).GetSpell();
+        }
     }
 }

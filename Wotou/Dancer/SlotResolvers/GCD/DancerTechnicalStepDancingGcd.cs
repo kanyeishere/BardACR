@@ -32,7 +32,7 @@ public class DancerTechnicalStepDancingGcd: ISlotResolver
 
     public void Build(Slot slot)
     {
-        if (Core.Me.HasAura(TechnicalStep) && Core.Resolve<JobApi_Dancer>().CompleteSteps == 4)
+        if (Core.Me.HasAura(TechnicalStep) && Core.Resolve<JobApi_Dancer>().CompleteSteps == 4 && QuadrupleTechnicalFinish.IsUnlockWithCDCheck())
         {
             AI.Instance.BattleData.CurrGcdAbilityCount = 0;
             slot.Add(QuadrupleTechnicalFinish.GetSpell());
