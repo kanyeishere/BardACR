@@ -27,7 +27,9 @@ public class DancerCommandWindow
         ("QT", "/Wotou_DNC 剑舞_qt", "/Wotou_DNC saberdance_qt"),
         ("QT", "/Wotou_DNC 扇舞_qt", "/Wotou_DNC fandance_qt"),
         ("QT", "/Wotou_DNC 自动华尔兹_qt", "/Wotou_DNC autocuringwaltz_qt"),
-        ("QT", "/Wotou_DNC 倾泻资源_qt", "/Wotou_DNC finalburst_qt")
+        ("QT", "/Wotou_DNC 倾泻资源_qt", "/Wotou_DNC finalburst_qt"),
+        ("QT", "/Wotou_DNC 强对齐_qt", "/Wotou_DNC strongalign_qt"),
+        ("QT", "/Wotou_DNC 智能AOE目标_qt", "/Wotou_DNC smartaoetarget_qt"),
     };
 
     public static void Draw()
