@@ -6,6 +6,7 @@ using AEAssist.JobApi;
 using AEAssist.MemoryApi;
 using Wotou.Dancer.Data;
 using Wotou.Dancer.Setting;
+using Wotou.Dancer.Utility;
 
 namespace Wotou.Dancer.GCD;
 
@@ -52,6 +53,11 @@ public class DancerSaberDanceGcd : ISlotResolver
 
     public void Build(Slot slot)
     {
-        slot.Add(Core.Resolve<MemApiSpell>().CheckActionChange(SaberDance).GetSpell());
+        slot.Add(Core
+            .Resolve<MemApiSpell>()
+            .CheckActionChange(
+                DancerUtil.GetSmartAoeSpell(
+                        Core.Resolve<MemApiSpell>().CheckActionChange(SaberDance)).Id)
+            .GetSpell());
     }
 }

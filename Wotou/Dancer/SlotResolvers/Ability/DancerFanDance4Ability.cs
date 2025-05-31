@@ -6,6 +6,7 @@ using AEAssist.Helper;
 using AEAssist.JobApi;
 using AEAssist.MemoryApi;
 using Wotou.Dancer.Data;
+using Wotou.Dancer.Utility;
 
 namespace Wotou.Dancer.Ability;
 
@@ -23,6 +24,7 @@ public class DancerFanDance4Ability : ISlotResolver
 
     public void Build(Slot slot)
     {
-        slot.Add(FanDance4.GetSpell());
+        slot.Add(DancerUtil.GetSmartAoeSpell(FanDance4));
+        // slot.Add(FanDance4.GetSpell());
     }
 }

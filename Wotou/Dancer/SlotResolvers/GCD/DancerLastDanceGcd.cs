@@ -6,6 +6,7 @@ using AEAssist.JobApi;
 using AEAssist.MemoryApi;
 using Wotou.Dancer.Data;
 using Wotou.Dancer.Setting;
+using Wotou.Dancer.Utility;
 
 namespace Wotou.Dancer.GCD;
 
@@ -33,6 +34,7 @@ public class DancerLastDanceGcd : ISlotResolver
 
     public void Build(Slot slot)
     {
-        slot.Add(LastDance.GetSpell());
+        slot.Add(DancerUtil.GetSmartAoeSpell(LastDance));
+        // slot.Add(LastDance.GetSpell());
     }
 }

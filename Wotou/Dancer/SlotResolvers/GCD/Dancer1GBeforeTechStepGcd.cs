@@ -18,6 +18,8 @@ public class Dancer1GBeforeTechStepGcd : ISlotResolver
     private const uint Fountain = DancerDefinesData.Spells.Fountain;
     private const uint SaberDance = DancerDefinesData.Spells.SaberDance;
     private const uint LastDance = DancerDefinesData.Spells.LastDance;
+    private const uint Windmill = DancerDefinesData.Spells.Windmill;
+    private const uint BladeShower = DancerDefinesData.Spells.Bladeshower;
 
     private const uint LastDanceReady = DancerDefinesData.Buffs.LastDanceReady;
     private const uint SilkenFlow = DancerDefinesData.Buffs.SilkenFlow;
@@ -41,6 +43,11 @@ public class Dancer1GBeforeTechStepGcd : ISlotResolver
     {
         if (Core.Resolve<MemApiSpell>().GetLastComboSpellId() == Cascade)
             return Fountain.GetSpell();
+        if (BladeShower.GetSpell().IsReadyWithCanCast() &&
+            Core.Resolve<MemApiSpell>().GetLastComboSpellId() == Windmill &&
+            Core.Resolve<MemApiSpell>().GetComboTimeLeft().TotalMilliseconds > 10.0 &&
+            DancerUtil.CanUseAoeCombo())
+            return BladeShower.GetSpell();
         if (Core.Resolve<MemApiSpell>().GetLastComboSpellId() == Fountain)
         {
             if (Core.Me.HasAura(SilkenFlow) || Core.Me.HasAura(SilkenSymmetry))

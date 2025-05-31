@@ -3,6 +3,7 @@ using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using Wotou.Dancer.Data;
+using Wotou.Dancer.Utility;
 
 namespace Wotou.Dancer.GCD;
 
@@ -22,6 +23,7 @@ public class DancerStarfallDanceGCD : ISlotResolver
 
     public void Build(Slot slot)
     {
-        slot.Add(DancerDefinesData.Spells.StarfallDance.GetSpell());
+        // slot.Add(DancerDefinesData.Spells.StarfallDance.GetSpell());
+        slot.Add(DancerUtil.GetSmartAoeSpell(StarfallDance));
     }
 }

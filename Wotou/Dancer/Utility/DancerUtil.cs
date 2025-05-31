@@ -128,7 +128,7 @@ namespace Wotou.Dancer.Utility
             return Core.Resolve<JobApi_Dancer>().NextStep.GetSpell();
         }
         
-        public static Spell GetSmartAoeSpell(uint spellId, int minTargetCount, float maxDistance = 25)
+        public static Spell GetSmartAoeSpell(uint spellId, int minTargetCount = 1, float maxDistance = 25)
         {
             if (!DancerRotationEntry.QT.GetQt(QTKey.SmartAoeTarget))
                 return Core.Resolve<MemApiSpell>().CheckActionChange(spellId).GetSpell();
