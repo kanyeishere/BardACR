@@ -560,6 +560,7 @@ public class DancerRotationEntry : IRotationEntry
         { QTKey.SaberDance, (true, "是否使用剑舞与拂晓舞", null) },
         { QTKey.FanDance, (true, "是否使用扇舞", null) },
         { QTKey.AutoCuringWaltz, (true, "是否自动使用治疗之华尔兹", null) },
-        { QTKey.FinalBurst, (false, "是否倾泻资源", null) }
+        { QTKey.FinalBurst, (false, "是否倾泻资源", null) },
+        { QTKey.SmartAoeTarget, (false, "是否智能选择AOE目标", null) }
     };
 }
