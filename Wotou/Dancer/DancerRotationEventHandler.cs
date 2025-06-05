@@ -491,17 +491,19 @@ namespace Wotou.Dancer
                 .Where(obj => obj is IBattleChara)
                 .Cast<IBattleChara>()
                 .Where(c => c.DistanceToPlayer() < maxDistance && c.IsEnemy())
-                .ToArray();
+                .ToArray()
+                .OrderBy(c =>c.DistanceToPlayer());
         
             var 无目标鱼 = enemies.FirstOrDefault(c => c.DataId == 18346 && c.TargetObject == null);
             var 有目标鱼 = enemies.FirstOrDefault(c => c.DataId == 18346);
+            var 所有鱼 = enemies.Where(c => c.DataId == 18346).ToArray();
             var 自己有鱼 = enemies.Any(c => c.DataId == 18346 && c.TargetObject?.IsMe() == true);
             var 哈基米 = enemies.FirstOrDefault(c => c.DataId == 18347);
             var 羊 = enemies.FirstOrDefault(c => c.DataId == 18344);
             var 马 = enemies.FirstOrDefault(c => c.DataId == 18345);
             var boss = enemies.FirstOrDefault(c => c.DataId == 18335);
         
-            if (!自己有鱼 && 无目标鱼 != null)
+            if (!自己有鱼 && 无目标鱼 != null && 所有鱼.Length >= 2)
             {
                 var battleTime = AI.Instance.BattleData.CurrBattleTimeInMs;
             
@@ -515,7 +517,7 @@ namespace Wotou.Dancer
         
             if (马 != null) return 马;
             if (哈基米 != null) return 哈基米;
-            if (有目标鱼 != null) return 有目标鱼;
+            if (有目标鱼 != null && 所有鱼.Length >= 2) return 有目标鱼;
             if (羊 != null) return 羊;
             if (boss != null) return boss;
         

@@ -25,6 +25,9 @@ public class BardDefinesData
     public const ushort RadiantFinale = 2964;
     public const ushort PlayingRadiantFinale = 2722;
     public const ushort RadiantEncoreReady = 3863;
+    public const ushort Troubadour = 1934;
+    public const ushort ShieldSamba = 1826;
+    public const ushort Tactician = 1951;
   }
 
   public static class Spells

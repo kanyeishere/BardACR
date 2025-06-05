@@ -31,7 +31,9 @@ public class DancerDefinesData
             LastDanceReady = 3867,
             FinishingMoveReady = 3868,
             DanceOfTheDawnReady = 3869,
-            Medicated = 49,
+            Medicated = 49, 
+            Troubadour = 1934,
+            Tactician = 1951,
             Peloton = 1199;
     }
 
