@@ -26,32 +26,30 @@ public class BardRotationEventHandler : IRotationEventHandler
     private Dictionary<string, string> qtKeyDictionary;
     private Dictionary<string, string?> hotkeyDictionary; 
     
-    private void HandleMovingToTarget()
+    private static void HandleMovingToTarget()
     {
-        var _targetPosition = BardBattleData.Instance.TargetPosition;
-        var offset = 0.05f;
-        if (_targetPosition != null)
+        var instanceTargetPosition = BardBattleData.Instance.TargetPosition;
+        if (instanceTargetPosition == null) return;
+        const float offset = 0.05f;
+        var targetPosition = (Vector3)instanceTargetPosition;
+            
+        Core.Resolve<MemApiMove>().MoveToTarget(targetPosition);
+            
+        var currentPos = Core.Me.Position;
+            
+        float dx = targetPosition.X - currentPos.X;
+        float dz = targetPosition.Z - currentPos.Z;
+        float distance = MathF.Sqrt(dx * dx + dz * dz);
+            
+        if (distance > offset)
         {
-            var targetPosition = (Vector3)_targetPosition;
-            
             Core.Resolve<MemApiMove>().MoveToTarget(targetPosition);
-            
-            var currentPos = Core.Me.Position;
-            
-            float dx = targetPosition.X - currentPos.X;
-            float dz = targetPosition.Z - currentPos.Z;
-            float distance = MathF.Sqrt(dx * dx + dz * dz);
-            
-            if (distance > offset)
-            {
-                Core.Resolve<MemApiMove>().MoveToTarget(targetPosition);
-            }
-            else
-            {
-                // 到达目标位置，停止移动
-                Core.Resolve<MemApiMove>().CancelMove();
-                BardBattleData.Instance.TargetPosition = null; // 清除目标位置
-            }
+        }
+        else
+        {
+            // 到达目标位置，停止移动
+            Core.Resolve<MemApiMove>().CancelMove();
+            BardBattleData.Instance.TargetPosition = null; // 清除目标位置
         }
     }
     
@@ -59,6 +57,7 @@ public class BardRotationEventHandler : IRotationEventHandler
     {
         BardRotationEntry.UpdateWardensPaeanPanel();
         SmartUseHighPrioritySlot();
+        CancelMoving();
         // HandleMovingToTarget();
         
         /*if (LowVipRestrictor.IsRestrictedZoneForLowVip())
@@ -72,27 +71,6 @@ public class BardRotationEventHandler : IRotationEventHandler
         
         /*if (LowVipRestrictor.IsRestrictedZoneForLowVip() && !LowVipRestrictor.IsInStaticParty(BardSettings.Instance.QwertyList))
             PlayerOptions.Instance.Stop = true;*/
-        
-        if (Core.Me.IsMoving())
-        {
-            Core.Resolve<MemApiMove>().CancelMove();
-            BardBattleData.Instance.TargetPosition = null;
-            if (BardBattleData.Instance.IsFollowing)
-            {
-                BardBattleData.Instance.FollowingTarget = null;
-            }
-        }
-        if (Core.Resolve<MemApiMove>().IsMoving())
-        {
-            Core.Resolve<MemApiMove>().CancelMove();
-            BardBattleData.Instance.TargetPosition = null;
-            if (BardBattleData.Instance.IsFollowing)
-            {
-                BardBattleData.Instance.FollowingTarget = null;
-            }
-        }
-
-        
         
         if (!BardUtil.IsSongOrderNormal())
         {
@@ -136,6 +114,8 @@ public class BardRotationEventHandler : IRotationEventHandler
     public void OnResetBattle()
     {
         BardRotationEntry.UpdateWardensPaeanPanel();
+        SmartUseHighPrioritySlot();
+        CancelMoving();
         //BardRotationEntry.QT.Reset();
         BardBattleData.Instance = new BardBattleData();
         
@@ -666,5 +646,13 @@ public class BardRotationEventHandler : IRotationEventHandler
             BardBattleData.Instance.HotkeyUseHighPrioritySlot = true;
         else
             BardBattleData.Instance.HotkeyUseHighPrioritySlot = false;
+    }
+
+    private void CancelMoving()
+    {
+        Core.Resolve<MemApiMove>().CancelMove();
+        BardBattleData.Instance.TargetPosition = null;
+        BardBattleData.Instance.FollowingTarget = null;
+        BardBattleData.Instance.IsFollowing = false;
     }
 }

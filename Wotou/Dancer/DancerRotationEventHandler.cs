@@ -303,15 +303,15 @@ namespace Wotou.Dancer
                 if (!Core.Me.HasLocalPlayerAura(DancerDefinesData.Buffs.ClosedPosition) && 
                     PartyHelper.Party.Count > 1 && 
                     DancerSettings.Instance.EnableAutoDancePartner && 
-                    Core.Resolve<MemApiDuty>().InMission &&
+                    // Core.Resolve<MemApiDuty>().InMission &&
                     !Core.Resolve<MemApiDuty>().IsOver &&
                     DancerDefinesData.Spells.ClosedPosition.IsUnlockWithCDCheck())
                 {
-                    LogHelper.Print("寻找舞伴");
+                    // LogHelper.Print("寻找舞伴");
                     IBattleChara targetPlayer = PartyHelper.Party[^1];
                     foreach (var player in PartyHelper.Party)
                     {
-                        if (player != Core.Me && jobPriorities.TryGetValue(player.CurrentJob(), out var playerPriority) && playerPriority <= jobPriorities[targetPlayer.CurrentJob()])
+                        if (player != Core.Me && player.IsTargetable && jobPriorities.TryGetValue(player.CurrentJob(), out var playerPriority) && playerPriority <= jobPriorities[targetPlayer.CurrentJob()])
                         {
                             if (targetPlayer.CurrentJob() == player.CurrentJob() && targetPlayer.MaxHp >= player.MaxHp)
                             {
