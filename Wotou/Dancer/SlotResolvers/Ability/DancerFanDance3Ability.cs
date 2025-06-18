@@ -73,6 +73,9 @@ public class DancerFanDance3Ability : ISlotResolver
             DancerRotationEntry.QT.GetQt(QTKey.TechnicalStep) &&
             TechnicalStep.IsUnlock())
             return -5;
+
+        if (Core.Resolve<JobApi_Dancer>().FourFoldFeathers > DancerSettings.Instance.FanDanceSaveStack + 1)
+            return 10;
         
         if (Core.Resolve<JobApi_Dancer>().FourFoldFeathers > DancerSettings.Instance.FanDanceSaveStack &&
             (Core.Me.HasLocalPlayerAura(FlourishingSymmetry) ||

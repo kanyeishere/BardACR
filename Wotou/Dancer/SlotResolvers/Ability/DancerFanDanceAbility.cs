@@ -59,6 +59,8 @@ public class DancerFanDanceAbility : ISlotResolver
             DancerRotationEntry.QT.GetQt(QTKey.Flourish) &&
             Flourish.IsUnlock())
             return -6;
+        if (Core.Resolve<JobApi_Dancer>().FourFoldFeathers > DancerSettings.Instance.FanDanceSaveStack + 1)
+            return 10;
         if (Core.Resolve<JobApi_Dancer>().FourFoldFeathers > DancerSettings.Instance.FanDanceSaveStack  &&
             (Core.Me.HasLocalPlayerAura(FlourishingSymmetry) ||
              Core.Me.HasLocalPlayerAura(FlourishingFlow) || 
