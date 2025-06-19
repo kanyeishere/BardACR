@@ -11,6 +11,9 @@ public class DancerDevilmentAbility : ISlotResolver
 {
     private const uint Devilment = DancerDefinesData.Spells.Devilment;
     private const uint QuadrupleTechnicalFinish = DancerDefinesData.Spells.QuadrupleTechnicalFinish;
+    private const uint TripleTechnicalFinish = DancerDefinesData.Spells.TripleTechnicalFinish;
+    private const uint DoubleTechnicalFinish = DancerDefinesData.Spells.DoubleTechnicalFinish;
+    private const uint SingleTechnicalFinish = DancerDefinesData.Spells.SingleTechnicalFinish;
     private const uint TechnicalStep = DancerDefinesData.Spells.TechnicalStep;
     
     private const uint TechnicalFinishBuff = DancerDefinesData.Buffs.TechnicalFinish;
@@ -19,7 +22,13 @@ public class DancerDevilmentAbility : ISlotResolver
     {
         if (!Devilment.GetSpell().IsReadyWithCanCast())
             return -1;
-        if (Core.Me.HasMyAuraWithTimeleft(TechnicalFinishBuff))
+        if (QuadrupleTechnicalFinish.RecentlyUsed(15000))
+            return 1;
+        if (TripleTechnicalFinish.RecentlyUsed(15000))
+            return 1;
+        if (DoubleTechnicalFinish.RecentlyUsed(15000))
+            return 1;
+        if (SingleTechnicalFinish.RecentlyUsed(15000))
             return 1;
         if (Core.Resolve<MemApiSpellCastSuccess>().LastGcd != QuadrupleTechnicalFinish && 
             TechnicalStep.IsUnlock())
