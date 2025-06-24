@@ -21,7 +21,7 @@ public class DancerTechnicalStepGcd : ISlotResolver
         if (Core.Resolve<JobApi_Dancer>().IsDancing)
             return -1;
         // 如果探戈的cd - 大舞的cd > 8000 
-        if (Core.Resolve<MemApiSpell>().GetCooldown(Devilment).TotalMilliseconds - Core.Resolve<MemApiSpell>().GetCooldown(TechnicalStep).TotalMilliseconds > 8000)
+        if (Core.Resolve<MemApiSpell>().GetCooldown(Devilment).TotalMilliseconds - Core.Resolve<MemApiSpell>().GetCooldown(TechnicalStep).TotalMilliseconds > 7500)
             return -2;
         if (TechnicalStep.IsUnlockWithCDCheck())
             return 1;
