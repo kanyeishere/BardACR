@@ -32,12 +32,20 @@ public class DancerTechnicalStepDancingGcd: ISlotResolver
 
     public void Build(Slot slot)
     {
-        if (Core.Me.HasAura(TechnicalStep) && Core.Resolve<JobApi_Dancer>().CompleteSteps == 4 && QuadrupleTechnicalFinish.IsUnlockWithCDCheck())
+        if (Core.Me.HasAura(TechnicalStep) && Core.Resolve<JobApi_Dancer>().CompleteSteps == 4 && QuadrupleTechnicalFinish.IsUnlockWithCDCheck() && Devilment.IsUnlockWithCDCheck())
         {
             AI.Instance.BattleData.CurrGcdAbilityCount = 0;
             slot.Add(QuadrupleTechnicalFinish.GetSpell());
             AI.Instance.BattleData.CurrGcdAbilityCount = 0;
             slot.Add(Devilment.GetSpell());
+            return;
+        }
+        if (Core.Me.HasAura(TechnicalStep) && Core.Resolve<JobApi_Dancer>().CompleteSteps == 4 && QuadrupleTechnicalFinish.IsUnlockWithCDCheck())
+        {
+            AI.Instance.BattleData.CurrGcdAbilityCount = 0;
+            slot.Add(QuadrupleTechnicalFinish.GetSpell());
+            AI.Instance.BattleData.CurrGcdAbilityCount = 0;
+            // slot.Add(Devilment.GetSpell());
             return;
         }
         slot.Wait2NextGcd = true;
