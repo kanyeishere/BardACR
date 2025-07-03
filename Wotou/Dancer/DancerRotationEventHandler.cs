@@ -492,11 +492,11 @@ namespace Wotou.Dancer
                 .Cast<IBattleChara>()
                 .Where(c => c.DistanceToPlayer() < maxDistance && c.IsEnemy())
                 .ToArray()
-                .OrderBy(c =>c.DistanceToPlayer());
+                .OrderBy(c => c.DistanceToPlayer());
         
             var 无目标鱼 = enemies.FirstOrDefault(c => c.DataId == 18346 && c.TargetObject == null);
             var 有目标鱼 = enemies.FirstOrDefault(c => c.DataId == 18346);
-            var 所有鱼 = enemies.Where(c => c.DataId == 18346).ToArray();
+            var 所有鱼 = enemies.Where(c => c.DataId == 18346).OrderBy(c => c.DistanceToPlayer()).ToArray();
             var 自己有鱼 = enemies.Any(c => c.DataId == 18346 && c.TargetObject?.IsMe() == true);
             var 哈基米 = enemies.FirstOrDefault(c => c.DataId == 18347);
             var 羊 = enemies.FirstOrDefault(c => c.DataId == 18344);
@@ -512,6 +512,18 @@ namespace Wotou.Dancer
                     (DancerSettings.Instance.M6SAutoTargetCount == 1 && battleTime > 250*1000 && battleTime < 300*1000))
                 {
                     return 无目标鱼;
+                }
+            }
+            
+            if (!自己有鱼 && 所有鱼.Length >= 2)
+            {
+                var battleTime = AI.Instance.BattleData.CurrBattleTimeInMs;
+            
+                if (DancerSettings.Instance.M6SAutoTargetCount == 3 || 
+                    (DancerSettings.Instance.M6SAutoTargetCount == 2 && battleTime > 300*1000) ||
+                    (DancerSettings.Instance.M6SAutoTargetCount == 1 && battleTime > 250*1000 && battleTime < 300*1000))
+                {
+                    return 所有鱼[0];
                 }
             }
         
