@@ -101,8 +101,14 @@ namespace Wotou.Dancer.Utility
             
             if (Core.Me.HasAura(SilkenSymmetry))
                 return ReverseCascade.GetSpell();
+            
+            if (FountainFall.GetSpell().IsReadyWithCanCast())
+                return FountainFall.GetSpell();
+            
+            if (ReverseCascade.GetSpell().IsReadyWithCanCast())
+                return ReverseCascade.GetSpell();
         
-            return null;
+            return GetAoeCombo();
         }
 
 
@@ -120,7 +126,7 @@ namespace Wotou.Dancer.Utility
             if (ReverseCascade.GetSpell().IsReadyWithCanCast())
                 return ReverseCascade.GetSpell();
             
-            return null;
+            return GetSingleCombo();
         }
 
         public static Spell GetStep()
