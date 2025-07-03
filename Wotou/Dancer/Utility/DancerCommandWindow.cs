@@ -19,6 +19,7 @@ public class DancerCommandWindow
         ("Hotkey", "/Wotou_DNC 爆发药_hk", "/Wotou_DNC potion_hk"),
         ("Hotkey", "/Wotou_DNC 极限技_hk", "/Wotou_DNC limitbreak_hk"),
         ("Hotkey", "/Wotou_DNC 停止自动移动_hk", "/Wotou_DNC stopmove_hk"),
+        ("Hotkey", "/Wotou_DNC 伤头_hk", "/Wotou_DNC headgraze_hk"),
 
         ("QT", "/Wotou_DNC AOE_qt", "/Wotou_DNC aoe_qt"),
         ("QT", "/Wotou_DNC 大舞_qt", "/Wotou_DNC technicalstep_qt"),

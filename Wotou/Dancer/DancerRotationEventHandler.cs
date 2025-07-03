@@ -180,7 +180,9 @@ namespace Wotou.Dancer
                 { "极限技", "LimitBreak" },
                 { "limitbreak", "LimitBreak" },
                 { "停止自动移动", "StopMove" },
-                { "stopmove", "StopMove" }
+                { "stopmove", "StopMove" },
+                { "伤头", "HeadGraze" },
+                { "headgraze", "HeadGraze" }
             };
         }
 
@@ -439,6 +441,7 @@ namespace Wotou.Dancer
                 "Potion" => new HotKeyResolver_Potion(),
                 "LimitBreak" => new HotKeyResolver_LB(),
                 "StopMove" => new StopMoveHotkeyResolver(),
+                "HeadGraze" => new MyNormalSpellHotKeyResolver(DancerDefinesData.Spells.HeadGraze, SpellTargetType.Target),
                 _ => null // 如果找不到匹配的 Hotkey，返回 null
             };
         }

@@ -27,10 +27,6 @@ namespace Wotou.Dancer.Utility
         
         public static bool CanUseAoeCombo()
         {
-            if (!DancerSettings.Instance.IsInternationalServer)
-                return DancerRotationEntry.QT.GetQt(QTKey.Aoe) && 
-                       ((TargetHelper.GetNearbyEnemyCount(5) > 2 && Core.Me.Level >= 94) || 
-                        (TargetHelper.GetNearbyEnemyCount(5) > 1) && Core.Me.Level < 94);
             return DancerRotationEntry.QT.GetQt(QTKey.Aoe) && TargetHelper.GetNearbyEnemyCount(5) > 1;
         }
         
@@ -86,12 +82,20 @@ namespace Wotou.Dancer.Utility
                 BloodShower.IsUnlockWithCDCheck())
                 return BloodShower.GetSpell();
             
+            if (Core.Me.HasAura(FlourishingFlow) &&
+                BloodShower.GetSpell().IsReadyWithCanCast())
+                return BloodShower.GetSpell();
+            
+            if (BloodShower.GetSpell().IsReadyWithCanCast())
+                return BloodShower.GetSpell();
+            
             if (Core.Me.HasAura(SilkenSymmetry) && 
                 RisingWindmill.IsUnlockWithCDCheck())
                 return RisingWindmill.GetSpell();
             
-            if (BloodShower.GetSpell().IsReadyWithCanCast())
-                return BloodShower.GetSpell();
+            if (Core.Me.HasAura(FlourishingSymmetry) &&
+                RisingWindmill.GetSpell().IsReadyWithCanCast())
+                return RisingWindmill.GetSpell();
         
             if (RisingWindmill.GetSpell().IsReadyWithCanCast())
                 return RisingWindmill.GetSpell();
@@ -99,11 +103,19 @@ namespace Wotou.Dancer.Utility
             if (Core.Me.HasAura(SilkenFlow))
                 return  FountainFall.GetSpell();
             
+            if (FountainFall.GetSpell().IsReadyWithCanCast())
+                return FountainFall.GetSpell();
+            
+            if (Core.Me.HasAura(FlourishingFlow) &&
+                FountainFall.GetSpell().IsReadyWithCanCast())
+                return FountainFall.GetSpell();
+            
             if (Core.Me.HasAura(SilkenSymmetry))
                 return ReverseCascade.GetSpell();
             
-            if (FountainFall.GetSpell().IsReadyWithCanCast())
-                return FountainFall.GetSpell();
+            if (Core.Me.HasAura(FlourishingSymmetry) &&
+                ReverseCascade.GetSpell().IsReadyWithCanCast())
+                return ReverseCascade.GetSpell();
             
             if (ReverseCascade.GetSpell().IsReadyWithCanCast())
                 return ReverseCascade.GetSpell();
@@ -117,11 +129,19 @@ namespace Wotou.Dancer.Utility
             if (Core.Me.HasAura(SilkenFlow))
                 return FountainFall.GetSpell();
             
-            if (Core.Me.HasAura(SilkenSymmetry))
-                return ReverseCascade.GetSpell();
+            if (Core.Me.HasAura(FlourishingFlow) &&
+                FountainFall.GetSpell().IsReadyWithCanCast())
+                return FountainFall.GetSpell();
             
             if (FountainFall.GetSpell().IsReadyWithCanCast())
                 return FountainFall.GetSpell();
+            
+            if (Core.Me.HasAura(SilkenSymmetry))
+                return ReverseCascade.GetSpell();
+            
+            if (Core.Me.HasAura(FlourishingSymmetry) &&
+                ReverseCascade.GetSpell().IsReadyWithCanCast())
+                return ReverseCascade.GetSpell();
         
             if (ReverseCascade.GetSpell().IsReadyWithCanCast())
                 return ReverseCascade.GetSpell();

@@ -21,6 +21,7 @@ public class BardCommandWindow
         ("Hotkey", "/Wotou_BRD 极限技_hk", "/Wotou_BRD limitbreak_hk"),
         ("Hotkey", "/Wotou_BRD 停止自动移动_hk", "/Wotou_BRD stopmove_hk"),
         ("Hotkey", "/Wotou_BRD 绝峰箭_hk", "/Wotou_BRD apexarrow_hk"),
+        ("Hotkey", "/Wotou_BRD 伤头_hk", "/Wotou_BRD headgraze_hk"),
 
         ("QT", "/Wotou_BRD AOE_qt", "/Wotou_BRD aoe_qt"),
         ("QT", "/Wotou_BRD 爆发_qt", "/Wotou_BRD burst_qt"),

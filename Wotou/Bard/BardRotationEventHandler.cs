@@ -415,7 +415,9 @@ public class BardRotationEventHandler : IRotationEventHandler
             { "停止自动移动", "StopMove" },
             { "stopmove", "StopMove" },
             { "绝峰箭", "ApexArrow"},
-            { "apexarrow", "ApexArrow"}
+            { "apexarrow", "ApexArrow"},
+            { "伤头", "HeadGraze" },
+            { "headgraze", "HeadGraze" },
         };
     }
     
@@ -597,6 +599,7 @@ public class BardRotationEventHandler : IRotationEventHandler
             "LimitBreak" => new HotKeyResolver_LB(),
             "StopMove" => new StopMoveHotkeyResolver(),
             "ApexArrow" => new ApexArrowHotkeyResolver(BardDefinesData.Spells.ApexArrow, SpellTargetType.Target),
+            "HeadGraze" => new MyNormalSpellHotKeyResolver(BardDefinesData.Spells.HeadGraze, SpellTargetType.Target),
             _ => null
         };
     }

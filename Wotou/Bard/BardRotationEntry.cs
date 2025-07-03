@@ -246,6 +246,7 @@ public class BardRotationEntry : IRotationEntry
         QT.AddHotkey("爆发药", new HotKeyResolver_Potion());
         QT.AddHotkey("极限技", new HotKeyResolver_LB());
         QT.AddHotkey("停止自动移动", new StopMoveHotkeyResolver());
+        QT.AddHotkey("伤头", new MyNormalSpellHotKeyResolver(BardDefinesData.Spells.HeadGraze, SpellTargetType.Target));
     }
 
     public void OnUIUpdate()

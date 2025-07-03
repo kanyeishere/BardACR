@@ -39,7 +39,8 @@ public class DancerDefinesData
 
     public static class Spells
     {
-        public const uint
+        public const uint 
+            HeadGraze = 7551,
             ArmsLength = 7548,
             Cascade = 15989,
             Fountain = 15990,
@@ -88,6 +89,7 @@ public class DancerDefinesData
     public static class 舞者技能
     {
         public const uint 亲疏自行 = 7548;
+        public const uint 伤头 = 7551;
         public const uint 瀑泻 = 15989;
         public const uint 喷泉 = 15990;
         public const uint 逆瀑泻 = 15991;
