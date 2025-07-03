@@ -529,7 +529,7 @@ namespace Wotou.Dancer
         
             if (马 != null) return 马;
             if (哈基米 != null) return 哈基米;
-            if (有目标鱼 != null && 所有鱼.Length >= 2) return 有目标鱼;
+            if (有目标鱼 != null) return 有目标鱼;
             if (羊 != null) return 羊;
             if (boss != null) return boss;
         
