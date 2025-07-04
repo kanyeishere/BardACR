@@ -44,9 +44,7 @@ public class Dancer1GBeforeTechStepGcd : ISlotResolver
         if (Core.Resolve<MemApiSpell>().GetLastComboSpellId() == Cascade)
             return Fountain.GetSpell();
         
-        if (BladeShower.GetSpell().IsReadyWithCanCast() &&
-            Core.Resolve<MemApiSpell>().GetLastComboSpellId() == Windmill &&
-            Core.Resolve<MemApiSpell>().GetComboTimeLeft().TotalMilliseconds > 10.0 &&
+        if (Core.Resolve<MemApiSpell>().GetLastComboSpellId() == Windmill &&
             DancerUtil.CanUseAoeCombo())
             return BladeShower.GetSpell();
         
