@@ -41,10 +41,16 @@ public class Dancer1GBeforeTechStepGcd : ISlotResolver
     
     private static Spell GetSpell()
     {
-        if (Core.Resolve<MemApiSpell>().GetLastComboSpellId() == Cascade || Core.Resolve<MemApiSpell>().GetLastComboSpellId() == Windmill)
-            return DancerUtil.GetBaseGcdCombo();
+        if (Core.Resolve<MemApiSpell>().GetLastComboSpellId() == Cascade)
+            return Fountain.GetSpell();
         
-        if (Core.Resolve<MemApiSpell>().GetLastComboSpellId() == Fountain || Core.Resolve<MemApiSpell>().GetLastComboSpellId() == BladeShower)
+        if (BladeShower.GetSpell().IsReadyWithCanCast() &&
+            Core.Resolve<MemApiSpell>().GetLastComboSpellId() == Windmill &&
+            Core.Resolve<MemApiSpell>().GetComboTimeLeft().TotalMilliseconds > 10.0 &&
+            DancerUtil.CanUseAoeCombo())
+            return BladeShower.GetSpell();
+        
+        if (Core.Resolve<MemApiSpell>().GetLastComboSpellId() == Fountain)
         {
             if (Core.Me.HasAura(SilkenFlow) || Core.Me.HasAura(SilkenSymmetry))
                 return DancerUtil.GetProcGcdCombo();
@@ -54,6 +60,18 @@ public class Dancer1GBeforeTechStepGcd : ISlotResolver
                 return LastDance.GetSpell();
             return DancerUtil.GetBaseGcdCombo();
         }
+
+        if (Core.Resolve<MemApiSpell>().GetLastComboSpellId() == BladeShower)
+        {
+            if (Core.Me.HasAura(SilkenFlow) || Core.Me.HasAura(SilkenSymmetry))
+                return DancerUtil.GetProcGcdCombo();
+            if (Core.Resolve<JobApi_Dancer>().Esprit >= 50)
+                return SaberDance.GetSpell();
+            if (Core.Me.HasAura(LastDanceReady))
+                return LastDance.GetSpell();
+            return DancerUtil.GetBaseGcdCombo();
+        }
+        
         return DancerUtil.GetBaseGcdCombo();
     }
 }
