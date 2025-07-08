@@ -22,7 +22,7 @@ namespace Wotou.Bard.Triggers
         {
             ImGui.NewLine();
             ImGui.Separator();
-            ImGui.Text("点击下方任意按钮添加 QT 项目 ↓");
+            ImGui.Text("点击按钮在三种状态间切换：未添加 / 已关闭 / 已启用 ：");
             ImGui.NewLine();
             int columns = 5;
             int count = 0;
@@ -31,19 +31,28 @@ namespace Wotou.Bard.Triggers
             {
                 ImGui.PushID(qt);
 
-                ImGui.PushStyleColor(
-                    ImGuiCol.Text,
-                    qtValues.ContainsKey(qt)
-                        ? new Vector4(0f, 1f, 0f, 1f) // 绿色：已添加
-                        : new Vector4(1f, 1f, 1f, 1f) // 白色：未添加
-                );
+                if (qtValues.TryGetValue(qt, out var isEnabled))
+                {
+                    ImGui.PushStyleColor(
+                        ImGuiCol.Text,
+                        isEnabled
+                            ? new Vector4(0f, 1f, 0f, 1f)              // ✅ 启用：绿色
+                            : new Vector4(1.0f, 0.4f, 0.7f, 1.0f)      // ❌ 未启用：粉红色
+                    );
+                }
+                else
+                {
+                    ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(1f, 1f, 1f, 1f)); // 🆕 未添加：默认白
+                }
 
                 if (ImGui.Button(qt))
                 {
-                    if (qtValues.ContainsKey(qt))
-                        qtValues.Remove(qt); 
+                    if (!qtValues.ContainsKey(qt))
+                        qtValues[qt] = false;         // 🆕 → ❌
+                    else if (!qtValues[qt])
+                        qtValues[qt] = true;          // ❌ → ✅
                     else
-                        qtValues.TryAdd(qt, false); // C# 9+ 简写，已有则不添加
+                        qtValues.Remove(qt);          // ✅ → 🆕
                 }
 
                 ImGui.PopStyleColor();
