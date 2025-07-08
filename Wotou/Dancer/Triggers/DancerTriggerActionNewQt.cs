@@ -98,8 +98,25 @@ namespace Wotou.Dancer.Triggers
             {
                 qtValues.Remove(qt);
             }
-
+            
             ImGui.Separator();
+            
+            if (ImGui.Button("全部启用"))
+            {
+                foreach (var key in qtValues.Keys.ToList())
+                    qtValues[key] = true;
+            }
+
+            ImGui.SameLine();
+
+            if (ImGui.Button("全部关闭"))
+            {
+                foreach (var key in qtValues.Keys.ToList())
+                    qtValues[key] = false;
+            }
+            
+            ImGui.SameLine();
+            
             if (ImGui.Button("清除所有"))
             {
                 qtValues.Clear();
