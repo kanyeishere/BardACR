@@ -83,6 +83,7 @@ public class BardRotationEntry : IRotationEntry
 
         // 添加时间轴行为
         rot.AddTriggerAction(new BardTriggerActionQt());
+        rot.AddTriggerAction(new BardTriggerActionNewQt());
         rot.AddTriggerAction(new BardSongDurationAction());
         rot.AddTriggerAction(new BardSongOrderAction());
         rot.AddTriggerAction(new BardHeartBreakSaveAction());
