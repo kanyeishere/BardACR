@@ -22,7 +22,7 @@ namespace Wotou.Dancer.Triggers
         {
             ImGui.NewLine();
             ImGui.Separator();
-            ImGui.Text("点击按钮在三种状态间切换：未添加 / 已关闭 / 已启用 ：");
+            ImGui.Text("点击按钮在三种状态间切换：未添加 / 已关闭 / 已启用");
             ImGui.NewLine();
             int columns = 5;
             int count = 0;
