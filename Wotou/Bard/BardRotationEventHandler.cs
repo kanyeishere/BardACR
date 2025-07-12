@@ -124,6 +124,9 @@ public class BardRotationEventHandler : IRotationEventHandler
         
         _randomTime = 0;
         
+        if (BardSettings.Instance.ResetSongOrder)
+            BardUtil.ResetSongOrderCustom();
+        
         if (!BardUtil.IsSongOrderNormal())
         {
             BardRotationEntry.QT.SetQt("对齐旅神", false);

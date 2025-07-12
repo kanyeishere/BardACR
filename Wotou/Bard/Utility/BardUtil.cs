@@ -143,4 +143,17 @@ public static class BardUtil
 
         return Core.Resolve<MemApiSpell>().CheckActionChange(spellId).GetSpell();
     }
+    
+    public static void ResetSongOrder()
+    {
+        BardSongSettingsManager.Instance.ResetOrder();
+    }
+    
+    public static void ResetSongOrderCustom()
+    {
+        BardSettings.Instance.FirstSong = BardSettings.Instance.SongOrderOnReset[0];
+        BardSettings.Instance.SecondSong = BardSettings.Instance.SongOrderOnReset[1];
+        BardSettings.Instance.ThirdSong = BardSettings.Instance.SongOrderOnReset[2];
+        BardSongSettingsManager.Instance.InitializeSongSettings();
+    }
 }

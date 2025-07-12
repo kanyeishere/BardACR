@@ -1,6 +1,7 @@
 using AEAssist;
 using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
+using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.JobApi;
 using Dalamud.Game.ClientState.JobGauge.Enums;
@@ -74,13 +75,19 @@ public class BardRagingStrikesAbility : ISlotResolver
             AI.Instance.BattleData.CurrGcdAbilityCount = 0;
             return;
         }
-        if (BardSettings.Instance.ImitateGreenPlayer)
+        var potionId = SettingMgr.GetSetting<PotionSetting>().GetPotionId(Core.Me.CurrentJob());
+        var cooldown = Core.Me?.GetItemCoolDown(potionId);
+        if (potionId == 0 || cooldown == null || cooldown.Value.TotalMilliseconds <= (240 + 29) * 1000)
         {
-            slot.Add(LegGraze.GetSpell());
-            slot.Add(RagingStrikes.GetSpell());
-            AI.Instance.BattleData.CurrGcdAbilityCount = 0;
-            return;
+            if (BardSettings.Instance.ImitateGreenPlayer)
+            {
+                slot.Add(LegGraze.GetSpell());
+                slot.Add(RagingStrikes.GetSpell());
+                AI.Instance.BattleData.CurrGcdAbilityCount = 0;
+                return;
+            }
         }
+        
         slot.Add(RagingStrikes.GetSpell());
         AI.Instance.BattleData.CurrGcdAbilityCount = 0;
         // 单插 

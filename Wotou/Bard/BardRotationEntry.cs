@@ -401,7 +401,7 @@ public class BardRotationEntry : IRotationEntry
                 ImGui.Checkbox("自动使用速行", ref BardSettings.Instance.EnableAutoPeloton);
             }
             ImGui.Separator();
-            ImGui.Text("木桩本建议军神歌设置略长些，开启爆发和对齐旅神时，会自动切旅神");
+            ImGui.Text("当前歌轴时长及顺序：");
             if (BardSettings.Instance.WandererSongDuration + BardSettings.Instance.MageSongDuration +
                 BardSettings.Instance.ArmySongDuration < 120)
                 ImGui.TextColored(new Vector4(1, 0.7f, 0, 1), "警告，你设置的三首歌累计时长小于120秒，建议设置略长于120秒");
@@ -664,6 +664,37 @@ public class BardRotationEntry : IRotationEntry
                 }
                 ImGui.EndCombo();
             }
+            
+            ImGui.Checkbox("战斗开始时重置顺序：", ref BardSettings.Instance.ResetSongOrder);
+            for (int i = 0; i < BardSettings.Instance.SongOrderOnReset.Count; i++)
+            {
+                var song = BardSettings.Instance.SongOrderOnReset[i];
+                string songName = song switch
+                {
+                    Song.WANDERER => "旅神",
+                    Song.MAGE => "贤者",
+                    Song.ARMY => "军神",
+                    _ => song.ToString()
+                };
+
+                ImGui.Text($"第{i + 1}首：{songName}");
+
+                ImGui.SameLine();
+                if (i > 0 && ImGui.SmallButton($"↑##{i}"))
+                {
+                    (BardSettings.Instance.SongOrderOnReset[i], BardSettings.Instance.SongOrderOnReset[i - 1]) = 
+                        (BardSettings.Instance.SongOrderOnReset[i - 1], BardSettings.Instance.SongOrderOnReset[i]);
+                }
+
+                ImGui.SameLine();
+                if (i < 2 && ImGui.SmallButton($"↓##{i}"))
+                {
+                    (BardSettings.Instance.SongOrderOnReset[i], BardSettings.Instance.SongOrderOnReset[i + 1]) =
+                        (BardSettings.Instance.SongOrderOnReset[i + 1], BardSettings.Instance.SongOrderOnReset[i]);
+                }
+            }
+            
+            ImGui.NewLine();
 
             ImGui.Separator();
             var opener = "";

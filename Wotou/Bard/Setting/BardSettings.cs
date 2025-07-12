@@ -52,6 +52,9 @@ public class BardSettings
     public Song SecondSong = Song.MAGE; // 第二首歌
     public Song ThirdSong = Song.ARMY; // 第三首歌
     
+    public bool ResetSongOrder = true; // 是否重置歌曲顺序
+    public List<Song> SongOrderOnReset = new() { Song.WANDERER, Song.MAGE, Song.ARMY };
+
     public bool GambleTripleApex = false; // 是否赌两分钟三次绝峰
     public bool UsePotionInOpener = false; // 是否在开场使用药水
     public int Opener = 0; // 起手选择
