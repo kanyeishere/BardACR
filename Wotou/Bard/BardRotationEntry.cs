@@ -666,7 +666,99 @@ public class BardRotationEntry : IRotationEntry
             }
             
             ImGui.Checkbox("战斗开始时重置顺序：", ref BardSettings.Instance.ResetSongOrder);
-            for (int i = 0; i < BardSettings.Instance.SongOrderOnReset.Count; i++)
+            var songOrder = BardSettings.Instance.SongOrderOnReset;
+
+            for (int i = 0; i < songOrder.Count; i++)
+            {
+                var song = songOrder[i];
+                string name = song switch
+                {
+                    Song.WANDERER => "旅神",
+                    Song.MAGE => "贤者",
+                    Song.ARMY => "军神",
+                    _ => song.ToString()
+                };
+
+                uint color = song switch
+                {
+                    Song.WANDERER => // 绿色
+                        ImGui.ColorConvertFloat4ToU32(new Vector4(0.3f, 0.9f, 0.35f, 1.0f)),
+                    Song.ARMY => // 黄色
+                        ImGui.ColorConvertFloat4ToU32(new Vector4(0.88f, 0.55f, 0.03f, 1.0f)),
+                    Song.MAGE => // 蓝色
+                        ImGui.ColorConvertFloat4ToU32(new Vector4(0.31f, 0.33f, 0.89f, 1.0f)),
+                    _ => ImGui.ColorConvertFloat4ToU32(new Vector4(1f, 1f, 1f, 1f))
+                };
+                
+                float squareSize =  ImGui.GetFontSize() - 9; 
+                Vector2 cursorPos = ImGui.GetCursorScreenPos(); // 当前光标屏幕位置
+                float squareY = cursorPos.Y + (ImGui.GetFontSize() - squareSize) / 2f; // 居中对齐
+                
+                // 绘制小圆角方块
+                ImGui.GetWindowDrawList().AddRectFilled(
+                    new Vector2(cursorPos.X, squareY),
+                    new Vector2(cursorPos.X + squareSize, squareY + squareSize),
+                    color,
+                    squareSize / 2f
+                );
+                
+                // 在颜色方块后面留出空隙
+                ImGui.SetCursorScreenPos(new Vector2(cursorPos.X + squareSize + 6f, cursorPos.Y));
+
+                // 用Selectable作为拖拽源（必须在源内定义SetPayload）
+                if (ImGui.Selectable($"{name}##song_{i}", false, ImGuiSelectableFlags.AllowDoubleClick, new Vector2(ImGui.GetFontSize() * 2, ImGui.GetFontSize())))
+                { }
+                
+                if (ImGui.IsItemHovered())
+                {
+                    ImGui.BeginTooltip();
+                    ImGui.Text("拖动以更改顺序");
+                    ImGui.EndTooltip();
+                }
+
+                if (ImGui.BeginDragDropSource())
+                {
+                    unsafe
+                    {
+                        int index = i;
+                        ImGui.SetDragDropPayload("DND_SONG_ORDER", new IntPtr(&index), sizeof(int));
+                        ImGui.Text($"拖拽：{name}");
+                        ImGui.EndDragDropSource();
+                    }
+                }
+
+                if (ImGui.BeginDragDropTarget())
+                {
+                    unsafe
+                    {
+                        var payload = ImGui.AcceptDragDropPayload("DND_SONG_ORDER", ImGuiDragDropFlags.AcceptNoDrawDefaultRect);
+                        if (payload.NativePtr != null && payload.Data != null)
+                        {
+                            int from = *(int*)payload.Data;
+                            int to = i;
+
+                            if (from != to && from >= 0 && to >= 0 &&
+                                from < songOrder.Count && to <= songOrder.Count)
+                            {
+                                var moved = songOrder[from];
+                                songOrder.RemoveAt(from);
+                                songOrder.Insert(to, moved); // 无需额外判断
+                                BardSettings.Instance.Save();
+                            }
+                        }
+                        ImGui.EndDragDropTarget();
+                    }
+                }
+
+                if (i < songOrder.Count - 1)
+                {
+                    ImGui.SameLine();
+                    ImGui.TextUnformatted("-> ");
+                    ImGui.SameLine();
+                }
+            }
+
+            /*for (int i = 0; i < BardSettings.Instance.SongOrderOnReset.Count; i++)
             {
                 var song = BardSettings.Instance.SongOrderOnReset[i];
                 string songName = song switch
@@ -692,9 +784,8 @@ public class BardRotationEntry : IRotationEntry
                     (BardSettings.Instance.SongOrderOnReset[i], BardSettings.Instance.SongOrderOnReset[i + 1]) =
                         (BardSettings.Instance.SongOrderOnReset[i + 1], BardSettings.Instance.SongOrderOnReset[i]);
                 }
-            }
+            }*/
             
-            ImGui.NewLine();
 
             ImGui.Separator();
             var opener = "";
