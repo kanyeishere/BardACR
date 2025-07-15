@@ -10,7 +10,6 @@ using AEAssist.CombatRoutine.View.JobView.HotkeyResolver;
 using AEAssist.Extension;
 using AEAssist.GUI;
 using AEAssist.Helper;
-using AEAssist.JobApi;
 using AEAssist.MemoryApi;
 using Wotou.Dancer.Ability;
 using Wotou.Dancer.Data;
@@ -37,6 +36,21 @@ public class DancerRotationEntry : IRotationEntry
     public string AuthorName { get; set; } = "Wotou";
     
     private const string UpdateLog = "";
+    
+    public static readonly Dictionary<string, (bool DefaultValue, string Description, Action<bool>? Callback)> DefaultQtValues = new()
+    {
+        { QTKey.UsePotion, (false, "是否使用爆发药", null) },
+        { QTKey.Aoe, (true, "是否使用AOE", null) },
+        { QTKey.StrongAlign, (true, "不会因多打GCD而延后大舞，绝本有上天的阶段建议关闭", null) },
+        { QTKey.TechnicalStep, (true, "是否使用技巧舞步与进攻之探戈", null) },
+        { QTKey.StandardStep, (true, "是否使用标准舞步与结束动作", null) },
+        { QTKey.Flourish, (true, "是否使用百花争艳", null) },
+        { QTKey.SaberDance, (true, "是否使用剑舞与拂晓舞", null) },
+        { QTKey.FanDance, (true, "是否使用扇舞", null) },
+        { QTKey.AutoCuringWaltz, (true, "是否自动使用治疗之华尔兹", null) },
+        { QTKey.FinalBurst, (false, "是否倾泻资源", null) },
+        { QTKey.SmartAoeTarget, (false, "是否智能选择AOE目标", null) }
+    };
     
     public void Dispose()
     {
@@ -79,7 +93,7 @@ public class DancerRotationEntry : IRotationEntry
     {
         DancerDefinesData.InitializeDictionary();
         DancerSettings.Build(settingFolder);
-        BuildQT(settingFolder);
+        BuildQt(settingFolder);
         var rot = new Rotation(SlotResolvers)
         {
             TargetJob = Jobs.Dancer,
@@ -138,10 +152,8 @@ public class DancerRotationEntry : IRotationEntry
     }
     
     // 构造函数里初始化QT
-    public void BuildQT(string settingFolder)
+    public void BuildQt(string settingFolder)
     {
-        DancerSettings.Instance.InitializeQtValues();
-
         // JobViewSave是AE底层提供的QT设置存档类 在你自己的设置里定义即可
         // 第二个参数是你设置文件的Save类 第三个参数是QT窗口标题
         QT = new JobViewWindow(DancerSettings.Instance.JobViewSave, DancerSettings.Instance.Save, "Wotou");
@@ -163,12 +175,12 @@ public class DancerRotationEntry : IRotationEntry
         QT.SetUpdateAction(() =>
         {   
             UpdateDancerPartnerPanel();
-            var myJobViewSave = new JobViewSave();
-            myJobViewSave.QtHotkeySize = new Vector2(DancerSettings.Instance.DancePartnerPanelIconSize, DancerSettings.Instance.DancePartnerPanelIconSize);
-            myJobViewSave.ShowHotkey = DancerSettings.Instance.ShowDancePartnerPanel;
-            myJobViewSave.LockWindow = DancerSettings.Instance.isDancePartnerPanelLocked;
+            var viewSave = new JobViewSave();
+            viewSave.QtHotkeySize = new Vector2(DancerSettings.Instance.DancePartnerPanelIconSize, DancerSettings.Instance.DancePartnerPanelIconSize);
+            viewSave.ShowHotkey = DancerSettings.Instance.ShowDancePartnerPanel;
+            viewSave.LockWindow = DancerSettings.Instance.isDancePartnerPanelLocked;
             DancePartnerPanel.DrawHotkeyWindow(new QtStyle(DancerSettings.Instance.JobViewSave));
-            DancePartnerPanel = new HotkeyWindow(myJobViewSave, "Custom DNC HotkeyWindow");
+            DancePartnerPanel = new HotkeyWindow(viewSave, "Custom DNC HotkeyWindow");
             DancePartnerPanel.HotkeyLineCount = 1;
             
             
@@ -185,12 +197,12 @@ public class DancerRotationEntry : IRotationEntry
             EnAvantPanel.AddHotkey("前冲步 - 右下", new EnAvantHotkeyResolver(45f * MathF.PI / 180f));  // ⬊ 东南 (225° → 45°)
 
             
-            var enAvantJobViewSave = new JobViewSave();
-            enAvantJobViewSave.QtHotkeySize = new Vector2(DancerSettings.Instance.EnAvantPanelIconSize, DancerSettings.Instance.EnAvantPanelIconSize);
-            enAvantJobViewSave.ShowHotkey = DancerSettings.Instance.ShowEnAvantPanel;
-            enAvantJobViewSave.LockWindow = DancerSettings.Instance.isEnAvantPanelLocked;
+            var enAvantViewSave = new JobViewSave();
+            enAvantViewSave.QtHotkeySize = new Vector2(DancerSettings.Instance.EnAvantPanelIconSize, DancerSettings.Instance.EnAvantPanelIconSize);
+            enAvantViewSave.ShowHotkey = DancerSettings.Instance.ShowEnAvantPanel;
+            enAvantViewSave.LockWindow = DancerSettings.Instance.isEnAvantPanelLocked;
             EnAvantPanel.DrawHotkeyWindow(new QtStyle(DancerSettings.Instance.JobViewSave));
-            EnAvantPanel = new HotkeyWindow(enAvantJobViewSave, "Custom DNC En Avant HotkeyWindow");
+            EnAvantPanel = new HotkeyWindow(enAvantViewSave, "Custom DNC En Avant HotkeyWindow");
             EnAvantPanel.HotkeyLineCount = 3;
             
             if (!DancerSettings.Instance.IsReadInfoWindow08)
@@ -204,23 +216,18 @@ public class DancerRotationEntry : IRotationEntry
         QT.AddTab("Qt默认值", DrawQtDefaults);
         
         // 初始化 QT 选项
-        foreach (var (key, value) in DefaultQTValues)
+        foreach (var (key, value) in DefaultQtValues)
         {
             bool initialValue = value.DefaultValue;
             
-            if (DancerSettings.Instance.UserDefinedQtValues.ContainsKey(key))
-            {
-                initialValue = DancerSettings.Instance.UserDefinedQtValues[key];
-            }
+            if (DancerSettings.Instance.UserDefinedQtValues.TryGetValue(key, out var qtValue))
+                initialValue = qtValue;
             
             if (value.Callback != null)
-            {
                 QT.AddQt(key, initialValue, value.Callback);
-            }
             else
-            {
                 QT.AddQt(key, initialValue, value.Description);
-            }
+
             QT.SetQtToolTip(value.Description);
         }
         
@@ -342,9 +349,6 @@ public class DancerRotationEntry : IRotationEntry
                 ImGui.TextColored(new Vector4(0.7f, 0.8f, 0.0f, 1.0000f), "如果你希望使用爆发药，请在QT面板中开启爆发药开关");
             ImGui.Checkbox("起手吃爆发药", ref DancerSettings.Instance.UsePotionInOpener);
             ImGui.Separator();
-            ImGui.Text("AOE设置：" + (DancerSettings.Instance.IsInternationalServer ? "国际服" : "国服"));
-            ImGui.Checkbox("国际服", ref DancerSettings.Instance.IsInternationalServer);
-            ImGui.Separator();
             ImGui.BeginGroup(); // 开始一个整体分组
             ImGui.Checkbox("##DanceDistanceWarning", ref DancerSettings.Instance.DanceDistanceWarning);
             ImGui.SameLine();
@@ -465,10 +469,10 @@ public class DancerRotationEntry : IRotationEntry
     {
         ImGui.Text("在这里设置 Qt 的默认值：");
 
-        foreach (var (key, value) in DefaultQTValues)
+        foreach (var (key, value) in DefaultQtValues)
         {
-            bool currentValue = DancerSettings.Instance.UserDefinedQtValues.ContainsKey(key)
-                ? DancerSettings.Instance.UserDefinedQtValues[key]
+            bool currentValue = DancerSettings.Instance.UserDefinedQtValues.TryGetValue(key, out var qtValue)
+                ? qtValue
                 : value.DefaultValue;
 
             if (ImGui.Checkbox($"{key}##{key}", ref currentValue))
@@ -550,19 +554,4 @@ public class DancerRotationEntry : IRotationEntry
         ImGui.Separator();
         ImGui.PopStyleColor(2);
     }
-
-    public static readonly Dictionary<string, (bool DefaultValue, string Description, Action<bool>? Callback)> DefaultQTValues = new()
-    {
-        { QTKey.UsePotion, (false, "是否使用爆发药", null) },
-        { QTKey.Aoe, (true, "是否使用AOE", null) },
-        { QTKey.StrongAlign, (true, "不会因多打GCD而延后大舞，绝本有上天的阶段建议关闭", null) },
-        { QTKey.TechnicalStep, (true, "是否使用技巧舞步与进攻之探戈", null) },
-        { QTKey.StandardStep, (true, "是否使用标准舞步与结束动作", null) },
-        { QTKey.Flourish, (true, "是否使用百花争艳", null) },
-        { QTKey.SaberDance, (true, "是否使用剑舞与拂晓舞", null) },
-        { QTKey.FanDance, (true, "是否使用扇舞", null) },
-        { QTKey.AutoCuringWaltz, (true, "是否自动使用治疗之华尔兹", null) },
-        { QTKey.FinalBurst, (false, "是否倾泻资源", null) },
-        { QTKey.SmartAoeTarget, (false, "是否智能选择AOE目标", null) }
-    };
 }

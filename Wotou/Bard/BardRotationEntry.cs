@@ -39,7 +39,7 @@ public class BardRotationEntry : IRotationEntry
                                      "\n- 添加70-80级起手" +
                                      "\n- 添加70-80级高难特化循环";
     
-    public static readonly Dictionary<string, (bool DefaultValue, string Description, Action<bool>? Callback)> DefaultQTValues = new()
+    public static readonly Dictionary<string, (bool DefaultValue, string Description, Action<bool>? Callback)> DefaultQtValues = new()
     {
         { QTKey.Aoe, (true, "是否使用AOE", null) },
         { QTKey.Burst, (true, "控制猛者，双团辅及纷乱箭的使用", value => { OnClickBurstQT(); }) },
@@ -181,7 +181,6 @@ public class BardRotationEntry : IRotationEntry
     // 构造函数里初始化QT
     public void BuildQT()
     {
-        BardSettings.Instance.InitializeQtValues();
         // JobViewSave是AE底层提供的QT设置存档类 在你自己的设置里定义即可
         // 第二个参数是你设置文件的Save类 第三个参数是QT窗口标题
         QT = new JobViewWindow(BardSettings.Instance.JobViewSave, BardSettings.Instance.Save, "Wotou Bard 诗人");
@@ -200,23 +199,18 @@ public class BardRotationEntry : IRotationEntry
 
         // 添加QT开关 第二个参数是默认值 (开or关) 第三个参数是鼠标悬浮时的tips
         // 初始化 QT 选项
-        foreach (var (key, value) in DefaultQTValues)
+        foreach (var (key, value) in DefaultQtValues)
         {
             bool initialValue = value.DefaultValue;
             
-            if (BardSettings.Instance.UserDefinedQtValues.ContainsKey(key))
-            {
-                initialValue = BardSettings.Instance.UserDefinedQtValues[key];
-            }
-            
+            if (BardSettings.Instance.UserDefinedQtValues.TryGetValue(key, out var qtValue))
+                initialValue = qtValue;
+
             if (value.Callback != null)
-            {
                 QT.AddQt(key, initialValue, value.Callback);
-            }
             else
-            {
                 QT.AddQt(key, initialValue, value.Description);
-            }
+
             QT.SetQtToolTip(value.Description);
         }
 
@@ -303,10 +297,10 @@ public class BardRotationEntry : IRotationEntry
     {
         ImGui.Text("在这里设置 Qt 的默认值：");
 
-        foreach (var (key, value) in DefaultQTValues)
+        foreach (var (key, value) in DefaultQtValues)
         {
-            bool currentValue = BardSettings.Instance.UserDefinedQtValues.ContainsKey(key)
-                ? BardSettings.Instance.UserDefinedQtValues[key]
+            var currentValue = BardSettings.Instance.UserDefinedQtValues.TryGetValue(key, out var qtValue)
+                ? qtValue
                 : value.DefaultValue;
 
             if (ImGui.Checkbox($"{key}##{key}", ref currentValue))

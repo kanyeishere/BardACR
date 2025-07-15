@@ -33,6 +33,7 @@ public class DancerSettings
             Instance = new();
             LogHelper.Error(e.ToString());
         }
+        Instance.InitializeQtValues();
     }
 
     public void Save()
@@ -68,8 +69,6 @@ public class DancerSettings
     public bool EnableAutoDancing = true; // 是否在自动使用舞步
     public bool EnableAutoDancePartner = true; // 是否在自动使用舞伴
     
-    public bool IsInternationalServer = false; // 是否国际服
-    
     public bool IsReadInfoWindow08 = false;
     
     public bool IsOpenCommandWindow = true;
@@ -88,14 +87,14 @@ public class DancerSettings
     public int M6SAutoTargetCount = 1; 
     
     // 用户自定义的 QT 配置值
-    public Dictionary<string, bool> UserDefinedQtValues { get; private set; } = new();
+    public Dictionary<string, bool> UserDefinedQtValues = new(); // 用户自定义QT值
 
     /// <summary>
     /// 初始化用户自定义的 QT 值。如果没有自定义值，则使用默认值。
     /// </summary>
     public void InitializeQtValues()
     {
-        foreach (var (key, value) in DancerRotationEntry.DefaultQTValues)
+        foreach (var (key, value) in DancerRotationEntry.DefaultQtValues)
         {
             if (!UserDefinedQtValues.ContainsKey(key))
             {

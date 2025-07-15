@@ -134,11 +134,11 @@ public class BardRotationEventHandler : IRotationEventHandler
         }
         
         // 重置 QT 值
-        foreach (var (key, value) in BardRotationEntry.DefaultQTValues)
+        foreach (var (key, value) in BardRotationEntry.DefaultQtValues)
         {
             // 检查用户自定义值，优先使用用户定义值
-            bool qtValue = BardSettings.Instance.UserDefinedQtValues.ContainsKey(key)
-                ? BardSettings.Instance.UserDefinedQtValues[key]
+            var qtValue = BardSettings.Instance.UserDefinedQtValues.TryGetValue(key, out var definedQtValue)
+                ? definedQtValue
                 : value.DefaultValue;
 
             // 设置 QT 值

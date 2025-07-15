@@ -35,6 +35,7 @@ public class BardSettings
             Instance = new();
             LogHelper.Error(e.ToString());
         }
+        Instance.InitializeQtValues();
     }
 
     public void Save()
@@ -100,7 +101,7 @@ public class BardSettings
     /// </summary>
     public void InitializeQtValues()
     {
-        foreach (var (key, value) in BardRotationEntry.DefaultQTValues)
+        foreach (var (key, value) in BardRotationEntry.DefaultQtValues)
         {
             if (!UserDefinedQtValues.ContainsKey(key))
             {
