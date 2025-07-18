@@ -110,7 +110,10 @@ public class DancerRotationEntry : IRotationEntry
         rot.AddTriggerAction(new DancerTriggerActionNewQt());
         rot.AddTriggerAction(new DancerTriggerActionQt());
         rot.AddTriggerAction(new DancerEspritSaveAction());
+        rot.AddTriggerAction(new DancerTriggerActionEspritThreshold());
         rot.AddTriggerAction(new DancerFeatherSaveAction());
+        rot.AddTriggerAction(new DancerTriggerActionToggleDailyMode());
+        rot.AddTriggerAction(new DancerTriggerActionPotionMode());
         rot.AddTriggerCondition(new DancerFeatherCondition());
         rot.AddTriggerCondition(new DancerEspritCondition());
         rot.AddSlotSequences(new TechnicalStandardStepSequence());
