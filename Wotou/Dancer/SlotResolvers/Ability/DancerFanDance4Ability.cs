@@ -24,7 +24,7 @@ public class DancerFanDance4Ability : ISlotResolver
 
     public void Build(Slot slot)
     {
-        slot.Add(DancerUtil.GetSmartAoeSpell(FanDance4));
+        slot.Add(DancerUtil.GetSmartAoeSpell(FanDance4, angle:90));
         // slot.Add(FanDance4.GetSpell());
     }
 }

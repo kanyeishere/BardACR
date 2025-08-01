@@ -154,12 +154,15 @@ namespace Wotou.Dancer.Utility
             return Core.Resolve<JobApi_Dancer>().NextStep.GetSpell();
         }
         
-        public static Spell GetSmartAoeSpell(uint spellId, int minTargetCount = 1, float maxDistance = 25)
+        public static Spell GetSmartAoeSpell(uint spellId, int minTargetCount = 1, float maxDistance = 25, float? angle = null)
         {
             if (!DancerRotationEntry.QT.GetQt(QTKey.SmartAoeTarget))
                 return Core.Resolve<MemApiSpell>().CheckActionChange(spellId).GetSpell();
 
-            var target = TargetHelper.GetMostCanTargetObjects(spellId, minTargetCount);
+            var target = angle != null ? 
+                TargetHelper.GetMostCanTargetObjects(spellId, minTargetCount, angle.Value) : 
+                TargetHelper.GetMostCanTargetObjects(spellId, minTargetCount);
+            
             if (target != null && target.IsValid() && target.DistanceToPlayer() <= maxDistance)
                 return Core.Resolve<MemApiSpell>().CheckActionChange(spellId).GetSpell(target);
 
