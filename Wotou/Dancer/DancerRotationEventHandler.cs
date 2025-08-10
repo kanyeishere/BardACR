@@ -19,8 +19,32 @@ namespace Wotou.Dancer
     public class DancerRotationEventHandler : IRotationEventHandler
     {
         private long _randomTime = 0;
-        private Dictionary<string, string> qtKeyDictionary;
-        private Dictionary<string, string?> hotkeyDictionary;
+        public Dictionary<string, string> qtKeyDictionary;
+        public Dictionary<string, string?> hotkeyDictionary = new (StringComparer.OrdinalIgnoreCase)
+        {
+            { "防击退", "ArmsLength" },
+            { "armslength", "ArmsLength" },
+            { "内丹", "SecondWind" },
+            { "secondwind", "SecondWind" },
+            { "桑巴", "ShieldSamba" },
+            { "shieldsamba", "ShieldSamba" },
+            { "华尔兹", "CuringWaltz" },
+            { "curingwaltz", "CuringWaltz" },
+            { "秒开关即兴", "Improvisation" },
+            { "improvisation", "Improvisation" },
+            { "疾跑", "Run" },
+            { "run", "Run" },
+            { "前冲步", "EnAvant" },
+            { "enavant", "EnAvant" },
+            { "爆发药", "Potion" },
+            { "potion", "Potion" },
+            { "极限技", "LimitBreak" },
+            { "limitbreak", "LimitBreak" },
+            { "停止自动移动", "StopMove" },
+            { "stopmove", "StopMove" },
+            { "伤头", "HeadGraze" },
+            { "headgraze", "HeadGraze" }
+        };
 
         private static Dictionary<Jobs, int> jobPriorities = new()
         {
@@ -135,7 +159,11 @@ namespace Wotou.Dancer
             TimeLineUpdater.UpdateFiles("https://raw.githubusercontent.com/kanyeishere/ACR-Timeline/refs/heads/main/Wotou-DancerMaster.json", DancerSettings.Instance.SelectedTimeLinesForUpdate);
             
             ECHelper.Commands.AddHandler("/Wotou_DNC", new CommandInfo(DancerCommandHandler));
-            
+            BulidQtKeyDictionary();
+        }
+
+        public void BulidQtKeyDictionary()
+        {
             qtKeyDictionary = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             foreach (var fi in typeof(QTKey).GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.FlattenHierarchy))
             {
@@ -158,32 +186,6 @@ namespace Wotou.Dancer
                     }
                 }
             }
-
-            hotkeyDictionary = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase)
-            {
-                { "防击退", "ArmsLength" },
-                { "armslength", "ArmsLength" },
-                { "内丹", "SecondWind" },
-                { "secondwind", "SecondWind" },
-                { "桑巴", "ShieldSamba" },
-                { "shieldsamba", "ShieldSamba" },
-                { "华尔兹", "CuringWaltz" },
-                { "curingwaltz", "CuringWaltz" },
-                { "秒开关即兴", "Improvisation" },
-                { "improvisation", "Improvisation" },
-                { "疾跑", "Run" },
-                { "run", "Run" },
-                { "前冲步", "EnAvant" },
-                { "enavant", "EnAvant" },
-                { "爆发药", "Potion" },
-                { "potion", "Potion" },
-                { "极限技", "LimitBreak" },
-                { "limitbreak", "LimitBreak" },
-                { "停止自动移动", "StopMove" },
-                { "stopmove", "StopMove" },
-                { "伤头", "HeadGraze" },
-                { "headgraze", "HeadGraze" }
-            };
         }
 
         public void OnExitRotation()

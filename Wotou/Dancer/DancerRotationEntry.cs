@@ -253,7 +253,7 @@ public class DancerRotationEntry : IRotationEntry
         for (var i = 1; i < PartyHelper.Party.Count; i++)
         {
             var index = i;
-            DancePartnerPanel?.AddHotkey("切换舞伴: " + PartyHelper.Party[i].Name, new ClosedPositionHotkeyResolver(index));
+            DancePartnerPanel?.AddHotkey("[" + i  +"] 切换舞伴: " + PartyHelper.Party[i].Name , new ClosedPositionHotkeyResolver(index));
         }
     }
     

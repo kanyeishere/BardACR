@@ -23,9 +23,34 @@ namespace Wotou.Bard;
 public class BardRotationEventHandler : IRotationEventHandler
 {
     private long _randomTime = 0;
-    private Dictionary<string, string> qtKeyDictionary;
-    private Dictionary<string, string?> hotkeyDictionary; 
-    
+    public Dictionary<string, string> qtKeyDictionary;
+    public Dictionary<string, string?> hotkeyDictionary = new (StringComparer.OrdinalIgnoreCase)
+    {
+        { "防击退", "ArmsLength" },
+        { "armslength", "ArmsLength" },
+        { "续毒", "IronJaws" },
+        { "ironjaws", "IronJaws" },
+        { "内丹", "SecondWind" },
+        { "secondwind", "SecondWind" },
+        { "行吟", "Troubadour" },
+        { "troubadour", "Troubadour" },
+        { "大地神", "NaturesMinne" },
+        { "naturesminne", "NaturesMinne" },
+        { "疾跑", "Run" },
+        { "run", "Run" },
+        { "后跳", "RepellingShot" },
+        { "repellingshot", "RepellingShot" },
+        { "爆发药", "Potion" },
+        { "potion", "Potion" },
+        { "极限技", "LimitBreak" },
+        { "limitbreak", "LimitBreak" },
+        { "停止自动移动", "StopMove" },
+        { "stopmove", "StopMove" },
+        { "绝峰箭", "ApexArrow"},
+        { "apexarrow", "ApexArrow"},
+        { "伤头", "HeadGraze" },
+        { "headgraze", "HeadGraze" },
+    };
     private static void HandleMovingToTarget()
     {
         var instanceTargetPosition = BardBattleData.Instance.TargetPosition;
@@ -371,7 +396,11 @@ public class BardRotationEventHandler : IRotationEventHandler
 
         // 注册命令
         ECHelper.Commands.AddHandler("/Wotou_BRD", new CommandInfo(BardCommandHandler));
-        
+        BulidQtKeyDictionary();
+    }
+
+    public void BulidQtKeyDictionary()
+    {
         qtKeyDictionary = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         foreach (var fi in typeof(QTKey).GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.FlattenHierarchy))
         {
@@ -394,34 +423,6 @@ public class BardRotationEventHandler : IRotationEventHandler
                 }
             }
         }
-
-        hotkeyDictionary = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase)
-        {
-            { "防击退", "ArmsLength" },
-            { "armslength", "ArmsLength" },
-            { "续毒", "IronJaws" },
-            { "ironjaws", "IronJaws" },
-            { "内丹", "SecondWind" },
-            { "secondwind", "SecondWind" },
-            { "行吟", "Troubadour" },
-            { "troubadour", "Troubadour" },
-            { "大地神", "NaturesMinne" },
-            { "naturesminne", "NaturesMinne" },
-            { "疾跑", "Run" },
-            { "run", "Run" },
-            { "后跳", "RepellingShot" },
-            { "repellingshot", "RepellingShot" },
-            { "爆发药", "Potion" },
-            { "potion", "Potion" },
-            { "极限技", "LimitBreak" },
-            { "limitbreak", "LimitBreak" },
-            { "停止自动移动", "StopMove" },
-            { "stopmove", "StopMove" },
-            { "绝峰箭", "ApexArrow"},
-            { "apexarrow", "ApexArrow"},
-            { "伤头", "HeadGraze" },
-            { "headgraze", "HeadGraze" },
-        };
     }
     
     private void BardCommandHandler(string command, string args)

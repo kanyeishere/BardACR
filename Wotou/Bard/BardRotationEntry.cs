@@ -270,7 +270,7 @@ public class BardRotationEntry : IRotationEntry
         for (var i = 0; i < PartyHelper.Party.Count; i++)
         {
             var index = i;
-            WardensPaeanPanel?.AddHotkey("净化: " + PartyHelper.Party[i].Name, new WardensPaeanHotkeyResolver(index));
+            WardensPaeanPanel?.AddHotkey("[" + i  +"]净化: " + PartyHelper.Party[i].Name, new WardensPaeanHotkeyResolver(index));
         }
     }
     
