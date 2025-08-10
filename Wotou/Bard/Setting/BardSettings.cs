@@ -2,7 +2,6 @@
 using AEAssist.Helper;
 using AEAssist.IO;
 using Dalamud.Game.ClientState.JobGauge.Enums;
-using Dalamud.Interface.Utility.Raii;
 
 namespace Wotou.Bard.Setting;
 
@@ -101,11 +100,11 @@ public class BardSettings
     /// </summary>
     public void InitializeQtValues()
     {
-        foreach (var (key, value) in BardRotationEntry.DefaultQtValues)
+        foreach (var def in BardQtHotkeyRegistry.Qts)
         {
-            if (!UserDefinedQtValues.ContainsKey(key))
+            if (!UserDefinedQtValues.ContainsKey(def.Key))
             {
-                UserDefinedQtValues[key] = value.DefaultValue;
+                UserDefinedQtValues[def.Key] = def.Default; // 只写默认值
             }
         }
     }

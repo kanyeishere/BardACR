@@ -39,27 +39,6 @@ public class BardRotationEntry : IRotationEntry
                                      "\n- 添加70-80级起手" +
                                      "\n- 添加70-80级高难特化循环";
     
-    public static readonly Dictionary<string, (bool DefaultValue, string Description, Action<bool>? Callback)> DefaultQtValues = new()
-    {
-        { QTKey.Aoe, (true, "是否使用AOE", null) },
-        { QTKey.Burst, (true, "控制猛者，双团辅及纷乱箭的使用", value => { OnClickBurstQT(); }) },
-        { QTKey.BurstWithWanderer, (true, "爆发是否对齐旅神", value => { OnClickBurstWithWandererQT(); }) },
-        { QTKey.StrongAlign, (true, "不会因GCD时间变化而延后爆发，绝本有上天的阶段建议关闭", value => { OnClickStrongAlign(value); }) },
-        { QTKey.Apex, (true, "是否使用绝峰箭", null) },
-        { QTKey.HeartBreak, (true, "是否攒碎心箭进团辅", null) },
-        { QTKey.DOT, (true, "是否使用DOT", null) },
-        { QTKey.Song, (true, "是否使用歌曲", null) },
-        { QTKey.NatureMinne, (true, "大地神自动对齐秘策/活化/中间学派", null) },
-        { QTKey.UsePotion, (false, "是否使用爆发药水", null) },
-        { QTKey.Debug, (false, "是否打印调试信息", null) },
-        { QTKey.EmpyrealArrow, (true, "是否使用九天", null) },
-        { QTKey.Sidewinder, (true, "是否使用侧风", null) },
-        { QTKey.EmpyrealArrowBeforeGcd, (false, "Boss上天后，落地第一个技能是否使用九天", null) },
-        { QTKey.ClearHawkEyesBuffBeforeDots, (true, "在上毒前是否清空鹰眼Buff", null) },
-        { QTKey.AutoWardensPaean, (true, "是否开启自动驱散", null) },
-        { QTKey.SmartAoeTarget, (false, "是否智能选择AOE目标", null) }
-    };
-    
     public Rotation Build(string settingFolder)
     {
         BardDefinesData.InitializeDictionary();
@@ -140,7 +119,7 @@ public class BardRotationEntry : IRotationEntry
         return new Bard3GOpener100();
     }
 
-    private static void OnClickStrongAlign(bool value)
+    public static void OnClickStrongAlign(bool value)
     {
         if (!BardUtil.IsSongOrderNormal())
         {
@@ -157,7 +136,7 @@ public class BardRotationEntry : IRotationEntry
         }
     }
 
-    private static void OnClickBurstQT()
+    public static void OnClickBurstQT()
     {
         if (QT.GetQt("强对齐"))
         {
@@ -166,7 +145,7 @@ public class BardRotationEntry : IRotationEntry
         }
     }
 
-    private static void OnClickBurstWithWandererQT()
+    public static void OnClickBurstWithWandererQT()
     {
         if (!BardUtil.IsSongOrderNormal())
         {
@@ -202,19 +181,12 @@ public class BardRotationEntry : IRotationEntry
 
         // 添加QT开关 第二个参数是默认值 (开or关) 第三个参数是鼠标悬浮时的tips
         // 初始化 QT 选项
-        foreach (var (key, value) in DefaultQtValues)
+        foreach (var def in BardQtHotkeyRegistry.Qts)
         {
-            bool initialValue = value.DefaultValue;
-            
-            if (BardSettings.Instance.UserDefinedQtValues.TryGetValue(key, out var qtValue))
-                initialValue = qtValue;
-
-            if (value.Callback != null)
-                QT.AddQt(key, initialValue, value.Callback);
-            else
-                QT.AddQt(key, initialValue, value.Description);
-
-            QT.SetQtToolTip(value.Description);
+            var initial = BardSettings.Instance.UserDefinedQtValues.TryGetValue(def.Key, out var v) ? v : def.Default;
+            if (def.Callback != null) QT.AddQt(def.Key, initial, def.Callback);
+            else QT.AddQt(def.Key, initial, def.Description);
+            QT.SetQtToolTip(def.Description);
         }
 
         if(BardSettings.Instance.JobViewSave.QtUnVisibleList.Count == 0 )
@@ -226,25 +198,11 @@ public class BardRotationEntry : IRotationEntry
         }
 
         // 添加快捷按钮 (带技能图标)
-        QT.AddHotkey("防击退", new MyNormalSpellHotKeyResolver(BardDefinesData.Spells.ArmsLength, 
-            SpellTargetType.Target));
-        QT.AddHotkey("续毒", new IronJawsHotkeyResolver(BardDefinesData.Spells.IronJaws, 
-            SpellTargetType.Target));
-        QT.AddHotkey("内丹",
-            new MyNormalSpellHotKeyResolver(BardDefinesData.Spells.SecondWind, SpellTargetType.Target));
-        QT.AddHotkey("行吟", new MyNormalSpellHotKeyResolver(BardDefinesData.Spells.Troubadour, 
-            SpellTargetType.Target));
-        QT.AddHotkey("大地神",
-            new MyNormalSpellHotKeyResolver(BardDefinesData.Spells.NaturesMinne, SpellTargetType.Target));
-        QT.AddHotkey("疾跑", new HotKeyResolver_疾跑());
-        QT.AddHotkey("绝峰箭", new ApexArrowHotkeyResolver(BardDefinesData.Spells.ApexArrow, 
-            SpellTargetType.Target));
-        QT.AddHotkey("后跳",
-            new MyNormalSpellHotKeyResolver(BardDefinesData.Spells.RepellingShot, SpellTargetType.Target));
-        QT.AddHotkey("爆发药", new HotKeyResolver_Potion());
-        QT.AddHotkey("极限技", new HotKeyResolver_LB());
-        QT.AddHotkey("停止自动移动", new StopMoveHotkeyResolver());
-        QT.AddHotkey("伤头", new MyNormalSpellHotKeyResolver(BardDefinesData.Spells.HeadGraze, SpellTargetType.Target));
+        foreach (var hk in BardQtHotkeyRegistry.Hotkeys)
+        {
+            // UI 显示中文名；如果你做多语言切换，这里可按语言显示 zh/en
+            QT.AddHotkey(hk.LabelZh, hk.Factory());
+        }
     }
 
     public void OnUIUpdate()
@@ -300,15 +258,23 @@ public class BardRotationEntry : IRotationEntry
     {
         ImGui.Text("在这里设置 Qt 的默认值：");
 
-        foreach (var (key, value) in DefaultQtValues)
+        foreach (var def in BardQtHotkeyRegistry.Qts)
         {
-            var currentValue = BardSettings.Instance.UserDefinedQtValues.TryGetValue(key, out var qtValue)
+            var currentValue = BardSettings.Instance.UserDefinedQtValues.TryGetValue(def.Key, out var qtValue)
                 ? qtValue
-                : value.DefaultValue;
+                : def.Default;
 
-            if (ImGui.Checkbox($"{key}##{key}", ref currentValue))
+            // 左侧显示中文键名，右侧是开关
+            ImGui.PushID(def.Key);
+            var clicked = ImGui.Checkbox($"{def.Key}##{def.Key}", ref currentValue);
+
+            // 提示
+            if (ImGui.IsItemHovered() && !string.IsNullOrWhiteSpace(def.Description))
+                ImGui.SetTooltip(def.Description);
+
+            if (clicked)
             {
-                BardSettings.Instance.UserDefinedQtValues[key] = currentValue;
+                BardSettings.Instance.UserDefinedQtValues[def.Key] = currentValue;
                 BardSettings.Instance.Save();
             }
         }

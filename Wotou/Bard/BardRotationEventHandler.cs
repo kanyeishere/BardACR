@@ -23,34 +23,6 @@ namespace Wotou.Bard;
 public class BardRotationEventHandler : IRotationEventHandler
 {
     private long _randomTime = 0;
-    public Dictionary<string, string> qtKeyDictionary;
-    public Dictionary<string, string?> hotkeyDictionary = new (StringComparer.OrdinalIgnoreCase)
-    {
-        { "防击退", "ArmsLength" },
-        { "armslength", "ArmsLength" },
-        { "续毒", "IronJaws" },
-        { "ironjaws", "IronJaws" },
-        { "内丹", "SecondWind" },
-        { "secondwind", "SecondWind" },
-        { "行吟", "Troubadour" },
-        { "troubadour", "Troubadour" },
-        { "大地神", "NaturesMinne" },
-        { "naturesminne", "NaturesMinne" },
-        { "疾跑", "Run" },
-        { "run", "Run" },
-        { "后跳", "RepellingShot" },
-        { "repellingshot", "RepellingShot" },
-        { "爆发药", "Potion" },
-        { "potion", "Potion" },
-        { "极限技", "LimitBreak" },
-        { "limitbreak", "LimitBreak" },
-        { "停止自动移动", "StopMove" },
-        { "stopmove", "StopMove" },
-        { "绝峰箭", "ApexArrow"},
-        { "apexarrow", "ApexArrow"},
-        { "伤头", "HeadGraze" },
-        { "headgraze", "HeadGraze" },
-    };
     private static void HandleMovingToTarget()
     {
         var instanceTargetPosition = BardBattleData.Instance.TargetPosition;
@@ -159,15 +131,14 @@ public class BardRotationEventHandler : IRotationEventHandler
         }
         
         // 重置 QT 值
-        foreach (var (key, value) in BardRotationEntry.DefaultQtValues)
+        foreach (var def in BardQtHotkeyRegistry.Qts)
         {
-            // 检查用户自定义值，优先使用用户定义值
-            var qtValue = BardSettings.Instance.UserDefinedQtValues.TryGetValue(key, out var definedQtValue)
-                ? definedQtValue
-                : value.DefaultValue;
+            bool v = BardSettings.Instance.UserDefinedQtValues.TryGetValue(def.Key, out var saved)
+                ? saved
+                : def.Default;
 
-            // 设置 QT 值
-            BardRotationEntry.QT.SetQt(key, qtValue);
+            // 这里按需触发回调，让逻辑实时生效
+            BardRotationEntry.QT.SetQt(def.Key, v);
         }
         
         if (BardSettings.Instance.IsDailyMode)
@@ -396,33 +367,6 @@ public class BardRotationEventHandler : IRotationEventHandler
 
         // 注册命令
         ECHelper.Commands.AddHandler("/Wotou_BRD", new CommandInfo(BardCommandHandler));
-        BulidQtKeyDictionary();
-    }
-
-    public void BulidQtKeyDictionary()
-    {
-        qtKeyDictionary = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-        foreach (var fi in typeof(QTKey).GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.FlattenHierarchy))
-        {
-            if (fi.IsLiteral && !fi.IsInitOnly && fi.FieldType == typeof(string))
-            {
-                string value = fi.GetValue(null).ToString();
-                string key = value.ToLower();
-                string fieldName = fi.Name.ToLower();
-
-                // 添加中文键
-                if (!qtKeyDictionary.ContainsKey(key))
-                {
-                    qtKeyDictionary.Add(key, value);
-                }
-
-                // 添加英文键
-                if (!qtKeyDictionary.ContainsKey(fieldName))
-                {
-                    qtKeyDictionary.Add(fieldName, value);
-                }
-            }
-        }
     }
     
     private void BardCommandHandler(string command, string args)
@@ -443,27 +387,23 @@ public class BardRotationEventHandler : IRotationEventHandler
             var keyPart = lowerArgs.Substring(0, lowerArgs.Length - 3); // 去除 "_qt"
 
             // 尝试匹配 QTKey 常量
-            var matchedKey = GetMatchingQtKey(keyPart);
-            ToggleQtSetting(matchedKey);
+            var matchedKey = BardQtHotkeyRegistry.ParseQtKey(keyPart);
+            if (matchedKey != null)
+                ToggleQtSetting(matchedKey);
             return;
         }
 
         // 检查是否是 Hotkey + "_hk" 格式的命令
         else if (lowerArgs.EndsWith("_hk"))
         {
-            string keyPart = lowerArgs.Substring(0, lowerArgs.Length - 3); // 去除 "_hk"
-
-            // 尝试匹配 Hotkey
-            if (hotkeyDictionary.TryGetValue(keyPart.ToLower(), out var matchedHotkey))
+            var keyPart = lowerArgs[..^3]; // 去掉 "_hk"
+            if (BardQtHotkeyRegistry.HotkeyAliasToId.TryGetValue(keyPart.ToLower(), out var id))
             {
-                ExecuteHotkey(GetHotkeyResolver(matchedHotkey));
+                ExecuteHotkey(BardQtHotkeyRegistry.CreateResolver(id));
                 return;
             }
-            else
-            {
-                ChatHelper.SendMessage($"未知 Hotkey 参数: {keyPart}");
-                return;
-            }
+            ChatHelper.SendMessage($"未知 Hotkey 参数: {keyPart}");
+            return;
         }
 
         // 处理其他命令
@@ -588,36 +528,6 @@ public class BardRotationEventHandler : IRotationEventHandler
         }
     }
     
-    private IHotkeyResolver? GetHotkeyResolver(string? hotkey)
-    {
-        return hotkey switch
-        {
-            "ArmsLength" => new MyNormalSpellHotKeyResolver(BardDefinesData.Spells.ArmsLength, SpellTargetType.Target),
-            "IronJaws" => new IronJawsHotkeyResolver(BardDefinesData.Spells.IronJaws, SpellTargetType.Target),
-            "SecondWind" => new MyNormalSpellHotKeyResolver(BardDefinesData.Spells.SecondWind, SpellTargetType.Target),
-            "Troubadour" => new MyNormalSpellHotKeyResolver(BardDefinesData.Spells.Troubadour, SpellTargetType.Target),
-            "NaturesMinne" => new MyNormalSpellHotKeyResolver(BardDefinesData.Spells.NaturesMinne, SpellTargetType.Target),
-            "Run" => new HotKeyResolver_疾跑(),
-            "RepellingShot" => new MyNormalSpellHotKeyResolver(BardDefinesData.Spells.RepellingShot, SpellTargetType.Target),
-            "Potion" => new HotKeyResolver_Potion(),
-            "LimitBreak" => new HotKeyResolver_LB(),
-            "StopMove" => new StopMoveHotkeyResolver(),
-            "ApexArrow" => new ApexArrowHotkeyResolver(BardDefinesData.Spells.ApexArrow, SpellTargetType.Target),
-            "HeadGraze" => new MyNormalSpellHotKeyResolver(BardDefinesData.Spells.HeadGraze, SpellTargetType.Target),
-            _ => null
-        };
-    }
-    
-    private string GetMatchingQtKey(string keyPart)
-    {
-        string lowerKeyPart = keyPart.ToLower();
-        if (qtKeyDictionary.TryGetValue(lowerKeyPart, out string matchedKey))
-        {
-            return matchedKey;
-        }
-        return null;
-    }
-
     private void ToggleQtSetting(string qtKey)
     {
         bool currentValue = BardRotationEntry.QT.GetQt(qtKey);
