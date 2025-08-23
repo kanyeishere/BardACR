@@ -354,7 +354,7 @@ public class BardRotationEventHandler : IRotationEventHandler
         }
         if (BardSettings.Instance.WelcomeVoice)
             ChatHelper.SendMessage("/pdr tts 你好，欢迎你使用窝头诗人");
-        // TimeLineUpdater.UpdateFiles("https://raw.githubusercontent.com/kanyeishere/ACR-Timeline/refs/heads/main/Wotou-BardMaster.json", BardSettings.Instance.SelectedTimeLinesForUpdate);
+        TimeLineUpdater.UpdateFiles("https://raw.githubusercontent.com/kanyeishere/ACR-Timeline/refs/heads/main/Wotou-BardMaster.json", BardSettings.Instance.SelectedTimeLinesForUpdate);
         
         try
         {

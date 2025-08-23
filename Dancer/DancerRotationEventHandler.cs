@@ -156,7 +156,7 @@ namespace Wotou.Dancer
             }
             if (DancerSettings.Instance.WelcomeVoice)
                 ChatHelper.SendMessage("/pdr tts 你好，欢迎你使用窝头舞者");
-            // TimeLineUpdater.UpdateFiles("https://raw.githubusercontent.com/kanyeishere/ACR-Timeline/refs/heads/main/Wotou-DancerMaster.json", DancerSettings.Instance.SelectedTimeLinesForUpdate);
+            TimeLineUpdater.UpdateFiles("https://raw.githubusercontent.com/kanyeishere/ACR-Timeline/refs/heads/main/Wotou-DancerMaster.json", DancerSettings.Instance.SelectedTimeLinesForUpdate);
             
             ECHelper.Commands.AddHandler("/Wotou_DNC", new CommandInfo(DancerCommandHandler));
             BulidQtKeyDictionary();

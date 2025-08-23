@@ -860,7 +860,7 @@ public class BardRotationEntry : IRotationEntry
             }
         }
         
-        /*ImGui.Separator();
+        ImGui.Separator();
         if (ImGui.CollapsingHeader("   时间轴更新"))
         {
             ImGui.Separator();
@@ -884,7 +884,7 @@ public class BardRotationEntry : IRotationEntry
                     BardSettings.Instance.Save();
             }
             ImGui.Separator();
-        }*/
+        }
 
         ImGui.Separator();
         if (ImGui.CollapsingHeader("   技能队列"))
