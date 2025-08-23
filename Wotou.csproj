@@ -5,7 +5,7 @@
         <Nullable>enable</Nullable>
         <LangVersion>latest</LangVersion>
         <TargetFramework>net9.0-windows</TargetFramework>
-        <AssemblyName>temp</AssemblyName>
+        <AssemblyName>Wotou</AssemblyName>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
     </PropertyGroup>
