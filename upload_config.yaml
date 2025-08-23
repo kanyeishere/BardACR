@@ -1,12 +1,12 @@
 #ACR介绍
-Remark: 这是一个ACR介绍
+Remark: 日随/高难 全等级
 #支持的职业
 SupportJobs:
-  - 白魔法师
-  - 黑魔法师
+  - 吟游诗人
+  - 舞者
 #支持链接
-SupportUrl: https://exam.exam.com
+SupportUrl: https://afdian.com/a/wotou
 #问题反馈链接
-ReportUrl: https://exam.exam.com
+ReportUrl: https://discord.com/channels/1191648233454313482/1296269368224911461
 #是否国际服版本
 EnVersion: false
