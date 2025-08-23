@@ -401,7 +401,7 @@ public class DancerRotationEntry : IRotationEntry
             if (ImGui.Button("保存界面设置")) DancerSettings.Instance.Save();
         }
         
-        ImGui.Separator();
+        /*ImGui.Separator();
         if (ImGui.CollapsingHeader("   时间轴更新"))
         {
             ImGui.Separator();
@@ -425,7 +425,7 @@ public class DancerRotationEntry : IRotationEntry
                     DancerSettings.Instance.Save();
             }
             ImGui.Separator();
-        }
+        }*/
         
         ImGui.Separator();
         if (ImGui.CollapsingHeader("   副本设置"))
