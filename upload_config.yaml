@@ -1,0 +1,12 @@
+#ACR介绍
+Remark: 这是一个ACR介绍
+#支持的职业
+SupportJobs:
+  - 白魔法师
+  - 黑魔法师
+#支持链接
+SupportUrl: https://exam.exam.com
+#问题反馈链接
+ReportUrl: https://exam.exam.com
+#是否国际服版本
+EnVersion: false

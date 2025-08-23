@@ -1,0 +1,17 @@
+packages.lock.json
+
+*.sln
+
+*.DotSettings.user
+
+obj
+
+bin
+
+.idea
+
+.git
+
+.vs
+
+output
