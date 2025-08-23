@@ -329,7 +329,7 @@ public class BardRotationEventHandler : IRotationEventHandler
         }
     }
 
-    public void OnEnterRotation()
+    public async void OnEnterRotation()
     {
         try
         {
@@ -354,18 +354,20 @@ public class BardRotationEventHandler : IRotationEventHandler
         }
         if (BardSettings.Instance.WelcomeVoice)
             ChatHelper.SendMessage("/pdr tts 你好，欢迎你使用窝头诗人");
-        TimeLineUpdater.UpdateFiles("https://raw.githubusercontent.com/kanyeishere/ACR-Timeline/refs/heads/main/Wotou-BardMaster.json", BardSettings.Instance.SelectedTimeLinesForUpdate);
+        try
+        {
+            await TimeLineUpdater.UpdateFiles("https://raw.githubusercontent.com/kanyeishere/ACR-Timeline/refs/heads/main/Wotou-BardMaster.json", BardSettings.Instance.SelectedTimeLinesForUpdate);
+        }
+        catch (Exception ex)
+        {
+            LogHelper.PrintError($"时间轴更新失败: {ex.Message}");
+        }
         
         try
         {
             ECHelper.Commands.RemoveHandler("/Wotou_BRD");
         }
-        catch (Exception)
-        {
-            // ignored
-        }
-
-        // 注册命令
+        catch (Exception) { }
         ECHelper.Commands.AddHandler("/Wotou_BRD", new CommandInfo(BardCommandHandler));
     }
     

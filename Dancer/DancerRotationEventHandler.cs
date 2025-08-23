@@ -131,7 +131,7 @@ namespace Wotou.Dancer
             }
         }
 
-        public void OnEnterRotation()
+        public async void OnEnterRotation()
         {
             try
             {
@@ -156,8 +156,20 @@ namespace Wotou.Dancer
             }
             if (DancerSettings.Instance.WelcomeVoice)
                 ChatHelper.SendMessage("/pdr tts 你好，欢迎你使用窝头舞者");
-            TimeLineUpdater.UpdateFiles("https://raw.githubusercontent.com/kanyeishere/ACR-Timeline/refs/heads/main/Wotou-DancerMaster.json", DancerSettings.Instance.SelectedTimeLinesForUpdate);
+            try
+            {
+                await TimeLineUpdater.UpdateFiles("https://raw.githubusercontent.com/kanyeishere/ACR-Timeline/refs/heads/main/Wotou-DancerMaster.json", DancerSettings.Instance.SelectedTimeLinesForUpdate);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.PrintError($"时间轴更新失败: {ex.Message}");
+            }
             
+            try
+            {
+                ECHelper.Commands.RemoveHandler("/Wotou_DNC");
+            }
+            catch (Exception) { }
             ECHelper.Commands.AddHandler("/Wotou_DNC", new CommandInfo(DancerCommandHandler));
             BulidQtKeyDictionary();
         }
