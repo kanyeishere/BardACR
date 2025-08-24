@@ -90,8 +90,7 @@ public class WardensPaeanHotkeyResolver : IHotkeyResolver
         
         if (!BardBattleData.Instance.HotkeyUseHighPrioritySlot)
         {
-            if (AI.Instance.BattleData.NextSlot == null)
-                AI.Instance.BattleData.NextSlot = new Slot(); 
+            AI.Instance.BattleData.NextSlot ??= new Slot();
             AI.Instance.BattleData.NextSlot.Add(new Spell(BardDefinesData.Spells.TheWardensPaean,
                     partyMembers[index]));
         }

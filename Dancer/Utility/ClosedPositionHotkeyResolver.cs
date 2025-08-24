@@ -98,8 +98,7 @@ public class ClosedPositionHotkeyResolver : IHotkeyResolver
         
         if (!DancerBattleData.Instance.HotkeyUseHighPrioritySlot)
         {
-            if (AI.Instance.BattleData.NextSlot == null)
-                AI.Instance.BattleData.NextSlot = new Slot();
+            AI.Instance.BattleData.NextSlot ??= new Slot();
             if (Core.Me.HasLocalPlayerAura(DancerDefinesData.Buffs.ClosedPosition))
             {
                 AI.Instance.BattleData.NextSlot.Add(DancerDefinesData.Spells.Ending.GetSpell());

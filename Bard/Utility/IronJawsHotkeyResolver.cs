@@ -49,8 +49,7 @@ public class IronJawsHotkeyResolver: IHotkeyResolver
         Spell spell = Core.Resolve<MemApiSpell>().CheckActionChange(this.SpellId).GetSpell(this.TargetType);
         if (!BardBattleData.Instance.HotkeyUseHighPrioritySlot)
         {
-            if (AI.Instance.BattleData.NextSlot == null)
-                AI.Instance.BattleData.NextSlot = new Slot();
+            AI.Instance.BattleData.NextSlot ??= new Slot();
             AI.Instance.BattleData.NextSlot.Add(spell);
         }
         else

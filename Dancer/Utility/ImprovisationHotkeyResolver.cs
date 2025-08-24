@@ -89,8 +89,7 @@ public class ImprovisationHotkeyResolver : IHotkeyResolver
             return;
         if (!DancerBattleData.Instance.HotkeyUseHighPrioritySlot)
         {
-            if (AI.Instance.BattleData.NextSlot == null)
-                AI.Instance.BattleData.NextSlot = new Slot();
+            AI.Instance.BattleData.NextSlot ??= new Slot();
             AI.Instance.BattleData.NextSlot.Add(DancerDefinesData.Spells.Improvisation.GetSpell());
             AI.Instance.BattleData.NextSlot.Add(DancerDefinesData.Spells.ImprovisationFinish.GetSpell());
         }else
