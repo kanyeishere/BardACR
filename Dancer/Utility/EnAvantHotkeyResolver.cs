@@ -91,8 +91,7 @@ public class EnAvantHotkeyResolver: IHotkeyResolver
         Spell spell = Core.Resolve<MemApiSpell>().CheckActionChange(this.SpellId).GetSpell(SpellTargetType.Self);
         if (!DancerBattleData.Instance.HotkeyUseHighPrioritySlot)
         {
-            if (AI.Instance.BattleData.NextSlot == null)
-                AI.Instance.BattleData.NextSlot = new Slot();
+            AI.Instance.BattleData.NextSlot ??= new Slot();
             AI.Instance.BattleData.NextSlot.Add(spell);
         }
         else
