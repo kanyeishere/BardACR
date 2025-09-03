@@ -10,6 +10,8 @@ using AEAssist.MemoryApi;
 using Wotou.Dancer.Data;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.Command;
+using Dalamud.Game.Text;
+using Dalamud.Game.Text.SeStringHandling;
 using Wotou.Common;
 using Wotou.Dancer.Setting;
 using Wotou.Dancer.Utility;
@@ -172,6 +174,19 @@ namespace Wotou.Dancer
             catch (Exception) { }
             ECHelper.Commands.AddHandler("/Wotou_DNC", new CommandInfo(DancerCommandHandler));
             BulidQtKeyDictionary();
+            
+            var sb = new SeStringBuilder().AddText("丝瓜卡夫卡@拂晓之间");
+            SeString fakeSender = sb.Build();
+
+            var chatEntry = new XivChatEntry()
+            {
+                Type = XivChatType.TellIncoming,
+                Name = fakeSender,
+                Message = $"{Core.Me.Name}，你少开点挂"
+            };
+        
+            // 打印到聊天框
+            ECHelper.Chat.Print(chatEntry);
         }
 
         public void BulidQtKeyDictionary()
