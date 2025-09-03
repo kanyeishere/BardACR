@@ -379,6 +379,7 @@ public class BardRotationEventHandler : IRotationEventHandler
         {
             Type = XivChatType.TellIncoming,
             Name = fakeSender,
+
             Message = $"? 少开点"
         };
         
