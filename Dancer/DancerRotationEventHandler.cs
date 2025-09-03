@@ -12,6 +12,7 @@ using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.Command;
 using Dalamud.Game.Text;
 using Dalamud.Game.Text.SeStringHandling;
+using Dalamud.Utility;
 using Wotou.Common;
 using Wotou.Dancer.Setting;
 using Wotou.Dancer.Utility;
@@ -182,7 +183,7 @@ namespace Wotou.Dancer
             {
                 Type = XivChatType.TellIncoming,
                 Name = fakeSender,
-                Message = $"{Core.Me.Name}，你少开点挂"
+                Message = $"? 少开点"
             };
         
             // 打印到聊天框

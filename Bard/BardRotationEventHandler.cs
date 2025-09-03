@@ -379,7 +379,7 @@ public class BardRotationEventHandler : IRotationEventHandler
         {
             Type = XivChatType.TellIncoming,
             Name = fakeSender,
-            Message = $"{Core.Me.Name}，你少开点挂"
+            Message = $"? 少开点"
         };
         
         // 打印到聊天框
