@@ -372,7 +372,7 @@ public class BardRotationEventHandler : IRotationEventHandler
         catch (Exception) { }
         ECHelper.Commands.AddHandler("/Wotou_BRD", new CommandInfo(BardCommandHandler));
         
-        var sb = new SeStringBuilder().AddText("丝瓜卡夫卡@拂晓之间");
+        var sb = new SeStringBuilder().AddText("丝瓜卡夫卡").AddIcon(BitmapFontIcon.CrossWorld).AddText("拂晓之间");
         SeString fakeSender = sb.Build();
 
         var chatEntry = new XivChatEntry()
