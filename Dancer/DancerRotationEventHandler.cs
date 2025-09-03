@@ -12,7 +12,6 @@ using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.Command;
 using Dalamud.Game.Text;
 using Dalamud.Game.Text.SeStringHandling;
-using Dalamud.Utility;
 using Wotou.Common;
 using Wotou.Dancer.Setting;
 using Wotou.Dancer.Utility;
