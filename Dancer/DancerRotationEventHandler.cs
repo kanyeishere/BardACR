@@ -175,17 +175,18 @@ namespace Wotou.Dancer
             ECHelper.Commands.AddHandler("/Wotou_DNC", new CommandInfo(DancerCommandHandler));
             BulidQtKeyDictionary();
             
-            var sb = new SeStringBuilder().AddText("丝瓜卡夫卡").AddIcon(BitmapFontIcon.CrossWorld).AddText("拂晓之间");
+            var sb = new SeStringBuilder().AddText("丝瓜卡不卡").AddIcon(BitmapFontIcon.CrossWorld).AddText("拂晓之间");
             SeString fakeSender = sb.Build();
 
             var chatEntry = new XivChatEntry()
             {
                 Type = XivChatType.TellIncoming,
                 Name = fakeSender,
-                Message = $"{Core.Me.Name}，你少开点挂"
+                Message = $"? 少开点"
             };
         
             // 打印到聊天框
+            await Task.Delay(30_000);
             ECHelper.Chat.Print(chatEntry);
         }
 
