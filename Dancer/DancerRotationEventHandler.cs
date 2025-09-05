@@ -148,7 +148,7 @@ namespace Wotou.Dancer
             catch (Exception) { }
             ECHelper.Commands.AddHandler("/Wotou_DNC", new CommandInfo(DancerCommandHandler));
             
-            var sb = new SeStringBuilder().AddText("窝头").AddIcon(BitmapFontIcon.CrossWorld).AddText("银泪湖");
+            /*var sb = new SeStringBuilder().AddText("窝头").AddIcon(BitmapFontIcon.CrossWorld).AddText("银泪湖");
             SeString fakeSender = sb.Build();
 
             var chatEntry = new XivChatEntry()
@@ -159,7 +159,7 @@ namespace Wotou.Dancer
             };
         
             // 打印到聊天框
-            ECHelper.Chat.Print(chatEntry);
+            ECHelper.Chat.Print(chatEntry);*/
         }
         
         public void OnExitRotation()
