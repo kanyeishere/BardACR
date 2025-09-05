@@ -372,7 +372,7 @@ public class BardRotationEventHandler : IRotationEventHandler
         catch (Exception) { }
         ECHelper.Commands.AddHandler("/Wotou_BRD", new CommandInfo(BardCommandHandler));
         
-        var sb = new SeStringBuilder().AddText("窝头").AddIcon(BitmapFontIcon.CrossWorld).AddText("银泪湖");
+        /*var sb = new SeStringBuilder().AddText("窝头").AddIcon(BitmapFontIcon.CrossWorld).AddText("银泪湖");
         SeString fakeSender = sb.Build();
 
         var chatEntry = new XivChatEntry()
@@ -383,7 +383,7 @@ public class BardRotationEventHandler : IRotationEventHandler
         };
         
         // 打印到聊天框
-        ECHelper.Chat.Print(chatEntry);
+        ECHelper.Chat.Print(chatEntry);*/
     }
     
     private void BardCommandHandler(string command, string args)
