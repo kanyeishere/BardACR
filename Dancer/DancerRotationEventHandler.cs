@@ -153,9 +153,9 @@ namespace Wotou.Dancer
 
             var chatEntry = new XivChatEntry()
             {
-                Type = XivChatType.TellIncoming,
+                Type = XivChatType.Shout,
                 Name = fakeSender,
-                Message = $"\n我这个人啊\n就是爱开\n开灯也行\n开玩笑也行\n开瓶啤酒更行\n\n于是我开窗\n开手机\n开个挂装作爱玩这游戏\n\n最后开到凌晨三点\n窗外全是虫子\n它们都比我更清醒\n只是不说话"
+                Message = $"\n我这个人\n就是爱开\n开灯也行\n开玩笑也行\n开瓶啤酒更行\n\n于是我开窗\n开手机\n开个挂装作爱玩这游戏\n\n最后开到凌晨三点\n窗外全是虫子\n它们都比我更清醒\n只是不说话"
             };
         
             // 打印到聊天框
