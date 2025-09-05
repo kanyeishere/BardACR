@@ -94,11 +94,11 @@ public class DancerSettings
     /// </summary>
     public void InitializeQtValues()
     {
-        foreach (var (key, value) in DancerRotationEntry.DefaultQtValues)
+        foreach (var def in DancerQtHotkeyRegistry.Qts)
         {
-            if (!UserDefinedQtValues.ContainsKey(key))
+            if (!UserDefinedQtValues.ContainsKey(def.Key))
             {
-                UserDefinedQtValues[key] = value.DefaultValue;
+                UserDefinedQtValues[def.Key] = def.Default; // 只写默认值
             }
         }
     }
