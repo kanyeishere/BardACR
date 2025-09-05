@@ -37,21 +37,6 @@ public class DancerRotationEntry : IRotationEntry
     
     private const string UpdateLog = "";
     
-    public static readonly Dictionary<string, (bool DefaultValue, string Description, Action<bool>? Callback)> DefaultQtValues = new()
-    {
-        { QTKey.UsePotion, (false, "是否使用爆发药", null) },
-        { QTKey.Aoe, (true, "是否使用AOE", null) },
-        { QTKey.StrongAlign, (true, "不会因多打GCD而延后大舞，绝本有上天的阶段建议关闭", null) },
-        { QTKey.TechnicalStep, (true, "是否使用技巧舞步与进攻之探戈", null) },
-        { QTKey.StandardStep, (true, "是否使用标准舞步与结束动作", null) },
-        { QTKey.Flourish, (true, "是否使用百花争艳", null) },
-        { QTKey.SaberDance, (true, "是否使用剑舞与拂晓舞", null) },
-        { QTKey.FanDance, (true, "是否使用扇舞", null) },
-        { QTKey.AutoCuringWaltz, (true, "是否自动使用治疗之华尔兹", null) },
-        { QTKey.FinalBurst, (false, "是否倾泻资源", null) },
-        { QTKey.SmartAoeTarget, (false, "是否智能选择AOE目标", null) }
-    };
-    
     public void Dispose()
     {
     }
@@ -219,32 +204,19 @@ public class DancerRotationEntry : IRotationEntry
         QT.AddTab("Qt默认值", DrawQtDefaults);
         
         // 初始化 QT 选项
-        foreach (var (key, value) in DefaultQtValues)
+        foreach (var def in DancerQtHotkeyRegistry.Qts)
         {
-            bool initialValue = value.DefaultValue;
-            
-            if (DancerSettings.Instance.UserDefinedQtValues.TryGetValue(key, out var qtValue))
-                initialValue = qtValue;
-            
-            if (value.Callback != null)
-                QT.AddQt(key, initialValue, value.Callback);
-            else
-                QT.AddQt(key, initialValue, value.Description);
+            bool initialValue = DancerSettings.Instance.UserDefinedQtValues.TryGetValue(def.Key, out var qtValue)
+                ? qtValue
+                : def.Default;
 
-            QT.SetQtToolTip(value.Description);
+            if (def.Callback != null) QT.AddQt(def.Key, initialValue, def.Callback);
+            else QT.AddQt(def.Key, initialValue, def.Description);
+
+            QT.SetQtToolTip(def.Description);
         }
         
-        QT.AddHotkey("防击退", new MyNormalSpellHotKeyResolver(DancerDefinesData.Spells.ArmsLength, SpellTargetType.Target));
-        QT.AddHotkey("内丹", new MyNormalSpellHotKeyResolver(DancerDefinesData.Spells.SecondWind, SpellTargetType.Self));
-        QT.AddHotkey("桑巴", new MyNormalSpellHotKeyResolver(DancerDefinesData.Spells.ShieldSamba, SpellTargetType.Self));
-        QT.AddHotkey("华尔兹", new MyNormalSpellHotKeyResolver(DancerDefinesData.Spells.CuringWaltz, SpellTargetType.Self));
-        QT.AddHotkey("秒开关即兴", new ImprovisationHotkeyResolver());
-        QT.AddHotkey("疾跑", new HotKeyResolver_疾跑());
-        QT.AddHotkey("前冲步", new MyNormalSpellHotKeyResolver(DancerDefinesData.Spells.EnAvant, SpellTargetType.Self));
-        QT.AddHotkey("爆发药", new HotKeyResolver_Potion());
-        QT.AddHotkey("极限技", new HotKeyResolver_LB());
-        QT.AddHotkey("停止自动移动", new StopMoveHotkeyResolver());
-        QT.AddHotkey("伤头", new MyNormalSpellHotKeyResolver(DancerDefinesData.Spells.HeadGraze, SpellTargetType.Target));
+        foreach (var hk in DancerQtHotkeyRegistry.Hotkeys) QT.AddHotkey(hk.LabelZh, hk.Factory());
     }
     
     public static void UpdateDancerPartnerPanel()
@@ -472,15 +444,15 @@ public class DancerRotationEntry : IRotationEntry
     {
         ImGui.Text("在这里设置 Qt 的默认值：");
 
-        foreach (var (key, value) in DefaultQtValues)
+        foreach (var def in DancerQtHotkeyRegistry.Qts) // [CHANGED]
         {
-            bool currentValue = DancerSettings.Instance.UserDefinedQtValues.TryGetValue(key, out var qtValue)
+            bool currentValue = DancerSettings.Instance.UserDefinedQtValues.TryGetValue(def.Key, out var qtValue)
                 ? qtValue
-                : value.DefaultValue;
+                : def.Default;
 
-            if (ImGui.Checkbox($"{key}##{key}", ref currentValue))
+            if (ImGui.Checkbox($"{def.Key}##{def.Key}", ref currentValue))
             {
-                DancerSettings.Instance.UserDefinedQtValues[key] = currentValue;
+                DancerSettings.Instance.UserDefinedQtValues[def.Key] = currentValue;
                 DancerSettings.Instance.Save();
             }
         }
