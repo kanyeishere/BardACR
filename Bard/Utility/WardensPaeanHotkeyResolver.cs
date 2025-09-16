@@ -29,7 +29,7 @@ public class WardensPaeanHotkeyResolver : IHotkeyResolver
         ImGui.SetCursorPos(size * 0.1f);
         if (!Core.Resolve<MemApiIcon>().GetActionTexture(id, out var textureWrap))
             return;
-        ImGui.Image(new ImTextureID(textureWrap.Handle), size1);
+        ImGui.Image(textureWrap.Handle, size1);
         
         if (SpellId.GetSpell().Cooldown.TotalMilliseconds > 0)
         {
