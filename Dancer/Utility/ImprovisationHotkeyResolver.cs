@@ -27,7 +27,7 @@ public class ImprovisationHotkeyResolver : IHotkeyResolver
         ImGui.SetCursorPos(size * 0.1f);
         if (!Core.Resolve<MemApiIcon>().GetActionTexture(id, out var textureWrap))
             return;
-        ImGui.Image(new ImTextureID(textureWrap.ImGuiHandle), size1);
+        ImGui.Image(new ImTextureID(textureWrap.Handle), size1);
         // Check if skill is on cooldown and apply grey overlay if true
         
         if (!Core.Resolve<MemApiSpell>().CheckActionChange(SpellId).GetSpell().IsReadyWithCanCast())
