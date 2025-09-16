@@ -4,7 +4,6 @@ using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.Helper;
-using AEAssist.JobApi;
 using AEAssist.MemoryApi;
 using Dalamud.Interface.Textures.TextureWraps;
 using Dalamud.Bindings.ImGui;
@@ -19,19 +18,18 @@ public class WardensPaeanHotkeyResolver : IHotkeyResolver
 
     public WardensPaeanHotkeyResolver(int index)
     {
-        this.SpellId = BardDefinesData.Spells.TheWardensPaean;
-        this.Index = index;
+        SpellId = BardDefinesData.Spells.TheWardensPaean;
+        Index = index;
     }
     
     public void Draw(Vector2 size)
     {
-        uint id = SpellId;
-        Vector2 size1 = size * 0.8f;
+        var id = SpellId;
+        var size1 = size * 0.8f;
         ImGui.SetCursorPos(size * 0.1f);
-        IDalamudTextureWrap textureWrap;
-        if (!Core.Resolve<MemApiIcon>().GetActionTexture(id, out textureWrap))
+        if (!Core.Resolve<MemApiIcon>().GetActionTexture(id, out var textureWrap))
             return;
-        ImGui.Image(textureWrap.Handle, size1);
+        ImGui.Image(new ImTextureID(textureWrap.ImGuiHandle), size1);
         
         if (SpellId.GetSpell().Cooldown.TotalMilliseconds > 0)
         {
@@ -50,10 +48,10 @@ public class WardensPaeanHotkeyResolver : IHotkeyResolver
         if (cooldownRemaining > 0)
         {
             // Convert cooldown to seconds and format as string
-            string cooldownText = Math.Ceiling(cooldownRemaining).ToString();
+            var cooldownText = Math.Ceiling(cooldownRemaining).ToString();
 
             // 计算文本位置，向左下角偏移
-            Vector2 textPos = ImGui.GetItemRectMin();
+            var textPos = ImGui.GetItemRectMin();
             textPos.X -= 1; // 向左移动一点
             textPos.Y += size1.Y - ImGui.CalcTextSize(cooldownText).Y + 5; // 向下移动一点
 
@@ -96,7 +94,7 @@ public class WardensPaeanHotkeyResolver : IHotkeyResolver
         }
         else
         {
-            Slot slot = new Slot();
+            var slot = new Slot();
             slot.Add(new Spell(BardDefinesData.Spells.TheWardensPaean, partyMembers[index]));
             AI.Instance.BattleData.HighPrioritySlots_OffGCD.Enqueue(slot);
         }

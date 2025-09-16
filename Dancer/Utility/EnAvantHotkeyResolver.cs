@@ -24,20 +24,19 @@ public class EnAvantHotkeyResolver: IHotkeyResolver
     
     public void Draw(Vector2 size)
     {
-        uint id = Core.Resolve<MemApiSpell>().CheckActionChange(SpellId);
-        Vector2 size1 = size * 0.8f;
+        var id = Core.Resolve<MemApiSpell>().CheckActionChange(SpellId);
+        var size1 = size * 0.8f;
         ImGui.SetCursorPos(size * 0.1f);
-        IDalamudTextureWrap textureWrap;
-        if (!Core.Resolve<MemApiIcon>().GetActionTexture(id, out textureWrap))
+        if (!Core.Resolve<MemApiIcon>().GetActionTexture(id, out var textureWrap))
             return;
-        ImGui.Image(textureWrap.Handle, size1);
+        ImGui.Image(new ImTextureID(textureWrap.ImGuiHandle), size1);
         // Check if skill is on cooldown and apply grey overlay if true
         
         if (!Core.Resolve<MemApiSpell>().CheckActionChange(SpellId).GetSpell().IsReadyWithCanCast())
         {
             // Use ImGui.GetItemRectMin() and ImGui.GetItemRectMax() for exact icon bounds
-            Vector2 overlayMin = ImGui.GetItemRectMin();
-            Vector2 overlayMax = ImGui.GetItemRectMax();
+            var overlayMin = ImGui.GetItemRectMin();
+            var overlayMax = ImGui.GetItemRectMax();
 
             // Draw a grey overlay over the icon
             ImGui.GetWindowDrawList().AddRectFilled(
@@ -50,10 +49,10 @@ public class EnAvantHotkeyResolver: IHotkeyResolver
         if (cooldownRemaining > 0)
         {
             // Convert cooldown to seconds and format as string
-            string cooldownText = Math.Ceiling(cooldownRemaining).ToString();
+            var cooldownText = Math.Ceiling(cooldownRemaining).ToString();
 
             // 计算文本位置，向左下角偏移
-            Vector2 textPos = ImGui.GetItemRectMin();
+            var textPos = ImGui.GetItemRectMin();
             textPos.X -= 1; // 向左移动一点
             textPos.Y += size1.Y - ImGui.CalcTextSize(cooldownText).Y + 5; // 向下移动一点
 
@@ -75,7 +74,7 @@ public class EnAvantHotkeyResolver: IHotkeyResolver
 
     public void Run()
     {
-        float rotation = RotHelper.GetCameraRotation() + Rotation;
+        var rotation = RotHelper.GetCameraRotation() + Rotation;
 
         Core.Resolve<MemApiMove>().SetRot(rotation);
         /*float moveDistance = 0.5f; // **移动的距离（可以调整）**
@@ -88,7 +87,7 @@ public class EnAvantHotkeyResolver: IHotkeyResolver
         
         Core.Resolve<MemApiMove>().MoveToTarget(targetPos);*/
         //  return; 
-        Spell spell = Core.Resolve<MemApiSpell>().CheckActionChange(this.SpellId).GetSpell(SpellTargetType.Self);
+        var spell = Core.Resolve<MemApiSpell>().CheckActionChange(this.SpellId).GetSpell(SpellTargetType.Self);
         if (!DancerBattleData.Instance.HotkeyUseHighPrioritySlot)
         {
             AI.Instance.BattleData.NextSlot ??= new Slot();
@@ -96,7 +95,7 @@ public class EnAvantHotkeyResolver: IHotkeyResolver
         }
         else
         {
-            Slot slot = new Slot();
+            var slot = new Slot();
             slot.Add(spell);
             if (spell.IsAbility())
                 AI.Instance.BattleData.HighPrioritySlots_OffGCD.Enqueue(slot);
