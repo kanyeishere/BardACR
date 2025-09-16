@@ -1,6 +1,6 @@
 ﻿using AEAssist.CombatRoutine.Trigger;
 using AEAssist.GUI;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 
 namespace Wotou.Dancer.Trigger;
 

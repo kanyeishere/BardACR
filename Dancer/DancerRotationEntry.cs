@@ -17,7 +17,7 @@ using Wotou.Dancer.GCD;
 using Wotou.Dancer.Opener;
 using Wotou.Dancer.Setting;
 using Wotou.Dancer.Trigger;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using Wotou.Common;
 using Wotou.Dancer.Sequence;
 using Wotou.Dancer.Triggers;

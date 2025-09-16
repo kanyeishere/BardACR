@@ -5,7 +5,7 @@ using AEAssist.CombatRoutine.Trigger.Node;
 using AEAssist.GUI;
 using AEAssist.GUI.Tree;
 using AEAssist.JobApi;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 
 #nullable enable
 namespace Wotou.Bard.Triggers;

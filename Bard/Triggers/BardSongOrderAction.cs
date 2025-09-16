@@ -3,7 +3,7 @@ using AEAssist.CombatRoutine.Trigger;
 using AEAssist.GUI;
 using AEAssist.Helper;
 using Dalamud.Game.ClientState.JobGauge.Enums;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using Wotou.Bard.Setting;
 using Wotou.Bard.Utility;
 

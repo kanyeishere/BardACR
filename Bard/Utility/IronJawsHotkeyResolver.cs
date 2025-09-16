@@ -6,31 +6,30 @@ using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
 using Dalamud.Interface.Textures.TextureWraps;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using Wotou.Bard.Data;
 
 namespace Wotou.Bard.Utility;
 
 public class IronJawsHotkeyResolver: IHotkeyResolver
 {
-    public uint SpellId;
-    public SpellTargetType TargetType;
+    private uint SpellId;
+    private SpellTargetType TargetType;
     
     public IronJawsHotkeyResolver(uint spellId, SpellTargetType targetType) 
     {
-        this.SpellId = spellId;
-        this.TargetType = targetType;
+        SpellId = spellId;
+        TargetType = targetType;
     }
     
     public void Draw(Vector2 size)
     {
-        uint id = Core.Resolve<MemApiSpell>().CheckActionChange(SpellId);
-        Vector2 size1 = size * 0.8f;
+        var id = Core.Resolve<MemApiSpell>().CheckActionChange(SpellId);
+        var size1 = size * 0.8f;
         ImGui.SetCursorPos(size * 0.1f);
-        IDalamudTextureWrap textureWrap;
-        if (!Core.Resolve<MemApiIcon>().GetActionTexture(id, out textureWrap))
+        if (!Core.Resolve<MemApiIcon>().GetActionTexture(id, out var textureWrap))
             return;
-        ImGui.Image(textureWrap.ImGuiHandle, size1);
+        ImGui.Image(new ImTextureID(textureWrap.ImGuiHandle), size1);
     }
 
     public void DrawExternal(Vector2 size, bool isActive)
@@ -46,7 +45,7 @@ public class IronJawsHotkeyResolver: IHotkeyResolver
 
     public new void Run()
     {
-        Spell spell = Core.Resolve<MemApiSpell>().CheckActionChange(this.SpellId).GetSpell(this.TargetType);
+        var spell = Core.Resolve<MemApiSpell>().CheckActionChange(this.SpellId).GetSpell(this.TargetType);
         if (!BardBattleData.Instance.HotkeyUseHighPrioritySlot)
         {
             AI.Instance.BattleData.NextSlot ??= new Slot();
@@ -54,7 +53,7 @@ public class IronJawsHotkeyResolver: IHotkeyResolver
         }
         else
         {
-            Slot slot = new Slot();
+            var slot = new Slot();
             slot.Add(spell);
             if (spell.IsAbility())
                 AI.Instance.BattleData.HighPrioritySlots_OffGCD.Enqueue(slot);

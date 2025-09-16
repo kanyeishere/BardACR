@@ -1,5 +1,5 @@
 using AEAssist.CombatRoutine.Trigger;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using System.Collections.Generic;
 using System.Numerics;
 using AEAssist;
@@ -28,10 +28,10 @@ namespace Wotou.Bard.Triggers
             ImGui.Text("拖动图标设置顺序：");
             ImGui.NewLine();
 
-            for (int i = 0; i < SongOrder.Count; i++)
+            for (var i = 0; i < SongOrder.Count; i++)
             {
                 var song = SongOrder[i];
-                string name = song switch
+                var name = song switch
                 {
                     Song.Wanderer => "旅神",
                     Song.Mage => "贤者",
@@ -39,7 +39,7 @@ namespace Wotou.Bard.Triggers
                     _ => song.ToString()
                 };
 
-                uint color = song switch
+                var color = song switch
                 {
                     Song.Wanderer => ImGui.ColorConvertFloat4ToU32(new Vector4(0.3f, 0.9f, 0.35f, 1f)),
                     Song.Mage => ImGui.ColorConvertFloat4ToU32(new Vector4(0.31f, 0.33f, 0.89f, 1f)),
@@ -47,9 +47,9 @@ namespace Wotou.Bard.Triggers
                     _ => ImGui.ColorConvertFloat4ToU32(new Vector4(1f, 1f, 1f, 1f))
                 };
 
-                float squareSize = ImGui.GetFontSize() - 6f;
-                Vector2 cursorPos = ImGui.GetCursorScreenPos();
-                float squareY = cursorPos.Y + (ImGui.GetFontSize() - squareSize) / 2f;
+                var squareSize = ImGui.GetFontSize() - 6f;
+                var cursorPos = ImGui.GetCursorScreenPos();
+                var squareY = cursorPos.Y + (ImGui.GetFontSize() - squareSize) / 2f;
 
                 ImGui.GetWindowDrawList().AddRectFilled(
                     new Vector2(cursorPos.X, squareY),
@@ -67,8 +67,8 @@ namespace Wotou.Bard.Triggers
                 {
                     unsafe
                     {
-                        int index = i;
-                        ImGui.SetDragDropPayload("DND_SONG_RESET_ORDER", new IntPtr(&index), sizeof(int));
+                        var index = i;
+                        ImGui.SetDragDropPayload("DND_SONG_RESET_ORDER", new ReadOnlySpan<byte>((byte*)&index, sizeof(int)));
                         ImGui.Text($"拖拽：{name}");
                         ImGui.EndDragDropSource();
                     }
@@ -79,10 +79,10 @@ namespace Wotou.Bard.Triggers
                     unsafe
                     {
                         var payload = ImGui.AcceptDragDropPayload("DND_SONG_RESET_ORDER");
-                        if (payload.NativePtr != null && payload.Data != null)
+                        if (payload.Data != null)
                         {
-                            int from = *(int*)payload.Data;
-                            int to = i;
+                            var from = *(int*)payload.Data;
+                            var to = i;
 
                             if (from != to && from >= 0 && to >= 0 && from < SongOrder.Count && to <= SongOrder.Count)
                             {

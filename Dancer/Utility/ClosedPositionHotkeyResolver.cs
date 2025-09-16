@@ -8,7 +8,7 @@ using AEAssist.Helper;
 using AEAssist.JobApi;
 using AEAssist.MemoryApi;
 using Dalamud.Interface.Textures.TextureWraps;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using Wotou.Dancer.Data;
 using Wotou.Dancer.Setting;
 
@@ -21,28 +21,27 @@ public class ClosedPositionHotkeyResolver : IHotkeyResolver
 
     public ClosedPositionHotkeyResolver(int index)
     {
-        this.SpellId = DancerDefinesData.Spells.ClosedPosition;
-        this.Index = index;
+        SpellId = DancerDefinesData.Spells.ClosedPosition;
+        Index = index;
     }
     
     public void Draw(Vector2 size)
     {
-        uint id = SpellId;
+        var id = SpellId;
         if (Core.Me.HasLocalPlayerAura(DancerDefinesData.Buffs.ClosedPosition))
             id = DancerDefinesData.Spells.Ending;
         
-        Vector2 size1 = size * 0.8f;
+        var size1 = size * 0.8f;
         ImGui.SetCursorPos(size * 0.1f);
-        IDalamudTextureWrap textureWrap;
-        if (!Core.Resolve<MemApiIcon>().GetActionTexture(id, out textureWrap))
+        if (!Core.Resolve<MemApiIcon>().GetActionTexture(id, out var textureWrap))
             return;
-        ImGui.Image(textureWrap.ImGuiHandle, size1);
+        ImGui.Image(new ImTextureID(textureWrap.ImGuiHandle), size1);
         
         if (SpellId.GetSpell().Cooldown.TotalMilliseconds > 0 || Core.Resolve<JobApi_Dancer>().IsDancing)
         {
             // Use ImGui.GetItemRectMin() and ImGui.GetItemRectMax() for exact icon bounds
-            Vector2 overlayMin = ImGui.GetItemRectMin();
-            Vector2 overlayMax = ImGui.GetItemRectMax();
+            var overlayMin = ImGui.GetItemRectMin();
+            var overlayMax = ImGui.GetItemRectMax();
 
             // Draw a grey overlay over the icon
             ImGui.GetWindowDrawList().AddRectFilled(
@@ -55,10 +54,10 @@ public class ClosedPositionHotkeyResolver : IHotkeyResolver
         if (cooldownRemaining > 0)
         {
             // Convert cooldown to seconds and format as string
-            string cooldownText = Math.Ceiling(cooldownRemaining).ToString();
+            var cooldownText = Math.Ceiling(cooldownRemaining).ToString();
 
             // 计算文本位置，向左下角偏移
-            Vector2 textPos = ImGui.GetItemRectMin();
+            var textPos = ImGui.GetItemRectMin();
             textPos.X -= 1; // 向左移动一点
             textPos.Y += size1.Y - ImGui.CalcTextSize(cooldownText).Y + 5; // 向下移动一点
 
@@ -113,7 +112,7 @@ public class ClosedPositionHotkeyResolver : IHotkeyResolver
         }
         else
         {
-            Slot slot = new Slot();
+            var slot = new Slot();
             if (Core.Me.HasLocalPlayerAura(DancerDefinesData.Buffs.ClosedPosition))
             {
                 slot.Add(DancerDefinesData.Spells.Ending.GetSpell());

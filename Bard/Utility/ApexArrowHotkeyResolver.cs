@@ -7,37 +7,36 @@ using AEAssist.Helper;
 using AEAssist.JobApi;
 using AEAssist.MemoryApi;
 using Dalamud.Interface.Textures.TextureWraps;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using Wotou.Bard.Data;
 
 namespace Wotou.Bard.Utility;
 
 public class ApexArrowHotkeyResolver: IHotkeyResolver
 {
-    public uint SpellId;
-    public SpellTargetType TargetType;
+    private uint SpellId;
+    private SpellTargetType TargetType;
     
     public ApexArrowHotkeyResolver(uint spellId, SpellTargetType targetType) 
     {
-        this.SpellId = spellId;
-        this.TargetType = targetType;
+        SpellId = spellId;
+        TargetType = targetType;
     }
     
     public void Draw(Vector2 size)
     {
-        uint id = Core.Resolve<MemApiSpell>().CheckActionChange(SpellId);
-        Vector2 size1 = size * 0.8f;
+        var id = Core.Resolve<MemApiSpell>().CheckActionChange(SpellId);
+        var size1 = size * 0.8f;
         ImGui.SetCursorPos(size * 0.1f);
-        IDalamudTextureWrap textureWrap;
-        if (!Core.Resolve<MemApiIcon>().GetActionTexture(id, out textureWrap))
+        if (!Core.Resolve<MemApiIcon>().GetActionTexture(id, out var textureWrap))
             return;
-        ImGui.Image(textureWrap.ImGuiHandle, size1);
+        ImGui.Image(new ImTextureID(textureWrap.ImGuiHandle), size1);
         
         if (Core.Resolve<JobApi_Bard>().SoulVoice < 20)
         {
             // Use ImGui.GetItemRectMin() and ImGui.GetItemRectMax() for exact icon bounds
-            Vector2 overlayMin = ImGui.GetItemRectMin();
-            Vector2 overlayMax = ImGui.GetItemRectMax();
+            var overlayMin = ImGui.GetItemRectMin();
+            var overlayMax = ImGui.GetItemRectMax();
 
             // Draw a grey overlay over the icon
             ImGui.GetWindowDrawList().AddRectFilled(
@@ -71,7 +70,7 @@ public class ApexArrowHotkeyResolver: IHotkeyResolver
         }
         else
         {
-            Slot slot = new Slot();
+            var slot = new Slot();
             slot.Add(spell);
             if (spell.IsAbility())
                 AI.Instance.BattleData.HighPrioritySlots_OffGCD.Enqueue(slot);

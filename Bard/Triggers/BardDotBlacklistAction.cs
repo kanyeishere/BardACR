@@ -1,5 +1,5 @@
 using AEAssist.CombatRoutine.Trigger;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using Wotou.Bard.Data;
 
 namespace Wotou.Bard.Triggers;
