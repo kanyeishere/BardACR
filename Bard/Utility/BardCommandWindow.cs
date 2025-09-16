@@ -1,5 +1,5 @@
 using System.Numerics;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using Wotou.Bard.Setting;
 
 namespace Wotou.Bard.Utility;

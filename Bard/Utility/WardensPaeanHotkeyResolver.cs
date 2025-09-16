@@ -7,7 +7,7 @@ using AEAssist.Helper;
 using AEAssist.JobApi;
 using AEAssist.MemoryApi;
 using Dalamud.Interface.Textures.TextureWraps;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using Wotou.Bard.Data;
 
 namespace Wotou.Bard.Utility;
@@ -31,7 +31,7 @@ public class WardensPaeanHotkeyResolver : IHotkeyResolver
         IDalamudTextureWrap textureWrap;
         if (!Core.Resolve<MemApiIcon>().GetActionTexture(id, out textureWrap))
             return;
-        ImGui.Image(textureWrap.ImGuiHandle, size1);
+        ImGui.Image(textureWrap.Handle, size1);
         
         if (SpellId.GetSpell().Cooldown.TotalMilliseconds > 0)
         {

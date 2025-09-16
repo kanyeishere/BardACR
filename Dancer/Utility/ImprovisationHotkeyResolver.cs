@@ -8,7 +8,7 @@ using AEAssist.Helper;
 using AEAssist.JobApi;
 using AEAssist.MemoryApi;
 using Dalamud.Interface.Textures.TextureWraps;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using Wotou.Dancer.Data;
 
 namespace Wotou.Dancer.Utility;
@@ -30,7 +30,7 @@ public class ImprovisationHotkeyResolver : IHotkeyResolver
         IDalamudTextureWrap textureWrap;
         if (!Core.Resolve<MemApiIcon>().GetActionTexture(id, out textureWrap))
             return;
-        ImGui.Image(textureWrap.ImGuiHandle, size1);
+        ImGui.Image(textureWrap.Handle, size1);
         // Check if skill is on cooldown and apply grey overlay if true
         
         if (!Core.Resolve<MemApiSpell>().CheckActionChange(SpellId).GetSpell().IsReadyWithCanCast())

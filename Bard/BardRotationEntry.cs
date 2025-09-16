@@ -14,7 +14,7 @@ using AEAssist.Helper;
 using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.JobGauge.Enums;
 using Dalamud.Interface;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using Wotou.Bard.Data;
 using Wotou.Bard.Opener;
 using Wotou.Bard.Sequence;
@@ -472,8 +472,8 @@ public class BardRotationEntry : IRotationEntry
                     if (ImGui.BeginDragDropSource())
                     {
                         moveFrom = i; // 记录当前项的索引
-                        ImGui.SetDragDropPayload("DND_SONG_SETTING", new IntPtr(&moveFrom),
-                            sizeof(int)); // 传递 moveFrom 索引
+                        ImGui.SetDragDropPayload("DND_SONG_SETTING", new ReadOnlySpan<byte>((byte*)&moveFrom,
+                            sizeof(int))); // 传递 moveFrom 索引
                         ImGui.SetTooltip($"调整顺序: {setting.Label.Substring(0, 3)}");
                         ImGui.EndDragDropSource();
                     }
@@ -485,7 +485,7 @@ public class BardRotationEntry : IRotationEntry
                         var payload = ImGui.AcceptDragDropPayload("DND_SONG_SETTING",
                             ImGuiDragDropFlags.AcceptNoDrawDefaultRect);
 
-                        if (payload.NativePtr != (void*)0)
+                        if (payload.Data != null)
                         {
                             // 从 payload 中获取 moveFrom 的值
                             moveFrom = *(int*)payload.Data;
@@ -683,8 +683,8 @@ public class BardRotationEntry : IRotationEntry
                 {
                     unsafe
                     {
-                        int index = i;
-                        ImGui.SetDragDropPayload("DND_SONG_ORDER", new IntPtr(&index), sizeof(int));
+                        var index = i;
+                        ImGui.SetDragDropPayload("DND_SONG_ORDER", new ReadOnlySpan<byte>((byte*)&index, sizeof(int)));
                         ImGui.Text($"拖拽：{name}");
                         ImGui.EndDragDropSource();
                     }
@@ -695,7 +695,7 @@ public class BardRotationEntry : IRotationEntry
                     unsafe
                     {
                         var payload = ImGui.AcceptDragDropPayload("DND_SONG_ORDER", ImGuiDragDropFlags.AcceptNoDrawDefaultRect);
-                        if (payload.NativePtr != null && payload.Data != null)
+                        if (payload.Data != null)
                         {
                             int from = *(int*)payload.Data;
                             int to = i;

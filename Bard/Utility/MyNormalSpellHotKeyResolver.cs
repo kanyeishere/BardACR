@@ -7,7 +7,7 @@ using AEAssist.Helper;
 using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Interface.Textures.TextureWraps;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using Wotou.Bard.Data;
 using Wotou.Dancer.Data;
 
@@ -32,7 +32,7 @@ public class MyNormalSpellHotKeyResolver: IHotkeyResolver
         IDalamudTextureWrap textureWrap;
         if (!Core.Resolve<MemApiIcon>().GetActionTexture(id, out textureWrap))
             return;
-        ImGui.Image(textureWrap.ImGuiHandle, size1);
+        ImGui.Image(textureWrap.Handle, size1);
         // Check if skill is on cooldown and apply grey overlay if true
         
         if (!Core.Resolve<MemApiSpell>().CheckActionChange(SpellId).GetSpell().IsReadyWithCanCast())

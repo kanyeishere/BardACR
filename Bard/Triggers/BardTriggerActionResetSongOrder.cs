@@ -1,5 +1,5 @@
 using AEAssist.CombatRoutine.Trigger;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using System.Collections.Generic;
 using System.Numerics;
 using AEAssist;
@@ -68,7 +68,8 @@ namespace Wotou.Bard.Triggers
                     unsafe
                     {
                         int index = i;
-                        ImGui.SetDragDropPayload("DND_SONG_RESET_ORDER", new IntPtr(&index), sizeof(int));
+                        var data = new ReadOnlySpan<byte>((byte*)&index, sizeof(int));
+                        ImGui.SetDragDropPayload("DND_SONG_RESET_ORDER", data);
                         ImGui.Text($"拖拽：{name}");
                         ImGui.EndDragDropSource();
                     }
@@ -79,7 +80,7 @@ namespace Wotou.Bard.Triggers
                     unsafe
                     {
                         var payload = ImGui.AcceptDragDropPayload("DND_SONG_RESET_ORDER");
-                        if (payload.NativePtr != null && payload.Data != null)
+                        if (payload.Data != null)
                         {
                             int from = *(int*)payload.Data;
                             int to = i;

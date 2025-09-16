@@ -2,7 +2,7 @@ using System.Numerics;
 using AEAssist;
 using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.MemoryApi;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using Wotou.Bard.Data;
 
 namespace Wotou.Common;

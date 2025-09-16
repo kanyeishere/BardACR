@@ -6,7 +6,7 @@ using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
 using Dalamud.Interface.Textures.TextureWraps;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using Wotou.Bard.Data;
 
 namespace Wotou.Bard.Utility;
@@ -30,7 +30,7 @@ public class IronJawsHotkeyResolver: IHotkeyResolver
         IDalamudTextureWrap textureWrap;
         if (!Core.Resolve<MemApiIcon>().GetActionTexture(id, out textureWrap))
             return;
-        ImGui.Image(textureWrap.ImGuiHandle, size1);
+        ImGui.Image(textureWrap.Handle, size1);
     }
 
     public void DrawExternal(Vector2 size, bool isActive)

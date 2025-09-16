@@ -8,7 +8,7 @@ using AEAssist.Helper;
 using AEAssist.JobApi;
 using AEAssist.MemoryApi;
 using Dalamud.Interface.Textures.TextureWraps;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using Wotou.Dancer.Data;
 using Wotou.Dancer.Setting;
 
@@ -36,7 +36,7 @@ public class ClosedPositionHotkeyResolver : IHotkeyResolver
         IDalamudTextureWrap textureWrap;
         if (!Core.Resolve<MemApiIcon>().GetActionTexture(id, out textureWrap))
             return;
-        ImGui.Image(textureWrap.ImGuiHandle, size1);
+        ImGui.Image(textureWrap.Handle, size1);
         
         if (SpellId.GetSpell().Cooldown.TotalMilliseconds > 0 || Core.Resolve<JobApi_Dancer>().IsDancing)
         {

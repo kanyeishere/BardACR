@@ -7,7 +7,7 @@ using AEAssist.GUI;
 using AEAssist.GUI.Tree;
 using AEAssist.JobApi;
 using Dalamud.Game.ClientState.JobGauge.Enums;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 
 #nullable enable
 namespace Wotou.Bard.Triggers;

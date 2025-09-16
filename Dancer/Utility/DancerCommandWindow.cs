@@ -1,5 +1,5 @@
 using System.Numerics;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using Wotou.Dancer.Setting;
 
 namespace Wotou.Dancer.Utility

@@ -1,6 +1,6 @@
 using System.Numerics;
 using Dalamud.Interface;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 
 namespace Wotou.Common;
 

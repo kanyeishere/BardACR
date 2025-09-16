@@ -4,7 +4,7 @@ using AEAssist.CombatRoutine.Trigger;
 using AEAssist.GUI;
 using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.Objects.Types;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 
 namespace Wotou.Bard.Triggers;
 
