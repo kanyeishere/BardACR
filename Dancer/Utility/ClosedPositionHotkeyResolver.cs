@@ -35,7 +35,7 @@ public class ClosedPositionHotkeyResolver : IHotkeyResolver
         ImGui.SetCursorPos(size * 0.1f);
         if (!Core.Resolve<MemApiIcon>().GetActionTexture(id, out var textureWrap))
             return;
-        ImGui.Image(new ImTextureID(textureWrap.ImGuiHandle), size1);
+        ImGui.Image(new ImTextureID(textureWrap.Handle), size1);
         
         if (SpellId.GetSpell().Cooldown.TotalMilliseconds > 0 || Core.Resolve<JobApi_Dancer>().IsDancing)
         {
