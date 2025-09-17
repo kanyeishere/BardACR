@@ -307,7 +307,7 @@ public class BardRotationEventHandler : IRotationEventHandler
         {
             if (inWindow)
             {
-                if ((nowUtc - _lastCastTime).TotalMilliseconds > 600)
+                if ((nowUtc - _lastCastTime).TotalMilliseconds > 620)
                     BardBattleData.Instance.EnableThreeOGcd = false; // 保持原判断与赋值
                 _hasDetected = true;
             }
