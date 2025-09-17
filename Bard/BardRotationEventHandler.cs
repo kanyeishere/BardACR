@@ -25,7 +25,6 @@ public class BardRotationEventHandler : IRotationEventHandler
     private Spell? _lastSpell = null;
     private DateTime _lastCastTime = DateTime.MinValue;
     private bool _hasDetected = false;
-
     private static void HandleMovingToTarget()
     {
         var instanceTargetPosition = BardBattleData.Instance.TargetPosition;
@@ -300,6 +299,7 @@ public class BardRotationEventHandler : IRotationEventHandler
             spell.IsAbility() &&
             Core.Me.InCombat() &&
             battleMs > 0 &&
+            BardSettings.Instance.IsDailyMode == false &&
             spell.Id != BardDefinesData.Spells.EmpyrealArrow &&
             (_lastSpell.Id != BardDefinesData.Spells.HeartBreak ||
              spell.Id != BardDefinesData.Spells.HeartBreak);

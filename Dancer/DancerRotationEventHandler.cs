@@ -70,6 +70,7 @@ namespace Wotou.Dancer
                 _lastSpell.IsAbility() &&
                 spell.IsAbility() &&
                 Core.Me.InCombat() &&
+                DancerSettings.Instance.IsDailyMode == false &&
                 battleMs > 0;
 
             if (!_hasDetected)
