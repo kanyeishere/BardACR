@@ -295,10 +295,10 @@ public class BardRotationEventHandler : IRotationEventHandler
         var inWindow =
             _lastSpell != null &&
             _lastCastTime != DateTime.MinValue &&
-            !_lastSpell.IsAbility() &&
+            _lastSpell.IsAbility() &&
             spell.IsAbility() &&
             Core.Me.InCombat() &&
-            battleMs > 4000;
+            battleMs > 0;
 
         if (!_hasDetected)
         {
