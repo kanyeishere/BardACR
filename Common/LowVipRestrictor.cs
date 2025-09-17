@@ -21,6 +21,11 @@ public class LowVipRestrictor
                !ComputeMd5Hash(DancerSettings.Instance.UnlockPassword).Equals("1b629ab7c628adc4e40705010ac745f3", 
                    StringComparison.OrdinalIgnoreCase);
     }
+
+    public static bool IsLowVip()
+    {
+        return Share.VIP.Level == VIPLevel.Normal;
+    }
     
     public static bool IsInStaticParty(List<string> storedStaticPartyHashes)
     {

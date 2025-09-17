@@ -19,6 +19,10 @@ public class BardBattleData
     public bool IsFollowing = false;
     
     public long LastSongTime = 0;
+
+    public int LastNotifyTime = 0;
+
+    public int LastCountDownTime = 0;
     
     public int WandererTimes = 0;
     

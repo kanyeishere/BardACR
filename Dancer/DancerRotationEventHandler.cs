@@ -21,7 +21,6 @@ namespace Wotou.Dancer
     public class DancerRotationEventHandler : IRotationEventHandler
     {
         private long _randomTime = 0;
-        private int _lastNotifyTime = 0;
 
         private static Dictionary<Jobs, int> jobPriorities = new()
         {
@@ -73,15 +72,23 @@ namespace Wotou.Dancer
             {
                 Core.Me.SetTarget(AutoTarget());
             }
-                    
-            /*if (LowVipRestrictor.IsRestrictedZoneForLowVip() && !LowVipRestrictor.IsInStaticParty(DancerSettings.Instance.QwertyList))
-                PlayerOptions.Instance.Stop = true;*/
             
-            if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3 && currTimeInMs - _lastNotifyTime > 1000)
+            if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3 && currTimeInMs - DancerBattleData.Instance.LastNotifyTime > 1000)
             {
                 LogHelper.PrintError("警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
                 ECHelper.Chat.PrintError("/e 警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
-                _lastNotifyTime = currTimeInMs;
+                DancerBattleData.Instance.LastNotifyTime = currTimeInMs;
+            }
+            if (LowVipRestrictor.IsLowVip() 
+                && SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3 == false
+                && currTimeInMs - DancerBattleData.Instance.LastCountDownTime > 1000)
+            {
+                const int totalTimeoutMs = 10000;
+                var timeLeft = totalTimeoutMs - currTimeInMs;
+                ChatHelper.Print.ErrorMessage($"/e [警告] 你未按照要求设置 ACR, {(int)(timeLeft / 1000)} 秒后将自动停手！");
+                DancerBattleData.Instance.LastCountDownTime = currTimeInMs;
+                if (timeLeft <= 0)
+                    PlayerOptions.Instance.Stop = true;
             }
             if (DancerBattleData.Instance.LastWarningTime == 0)
                 DancerBattleData.Instance.LastWarningTime = currTimeInMs;
@@ -188,18 +195,6 @@ namespace Wotou.Dancer
         {
             DancerRotationEntry.UpdateDancerPartnerPanel();
             SmartUseHighPrioritySlot();
-            
-            /*if (LowVipRestrictor.IsRestrictedZoneForLowVip())
-            {
-                if (DancerSettings.Instance.QwertyList.Count <= 7)
-                {
-                    DancerSettings.Instance.QwertyList = PartyHelper.Party.Select(player => LowVipRestrictor.ComputeMd5Hash(player.Name.ToString())).ToList();
-                    DancerSettings.Instance.Save();
-                }
-            }*/
-               
-            /*if (LowVipRestrictor.IsRestrictedZoneForLowVip() && !LowVipRestrictor.IsInStaticParty(DancerSettings.Instance.QwertyList))
-                PlayerOptions.Instance.Stop = true;*/
             
             if (Core.Me.IsMoving())
                 Core.Resolve<MemApiMove>().CancelMove();
@@ -329,15 +324,6 @@ namespace Wotou.Dancer
         public void OnTerritoryChanged()
         {
             DancerRotationEntry.UpdateDancerPartnerPanel();
-            
-            /*if (LowVipRestrictor.IsRestrictedZoneForLowVip())
-            {
-                if (DancerSettings.Instance.QwertyList.Count <= 7)
-                {
-                    DancerSettings.Instance.QwertyList = PartyHelper.Party.Select(player => LowVipRestrictor.ComputeMd5Hash(player.Name.ToString())).ToList();
-                    DancerSettings.Instance.Save();
-                }
-            }*/
         }
         
         private void DancerCommandHandler(string command, string args)
