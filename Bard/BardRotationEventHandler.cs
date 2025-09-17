@@ -333,7 +333,7 @@ public class BardRotationEventHandler : IRotationEventHandler
                 || SettingMgr.GetSetting<GeneralSettings>().Ping < 5)
             && currTimeInMs - BardBattleData.Instance.LastCountDownTime > 1000)
         {
-            const int totalTimeoutMs = 10000;
+            const int totalTimeoutMs = 120000;
             var timeLeft = totalTimeoutMs - currTimeInMs;
             if (timeLeft >= 0)
             {
