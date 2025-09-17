@@ -298,7 +298,7 @@ public class BardRotationEventHandler : IRotationEventHandler
             !_lastSpell.IsAbility() &&
             spell.IsAbility() &&
             Core.Me.InCombat() &&
-            battleMs > 2000;
+            battleMs > 4000;
 
         if (!_hasDetected)
         {
