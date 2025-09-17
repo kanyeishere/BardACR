@@ -85,8 +85,11 @@ namespace Wotou.Dancer
             {
                 const int totalTimeoutMs = 10000;
                 var timeLeft = totalTimeoutMs - currTimeInMs;
-                ChatHelper.Print.ErrorMessage($"/e [警告] 你未按照要求设置 ACR, {(int)(timeLeft / 1000)} 秒后将自动停手！");
-                DancerBattleData.Instance.LastCountDownTime = currTimeInMs;
+                if (timeLeft >= 0)
+                {
+                    ChatHelper.Print.ErrorMessage($"/e [警告] 你未按照要求设置 ACR, {(int)(timeLeft / 1000)} 秒后将自动停手！");
+                    DancerBattleData.Instance.LastCountDownTime = currTimeInMs;
+                }
                 if (timeLeft <= 0)
                     PlayerOptions.Instance.Stop = true;
             }
