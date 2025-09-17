@@ -300,6 +300,7 @@ public class BardRotationEventHandler : IRotationEventHandler
             spell.IsAbility() &&
             Core.Me.InCombat() &&
             battleMs > 0 &&
+            spell.Id != BardDefinesData.Spells.EmpyrealArrow &&
             (_lastSpell.Id != BardDefinesData.Spells.HeartBreak ||
              spell.Id != BardDefinesData.Spells.HeartBreak);
 
