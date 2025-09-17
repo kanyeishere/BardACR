@@ -62,6 +62,27 @@ namespace Wotou.Dancer
                 DancerBattleData.Instance.TechnicalStepCount++;
             if (spell.Id == DancerDefinesData.Spells.DanceOfTheDawn)
                 DancerBattleData.Instance.DanceOfTheDawnCount ++;
+            var nowUtc   = DateTime.UtcNow;
+            var battleMs = AI.Instance.BattleData.CurrBattleTimeInMs;
+            var inWindow =
+                _lastSpell != null &&
+                _lastCastTime != DateTime.MinValue &&
+                !_lastSpell.IsAbility() &&
+                spell.IsAbility() &&
+                Core.Me.InCombat() &&
+                battleMs > 2000;
+
+            if (!_hasDetected)
+            {
+                if (inWindow)
+                {
+                    if ((nowUtc - _lastCastTime).TotalMilliseconds > 600)
+                        DancerBattleData.Instance.EnableThreeOGcd = false; // 保持原判断与赋值
+                    _hasDetected = true;
+                }
+                _lastSpell    = spell;
+                _lastCastTime = nowUtc;
+            }
         }
 
         public void OnBattleUpdate(int currTimeInMs)
@@ -326,23 +347,6 @@ namespace Wotou.Dancer
 
         public void OnSpellCastSuccess(Slot slot, Spell spell)
         {
-            if (_hasDetected)
-                return;
-        
-            if (_lastSpell != null &&
-                _lastCastTime != DateTime.MinValue &&
-                !_lastSpell.IsAbility() &&
-                spell.IsAbility() &&
-                Core.Me.InCombat() &&
-                AI.Instance.BattleData.CurrBattleTimeInMs > 2000)
-            {
-                if ((DateTime.UtcNow - _lastCastTime).TotalMilliseconds > 600)
-                    DancerBattleData.Instance.EnableThreeOGcd = false;
-                _hasDetected = true;
-            }
-        
-            _lastSpell = spell;
-            _lastCastTime = DateTime.UtcNow;
         }
 
         public void OnTerritoryChanged()

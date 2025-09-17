@@ -198,23 +198,6 @@ public class BardRotationEventHandler : IRotationEventHandler
 
     public void OnSpellCastSuccess(Slot slot, Spell spell)
     {
-        if (_hasDetected)
-            return;
-        
-        if (_lastSpell != null &&
-            _lastCastTime != DateTime.MinValue &&
-            !_lastSpell.IsAbility() &&
-            spell.IsAbility() &&
-            Core.Me.InCombat() &&
-            AI.Instance.BattleData.CurrBattleTimeInMs > 2000)
-        {
-            if ((DateTime.UtcNow - _lastCastTime).TotalMilliseconds > 600)
-                BardBattleData.Instance.EnableThreeOGcd = false;
-            _hasDetected = true;
-        }
-        
-        _lastSpell = spell;
-        _lastCastTime = DateTime.UtcNow;
     }
 
     public void AfterSpell(Slot slot, Spell spell)
@@ -307,6 +290,28 @@ public class BardRotationEventHandler : IRotationEventHandler
         
         if (spell.Id == BardDefinesData.Spells.BattleVoice)
             BardUtil.LogDebug("GcdCooldown 3: ",GCDHelper.GetGCDCooldown().ToString());
+        
+        var nowUtc   = DateTime.UtcNow;
+        var battleMs = AI.Instance.BattleData.CurrBattleTimeInMs;
+        var inWindow =
+            _lastSpell != null &&
+            _lastCastTime != DateTime.MinValue &&
+            !_lastSpell.IsAbility() &&
+            spell.IsAbility() &&
+            Core.Me.InCombat() &&
+            battleMs > 2000;
+
+        if (!_hasDetected)
+        {
+            if (inWindow)
+            {
+                if ((nowUtc - _lastCastTime).TotalMilliseconds > 600)
+                    BardBattleData.Instance.EnableThreeOGcd = false; // 保持原判断与赋值
+                _hasDetected = true;
+            }
+            _lastSpell    = spell;
+            _lastCastTime = nowUtc;
+        }
     }
 
     public void OnBattleUpdate(int currTimeInMs)
