@@ -6,14 +6,11 @@ using AEAssist;
 using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.CombatRoutine.View.JobView;
-using AEAssist.CombatRoutine.View.JobView.HotkeyResolver;
+using AEAssist.MemoryApi;
 using AEAssist.Extension;
 using AEAssist.Helper;
-using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.JobGauge.Enums;
 using Dalamud.Game.Command;
-using Dalamud.Game.Text;
-using Dalamud.Game.Text.SeStringHandling;
 using Wotou.Bard.Utility;
 using Wotou.Common;
 
@@ -25,6 +22,9 @@ namespace Wotou.Bard;
 public class BardRotationEventHandler : IRotationEventHandler
 {
     private long _randomTime = 0;
+    private Spell? _lastSpell = null;
+    private DateTime _lastCastTime = DateTime.MinValue;
+    private bool _hasDetected = false;
     private static void HandleMovingToTarget()
     {
         var instanceTargetPosition = BardBattleData.Instance.TargetPosition;
@@ -87,14 +87,6 @@ public class BardRotationEventHandler : IRotationEventHandler
                     _randomTime = TimeHelper.Now() + RandomHelper.RandomInt(1000, 2000);
             }
         }
-        
-        /*if (PartyHelper.CastableParty.Any(characterAgent => 
-                (characterAgent.HasAura(1896U) && BardSettings.Instance.NaturesMinneWithRecitation) ||  //秘策
-                (characterAgent.HasAura(2611U) && BardSettings.Instance.NaturesMinneWithZoe) ||         //活化
-                (characterAgent.HasAura(1892U) && BardSettings.Instance.NaturesMinneWithNeutralSect)) &&   //中间学派
-            BardDefinesData.Spells.NaturesMinne.IsUnlockWithCDCheck() &&
-            BardRotationEntry.QT.GetQt(QTKey.NatureMinne))
-            await BardDefinesData.Spells.NaturesMinne.GetSpell().Cast();*/
     }
 
     public void OnResetBattle()
@@ -108,6 +100,9 @@ public class BardRotationEventHandler : IRotationEventHandler
         // 重置碎心箭保留层数
         BardSettings.Instance.HeartBreakSaveStack = 0; 
         
+        _hasDetected = false;
+        _lastSpell = null;
+        _lastCastTime = DateTime.MinValue;
         _randomTime = 0;
         
         if (BardSettings.Instance.ResetSongOrder)
@@ -202,7 +197,23 @@ public class BardRotationEventHandler : IRotationEventHandler
 
     public void OnSpellCastSuccess(Slot slot, Spell spell)
     {
-       
+        if (_hasDetected)
+            return;
+        
+        if (_lastSpell != null &&
+            _lastCastTime != DateTime.MinValue &&
+            !_lastSpell.IsAbility() &&
+            spell.IsAbility() &&
+            Core.Me.InCombat() &&
+            AI.Instance.BattleData.CurrBattleTimeInMs > 2000)
+        {
+            if ((DateTime.UtcNow - _lastCastTime).TotalMilliseconds > 600)
+                BardBattleData.Instance.EnableThreeOGcd = false;
+            _hasDetected = true;
+        }
+        
+        _lastSpell = spell;
+        _lastCastTime = DateTime.UtcNow;
     }
 
     public void AfterSpell(Slot slot, Spell spell)
@@ -307,21 +318,27 @@ public class BardRotationEventHandler : IRotationEventHandler
             BardRotationEntry.QT.SetQt("对齐旅神", false);
             BardRotationEntry.QT.SetQt("强对齐", false);
         }
-        if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3 && currTimeInMs - BardBattleData.Instance.LastNotifyTime > 1000)
+        if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3 && currTimeInMs - BardBattleData.Instance.LastNotifyTime > 100)
         {
             LogHelper.PrintError("警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
-            ChatHelper.Print.ErrorMessage("/e 警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
+            ChatHelper.Print.ErrorMessage("[警告] 你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
             BardBattleData.Instance.LastNotifyTime = currTimeInMs;
         }
         if (LowVipRestrictor.IsLowVip() 
-            && SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3 == false
+            && (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3 == false
+                || SettingMgr.GetSetting<GeneralSettings>().OptimizeGcd == false
+                || BardBattleData.Instance.EnableThreeOGcd == false)
             && currTimeInMs - BardBattleData.Instance.LastCountDownTime > 1000)
         {
             const int totalTimeoutMs = 10000;
             var timeLeft = totalTimeoutMs - currTimeInMs;
             if (timeLeft >= 0)
             {
-                ChatHelper.Print.ErrorMessage($"/e [警告] 你未按照要求设置 ACR, {(int)(timeLeft / 1000)} 秒后将自动停手！");
+                ChatHelper.Print.ErrorMessage($"[警告] 你未按照要求设置 ACR, {(int)(timeLeft / 1000)} 秒后将自动停手！");
+                ChatHelper.Print.ErrorMessage($"[警告] 请开启优化 GCD 偏移");
+                ChatHelper.Print.ErrorMessage($"[警告] 请关闭全局能力技能不卡GCD");
+                ChatHelper.Print.ErrorMessage($"[警告] 请开启FuckAnimation三插设置");
+                ChatHelper.Print.ErrorMessage($"[警告] 请检查你的网络延迟");
                 BardBattleData.Instance.LastCountDownTime = currTimeInMs;
             }
             if (timeLeft <= 0)
@@ -338,7 +355,7 @@ public class BardRotationEventHandler : IRotationEventHandler
                 Core.Resolve<MemApiChatMessage>()
                     .Toast2("欢迎使用窝头的诗人ACR\n请关闭全局能力技能不卡GCD\n打开此设置会导致本ACR产生能力技插入问题", 1, 5000);
                 LogHelper.PrintError("警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
-                ChatHelper.Print.ErrorMessage("/e 警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
+                ChatHelper.Print.ErrorMessage("[警告] 你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
             }
             else if (BardSettings.Instance.WelcomeVoice)
                 Core.Resolve<MemApiChatMessage>()
@@ -348,7 +365,7 @@ public class BardRotationEventHandler : IRotationEventHandler
             Core.Resolve<MemApiChatMessage>()
                 .Toast2("欢迎使用窝头的诗人ACR\n请关闭全局能力技能不卡GCD\n打开此设置会导致本ACR产生能力技插入问题", 1, 5000);
             LogHelper.PrintError("警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
-            ChatHelper.Print.ErrorMessage("/e 警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
+            ChatHelper.Print.ErrorMessage("[警告] 你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
         }
         if (BardSettings.Instance.WelcomeVoice)
             ChatHelper.SendMessage("/pdr tts 你好，欢迎你使用窝头诗人");

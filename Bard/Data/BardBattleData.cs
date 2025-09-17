@@ -24,6 +24,8 @@ public class BardBattleData
 
     public int LastCountDownTime = 0;
     
+    public bool EnableThreeOGcd = true;
+    
     public int WandererTimes = 0;
     
     public bool UseCountdown = false;

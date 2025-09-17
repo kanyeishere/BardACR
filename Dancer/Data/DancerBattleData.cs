@@ -10,4 +10,5 @@ public class DancerBattleData
     public int LastWarningTime = 0;
     public int LastNotifyTime = 0;
     public int LastCountDownTime = 0;
+    public bool EnableThreeOGcd = true;
 }
