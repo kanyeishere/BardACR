@@ -86,8 +86,8 @@ namespace Wotou.Dancer
                 {
                     ChatHelper.Print.ErrorMessage($"[警告] 你未按照要求设置 ACR, {(int)(timeLeft / 1000)} 秒后将自动停手！");
                     ChatHelper.Print.ErrorMessage($"[警告] 请开启优化 GCD 偏移");
-                    ChatHelper.Print.ErrorMessage($"[警告] 请关闭全局能力技能不卡GCD");
-                    ChatHelper.Print.ErrorMessage($"[警告] 请开启FuckAnimationLock三插设置");
+                    ChatHelper.Print.ErrorMessage($"[警告] 请关闭全局能力技能不卡 GCD");
+                    ChatHelper.Print.ErrorMessage($"[警告] 请开启 FuckAnimationLock 三插设置");
                     ChatHelper.Print.ErrorMessage($"[警告] 请检查你的网络延迟");
                     DancerBattleData.Instance.LastCountDownTime = currTimeInMs;
                 }
