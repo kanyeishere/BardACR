@@ -91,18 +91,6 @@ namespace Wotou.Dancer
                 if (timeLeft <= 0)
                     PlayerOptions.Instance.Stop = true;
             }
-            if (LowVipRestrictor.IsLowVip() 
-                && SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3 == false
-                && currTimeInMs - DancerBattleData.Instance.LastCountDownTime > 1000)
-            {
-                const int totalTimeoutMs = 10000;
-                var timeLeft = totalTimeoutMs - currTimeInMs;
-                ChatHelper.Print.ErrorMessage($"/e [警告] 你未按照要求设置 ACR, {(int)(timeLeft / 1000)} 秒后将自动停手！");
-                DancerBattleData.Instance.LastCountDownTime = currTimeInMs;
-                if (timeLeft <= 0)
-                    PlayerOptions.Instance.Stop = true;
-            }
-            
             if (DancerBattleData.Instance.LastWarningTime == 0)
                 DancerBattleData.Instance.LastWarningTime = currTimeInMs;
             // 检查舞步的CD和距离，并发送提醒
