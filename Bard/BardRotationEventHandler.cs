@@ -320,10 +320,9 @@ public class BardRotationEventHandler : IRotationEventHandler
         }
 
         if (LowVipRestrictor.IsLowVip() 
-            && (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3 == false
-                || SettingMgr.GetSetting<GeneralSettings>().OptimizeGcd == false
-                || BardBattleData.Instance.EnableThreeOGcd == false ||
-                SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3)
+            && (SettingMgr.GetSetting<GeneralSettings>().OptimizeGcd == false
+                || BardBattleData.Instance.EnableThreeOGcd == false 
+                || SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3)
             && currTimeInMs - BardBattleData.Instance.LastCountDownTime > 1000)
         {
             const int totalTimeoutMs = 10000;
@@ -331,7 +330,7 @@ public class BardRotationEventHandler : IRotationEventHandler
             if (timeLeft >= 0)
             {
                 ChatHelper.Print.ErrorMessage($"[警告] 你未按照要求设置 ACR, {(int)(timeLeft / 1000)} 秒后将自动停手！");
-                ChatHelper.Print.ErrorMessage($"[警告] 请开启优化 GCD 偏移");
+                ChatHelper.Print.ErrorMessage($"[警告] 请开启优化 GCD 偏移，且数字设置为 5");
                 ChatHelper.Print.ErrorMessage($"[警告] 请关闭全局能力技能不卡 GCD");
                 ChatHelper.Print.ErrorMessage($"[警告] 请开启 FuckAnimation 三插设置");
                 ChatHelper.Print.ErrorMessage($"[警告] 请检查你的网络延迟");
