@@ -76,7 +76,9 @@ namespace Wotou.Dancer
             if (LowVipRestrictor.IsLowVip() 
                 && (SettingMgr.GetSetting<GeneralSettings>().OptimizeGcd == false
                     || DancerBattleData.Instance.EnableThreeOGcd == false 
-                    || SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3)
+                    || SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3
+                    || SettingMgr.GetSetting<GeneralSettings>().Ping > 10 
+                    || SettingMgr.GetSetting<GeneralSettings>().Ping < 5)
                 && currTimeInMs - DancerBattleData.Instance.LastCountDownTime > 1000)
             {
                 const int totalTimeoutMs = 10000;
@@ -84,7 +86,7 @@ namespace Wotou.Dancer
                 if (timeLeft >= 0)
                 {
                     ChatHelper.Print.ErrorMessage($"[警告] 你未按照要求设置 ACR, {(int)(timeLeft / 1000)} 秒后将自动停手！");
-                    ChatHelper.Print.ErrorMessage($"[警告] 请开启优化 GCD 偏移，且数字设置为 5");
+                    ChatHelper.Print.ErrorMessage($"[警告] 请开启“优化 GCD 偏移”，并将数值设为 5 到 10（含 5 和 10）");
                     ChatHelper.Print.ErrorMessage($"[警告] 请关闭全局能力技能不卡 GCD");
                     ChatHelper.Print.ErrorMessage($"[警告] 请开启 FuckAnimationLock 三插设置");
                     ChatHelper.Print.ErrorMessage($"[警告] 请检查你的网络延迟");
