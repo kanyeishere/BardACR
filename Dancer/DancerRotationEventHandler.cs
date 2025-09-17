@@ -73,16 +73,11 @@ namespace Wotou.Dancer
                 Core.Me.SetTarget(AutoTarget());
             }
             
-            if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3 && currTimeInMs - DancerBattleData.Instance.LastNotifyTime > 100)
-            {
-                LogHelper.PrintError("警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
-                ChatHelper.Print.ErrorMessage("[警告] 你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
-                DancerBattleData.Instance.LastNotifyTime = currTimeInMs;
-            }
             if (LowVipRestrictor.IsLowVip() 
                 && (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3 == false
                     || SettingMgr.GetSetting<GeneralSettings>().OptimizeGcd == false
-                    || DancerBattleData.Instance.EnableThreeOGcd == false)
+                    || DancerBattleData.Instance.EnableThreeOGcd == false ||
+                    SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3)
                 && currTimeInMs - DancerBattleData.Instance.LastCountDownTime > 1000)
             {
                 const int totalTimeoutMs = 10000;
