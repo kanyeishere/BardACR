@@ -58,19 +58,6 @@ public class BardRotationEventHandler : IRotationEventHandler
         BardRotationEntry.UpdateWardensPaeanPanel();
         SmartUseHighPrioritySlot();
         CancelMoving();
-        // HandleMovingToTarget();
-        
-        /*if (LowVipRestrictor.IsRestrictedZoneForLowVip())
-        {
-            if (BardSettings.Instance.QwertyList.Count <= 7)
-            {
-                BardSettings.Instance.QwertyList = PartyHelper.Party.Select(player => LowVipRestrictor.ComputeMd5Hash(player.Name.ToString())).ToList();
-                BardSettings.Instance.Save();
-            }
-        }*/
-        
-        /*if (LowVipRestrictor.IsRestrictedZoneForLowVip() && !LowVipRestrictor.IsInStaticParty(BardSettings.Instance.QwertyList))
-            PlayerOptions.Instance.Stop = true;*/
         
         if (!BardUtil.IsSongOrderNormal())
         {
@@ -316,19 +303,27 @@ public class BardRotationEventHandler : IRotationEventHandler
         SmartUseHighPrioritySlot();
         HandleMovingToTarget();
         
-        /*if (LowVipRestrictor.IsRestrictedZoneForLowVip() && !LowVipRestrictor.IsInStaticParty(BardSettings.Instance.QwertyList))
-            PlayerOptions.Instance.Stop = true;*/
-        
         if (!BardUtil.IsSongOrderNormal())
         {
             BardRotationEntry.QT.SetQt("对齐旅神", false);
             BardRotationEntry.QT.SetQt("强对齐", false);
         }
-        if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3 && currTimeInMs - _lastNotifyTime > 1000)
+        if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3 && currTimeInMs - BardBattleData.Instance.LastNotifyTime > 1000)
         {
             LogHelper.PrintError("警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
-            ECHelper.Chat.PrintError("/e 警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
-            _lastNotifyTime = currTimeInMs;
+            ChatHelper.Print.ErrorMessage("/e 警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
+            BardBattleData.Instance.LastNotifyTime = currTimeInMs;
+        }
+        if (LowVipRestrictor.IsLowVip() 
+            && SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3 == false
+            && currTimeInMs - BardBattleData.Instance.LastCountDownTime > 1000)
+        {
+            const int totalTimeoutMs = 10000;
+            var timeLeft = totalTimeoutMs - currTimeInMs;
+            ChatHelper.Print.ErrorMessage($"/e [警告] 你未按照要求设置 ACR, {(int)(timeLeft / 1000)} 秒后将自动停手！");
+            BardBattleData.Instance.LastCountDownTime = currTimeInMs;
+            if (timeLeft <= 0)
+                PlayerOptions.Instance.Stop = true;
         }
     }
 
@@ -341,7 +336,7 @@ public class BardRotationEventHandler : IRotationEventHandler
                 Core.Resolve<MemApiChatMessage>()
                     .Toast2("欢迎使用窝头的诗人ACR\n请关闭全局能力技能不卡GCD\n打开此设置会导致本ACR产生能力技插入问题", 1, 5000);
                 LogHelper.PrintError("警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
-                ECHelper.Chat.PrintError("/e 警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
+                ChatHelper.Print.ErrorMessage("/e 警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
             }
             else if (BardSettings.Instance.WelcomeVoice)
                 Core.Resolve<MemApiChatMessage>()
@@ -351,7 +346,7 @@ public class BardRotationEventHandler : IRotationEventHandler
             Core.Resolve<MemApiChatMessage>()
                 .Toast2("欢迎使用窝头的诗人ACR\n请关闭全局能力技能不卡GCD\n打开此设置会导致本ACR产生能力技插入问题", 1, 5000);
             LogHelper.PrintError("警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
-            ECHelper.Chat.PrintError("/e 警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
+            ChatHelper.Print.ErrorMessage("/e 警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
         }
         if (BardSettings.Instance.WelcomeVoice)
             ChatHelper.SendMessage("/pdr tts 你好，欢迎你使用窝头诗人");
@@ -547,15 +542,6 @@ public class BardRotationEventHandler : IRotationEventHandler
     public void OnTerritoryChanged()
     {
         BardRotationEntry.UpdateWardensPaeanPanel();
-        
-        /*if (LowVipRestrictor.IsRestrictedZoneForLowVip())
-        {
-            if (BardSettings.Instance.QwertyList.Count <= 7)
-            {
-                BardSettings.Instance.QwertyList = PartyHelper.Party.Select(player => LowVipRestrictor.ComputeMd5Hash(player.Name.ToString())).ToList();
-                BardSettings.Instance.Save();
-            }
-        }*/
     }
     
     private void SmartUseHighPrioritySlot()
