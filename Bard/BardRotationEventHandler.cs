@@ -299,7 +299,9 @@ public class BardRotationEventHandler : IRotationEventHandler
             _lastSpell.IsAbility() &&
             spell.IsAbility() &&
             Core.Me.InCombat() &&
-            battleMs > 0;
+            battleMs > 0 &&
+            (_lastSpell.Id != BardDefinesData.Spells.HeartBreak ||
+             spell.Id != BardDefinesData.Spells.HeartBreak);
 
         if (!_hasDetected)
         {
