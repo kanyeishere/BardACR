@@ -25,6 +25,7 @@ namespace Wotou.Bard;
 public class BardRotationEventHandler : IRotationEventHandler
 {
     private long _randomTime = 0;
+    private int _lastNotifyTime = 0;
     private static void HandleMovingToTarget()
     {
         var instanceTargetPosition = BardBattleData.Instance.TargetPosition;
@@ -323,11 +324,11 @@ public class BardRotationEventHandler : IRotationEventHandler
             BardRotationEntry.QT.SetQt("对齐旅神", false);
             BardRotationEntry.QT.SetQt("强对齐", false);
         }
-        if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3)
+        if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3 && currTimeInMs - _lastNotifyTime > 1000)
         {
-            LogHelper.PrintError("警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭");
-            ChatHelper.SendMessage("/e 警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭");
-            ChatHelper.SendMessage("/e <se.1>");
+            LogHelper.PrintError("警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
+            ECHelper.Chat.PrintError("/e 警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
+            _lastNotifyTime = currTimeInMs;
         }
     }
 
@@ -339,9 +340,8 @@ public class BardRotationEventHandler : IRotationEventHandler
             {
                 Core.Resolve<MemApiChatMessage>()
                     .Toast2("欢迎使用窝头的诗人ACR\n请关闭全局能力技能不卡GCD\n打开此设置会导致本ACR产生能力技插入问题", 1, 5000);
-                LogHelper.PrintError("警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭");
-                ChatHelper.SendMessage("/e 警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭");
-                ChatHelper.SendMessage("/e <se.1>");
+                LogHelper.PrintError("警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
+                ECHelper.Chat.PrintError("/e 警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
             }
             else if (BardSettings.Instance.WelcomeVoice)
                 Core.Resolve<MemApiChatMessage>()
@@ -350,9 +350,8 @@ public class BardRotationEventHandler : IRotationEventHandler
         {
             Core.Resolve<MemApiChatMessage>()
                 .Toast2("欢迎使用窝头的诗人ACR\n请关闭全局能力技能不卡GCD\n打开此设置会导致本ACR产生能力技插入问题", 1, 5000);
-            LogHelper.PrintError("警告，你没有进行全局能力技能不卡GCD设置，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中先开启全局能力技能不卡GCD后，再重新关闭一次");
-            ChatHelper.SendMessage("/e 警告，你没有进行全局能力技能不卡GCD设置，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中先开启全局能力技能不卡GCD后，再重新关闭一次");
-            ChatHelper.SendMessage("/e <se.1>");
+            LogHelper.PrintError("警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
+            ECHelper.Chat.PrintError("/e 警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
         }
         if (BardSettings.Instance.WelcomeVoice)
             ChatHelper.SendMessage("/pdr tts 你好，欢迎你使用窝头诗人");
@@ -371,19 +370,6 @@ public class BardRotationEventHandler : IRotationEventHandler
         }
         catch (Exception) { }
         ECHelper.Commands.AddHandler("/Wotou_BRD", new CommandInfo(BardCommandHandler));
-        
-        /*var sb = new SeStringBuilder().AddText("窝头").AddIcon(BitmapFontIcon.CrossWorld).AddText("银泪湖");
-        SeString fakeSender = sb.Build();
-
-        var chatEntry = new XivChatEntry()
-        {
-            Type = XivChatType.Shout,
-            Name = fakeSender,
-            Message = $"\n我这个人\n就是爱开\n开灯也行\n开玩笑也行\n开瓶啤酒更行\n\n于是我开窗\n开手机\n开个挂装作喜欢玩这游戏\n\n最后开到凌晨三点\n窗外全是虫子\n它们都比我更清醒\n只是不说话"
-        };
-        
-        // 打印到聊天框
-        ECHelper.Chat.Print(chatEntry);*/
     }
     
     private void BardCommandHandler(string command, string args)
