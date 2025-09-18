@@ -125,7 +125,7 @@ namespace Wotou.Dancer
                 if (timeLeft <= 0)
                 {
                     var number = new Random().Next(1, 17); // [1,17)，也就是 1 到 16
-                    ChatHelper.Print.ErrorMessage($"[爆炸] <se.{number}>");
+                    ChatHelper.SendMessage($"/e [爆炸] <se.{number}>");
                     // PlayerOptions.Instance.Stop = true;
                 }
             }
