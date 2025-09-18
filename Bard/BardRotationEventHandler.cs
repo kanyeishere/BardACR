@@ -344,6 +344,7 @@ public class BardRotationEventHandler : IRotationEventHandler
                 ChatHelper.Print.ErrorMessage($"[警告] 请开启“优化 GCD 偏移”，并将数值设为 5 到 10（含 5 和 10）");
                 ChatHelper.Print.ErrorMessage($"[警告] 请关闭全局能力技能不卡 GCD");
                 ChatHelper.Print.ErrorMessage($"[警告] 请开启 FuckAnimation 三插设置");
+                ChatHelper.Print.ErrorMessage($"[警告] 请检查当前模式（日随/高难），与副本是否匹配");
                 ChatHelper.Print.ErrorMessage($"[警告] 请检查你的网络延迟");
                 BardBattleData.Instance.LastCountDownTime = currTimeInMs;
             }
