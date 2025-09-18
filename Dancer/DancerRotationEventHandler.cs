@@ -122,8 +122,8 @@ namespace Wotou.Dancer
                     }
                     DancerBattleData.Instance.LastCountDownTime = currTimeInMs;
                 }
-                if (timeLeft <= 0)
-                    PlayerOptions.Instance.Stop = true;
+                if (timeLeft <= 0) {}
+                    // PlayerOptions.Instance.Stop = true;
             }
             if (DancerBattleData.Instance.LastWarningTime == 0)
                 DancerBattleData.Instance.LastWarningTime = currTimeInMs;

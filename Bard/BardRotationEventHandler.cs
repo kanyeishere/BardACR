@@ -340,7 +340,7 @@ public class BardRotationEventHandler : IRotationEventHandler
             var timeLeft = totalTimeoutMs - currTimeInMs;
             if (timeLeft >= 0)
             {
-                ChatHelper.Print.ErrorMessage($"[警告] 你未按照要求设置 ACR, {(int)(timeLeft / 1000)} 秒后将自动停手！");
+                ChatHelper.Print.ErrorMessage($"[警告] 你未按照要求设置 ACR, {(int)(timeLeft / 1000)} 秒后将自动停手！ <se.1>");
                 if (SettingMgr.GetSetting<GeneralSettings>().OptimizeGcd == false
                     || SettingMgr.GetSetting<GeneralSettings>().Ping > 10 
                     || SettingMgr.GetSetting<GeneralSettings>().Ping < 5)
@@ -355,8 +355,9 @@ public class BardRotationEventHandler : IRotationEventHandler
                 }
                 BardBattleData.Instance.LastCountDownTime = currTimeInMs;
             }
-            if (timeLeft <= 0)
-                PlayerOptions.Instance.Stop = true;
+
+            if (timeLeft <= 0){}
+                // PlayerOptions.Instance.Stop = true;
         }
     }
 
