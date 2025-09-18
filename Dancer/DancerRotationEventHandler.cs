@@ -108,11 +108,18 @@ namespace Wotou.Dancer
                 if (timeLeft >= 0)
                 {
                     ChatHelper.Print.ErrorMessage($"[警告] 你未按照要求设置 ACR, {(int)(timeLeft / 1000)} 秒后将自动停手！");
-                    ChatHelper.Print.ErrorMessage($"[警告] 请开启“优化 GCD 偏移”，并将数值设为 5 到 10（含 5 和 10）");
-                    ChatHelper.Print.ErrorMessage($"[警告] 请关闭全局能力技能不卡 GCD");
-                    ChatHelper.Print.ErrorMessage($"[警告] 请开启 FuckAnimationLock 三插设置");
-                    ChatHelper.Print.ErrorMessage($"[警告] 请检查当前模式（日随/高难），与副本是否匹配");
-                    ChatHelper.Print.ErrorMessage($"[警告] 请检查你的网络延迟");
+                    if (SettingMgr.GetSetting<GeneralSettings>().OptimizeGcd == false
+                        || SettingMgr.GetSetting<GeneralSettings>().Ping > 10 
+                        || SettingMgr.GetSetting<GeneralSettings>().Ping < 5)
+                        ChatHelper.Print.ErrorMessage($"[警告] 请开启“优化 GCD 偏移”，并将数值设为 5 到 10（含 5 和 10）");
+                    if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3)
+                        ChatHelper.Print.ErrorMessage($"[警告] 请关闭全局能力技能不卡 GCD");
+                    if (DancerBattleData.Instance.EnableThreeOGcd == false)
+                    {
+                        ChatHelper.Print.ErrorMessage($"[警告] 请开启 FuckAnimation 三插设置");
+                        ChatHelper.Print.ErrorMessage($"[警告] 请检查当前模式（日随/高难），与副本是否匹配");
+                        ChatHelper.Print.ErrorMessage($"[警告] 请检查你的网络延迟");
+                    }
                     DancerBattleData.Instance.LastCountDownTime = currTimeInMs;
                 }
                 if (timeLeft <= 0)
