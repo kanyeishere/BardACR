@@ -334,13 +334,13 @@ public class BardRotationEventHandler : IRotationEventHandler
                 || SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3
                 || SettingMgr.GetSetting<GeneralSettings>().Ping > 10 
                 || SettingMgr.GetSetting<GeneralSettings>().Ping < 5)
-            && currTimeInMs - BardBattleData.Instance.LastCountDownTime > 1000)
+            )
         {
             const int totalTimeoutMs = 120000;
             var timeLeft = totalTimeoutMs - currTimeInMs;
-            if (timeLeft >= 0)
+            if (timeLeft >= 0 && currTimeInMs - BardBattleData.Instance.LastCountDownTime > 1000)
             {
-                ChatHelper.Print.ErrorMessage($"[警告] 你未按照要求设置 ACR, {(int)(timeLeft / 1000)} 秒后将自动停手！ <se.1>");
+                ChatHelper.Print.ErrorMessage($"[警告] 你未按照要求设置 ACR, {(int)(timeLeft / 1000)} 秒后将爆炸！ <se.1>");
                 if (SettingMgr.GetSetting<GeneralSettings>().OptimizeGcd == false
                     || SettingMgr.GetSetting<GeneralSettings>().Ping > 10 
                     || SettingMgr.GetSetting<GeneralSettings>().Ping < 5)
@@ -356,8 +356,12 @@ public class BardRotationEventHandler : IRotationEventHandler
                 BardBattleData.Instance.LastCountDownTime = currTimeInMs;
             }
 
-            if (timeLeft <= 0){}
+            if (timeLeft <= 0)
+            {
+                var number = new Random().Next(1, 17); // [1,17)，也就是 1 到 16
+                ChatHelper.Print.ErrorMessage($"[爆炸] <se.{number}>");
                 // PlayerOptions.Instance.Stop = true;
+            }
         }
     }
 
