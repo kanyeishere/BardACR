@@ -329,6 +329,7 @@ public class BardRotationEventHandler : IRotationEventHandler
         }
 
         if (LowVipRestrictor.IsLowVip() 
+            && BardSettings.Instance.IsDailyMode == false
             && (SettingMgr.GetSetting<GeneralSettings>().OptimizeGcd == false
                 || BardBattleData.Instance.EnableThreeOGcd == false 
                 || SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3

@@ -96,6 +96,7 @@ namespace Wotou.Dancer
             }
             
             if (LowVipRestrictor.IsLowVip() 
+                && DancerSettings.Instance.IsDailyMode == false
                 && (SettingMgr.GetSetting<GeneralSettings>().OptimizeGcd == false
                     || DancerBattleData.Instance.EnableThreeOGcd == false 
                     || SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3
