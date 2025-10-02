@@ -32,7 +32,8 @@ public class BardRotationEventHandler : IRotationEventHandler
         const float offset = 0.05f;
         var targetPosition = (Vector3)instanceTargetPosition;
             
-        Core.Resolve<MemApiMove>().MoveToTarget(targetPosition);
+        // Core.Resolve<MemApiMove>().MoveToTarget(targetPosition);
+        ChatHelper.SendMessage($"/vnav moveto {targetPosition.X} {targetPosition.Y} {targetPosition.Z}");
             
         var currentPos = Core.Me.Position;
             
@@ -42,12 +43,13 @@ public class BardRotationEventHandler : IRotationEventHandler
             
         if (distance > offset)
         {
-            Core.Resolve<MemApiMove>().MoveToTarget(targetPosition);
+            //Core.Resolve<MemApiMove>().MoveToTarget(targetPosition);
+            ChatHelper.SendMessage($"/vnav moveto {targetPosition.X} {targetPosition.Y} {targetPosition.Z}");
         }
         else
         {
             // 到达目标位置，停止移动
-            Core.Resolve<MemApiMove>().CancelMove();
+            ChatHelper.SendMessage($"/vnav stop");
             BardBattleData.Instance.TargetPosition = null; // 清除目标位置
         }
     }
@@ -473,7 +475,8 @@ public class BardRotationEventHandler : IRotationEventHandler
                             await Task.Delay(delay);
 
                         BardBattleData.Instance.TargetPosition = target;
-                        Core.Resolve<MemApiMove>().MoveToTarget(target);
+                        ChatHelper.SendMessage($"/vnav moveto {x} {y} {z}");
+                        //Core.Resolve<MemApiMove>().MoveToTarget(target);
                     });
                 }
                 else
@@ -524,7 +527,8 @@ public class BardRotationEventHandler : IRotationEventHandler
                                 BardBattleData.Instance.IsFollowing = false;
                                 break;
                             }
-                            Core.Resolve<MemApiMove>().MoveToTarget(BardBattleData.Instance.FollowingTarget.Position);
+                            // Core.Resolve<MemApiMove>().MoveToTarget(BardBattleData.Instance.FollowingTarget.Position);
+                            ChatHelper.SendMessage($"/vnav moveto {BardBattleData.Instance.FollowingTarget.Position.X} {BardBattleData.Instance.FollowingTarget.Position.Y} {BardBattleData.Instance.FollowingTarget.Position.Z}");
                             BardBattleData.Instance.IsFollowing = true;
                         }
 
@@ -594,7 +598,9 @@ public class BardRotationEventHandler : IRotationEventHandler
 
     private void CancelMoving()
     {
-        Core.Resolve<MemApiMove>().CancelMove();
+        // Core.Resolve<MemApiMove>().CancelMove();
+        if (Core.Resolve<MemApiDuty>().IsBoundByDuty() && Core.Resolve<MemApiDuty>().DutyMembersNumber() == 8)
+            ChatHelper.SendMessage($"/vnav stop");
         BardBattleData.Instance.TargetPosition = null;
         BardBattleData.Instance.FollowingTarget = null;
         BardBattleData.Instance.IsFollowing = false;
