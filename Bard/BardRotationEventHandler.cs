@@ -199,6 +199,7 @@ public class BardRotationEventHandler : IRotationEventHandler
 
     public void OnSpellCastSuccess(Slot slot, Spell spell)
     {
+       
     }
 
     public void AfterSpell(Slot slot, Spell spell)
