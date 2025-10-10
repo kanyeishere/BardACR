@@ -25,11 +25,11 @@ public class BardRotationEventHandler : IRotationEventHandler
     private Spell? _lastSpell = null;
     private DateTime _lastCastTime = DateTime.MinValue;
     private bool _hasDetected = false;
-    private static void HandleMovingToTarget()
+    private void HandleMovingToTarget()
     {
         var instanceTargetPosition = BardBattleData.Instance.TargetPosition;
         if (instanceTargetPosition == null) return;
-        const float offset = 0.05f;
+        const float offset = 1f;
         var targetPosition = (Vector3)instanceTargetPosition;
             
         // Core.Resolve<MemApiMove>().MoveToTarget(targetPosition);
@@ -49,7 +49,7 @@ public class BardRotationEventHandler : IRotationEventHandler
         else
         {
             // 到达目标位置，停止移动
-            ChatHelper.SendMessage($"/vnav stop");
+            CancelMoving();
             BardBattleData.Instance.TargetPosition = null; // 清除目标位置
         }
     }
@@ -58,7 +58,7 @@ public class BardRotationEventHandler : IRotationEventHandler
     {
         BardRotationEntry.UpdateWardensPaeanPanel();
         SmartUseHighPrioritySlot();
-        CancelMoving();
+        // CancelMoving();
         
         if (!BardUtil.IsSongOrderNormal())
         {
@@ -199,6 +199,7 @@ public class BardRotationEventHandler : IRotationEventHandler
 
     public void OnSpellCastSuccess(Slot slot, Spell spell)
     {
+       
     }
 
     public void AfterSpell(Slot slot, Spell spell)
