@@ -322,6 +322,7 @@ public class BardRotationEventHandler : IRotationEventHandler
     public void OnBattleUpdate(int currTimeInMs)
     {
         SmartUseHighPrioritySlot();
+        SmartStop();
         HandleMovingToTarget();
         
         if (!BardUtil.IsSongOrderNormal())
@@ -595,6 +596,15 @@ public class BardRotationEventHandler : IRotationEventHandler
             BardBattleData.Instance.HotkeyUseHighPrioritySlot = true;
         else
             BardBattleData.Instance.HotkeyUseHighPrioritySlot = false;
+    }
+
+    private void SmartStop()
+    {
+        if (!BardSettings.Instance.IsDailyMode)
+            return;
+        if (Core.Me.GetCurrTarget() != null)
+            PlayerOptions.Instance.Stop = false;
+        PlayerOptions.Instance.Stop = !Core.Me.GetCurrTarget().NotInvulnerable();
     }
 
     private void CancelMoving()
