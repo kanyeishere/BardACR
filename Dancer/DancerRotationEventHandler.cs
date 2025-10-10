@@ -88,6 +88,7 @@ namespace Wotou.Dancer
         public void OnBattleUpdate(int currTimeInMs)
         {
             SmartUseHighPrioritySlot();
+            SmartStop();
 
             if (DancerSettings.Instance.M6SAutoTarget && Core.Resolve<MemApiZoneInfo>().GetCurrTerrId() == 1259)
             {
@@ -438,6 +439,15 @@ namespace Wotou.Dancer
                 DancerBattleData.Instance.HotkeyUseHighPrioritySlot = true;
             else
                 DancerBattleData.Instance.HotkeyUseHighPrioritySlot = false;
+        }
+        
+        private void SmartStop()
+        {
+            if (!DancerSettings.Instance.IsDailyMode)
+                return;
+            if (Core.Me.GetCurrTarget() != null)
+                PlayerOptions.Instance.Stop = false;
+            PlayerOptions.Instance.Stop = !Core.Me.GetCurrTarget().NotInvulnerable();
         }
         
         public static IBattleChara AutoTarget()
