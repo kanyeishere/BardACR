@@ -153,6 +153,7 @@ public class DancerRotationEntry : IRotationEntry
         
         var enAvantJobViewSave = new JobViewSave();
         enAvantJobViewSave.ShowHotkey = DancerSettings.Instance.ShowEnAvantPanel;
+        enAvantJobViewSave.ShowHotkey = false;
         enAvantJobViewSave.QtHotkeySize = new Vector2(DancerSettings.Instance.EnAvantPanelIconSize, DancerSettings.Instance.EnAvantPanelIconSize);
         EnAvantPanel = new HotkeyWindow(enAvantJobViewSave, "Custom DNC En Avant HotkeyWindow");
 
@@ -188,6 +189,7 @@ public class DancerRotationEntry : IRotationEntry
             var enAvantViewSave = new JobViewSave();
             enAvantViewSave.QtHotkeySize = new Vector2(DancerSettings.Instance.EnAvantPanelIconSize, DancerSettings.Instance.EnAvantPanelIconSize);
             enAvantViewSave.ShowHotkey = DancerSettings.Instance.ShowEnAvantPanel;
+            enAvantViewSave.ShowHotkey = false;
             enAvantViewSave.LockWindow = DancerSettings.Instance.isEnAvantPanelLocked;
             EnAvantPanel.DrawHotkeyWindow(new QtStyle(DancerSettings.Instance.JobViewSave));
             EnAvantPanel = new HotkeyWindow(enAvantViewSave, "Custom DNC En Avant HotkeyWindow");
@@ -363,10 +365,10 @@ public class DancerRotationEntry : IRotationEntry
             ImGuiHelper.LeftInputInt("图标大小", ref DancerSettings.Instance.DancePartnerPanelIconSize, 10, 80);
             ImGui.Checkbox("锁定舞伴面板", ref DancerSettings.Instance.isDancePartnerPanelLocked);
             ImGui.Separator();
-            ImGui.Checkbox("显示前冲步面板 - 镜头面向控制前冲步", ref DancerSettings.Instance.ShowEnAvantPanel);
+            /*ImGui.Checkbox("显示前冲步面板 - 镜头面向控制前冲步", ref DancerSettings.Instance.ShowEnAvantPanel);
             ImGuiHelper.LeftInputInt("图标大小", ref DancerSettings.Instance.EnAvantPanelIconSize, 10, 80);
             ImGui.Checkbox("锁定前冲步面板", ref DancerSettings.Instance.isEnAvantPanelLocked);
-            ImGui.Separator();
+            ImGui.Separator();*/
             ImGui.Checkbox("是否启用舞伴宏", ref DancerSettings.Instance.UseDancePartnerMacro);
             ImGui.InputTextMultiline("", ref DancerSettings.Instance.DancePartnerMacroText, 1000, new Vector2(-1, ImGui.GetTextLineHeight() * 6));
             ImGui.Separator();
