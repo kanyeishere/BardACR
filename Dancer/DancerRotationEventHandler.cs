@@ -89,11 +89,6 @@ namespace Wotou.Dancer
         {
             SmartUseHighPrioritySlot();
             SmartStop();
-
-            if (DancerSettings.Instance.M6SAutoTarget && Core.Resolve<MemApiZoneInfo>().GetCurrTerrId() == 1259)
-            {
-                Core.Me.SetTarget(AutoTarget());
-            }
             
             if (LowVipRestrictor.IsLowVip() 
                 && DancerSettings.Instance.IsDailyMode == false
@@ -448,63 +443,6 @@ namespace Wotou.Dancer
             if (Core.Me.GetCurrTarget() != null)
                 PlayerOptions.Instance.Stop = false;
             PlayerOptions.Instance.Stop = !Core.Me.GetCurrTarget().NotInvulnerable();
-        }
-        
-        public static IBattleChara AutoTarget()
-        {
-            if (!DancerSettings.Instance.M6SAutoTarget)
-            {
-                return Core.Me.GetCurrTarget();
-            }
-            const float maxDistance = 25f;
-        
-            var enemies = ECHelper.Objects
-                .Where(obj => obj is IBattleChara)
-                .Cast<IBattleChara>()
-                .Where(c => c.DistanceToPlayer() < maxDistance && c.IsEnemy())
-                .ToArray()
-                .OrderBy(c => c.DistanceToPlayer());
-        
-            var 无目标鱼 = enemies.FirstOrDefault(c => c.DataId == 18346 && c.TargetObject == null);
-            var 有目标鱼 = enemies.FirstOrDefault(c => c.DataId == 18346);
-            var 所有鱼 = enemies.Where(c => c.DataId == 18346).OrderBy(c => c.DistanceToPlayer()).ToArray();
-            var 自己有鱼 = enemies.Any(c => c.DataId == 18346 && c.TargetObject?.IsMe() == true);
-            var 哈基米 = enemies.FirstOrDefault(c => c.DataId == 18347);
-            var 羊 = enemies.FirstOrDefault(c => c.DataId == 18344);
-            var 马 = enemies.FirstOrDefault(c => c.DataId == 18345);
-            var boss = enemies.FirstOrDefault(c => c.DataId == 18335);
-        
-            if (!自己有鱼 && 无目标鱼 != null && 所有鱼.Length >= 2)
-            {
-                var battleTime = AI.Instance.BattleData.CurrBattleTimeInMs;
-            
-                if (DancerSettings.Instance.M6SAutoTargetCount == 3 || 
-                    (DancerSettings.Instance.M6SAutoTargetCount == 2 && battleTime > 300*1000) ||
-                    (DancerSettings.Instance.M6SAutoTargetCount == 1 && battleTime > 250*1000 && battleTime < 300*1000))
-                {
-                    return 无目标鱼;
-                }
-            }
-            
-            if (!自己有鱼 && 所有鱼.Length >= 2)
-            {
-                var battleTime = AI.Instance.BattleData.CurrBattleTimeInMs;
-            
-                if (DancerSettings.Instance.M6SAutoTargetCount == 3 || 
-                    (DancerSettings.Instance.M6SAutoTargetCount == 2 && battleTime > 300*1000) ||
-                    (DancerSettings.Instance.M6SAutoTargetCount == 1 && battleTime > 250*1000 && battleTime < 300*1000))
-                {
-                    return 所有鱼[0];
-                }
-            }
-        
-            if (马 != null) return 马;
-            if (哈基米 != null) return 哈基米;
-            if (有目标鱼 != null) return 有目标鱼;
-            if (羊 != null) return 羊;
-            if (boss != null) return boss;
-        
-            return Core.Me.GetCurrTarget();
         }
     }
 }
