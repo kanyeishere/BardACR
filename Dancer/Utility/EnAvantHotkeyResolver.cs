@@ -74,9 +74,9 @@ public class EnAvantHotkeyResolver: IHotkeyResolver
 
     public void Run()
     {
-        var rotation = RotHelper.GetCameraRotation() + Rotation;
+        // var rotation = RotHelper.GetCameraRotation() + Rotation;
 
-        Core.Resolve<MemApiMove>().SetRot(rotation);
+        // Core.Resolve<MemApiMove>().SetRot(rotation);
         /*float moveDistance = 0.5f; // **移动的距离（可以调整）**
         Vector3 currentPos = Core.Me.Position;
         Vector3 targetPos = new Vector3(
