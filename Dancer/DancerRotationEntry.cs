@@ -402,19 +402,6 @@ public class DancerRotationEntry : IRotationEntry
         }
         
         ImGui.Separator();
-        if (ImGui.CollapsingHeader("   副本设置"))
-        {
-            ImGui.Separator();
-            ImGui.Checkbox("M6S自动切目标", ref DancerSettings.Instance.M6SAutoTarget);
-            if (DancerSettings.Instance.M6SAutoTarget)
-            {
-                UiHelper.RightInputInt("0-不拉鱼, 1-拉第1波鱼, 2-拉第2波鱼, 3-全拉", ref DancerSettings.Instance.M6SAutoTargetCount, 0, 3);
-            }
-            ImGui.Separator();
-            if (ImGui.Button("保存副本设置"))
-                DancerSettings.Instance.Save();
-        }
-        ImGui.Separator();
         if (ImGui.CollapsingHeader("   技能队列"))
         {
             ImGui.Separator();
