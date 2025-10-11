@@ -231,11 +231,6 @@ namespace Wotou.Dancer
             DancerRotationEntry.UpdateDancerPartnerPanel();
             SmartUseHighPrioritySlot();
             
-            if (Core.Me.IsMoving())
-                Core.Resolve<MemApiMove>().CancelMove();
-            if (Core.Resolve<MemApiMove>().IsMoving())
-                Core.Resolve<MemApiMove>().CancelMove();
-            
             if (DancerSettings.Instance.IsDailyMode)
             {
                 DancerRotationEntry.QT.SetQt(QTKey.SmartAoeTarget, true);
@@ -438,11 +433,11 @@ namespace Wotou.Dancer
         
         private void SmartStop()
         {
-            if (!DancerSettings.Instance.IsDailyMode)
+            /*if (!DancerSettings.Instance.IsDailyMode)
                 return;
             if (Core.Me.GetCurrTarget() != null)
                 PlayerOptions.Instance.Stop = false;
-            PlayerOptions.Instance.Stop = !Core.Me.GetCurrTarget().NotInvulnerable();
+            PlayerOptions.Instance.Stop = !Core.Me.GetCurrTarget().NotInvulnerable();*/
         }
     }
 }

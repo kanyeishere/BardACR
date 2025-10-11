@@ -58,7 +58,7 @@ public class BardRotationEventHandler : IRotationEventHandler
     {
         BardRotationEntry.UpdateWardensPaeanPanel();
         SmartUseHighPrioritySlot();
-        // CancelMoving();
+        CancelMoving();
         
         if (!BardUtil.IsSongOrderNormal())
         {
@@ -600,11 +600,11 @@ public class BardRotationEventHandler : IRotationEventHandler
 
     private void SmartStop()
     {
-        if (!BardSettings.Instance.IsDailyMode)
+        /*if (!BardSettings.Instance.IsDailyMode)
             return;
         if (Core.Me.GetCurrTarget() != null)
             PlayerOptions.Instance.Stop = false;
-        PlayerOptions.Instance.Stop = !Core.Me.GetCurrTarget().NotInvulnerable();
+        PlayerOptions.Instance.Stop = !Core.Me.GetCurrTarget().NotInvulnerable();*/
     }
 
     private void CancelMoving()
