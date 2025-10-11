@@ -1,6 +1,7 @@
 using System.Numerics;
 using AEAssist;
 using AEAssist.CombatRoutine.View.JobView;
+using AEAssist.Helper;
 using AEAssist.MemoryApi;
 using Dalamud.Bindings.ImGui;
 using Wotou.Bard.Data;
@@ -39,9 +40,10 @@ public class StopMoveHotkeyResolver : IHotkeyResolver
 
     public void Run()
     {
-        Core.Resolve<MemApiMove>().CancelMove();
+        if (Core.Resolve<MemApiDuty>().IsBoundByDuty() && Core.Resolve<MemApiDuty>().DutyMembersNumber() == 8)
+            ChatHelper.SendMessage($"/vnav stop");
         BardBattleData.Instance.TargetPosition = null;
-        if (BardBattleData.Instance.IsFollowing)
-            BardBattleData.Instance.FollowingTarget = null;
+        BardBattleData.Instance.FollowingTarget = null;
+        BardBattleData.Instance.IsFollowing = false;
     }
 }
