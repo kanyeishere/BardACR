@@ -1,3 +1,4 @@
+/*
 #nullable disable
 using AEAssist.Helper;
 using FFXIVClientStructs.FFXIV.Client.Game.Control;
@@ -16,3 +17,4 @@ namespace Wotou.Common {
     }
   }
 }
+*/
