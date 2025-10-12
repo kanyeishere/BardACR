@@ -11,6 +11,8 @@ using AEAssist.Extension;
 using AEAssist.Helper;
 using Dalamud.Game.ClientState.JobGauge.Enums;
 using Dalamud.Game.Command;
+using Dalamud.Plugin.Ipc.Exceptions;
+using ECommons.DalamudServices;
 using Wotou.Bard.Utility;
 using Wotou.Common;
 
@@ -27,14 +29,16 @@ public class BardRotationEventHandler : IRotationEventHandler
     private bool _hasDetected = false;
     private void HandleMovingToTarget()
     {
+        if (!VNavAvailable()) return;
         var instanceTargetPosition = BardBattleData.Instance.TargetPosition;
         if (instanceTargetPosition == null) return;
         const float offset = 1f;
         var targetPosition = (Vector3)instanceTargetPosition;
             
         // Core.Resolve<MemApiMove>().MoveToTarget(targetPosition);
-        ChatHelper.SendMessage($"/vnav moveto {targetPosition.X} {targetPosition.Y} {targetPosition.Z}");
-            
+        // ChatHelper.SendMessage($"/vnav moveto {targetPosition.X} {targetPosition.Y} {targetPosition.Z}");
+        var navMoveTo = Svc.PluginInterface.GetIpcSubscriber<List<Vector3>, bool, object>("vnavmesh.Path.MoveTo");
+        navMoveTo?.InvokeAction([targetPosition], false);
         var currentPos = Core.Me.Position;
             
         float dx = targetPosition.X - currentPos.X;
@@ -44,7 +48,8 @@ public class BardRotationEventHandler : IRotationEventHandler
         if (distance > offset)
         {
             //Core.Resolve<MemApiMove>().MoveToTarget(targetPosition);
-            ChatHelper.SendMessage($"/vnav moveto {targetPosition.X} {targetPosition.Y} {targetPosition.Z}");
+            //ChatHelper.SendMessage($"/vnav moveto {targetPosition.X} {targetPosition.Y} {targetPosition.Z}");
+            navMoveTo?.InvokeAction([targetPosition], false);
         }
         else
         {
@@ -456,9 +461,11 @@ public class BardRotationEventHandler : IRotationEventHandler
             {
                 // 匹配格式 moveTo (x,y,z) 或 moveTo(x,y,z)（可带空格）
                 var match = Regex.Match(move, @"moveto\s*\(\s*(-?\d+(\.\d+)?)\s*,\s*(-?\d+(\.\d+)?)\s*,\s*(-?\d+(\.\d+)?)\s*\)(?:\s+delay\s+(\d+))?", RegexOptions.IgnoreCase);
-                
+
                 if (match.Success)
                 {
+                    if (!VNavAvailable()) return;
+                    
                     float x = float.Parse(match.Groups[1].Value);
                     float y = float.Parse(match.Groups[3].Value);
                     float z = float.Parse(match.Groups[5].Value);
@@ -477,7 +484,9 @@ public class BardRotationEventHandler : IRotationEventHandler
                             await Task.Delay(delay);
 
                         BardBattleData.Instance.TargetPosition = target;
-                        ChatHelper.SendMessage($"/vnav moveto {x} {y} {z}");
+                        //ChatHelper.SendMessage($"/vnav moveto {x} {y} {z}");
+                        var navMoveTo = Svc.PluginInterface.GetIpcSubscriber<List<Vector3>, bool, object>("vnavmesh.Path.MoveTo");
+                        navMoveTo?.InvokeAction([target], false);
                         //Core.Resolve<MemApiMove>().MoveToTarget(target);
                     });
                 }
@@ -496,6 +505,8 @@ public class BardRotationEventHandler : IRotationEventHandler
 
                 if (match.Success)
                 {
+                    if (!VNavAvailable()) return;
+                    
                     if (!uint.TryParse(match.Groups[1].Value, out uint entityId))
                     {
                         LogHelper.PrintError("无法解析 EntityId！");
@@ -530,7 +541,9 @@ public class BardRotationEventHandler : IRotationEventHandler
                                 break;
                             }
                             // Core.Resolve<MemApiMove>().MoveToTarget(BardBattleData.Instance.FollowingTarget.Position);
-                            ChatHelper.SendMessage($"/vnav moveto {BardBattleData.Instance.FollowingTarget.Position.X} {BardBattleData.Instance.FollowingTarget.Position.Y} {BardBattleData.Instance.FollowingTarget.Position.Z}");
+                            //ChatHelper.SendMessage($"/vnav moveto {BardBattleData.Instance.FollowingTarget.Position.X} {BardBattleData.Instance.FollowingTarget.Position.Y} {BardBattleData.Instance.FollowingTarget.Position.Z}");
+                            var navMoveTo = Svc.PluginInterface.GetIpcSubscriber<List<Vector3>, bool, object>("vnavmesh.Path.MoveTo");
+                            navMoveTo.InvokeAction([BardBattleData.Instance.FollowingTarget.Position], false);
                             BardBattleData.Instance.IsFollowing = true;
                         }
 
@@ -609,11 +622,40 @@ public class BardRotationEventHandler : IRotationEventHandler
 
     private void CancelMoving()
     {
+        if (!VNavAvailable()) return;
         // Core.Resolve<MemApiMove>().CancelMove();
-        if (Core.Resolve<MemApiDuty>().IsBoundByDuty() && Core.Resolve<MemApiDuty>().DutyMembersNumber() == 8)
-            ChatHelper.SendMessage($"/vnav stop");
+        var navStop = Svc.PluginInterface.GetIpcSubscriber<object>("vnavmesh.Path.Stop");
+        if (Core.Resolve<MemApiDuty>().IsBoundByDuty() && 
+            Core.Resolve<MemApiZoneInfo>().GetCurrTerrId() == 1238)
+            navStop?.InvokeAction();
         BardBattleData.Instance.TargetPosition = null;
         BardBattleData.Instance.FollowingTarget = null;
         BardBattleData.Instance.IsFollowing = false;
     }
+    
+    private bool VNavAvailable()
+    {
+        var plist = Svc.PluginInterface.InstalledPlugins;
+        if (plist != null)
+        {
+            var meta = plist.FirstOrDefault(p =>
+                string.Equals(p.InternalName, "vnavmesh", StringComparison.OrdinalIgnoreCase));
+            if (meta is null || !meta.IsLoaded)
+                return false;
+        }
+
+        try
+        {
+            var isReady = Svc.PluginInterface
+                .GetIpcSubscriber<bool>("vnavmesh.Nav.IsReady")
+                .InvokeFunc();
+
+            if (!isReady)
+                return false;
+        }
+        catch (IpcNotReadyError)        { return false; } // 提供方未就绪（加载/切图中）
+        catch                           { return false; } // 其他异常一律视为不可用
+        return true;
+    }
+    
 }

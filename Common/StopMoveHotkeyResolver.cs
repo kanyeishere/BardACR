@@ -4,6 +4,9 @@ using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
 using Dalamud.Bindings.ImGui;
+using Dalamud.Plugin.Ipc.Exceptions;
+using ECommons.DalamudServices;
+using Wotou.Bard;
 using Wotou.Bard.Data;
 
 namespace Wotou.Common;
@@ -40,10 +43,37 @@ public class StopMoveHotkeyResolver : IHotkeyResolver
 
     public void Run()
     {
-        if (Core.Resolve<MemApiDuty>().IsBoundByDuty() && Core.Resolve<MemApiDuty>().DutyMembersNumber() == 8)
-            ChatHelper.SendMessage($"/vnav stop");
+        if (!VNavAvailable()) return;
+        // Core.Resolve<MemApiMove>().CancelMove();
+        var navStop = Svc.PluginInterface.GetIpcSubscriber<object>("vnavmesh.Path.Stop");
+        navStop?.InvokeAction();
         BardBattleData.Instance.TargetPosition = null;
         BardBattleData.Instance.FollowingTarget = null;
         BardBattleData.Instance.IsFollowing = false;
+    }
+    
+    private bool VNavAvailable()
+    {
+        var plist = Svc.PluginInterface.InstalledPlugins;
+        if (plist != null)
+        {
+            var meta = plist.FirstOrDefault(p =>
+                string.Equals(p.InternalName, "vnavmesh", StringComparison.OrdinalIgnoreCase));
+            if (meta is null || !meta.IsLoaded)
+                return false;
+        }
+
+        try
+        {
+            var isReady = Svc.PluginInterface
+                .GetIpcSubscriber<bool>("vnavmesh.Nav.IsReady")
+                .InvokeFunc();
+
+            if (!isReady)
+                return false;
+        }
+        catch (IpcNotReadyError)        { return false; } // 提供方未就绪（加载/切图中）
+        catch                           { return false; } // 其他异常一律视为不可用
+        return true;
     }
 }
