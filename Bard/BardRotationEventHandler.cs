@@ -341,32 +341,31 @@ public class BardRotationEventHandler : IRotationEventHandler
                 || SettingMgr.GetSetting<GeneralSettings>().MaxAbilityTimesInGcd != 2)
             )
         {
-            const int totalTimeoutMs = 120000;
-            var timeLeft = totalTimeoutMs - currTimeInMs;
-            if (timeLeft >= 0 && currTimeInMs - BardBattleData.Instance.LastCountDownTime > 1000)
+            if (SettingMgr.GetSetting<GeneralSettings>().OptimizeGcd == false
+                || SettingMgr.GetSetting<GeneralSettings>().Ping > 10 
+                || SettingMgr.GetSetting<GeneralSettings>().Ping < 5)
             {
-                ChatHelper.Print.ErrorMessage($"[警告] 你未按照要求设置 ACR, {(int)(timeLeft / 1000)} 秒后将爆炸！ <se.1>");
-                if (SettingMgr.GetSetting<GeneralSettings>().OptimizeGcd == false
-                    || SettingMgr.GetSetting<GeneralSettings>().Ping > 10 
-                    || SettingMgr.GetSetting<GeneralSettings>().Ping < 5)
-                    ChatHelper.Print.ErrorMessage($"[警告] 请开启“优化 GCD 偏移”，并将数值设为 5 到 10（含 5 和 10）");
-                if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3)
-                    ChatHelper.Print.ErrorMessage($"[警告] 请关闭全局能力技能不卡 GCD");
-                if (BardBattleData.Instance.EnableThreeOGcd == false)
-                {
-                    ChatHelper.Print.ErrorMessage($"[警告] 请开启 FuckAnimation 三插设置");
-                    ChatHelper.Print.ErrorMessage($"[警告] 请检查当前模式（日随/高难），与副本是否匹配");
-                    ChatHelper.Print.ErrorMessage($"[警告] 请检查你的网络延迟");
-                }
-                if (SettingMgr.GetSetting<GeneralSettings>().MaxAbilityTimesInGcd != 2)
-                    ChatHelper.Print.ErrorMessage($"[警告] 请在 AE-ACR设置中修改 Gcd 内最大能力技数量为 2");
-                BardBattleData.Instance.LastCountDownTime = currTimeInMs;
+                ChatHelper.Print.ErrorMessage("[警告] 请开启“优化 GCD 偏移”，并将数值设为 5 到 10（含 5 和 10）");
+                ChatHelper.SendMessage("/e [警告] 请开启“优化 GCD 偏移”，并将数值设为 5 到 10（含 5 和 10）");
             }
-            if (timeLeft <= 0)
+            if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3)
             {
-                var number = new Random().Next(1, 17); // [1,17)，也就是 1 到 16
-                ChatHelper.SendMessage($"/e [爆炸] <se.{number}>");
-                // PlayerOptions.Instance.Stop = true;
+                ChatHelper.Print.ErrorMessage("[警告] 请关闭全局能力技能不卡 GCD");
+                ChatHelper.SendMessage("/e [警告] 请关闭全局能力技能不卡 GCD");
+            }
+            if (BardBattleData.Instance.EnableThreeOGcd == false)
+            {
+                ChatHelper.Print.ErrorMessage("[警告] 请开启 FuckAnimation 三插设置");
+                ChatHelper.Print.ErrorMessage("[警告] 请检查当前模式（日随/高难），与副本是否匹配");
+                ChatHelper.Print.ErrorMessage("[警告] 请检查你的网络延迟");
+                ChatHelper.SendMessage("/e [警告] 请开启 FuckAnimation 三插设置");
+                ChatHelper.SendMessage("/e [警告] 请检查当前模式（日随/高难），与副本是否匹配");
+                ChatHelper.SendMessage("/e [警告] 请检查你的网络延迟");
+            }
+            if (SettingMgr.GetSetting<GeneralSettings>().MaxAbilityTimesInGcd != 2)
+            {
+                ChatHelper.Print.ErrorMessage("[警告] 请在 AE-ACR设置中修改 Gcd 内最大能力技数量为 2");
+                ChatHelper.SendMessage("/e [警告] 请在 AE-ACR设置中修改 Gcd 内最大能力技数量为 2");
             }
         }
     }
@@ -528,24 +527,20 @@ public class BardRotationEventHandler : IRotationEventHandler
                             await Task.Delay(delay);
 
                         var startTime = DateTime.UtcNow;
-                        BardBattleData.Instance.IsFollowing = true;
                         while ((DateTime.UtcNow - startTime).TotalMilliseconds < duration)
                         {
                             if (BardBattleData.Instance.FollowingTarget == null || BardBattleData.Instance.FollowingTarget.IsDead)
                             {
                                 LogHelper.Print($"跟随目标 {entityId} 不存在或者已被清除，停止跟随。");
-                                BardBattleData.Instance.IsFollowing = false;
                                 break;
                             }
                             // Core.Resolve<MemApiMove>().MoveToTarget(BardBattleData.Instance.FollowingTarget.Position);
                             //ChatHelper.SendMessage($"/vnav moveto {BardBattleData.Instance.FollowingTarget.Position.X} {BardBattleData.Instance.FollowingTarget.Position.Y} {BardBattleData.Instance.FollowingTarget.Position.Z}");
                             var navMoveTo = Svc.PluginInterface.GetIpcSubscriber<List<Vector3>, bool, object>("vnavmesh.Path.MoveTo");
                             navMoveTo.InvokeAction([BardBattleData.Instance.FollowingTarget.Position], false);
-                            BardBattleData.Instance.IsFollowing = true;
                         }
 
                         LogHelper.Print($"已停止跟随 {entityId}。");
-                        BardBattleData.Instance.IsFollowing = false;
                     });
                 }
                 else
@@ -618,7 +613,6 @@ public class BardRotationEventHandler : IRotationEventHandler
             navStop?.InvokeAction();
         BardBattleData.Instance.TargetPosition = null;
         BardBattleData.Instance.FollowingTarget = null;
-        BardBattleData.Instance.IsFollowing = false;
     }
     
     private bool VNavAvailable()
