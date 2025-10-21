@@ -26,7 +26,6 @@ public class BardRotationEventHandler : IRotationEventHandler
     private long _randomTime = 0;
     private Spell? _lastSpell = null;
     private DateTime _lastCastTime = DateTime.MinValue;
-    private bool _hasDetected = false;
     private void HandleMovingToTarget()
     {
         if (!VNavAvailable()) return;
@@ -107,7 +106,6 @@ public class BardRotationEventHandler : IRotationEventHandler
         // 重置碎心箭保留层数
         BardSettings.Instance.HeartBreakSaveStack = 0; 
         
-        _hasDetected = false;
         _lastSpell = null;
         _lastCastTime = DateTime.MinValue;
         _randomTime = 0;
@@ -300,34 +298,31 @@ public class BardRotationEventHandler : IRotationEventHandler
         
         var nowUtc   = DateTime.UtcNow;
         var battleMs = AI.Instance.BattleData.CurrBattleTimeInMs;
-        var inWindow =
-            _lastSpell != null &&
-            _lastCastTime != DateTime.MinValue &&
-            _lastSpell.IsAbility() &&
-            spell.IsAbility() &&
-            Core.Me.InCombat() &&
-            battleMs > 0 &&
-            spell.Id != BardDefinesData.Spells.EmpyrealArrow &&
-            (_lastSpell.Id != BardDefinesData.Spells.HeartBreak ||
-             spell.Id != BardDefinesData.Spells.HeartBreak);
-
-        if (BardSettings.Instance.IsDailyMode == false && !_hasDetected)
-        {
-            if (inWindow)
-            {
-                if ((nowUtc - _lastCastTime).TotalMilliseconds > 620)
-                    BardBattleData.Instance.EnableThreeOGcd = false; // 保持原判断与赋值
-                _hasDetected = true;
-            }
-            _lastSpell    = spell;
-            _lastCastTime = nowUtc;
-        }
+        var inWindow = _lastSpell != null 
+                       && _lastCastTime != DateTime.MinValue 
+                       && _lastSpell.IsAbility() 
+                       && spell.IsAbility() 
+                       && Core.Me.InCombat() 
+                       && battleMs > 0 
+                       && spell.Id != BardDefinesData.Spells.EmpyrealArrow
+                       && (_lastSpell.Id != BardDefinesData.Spells.HeartBreak || spell.Id != BardDefinesData.Spells.HeartBreak) 
+                       && BardSettings.Instance.IsDailyMode == false 
+                       && !BardBattleData.Instance.EnableThreeOGcd
+                       && (BardDefinesData.Spells.BattleVoice.GetSpell().Cooldown.TotalSeconds < 10 || BardDefinesData.Spells.BattleVoice.GetSpell().Cooldown.TotalSeconds > 100) 
+                       && (BardDefinesData.Spells.RagingStrikes.GetSpell().Cooldown.TotalSeconds < 10 || BardDefinesData.Spells.RagingStrikes.GetSpell().Cooldown.TotalSeconds > 100)
+                       && (BardDefinesData.Spells.RadiantFinale.GetSpell().Cooldown.TotalSeconds < 10 || BardDefinesData.Spells.RadiantFinale.GetSpell().Cooldown.TotalSeconds > 100);
+        
+        if (inWindow)
+            BardBattleData.Instance.EnableThreeOGcd = !((nowUtc - _lastCastTime).TotalMilliseconds > 620);
+        
+        _lastSpell    = spell;
+        _lastCastTime = nowUtc;
+        
     }
 
     public void OnBattleUpdate(int currTimeInMs)
     {
         SmartUseHighPrioritySlot();
-        SmartStop();
         HandleMovingToTarget();
         
         if (!BardUtil.IsSongOrderNormal())
@@ -342,7 +337,8 @@ public class BardRotationEventHandler : IRotationEventHandler
                 || BardBattleData.Instance.EnableThreeOGcd == false 
                 || SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3
                 || SettingMgr.GetSetting<GeneralSettings>().Ping > 10 
-                || SettingMgr.GetSetting<GeneralSettings>().Ping < 5)
+                || SettingMgr.GetSetting<GeneralSettings>().Ping < 5
+                || SettingMgr.GetSetting<GeneralSettings>().MaxAbilityTimesInGcd != 2)
             )
         {
             const int totalTimeoutMs = 120000;
@@ -362,9 +358,10 @@ public class BardRotationEventHandler : IRotationEventHandler
                     ChatHelper.Print.ErrorMessage($"[警告] 请检查当前模式（日随/高难），与副本是否匹配");
                     ChatHelper.Print.ErrorMessage($"[警告] 请检查你的网络延迟");
                 }
+                if (SettingMgr.GetSetting<GeneralSettings>().MaxAbilityTimesInGcd != 2)
+                    ChatHelper.Print.ErrorMessage($"[警告] 请在 AE-ACR设置中修改 Gcd 内最大能力技数量为 2");
                 BardBattleData.Instance.LastCountDownTime = currTimeInMs;
             }
-
             if (timeLeft <= 0)
             {
                 var number = new Random().Next(1, 17); // [1,17)，也就是 1 到 16
@@ -610,16 +607,7 @@ public class BardRotationEventHandler : IRotationEventHandler
         else
             BardBattleData.Instance.HotkeyUseHighPrioritySlot = false;
     }
-
-    private void SmartStop()
-    {
-        /*if (!BardSettings.Instance.IsDailyMode)
-            return;
-        if (Core.Me.GetCurrTarget() != null)
-            PlayerOptions.Instance.Stop = false;
-        PlayerOptions.Instance.Stop = !Core.Me.GetCurrTarget().NotInvulnerable();*/
-    }
-
+    
     private void CancelMoving()
     {
         if (!VNavAvailable()) return;
