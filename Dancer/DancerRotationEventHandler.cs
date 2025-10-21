@@ -20,7 +20,6 @@ namespace Wotou.Dancer
         private long _randomTime = 0;
         private Spell? _lastSpell = null;
         private DateTime _lastCastTime = DateTime.MinValue;
-        private bool _hasDetected = false;
 
         private static Dictionary<Jobs, int> jobPriorities = new()
         {
@@ -64,31 +63,27 @@ namespace Wotou.Dancer
                 DancerBattleData.Instance.DanceOfTheDawnCount ++;
             var nowUtc   = DateTime.UtcNow;
             var battleMs = AI.Instance.BattleData.CurrBattleTimeInMs;
-            var inWindow =
-                _lastSpell != null &&
-                _lastCastTime != DateTime.MinValue &&
-                _lastSpell.IsAbility() &&
-                spell.IsAbility() &&
-                Core.Me.InCombat() &&
-                battleMs > 0;
-
-            if (DancerSettings.Instance.IsDailyMode == false &&!_hasDetected)
-            {
-                if (inWindow)
-                {
-                    if ((nowUtc - _lastCastTime).TotalMilliseconds > 620)
-                        DancerBattleData.Instance.EnableThreeOGcd = false; // 保持原判断与赋值
-                    _hasDetected = true;
-                }
-                _lastSpell    = spell;
-                _lastCastTime = nowUtc;
-            }
+            var inWindow = _lastSpell != null 
+                           && _lastCastTime != DateTime.MinValue 
+                           && _lastSpell.IsAbility() 
+                           && spell.IsAbility() 
+                           && Core.Me.InCombat() 
+                           && battleMs > 0 
+                           && DancerSettings.Instance.IsDailyMode == false
+                           && !DancerBattleData.Instance.EnableThreeOGcd
+                           && (DancerDefinesData.Spells.TechnicalStep.GetSpell().Cooldown.TotalSeconds < 10 || DancerDefinesData.Spells.TechnicalStep.GetSpell().Cooldown.TotalSeconds > 100)
+                           && (DancerDefinesData.Spells.Devilment.GetSpell().Cooldown.TotalSeconds < 10 || DancerDefinesData.Spells.Devilment.GetSpell().Cooldown.TotalSeconds > 100);
+            
+            if (inWindow)
+                DancerBattleData.Instance.EnableThreeOGcd = !((nowUtc - _lastCastTime).TotalMilliseconds > 620);
+            
+            _lastSpell    = spell;
+            _lastCastTime = nowUtc;
         }
 
         public void OnBattleUpdate(int currTimeInMs)
         {
             SmartUseHighPrioritySlot();
-            SmartStop();
             
             if (LowVipRestrictor.IsLowVip() 
                 && DancerSettings.Instance.IsDailyMode == false
@@ -96,7 +91,8 @@ namespace Wotou.Dancer
                     || DancerBattleData.Instance.EnableThreeOGcd == false 
                     || SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3
                     || SettingMgr.GetSetting<GeneralSettings>().Ping > 10 
-                    || SettingMgr.GetSetting<GeneralSettings>().Ping < 5)
+                    || SettingMgr.GetSetting<GeneralSettings>().Ping < 5
+                    || SettingMgr.GetSetting<GeneralSettings>().MaxAbilityTimesInGcd != 2)
                 )
             {
                 const int totalTimeoutMs = 120000;
@@ -116,6 +112,8 @@ namespace Wotou.Dancer
                         ChatHelper.Print.ErrorMessage($"[警告] 请检查当前模式（日随/高难），与副本是否匹配");
                         ChatHelper.Print.ErrorMessage($"[警告] 请检查你的网络延迟");
                     }
+                    if (SettingMgr.GetSetting<GeneralSettings>().MaxAbilityTimesInGcd != 2)
+                        ChatHelper.Print.ErrorMessage($"[警告] 请在 AE-ACR设置中修改 Gcd 内最大能力技数量为 2");
                     DancerBattleData.Instance.LastCountDownTime = currTimeInMs;
                 }
                 if (timeLeft <= 0)
@@ -329,7 +327,6 @@ namespace Wotou.Dancer
             DancerSettings.Instance.FanDanceSaveStack = 3;
             
             _randomTime = 0;
-            _hasDetected = false;
             _lastSpell = null;
             _lastCastTime = DateTime.MinValue;
             
@@ -429,15 +426,6 @@ namespace Wotou.Dancer
                 DancerBattleData.Instance.HotkeyUseHighPrioritySlot = true;
             else
                 DancerBattleData.Instance.HotkeyUseHighPrioritySlot = false;
-        }
-        
-        private void SmartStop()
-        {
-            /*if (!DancerSettings.Instance.IsDailyMode)
-                return;
-            if (Core.Me.GetCurrTarget() != null)
-                PlayerOptions.Instance.Stop = false;
-            PlayerOptions.Instance.Stop = !Core.Me.GetCurrTarget().NotInvulnerable();*/
         }
     }
 }
