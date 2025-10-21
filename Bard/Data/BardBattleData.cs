@@ -16,13 +16,7 @@ public class BardBattleData
     
     public IBattleChara? FollowingTarget = null;
     
-    public bool IsFollowing = false;
-    
     public long LastSongTime = 0;
-
-    public int LastNotifyTime = 0;
-
-    public int LastCountDownTime = 0;
     
     public bool EnableThreeOGcd = true;
     
@@ -32,7 +26,7 @@ public class BardBattleData
 
     public int PitchPerfectMinEnemyCount = 0;
     
-    public HashSet<uint> DotBlackList = new HashSet<uint>();
+    public HashSet<uint> DotBlackList = [];
     
     public bool HasFirst120SBuff = false;
     

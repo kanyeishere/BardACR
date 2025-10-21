@@ -95,32 +95,31 @@ namespace Wotou.Dancer
                     || SettingMgr.GetSetting<GeneralSettings>().MaxAbilityTimesInGcd != 2)
                 )
             {
-                const int totalTimeoutMs = 120000;
-                var timeLeft = totalTimeoutMs - currTimeInMs;
-                if (timeLeft >= 0 && currTimeInMs - DancerBattleData.Instance.LastCountDownTime > 1000)
+                if (SettingMgr.GetSetting<GeneralSettings>().OptimizeGcd == false
+                    || SettingMgr.GetSetting<GeneralSettings>().Ping > 10 
+                    || SettingMgr.GetSetting<GeneralSettings>().Ping < 5)
                 {
-                    ChatHelper.Print.ErrorMessage($"[警告] 你未按照要求设置 ACR, {(int)(timeLeft / 1000)} 秒后将爆炸！");
-                    if (SettingMgr.GetSetting<GeneralSettings>().OptimizeGcd == false
-                        || SettingMgr.GetSetting<GeneralSettings>().Ping > 10 
-                        || SettingMgr.GetSetting<GeneralSettings>().Ping < 5)
-                        ChatHelper.Print.ErrorMessage($"[警告] 请开启“优化 GCD 偏移”，并将数值设为 5 到 10（含 5 和 10）");
-                    if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3)
-                        ChatHelper.Print.ErrorMessage($"[警告] 请关闭全局能力技能不卡 GCD");
-                    if (DancerBattleData.Instance.EnableThreeOGcd == false)
-                    {
-                        ChatHelper.Print.ErrorMessage($"[警告] 请开启 FuckAnimation 三插设置");
-                        ChatHelper.Print.ErrorMessage($"[警告] 请检查当前模式（日随/高难），与副本是否匹配");
-                        ChatHelper.Print.ErrorMessage($"[警告] 请检查你的网络延迟");
-                    }
-                    if (SettingMgr.GetSetting<GeneralSettings>().MaxAbilityTimesInGcd != 2)
-                        ChatHelper.Print.ErrorMessage($"[警告] 请在 AE-ACR设置中修改 Gcd 内最大能力技数量为 2");
-                    DancerBattleData.Instance.LastCountDownTime = currTimeInMs;
+                    ChatHelper.Print.ErrorMessage("[警告] 请开启“优化 GCD 偏移”，并将数值设为 5 到 10（含 5 和 10）");
+                    ChatHelper.SendMessage("/e [警告] 请开启“优化 GCD 偏移”，并将数值设为 5 到 10（含 5 和 10）");
                 }
-                if (timeLeft <= 0)
+                if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3)
                 {
-                    var number = new Random().Next(1, 17); // [1,17)，也就是 1 到 16
-                    ChatHelper.SendMessage($"/e [爆炸] <se.{number}>");
-                    // PlayerOptions.Instance.Stop = true;
+                    ChatHelper.Print.ErrorMessage("[警告] 请关闭全局能力技能不卡 GCD");
+                    ChatHelper.SendMessage("/e [警告] 请关闭全局能力技能不卡 GCD");
+                }
+                if (DancerBattleData.Instance.EnableThreeOGcd == false)
+                {
+                    ChatHelper.Print.ErrorMessage("[警告] 请开启 FuckAnimation 三插设置");
+                    ChatHelper.Print.ErrorMessage("[警告] 请检查当前模式（日随/高难），与副本是否匹配");
+                    ChatHelper.Print.ErrorMessage("[警告] 请检查你的网络延迟");
+                    ChatHelper.SendMessage("/e [警告] 请开启 FuckAnimation 三插设置");
+                    ChatHelper.SendMessage("/e [警告] 请检查当前模式（日随/高难），与副本是否匹配");
+                    ChatHelper.SendMessage("/e [警告] 请检查你的网络延迟");
+                }
+                if (SettingMgr.GetSetting<GeneralSettings>().MaxAbilityTimesInGcd != 2)
+                {
+                    ChatHelper.Print.ErrorMessage("[警告] 请在 AE-ACR设置中修改 Gcd 内最大能力技数量为 2");
+                    ChatHelper.SendMessage("/e [警告] 请在 AE-ACR设置中修改 Gcd 内最大能力技数量为 2");
                 }
             }
             if (DancerBattleData.Instance.LastWarningTime == 0)

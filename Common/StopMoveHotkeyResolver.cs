@@ -49,7 +49,6 @@ public class StopMoveHotkeyResolver : IHotkeyResolver
         navStop?.InvokeAction();
         BardBattleData.Instance.TargetPosition = null;
         BardBattleData.Instance.FollowingTarget = null;
-        BardBattleData.Instance.IsFollowing = false;
     }
     
     private bool VNavAvailable()
