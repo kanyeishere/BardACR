@@ -37,7 +37,8 @@ public class BardSongAbility : ISlotResolver
         if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < 1000 
             && Core.Me.Level >= 90
             && BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow)
-            && Core.Resolve<JobApi_Bard>().ActiveSong != Song.Mage) //除了贤者切军神 
+            // && Core.Resolve<JobApi_Bard>().ActiveSong != Song.Mage
+            ) //除了贤者切军神 
             return -1;
         if (!MagesBallad.GetSpell().IsReadyWithCanCast() && 
             !ArmysPaeon.GetSpell().IsReadyWithCanCast() &&
