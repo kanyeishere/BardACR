@@ -485,8 +485,7 @@ public class BardRotationEntry : IRotationEntry
                         var payload = ImGui.AcceptDragDropPayload("DND_SONG_SETTING",
                             ImGuiDragDropFlags.AcceptNoDrawDefaultRect);
 
-                        if (payload.Data != null)
-                        {
+                        if (!payload.Equals(default(ImGuiPayloadPtr)) && payload.Data != null && payload.DataSize >= sizeof(int))                        {
                             // 从 payload 中获取 moveFrom 的值
                             moveFrom = *(int*)payload.Data;
                             moveTo = i; // 记录目标位置
@@ -695,7 +694,7 @@ public class BardRotationEntry : IRotationEntry
                     unsafe
                     {
                         var payload = ImGui.AcceptDragDropPayload("DND_SONG_ORDER", ImGuiDragDropFlags.AcceptNoDrawDefaultRect);
-                        if (payload.Data != null)
+                        if (!payload.Equals(default(ImGuiPayloadPtr)) && payload.Data != null && payload.DataSize >= sizeof(int))
                         {
                             int from = *(int*)payload.Data;
                             int to = i;
