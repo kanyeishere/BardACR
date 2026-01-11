@@ -836,6 +836,8 @@ public class BardRotationEntry : IRotationEntry
                 ref BardSettings.Instance.UseBattleVoiceBeforeGcdTimeInMs, 500, 2000, "(毫秒)");
             /*BardUtil.RightInputInt("九天连箭最晚在下个GCD前多久使用",
                 ref BardSettings.Instance.EmpyrealArrowNotBeforeGcdTime, 0, 2000, "(毫秒)");*/
+            UiHelper.RightInputInt("GCD动画锁时间",
+                ref BardSettings.Instance.GcdAnimationTime, 300, 1000, "(毫秒)");
             ImGui.Separator();
             ImGui.Checkbox("显示快速光阴神面板", ref BardSettings.Instance.ShowWardensPaeanPanel);
             ImGuiHelper.LeftInputInt("光阴神面板图标大小", ref BardSettings.Instance.WardensPaeanPanelIconSize, 10, 80);
