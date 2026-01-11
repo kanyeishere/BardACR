@@ -156,7 +156,6 @@ namespace Wotou.Dancer
                     Core.Resolve<MemApiChatMessage>()
                         .Toast2("欢迎使用窝头的舞者ACR\n请关闭全局能力技能不卡GCD\n打开此设置会导致本ACR产生能力技插入问题", 1, 5000);
                     LogHelper.PrintError("警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
-                    ChatHelper.Print.ErrorMessage("[警告] 你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
                 }
                 else if (DancerSettings.Instance.WelcomeVoice)
                     Core.Resolve<MemApiChatMessage>()
@@ -170,6 +169,12 @@ namespace Wotou.Dancer
             }
             if (DancerSettings.Instance.WelcomeVoice)
                 ChatHelper.SendMessage("/pdr tts 你好，欢迎你使用窝头舞者");
+            if (SettingMgr.GetSetting<GeneralSettings>().OptimizeGcd == false
+                || SettingMgr.GetSetting<GeneralSettings>().Ping > 10 
+                || SettingMgr.GetSetting<GeneralSettings>().Ping < 5)
+            {
+                ChatHelper.Print.ErrorMessage("[警告] 建议开启“优化 GCD 偏移”，并将数值设为 5 到 10（含 5 和 10）");
+            }
             try
             {
                 await TimeLineUpdater.UpdateFiles("https://raw.githubusercontent.com/kanyeishere/ACR-Timeline/refs/heads/main/Wotou-DancerMaster.json", DancerSettings.Instance.SelectedTimeLinesForUpdate);
