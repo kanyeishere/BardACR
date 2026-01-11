@@ -17,7 +17,7 @@
 
     
     <ItemGroup>
-        <PackageReference Include="AEAssist.NET" Version="*" ExcludeAssets="runtime" />
+        <PackageReference Include="AEAssist.NET" Version="1.2.6" ExcludeAssets="runtime" />
     </ItemGroup>
 
 </Project>
