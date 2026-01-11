@@ -79,7 +79,7 @@ namespace Wotou.Bard.Triggers
                     unsafe
                     {
                         var payload = ImGui.AcceptDragDropPayload("DND_SONG_RESET_ORDER");
-                        if (payload.Data != null)
+                        if (!payload.Equals(default(ImGuiPayloadPtr)) && payload.Data != null && payload.DataSize >= sizeof(int))
                         {
                             var from = *(int*)payload.Data;
                             var to = i;
