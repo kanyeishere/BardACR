@@ -30,7 +30,7 @@ public class BardBaseGcd : ISlotResolver
     // 返回>=0表示检测通过 即将调用Build方法
     public int Check()
     {
-        const int gcdAnimationTime = 400;
+        var gcdAnimationTime = BardSettings.Instance.GcdAnimationTime;
         // 非团辅期间，高难模式下，九天不延后，延后gcd
         if (EmpyrealArrow.GetSpell().Cooldown.TotalMilliseconds < gcdAnimationTime &&
             BardRotationEntry.QT.GetQt("强对齐") &&
