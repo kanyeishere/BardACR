@@ -61,6 +61,7 @@ public class BardSettings
     public int OpenerTime = 300; // 起手提前多少时间 （毫秒）
     public float HeartBreakSaveStack = 0f;     //碎心箭保留层数
     public bool WelcomeVoice = true; // 是否开启欢迎声音
+    public List<uint> CustomOpenerSkills = new(); // 自定义起手技能列表
 
     public int UseBattleVoiceBeforeGcdTimeInMs = 1350; //战斗之声和光明神在下个GCD前多久使用（毫秒）
     public int RagingStrikeBeforeGcdTime = 600; //猛者强击在下个GCD前多久使用（毫秒）

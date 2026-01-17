@@ -119,32 +119,33 @@ public class BardDefinesData
     public const uint 伤腿 = 7554;
   }
   
-  private static Dictionary<string, uint> skillDictionary;
+  public static Dictionary<string, uint> SkillDictionary;
     
   public static void InitializeDictionary()
   {
-    if (skillDictionary == null)
+    if (SkillDictionary == null)
     {
-      skillDictionary = new Dictionary<string, uint>();
+      SkillDictionary = new Dictionary<string, uint>();
+      SkillDictionary.Add("4级巧力之宝药", 49235);
+      SkillDictionary.Add("3级巧力之宝药", 45996);
+      SkillDictionary.Add("2级巧力之宝药", 44163);
+      SkillDictionary.Add("1级巧力之宝药", 44158);
+      SkillDictionary.Add("8级巧力之幻药", 39728);
+      SkillDictionary.Add("7级巧力之幻药", 37841);
       foreach (var field in typeof(诗人技能).GetFields(BindingFlags.Public | BindingFlags.Static))
       {
         if (field.FieldType == typeof(uint))
         {
-          skillDictionary.Add(field.Name, (uint)field.GetValue(null));
+          SkillDictionary.Add(field.Name, (uint)field.GetValue(null));
         }
       }
       foreach (var field in typeof(Spells).GetFields(BindingFlags.Public | BindingFlags.Static))
       {
         if (field.FieldType == typeof(uint))
         {
-          skillDictionary.Add(field.Name, (uint)field.GetValue(null));
+          SkillDictionary.Add(field.Name, (uint)field.GetValue(null));
         }
       }
-      skillDictionary.Add("3级巧力之宝药", 45996);
-      skillDictionary.Add("2级巧力之宝药", 44163);
-      skillDictionary.Add("1级巧力之宝药", 44158);
-      skillDictionary.Add("8级巧力之幻药", 39728);
-      skillDictionary.Add("7级巧力之幻药", 37841);
     }
   }
     
@@ -152,7 +153,7 @@ public class BardDefinesData
   {
     // 将查询和技能名称转换为小写，避免大小写影响匹配
     var lowerCaseQuery = searchQuery.ToLower();
-    return skillDictionary.Where(skill => skill.Key.ToLower().Contains(lowerCaseQuery))
+    return SkillDictionary.Where(skill => skill.Key.ToLower().Contains(lowerCaseQuery))
       .ToDictionary(skill => skill.Key, skill => skill.Value);
   }
 }

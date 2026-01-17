@@ -135,6 +135,12 @@ public class DancerDefinesData
         if (skillDictionary == null)
         {
             skillDictionary = new Dictionary<string, uint>();
+            skillDictionary.Add("4级巧力之宝药", 49235);
+            skillDictionary.Add("3级巧力之宝药", 45996);
+            skillDictionary.Add("2级巧力之宝药", 44163);
+            skillDictionary.Add("1级巧力之宝药", 44158);
+            skillDictionary.Add("8级巧力之幻药", 39728);
+            skillDictionary.Add("7级巧力之幻药", 37841);
             // 加入你的中文技能类 
             foreach (var field in typeof(舞者技能).GetFields(BindingFlags.Public | BindingFlags.Static))
             {
@@ -151,11 +157,6 @@ public class DancerDefinesData
                     skillDictionary.Add(field.Name, (uint)field.GetValue(null));
                 }
             }
-            skillDictionary.Add("3级巧力之宝药", 45996);
-            skillDictionary.Add("2级巧力之宝药", 44163);
-            skillDictionary.Add("1级巧力之宝药", 44158);
-            skillDictionary.Add("8级巧力之幻药", 39728);
-            skillDictionary.Add("7级巧力之幻药", 37841);
         }
     }
     
