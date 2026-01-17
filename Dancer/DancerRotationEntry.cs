@@ -311,7 +311,7 @@ public class DancerRotationEntry : IRotationEntry
             }
             else
             {
-                ImGui.SameLine();
+                ImGui.Separator();
                 ImGui.Checkbox("自动舞伴（FA专用）", ref DancerSettings.Instance.EnableAutoDancePartnerInFullAutoMode);
             }
             
