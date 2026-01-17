@@ -309,6 +309,12 @@ public class DancerRotationEntry : IRotationEntry
                 ImGui.SameLine();
                 ImGui.Checkbox("自动舞伴", ref DancerSettings.Instance.EnableAutoDancePartner);
             }
+            else
+            {
+                ImGui.SameLine();
+                ImGui.Checkbox("自动舞伴（FA专用）", ref DancerSettings.Instance.EnableAutoDancePartnerInFullAutoMode);
+            }
+            
             ImGui.Separator();
             UiHelper.RightInputInt("倒计时提前使用小舞", ref DancerSettings.Instance.OpenerStandardStepTime, 6500, 15000, "(毫秒)");
             ImGui.Separator();

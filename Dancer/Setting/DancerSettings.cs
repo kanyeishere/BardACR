@@ -68,6 +68,7 @@ public class DancerSettings
     public bool EnableAutoPeloton  = true; // 是否在自动使用速行
     public bool EnableAutoDancing = true; // 是否在自动使用舞步
     public bool EnableAutoDancePartner = true; // 是否在自动使用舞伴
+    public bool EnableAutoDancePartnerInFullAutoMode = true; // FA模式自动舞伴
     
     public bool IsReadInfoWindow08 = false;
     
