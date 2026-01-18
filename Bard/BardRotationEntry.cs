@@ -1018,7 +1018,9 @@ public class BardRotationEntry : IRotationEntry
                 updated = true;
             }
             ImGui.SameLine();
-            ImGui.SetNextItemWidth(180);
+            ImGui.Text("搜索技能：");
+            ImGui.SameLine();
+            ImGui.SetNextItemWidth(160);
             ImGui.InputText("##CustomOpenerSearch", ref _customOpenerSearch, 100);
 
             ImGui.Separator();
