@@ -16,9 +16,9 @@ public class BardSongSettingsManager
 
     public void ResetOrder()
     {
-        BardSettings.Instance.FirstSong = Song.Wanderer;
-        BardSettings.Instance.SecondSong = Song.Mage;
-        BardSettings.Instance.ThirdSong = Song.Army;
+        BardSettings.Instance.FirstSong = Song.WanderersMinuet;
+        BardSettings.Instance.SecondSong = Song.MagesBallad;
+        BardSettings.Instance.ThirdSong = Song.ArmysPaeon;
         InitializeSongSettings();
     }
 
@@ -38,34 +38,34 @@ public class BardSongSettingsManager
         {
             switch (song)
             {
-                case Song.Wanderer:
+                case Song.WanderersMinuet:
                     SongSettings.Add(new SongSetting
                     {
                         Label = "旅神歌时长",
                         Value = BardSettings.Instance.WandererSongDuration,
                         Min = 3f,
                         Max = 45f,
-                        Song = Song.Wanderer
+                        Song = Song.WanderersMinuet
                     });
                     break;
-                case Song.Mage:
+                case Song.MagesBallad:
                     SongSettings.Add(new SongSetting
                     {
                         Label = "贤者歌时长",
                         Value = BardSettings.Instance.MageSongDuration,
                         Min = 3f,
                         Max = 45f,
-                        Song = Song.Mage
+                        Song = Song.MagesBallad
                     });
                     break;
-                case Song.Army:
+                case Song.ArmysPaeon:
                     SongSettings.Add(new SongSetting
                     {
                         Label = "军神歌时长",
                         Value = BardSettings.Instance.ArmySongDuration,
                         Min = 3f,
                         Max = 45f,
-                        Song = Song.Army
+                        Song = Song.ArmysPaeon
                     });
                     break;
             }
@@ -80,5 +80,5 @@ public class SongSetting
     public float Max;
     public float Min;
     public float Value;
-    public Song Song; 
+    public Song Song;
 }

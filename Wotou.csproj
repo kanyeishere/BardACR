@@ -4,7 +4,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>latest</LangVersion>
-        <TargetFramework>net10.0</TargetFramework>
+        <TargetFramework>net10.0-windows</TargetFramework>
         <AssemblyName>Wotou</AssemblyName>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
@@ -21,7 +21,7 @@
 
     
     <ItemGroup>
-        <PackageReference Include="AEAssist.NET" Version="1.2.6" ExcludeAssets="runtime" />
+        <PackageReference Include="AEAssist.NET" Version="1.2.11" ExcludeAssets="runtime" />
     </ItemGroup>
 
 </Project>

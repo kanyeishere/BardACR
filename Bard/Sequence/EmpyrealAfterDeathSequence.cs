@@ -13,7 +13,7 @@ namespace Wotou.Bard.Sequence;
 
 // 为了解决玩家死亡后复活/释放lb后，重新进入战斗时，九天连箭与GCD技能同时预备，此时无法正确判断技能释放顺序的问题
 // 暂时弃用此seq，用always队列解决
-public class EmpyrealAfterDeathSequence: ISlotSequence
+public class EmpyrealAfterDeathSequence : ISlotSequence
 {
     private const uint EmpyrealArrow = BardDefinesData.Spells.EmpyrealArrow;
     private const uint RefulgentArrow = BardDefinesData.Spells.RefulgentArrow;
@@ -25,29 +25,29 @@ public class EmpyrealAfterDeathSequence: ISlotSequence
     private const uint PitchPerfect = BardDefinesData.Spells.PitchPerfect;
     private const uint ApexArrow = BardDefinesData.Spells.ApexArrow;
     private const uint IronJaws = BardDefinesData.Spells.IronJaws;
-    
+
     private const uint HawkEyeBuff = BardDefinesData.Buffs.HawksEye;
     private const uint BarrageBuff = BardDefinesData.Buffs.Barrage;
     private const uint WindBiteDot = BardDefinesData.Buffs.Windbite;
     private const uint StormBiteDot = BardDefinesData.Buffs.Stormbite;
     private const uint VenomousBiteDot = BardDefinesData.Buffs.VenomousBite;
     private const uint CausticBiteDot = BardDefinesData.Buffs.CausticBite;
-    private const Song Wanderer = Song.Wanderer;
-    
+    private const Song Wanderer = Song.WanderersMinuet;
+
     public int StartCheck()
     {
         if (AI.Instance.BattleData.CurrBattleTimeInMs < 5000)
             return -9;
         if (EmpyrealArrow.IsUnlockWithCDCheck() &&
             BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow) &&
-            GCDHelper.GetGCDCooldown() == 0 && 
+            GCDHelper.GetGCDCooldown() == 0 &&
             BardUtil.HasNoPartyBuff())
             return 1;
         return -1;
     }
-    
+
     public int StopCheck(int index)
-    { 
+    {
         if (BardUtil.HasAnyPartyBuff())
             return 1;
         return -1;
@@ -60,7 +60,7 @@ public class EmpyrealAfterDeathSequence: ISlotSequence
         Step2,
         Step3
     };
-    
+
     private static void Step0(Slot slot)
     {
         if (BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrowBeforeGcd))
@@ -69,9 +69,9 @@ public class EmpyrealAfterDeathSequence: ISlotSequence
                 Core.Resolve<JobApi_Bard>().ActiveSong == Wanderer)
                 slot.Add(PitchPerfect.GetSpell());
             slot.Add(EmpyrealArrow.GetSpell());
-        } 
+        }
     }
-    
+
     private static void Step1(Slot slot)
     {
         if (BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrowBeforeGcd))
@@ -81,10 +81,10 @@ public class EmpyrealAfterDeathSequence: ISlotSequence
                 slot.Add(PitchPerfect.GetSpell());
         }
     }
-    
+
     private static void Step2(Slot slot)
     {
-        var partyBuffCountdown  = BardBattleData.Instance.First120SBuffSpellId.GetSpell().Cooldown.TotalSeconds;
+        var partyBuffCountdown = BardBattleData.Instance.First120SBuffSpellId.GetSpell().Cooldown.TotalSeconds;
         if (!BardBattleData.Instance.HasUseApexArrowInCurrentNonBurstingPeriod &&
             Core.Me.Level >= 80 &&
             Core.Resolve<JobApi_Bard>().SoulVoice >= 95 &&
@@ -92,19 +92,19 @@ public class EmpyrealAfterDeathSequence: ISlotSequence
             BardUtil.HasNoPartyBuff() &&
             partyBuffCountdown >= 39)
             slot.Add(ApexArrow.GetSpell());
-        
+
         // 绝伊甸 p1 & p2 特化
-        else if (!BardBattleData.Instance.HasUseApexArrowInCurrentNonBurstingPeriod && 
-                 Core.Me.Level >= 80 && 
-                 Core.Resolve<MemApiZoneInfo>().GetCurrTerrId() == 1238 && 
-                 Core.Resolve<MemApiZoneInfo>().GetWeatherId() <= 3 && 
-                 Core.Resolve<JobApi_Bard>().SoulVoice >= 80 && 
-                 BardRotationEntry.QT.GetQt(QTKey.Apex) && 
-                 BardUtil.HasNoPartyBuff() && 
+        else if (!BardBattleData.Instance.HasUseApexArrowInCurrentNonBurstingPeriod &&
+                 Core.Me.Level >= 80 &&
+                 Core.Resolve<MemApiZoneInfo>().GetCurrTerrId() == 1238 &&
+                 Core.Resolve<MemApiZoneInfo>().GetWeatherId() <= 3 &&
+                 Core.Resolve<JobApi_Bard>().SoulVoice >= 80 &&
+                 BardRotationEntry.QT.GetQt(QTKey.Apex) &&
+                 BardUtil.HasNoPartyBuff() &&
                  partyBuffCountdown >= 39)
             slot.Add(ApexArrow.GetSpell());
-        
-        else if (!BardBattleData.Instance.DotBlackList.Contains(Core.Me.GetCurrTarget().DataId) && 
+
+        else if (!BardBattleData.Instance.DotBlackList.Contains(Core.Me.GetCurrTarget().DataId) &&
                  !DotBlacklistHelper.IsBlackList(Core.Me.GetCurrTarget()))
         {
             if (!Core.Me.GetCurrTarget().HasLocalPlayerAura(WindBiteDot) &&
@@ -134,12 +134,12 @@ public class EmpyrealAfterDeathSequence: ISlotSequence
 
     private static void Step3(Slot slot)
     {
-        if (Core.Resolve<JobApi_Bard>().Repertoire >= 2 && 
+        if (Core.Resolve<JobApi_Bard>().Repertoire >= 2 &&
             Core.Resolve<JobApi_Bard>().ActiveSong == Wanderer &&
             !BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrowBeforeGcd))
             slot.Add(PitchPerfect.GetSpell());
     }
-    
+
     private static Spell GetBaseGcd()
     {
         return BardUtil.GetBaseGcd();

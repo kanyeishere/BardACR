@@ -1,10 +1,7 @@
 using AEAssist.CombatRoutine.Trigger;
 using Dalamud.Bindings.ImGui;
-using System.Collections.Generic;
-using System.Numerics;
-using AEAssist;
-using System.Linq;
 using Dalamud.Game.ClientState.JobGauge.Enums;
+using System.Numerics;
 using Wotou.Bard.Setting;
 
 namespace Wotou.Bard.Triggers
@@ -18,7 +15,7 @@ namespace Wotou.Bard.Triggers
         public bool EnableReset = true;
 
         // 设置的顺序（默认顺序）
-        public List<Song> SongOrder = new() { Song.Wanderer, Song.Mage, Song.Army };
+        public List<Song> SongOrder = new() { Song.WanderersMinuet, Song.MagesBallad, Song.ArmysPaeon };
 
         public bool Draw()
         {
@@ -33,17 +30,17 @@ namespace Wotou.Bard.Triggers
                 var song = SongOrder[i];
                 var name = song switch
                 {
-                    Song.Wanderer => "旅神",
-                    Song.Mage => "贤者",
-                    Song.Army => "军神",
+                    Song.WanderersMinuet => "旅神",
+                    Song.MagesBallad => "贤者",
+                    Song.ArmysPaeon => "军神",
                     _ => song.ToString()
                 };
 
                 var color = song switch
                 {
-                    Song.Wanderer => ImGui.ColorConvertFloat4ToU32(new Vector4(0.3f, 0.9f, 0.35f, 1f)),
-                    Song.Mage => ImGui.ColorConvertFloat4ToU32(new Vector4(0.31f, 0.33f, 0.89f, 1f)),
-                    Song.Army => ImGui.ColorConvertFloat4ToU32(new Vector4(0.88f, 0.55f, 0.03f, 1f)),
+                    Song.WanderersMinuet => ImGui.ColorConvertFloat4ToU32(new Vector4(0.3f, 0.9f, 0.35f, 1f)),
+                    Song.MagesBallad => ImGui.ColorConvertFloat4ToU32(new Vector4(0.31f, 0.33f, 0.89f, 1f)),
+                    Song.ArmysPaeon => ImGui.ColorConvertFloat4ToU32(new Vector4(0.88f, 0.55f, 0.03f, 1f)),
                     _ => ImGui.ColorConvertFloat4ToU32(new Vector4(1f, 1f, 1f, 1f))
                 };
 
