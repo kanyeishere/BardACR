@@ -1,8 +1,8 @@
 using AEAssist.CombatRoutine.Trigger;
 using AEAssist.CombatRoutine.Trigger.Node;
 using AEAssist.Extension;
-using AEAssist.Helper;
 using Dalamud.Game.ClientState.Objects.Types;
+using ECommons.DalamudServices;
 
 namespace ScriptTest;
 
@@ -11,7 +11,7 @@ public class 鱼有线: ITriggerScript
     public bool Check(ScriptEnv scriptEnv, ITriggerCondParams condParams)
     {
         var maxDistance = 35f;
-        var enemies = ECHelper.Objects
+        var enemies = Svc.Objects
             .Where(obj => obj is IBattleChara)
             .Cast<IBattleChara>()
             .Where(c => c.DistanceToPlayer() < maxDistance && c.IsEnemy())
