@@ -406,10 +406,10 @@ public class BardRotationEventHandler : IRotationEventHandler
 
         try
         {
-            ECHelper.Commands.RemoveHandler("/Wotou_BRD");
+            Svc.Commands.RemoveHandler("/Wotou_BRD");
         }
         catch (Exception) { }
-        ECHelper.Commands.AddHandler("/Wotou_BRD", new CommandInfo(BardCommandHandler));
+        Svc.Commands.AddHandler("/Wotou_BRD", new CommandInfo(BardCommandHandler));
     }
 
     private void BardCommandHandler(string command, string args)
@@ -587,7 +587,7 @@ public class BardRotationEventHandler : IRotationEventHandler
 
     public void OnExitRotation()
     {
-        ECHelper.Commands.RemoveHandler("/Wotou_BRD");
+        Svc.Commands.RemoveHandler("/Wotou_BRD");
     }
 
     public void OnTerritoryChanged()

@@ -7,6 +7,7 @@ using AEAssist.Helper;
 using AEAssist.JobApi;
 using AEAssist.MemoryApi;
 using Dalamud.Game.Command;
+using ECommons.DalamudServices;
 using Wotou.Common;
 using Wotou.Dancer.Data;
 using Wotou.Dancer.Setting;
@@ -182,15 +183,15 @@ namespace Wotou.Dancer
 
             try
             {
-                ECHelper.Commands.RemoveHandler("/Wotou_DNC");
+                Svc.Commands.RemoveHandler("/Wotou_DNC");
             }
             catch (Exception) { }
-            ECHelper.Commands.AddHandler("/Wotou_DNC", new CommandInfo(DancerCommandHandler));
+            Svc.Commands.AddHandler("/Wotou_DNC", new CommandInfo(DancerCommandHandler));
         }
 
         public void OnExitRotation()
         {
-            ECHelper.Commands.RemoveHandler("/Wotou_DNC");
+            Svc.Commands.RemoveHandler("/Wotou_DNC");
         }
 
         public async Task OnNoTarget()
