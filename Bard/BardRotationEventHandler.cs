@@ -335,10 +335,8 @@ public class BardRotationEventHandler : IRotationEventHandler
             && BardSettings.Instance.IsDailyMode == false
             && (SettingMgr.GetSetting<GeneralSettings>().OptimizeGcd == false
                 || BardBattleData.Instance.EnableThreeOGcd == false
-                || SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3
                 || SettingMgr.GetSetting<GeneralSettings>().Ping > 10
-                || SettingMgr.GetSetting<GeneralSettings>().Ping < 5
-                || SettingMgr.GetSetting<GeneralSettings>().MaxAbilityTimesInGcd != 2)
+                || SettingMgr.GetSetting<GeneralSettings>().Ping < 5)
             )
         {
             if (SettingMgr.GetSetting<GeneralSettings>().OptimizeGcd == false
@@ -348,20 +346,10 @@ public class BardRotationEventHandler : IRotationEventHandler
                 Core.Resolve<MemApiChatMessage>().PrintPluginErrorMessage("[警告] 请开启“优化 GCD 偏移”，并将数值设为 5 到 10（含 5 和 10） <se.2>");
                 ChatHelper.SendMessage("/e [警告] 请开启“优化 GCD 偏移”，并将数值设为 5 到 10（含 5 和 10） <se.2>");
             }
-            if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3)
-            {
-                Core.Resolve<MemApiChatMessage>().PrintPluginErrorMessage("[警告] 请关闭全局能力技能不卡 GCD <se.2>");
-                ChatHelper.SendMessage("/e [警告] 请关闭全局能力技能不卡 GCD <se.2>");
-            }
             if (BardBattleData.Instance.EnableThreeOGcd == false)
             {
                 Core.Resolve<MemApiChatMessage>().PrintPluginErrorMessage("[警告] 请开启 FuckAnimation 三插设置，并且检查网络延迟 <se.2>");
                 ChatHelper.SendMessage("/e [警告] 请开启 FuckAnimation 三插设置，并且检查网络延迟 <se.2>");
-            }
-            if (SettingMgr.GetSetting<GeneralSettings>().MaxAbilityTimesInGcd != 2)
-            {
-                Core.Resolve<MemApiChatMessage>().PrintPluginErrorMessage("[警告] 请在 AE-ACR设置中修改 Gcd 内最大能力技数量为 2 <se.2>");
-                ChatHelper.SendMessage("/e [警告] 请在 AE-ACR设置中修改 Gcd 内最大能力技数量为 2 <se.2>");
             }
         }
     }
@@ -370,15 +358,8 @@ public class BardRotationEventHandler : IRotationEventHandler
     {
         try
         {
-            if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3)
-            {
-                Core.Resolve<MemApiChatMessage>()
-                    .Toast2("欢迎使用窝头的诗人ACR\n请关闭全局能力技能不卡GCD\n打开此设置会导致本ACR产生能力技插入问题", 1, 5000);
-                Core.Resolve<MemApiChatMessage>().PrintPluginErrorMessage("[警告] 你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
-            }
-            else if (BardSettings.Instance.WelcomeVoice)
-                Core.Resolve<MemApiChatMessage>()
-                    .Toast2("欢迎使用窝头的诗人ACR", 1, 5000);
+            if (BardSettings.Instance.WelcomeVoice)
+                Core.Resolve<MemApiChatMessage>().Toast2("欢迎使用窝头的诗人ACR", 1, 5000);
         }
         catch (MissingFieldException ex)
         {
