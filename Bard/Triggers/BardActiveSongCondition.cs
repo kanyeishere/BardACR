@@ -5,15 +5,15 @@ using AEAssist.CombatRoutine.Trigger.Node;
 using AEAssist.GUI;
 using AEAssist.GUI.Tree;
 using AEAssist.JobApi;
-using Dalamud.Game.ClientState.JobGauge.Enums;
 using Dalamud.Bindings.ImGui;
+using Dalamud.Game.ClientState.JobGauge.Enums;
 
 #nullable enable
 namespace Wotou.Bard.Triggers
 {
     public class BardActiveSongCondition : ITriggerBase, ITriggerCond, ITriggerlineCheck
     {
-        
+
         private readonly string[] label = new string[4]
         {
             "无歌曲",
@@ -25,7 +25,7 @@ namespace Wotou.Bard.Triggers
         public string DisplayName { get; } = "Bard/判断歌曲类型";
 
         public string Remark { get; set; }
-        
+
         public int SongType = 0;
 
         public bool Draw()
@@ -40,14 +40,14 @@ namespace Wotou.Bard.Triggers
             if (SongType == 0)
                 return Core.Resolve<JobApi_Bard>().ActiveSong == Song.None;
             if (SongType == 1)
-                return Core.Resolve<JobApi_Bard>().ActiveSong == Song.Wanderer;
+                return Core.Resolve<JobApi_Bard>().ActiveSong == Song.WanderersMinuet;
             if (SongType == 2)
-                return Core.Resolve<JobApi_Bard>().ActiveSong == Song.Mage;
+                return Core.Resolve<JobApi_Bard>().ActiveSong == Song.MagesBallad;
             if (SongType == 3)
-                return Core.Resolve<JobApi_Bard>().ActiveSong == Song.Army;
+                return Core.Resolve<JobApi_Bard>().ActiveSong == Song.ArmysPaeon;
             return false;
         }
-        
+
 
         public void Check(
             TreeCompBase parent,

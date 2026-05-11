@@ -1,9 +1,9 @@
-using System.Numerics;
 using AEAssist.CombatRoutine.Trigger;
 using AEAssist.GUI;
 using AEAssist.Helper;
-using Dalamud.Game.ClientState.JobGauge.Enums;
 using Dalamud.Bindings.ImGui;
+using Dalamud.Game.ClientState.JobGauge.Enums;
+using System.Numerics;
 using Wotou.Bard.Setting;
 using Wotou.Bard.Utility;
 
@@ -31,7 +31,7 @@ public class BardSongOrderAction : ITriggerAction, ITriggerBase
     {
         ImGui.Text("这个数值修改之后不会自动重置");
         ImGui.Text("如果要改的话建议战斗开始时加一个重置回默认的触发器");
-        
+
         if (FirstSong == 0 || SecondSong == 0 || ThirdSong == 0)
             ImGui.TextColored(new Vector4(1, 0.7f, 0, 1), "请选择歌曲顺序");
         else if (FirstSong == SecondSong || FirstSong == ThirdSong || SecondSong == ThirdSong)
@@ -41,7 +41,7 @@ public class BardSongOrderAction : ITriggerAction, ITriggerBase
         // 特殊歌曲顺序提示
         if (FirstSong != 1 || SecondSong != 2 || ThirdSong != 3)
             ImGui.TextColored(new Vector4(0, 1, 0, 1), "特殊歌曲顺序，将禁用强对齐和对齐旅神");
-        
+
         ImGuiHelper.LeftCombo("第一首歌", ref this.FirstSong, this.label);
         ImGuiHelper.LeftCombo("第二首歌", ref this.SecondSong, this.label);
         ImGuiHelper.LeftCombo("第三首歌", ref this.ThirdSong, this.label);
@@ -57,25 +57,25 @@ public class BardSongOrderAction : ITriggerAction, ITriggerBase
 
         BardSettings.Instance.FirstSong = FirstSong switch
         {
-            1 => Song.Wanderer,
-            2 => Song.Mage,
-            3 => Song.Army,
+            1 => Song.WanderersMinuet,
+            2 => Song.MagesBallad,
+            3 => Song.ArmysPaeon,
             _ => BardSettings.Instance.FirstSong
         };
 
         BardSettings.Instance.SecondSong = SecondSong switch
         {
-            1 => Song.Wanderer,
-            2 => Song.Mage,
-            3 => Song.Army,
+            1 => Song.WanderersMinuet,
+            2 => Song.MagesBallad,
+            3 => Song.ArmysPaeon,
             _ => BardSettings.Instance.SecondSong
         };
 
         BardSettings.Instance.ThirdSong = ThirdSong switch
         {
-            1 => Song.Wanderer,
-            2 => Song.Mage,
-            3 => Song.Army,
+            1 => Song.WanderersMinuet,
+            2 => Song.MagesBallad,
+            3 => Song.ArmysPaeon,
             _ => BardSettings.Instance.ThirdSong
         };
         BardSongSettingsManager.Instance.InitializeSongSettings();
@@ -83,7 +83,7 @@ public class BardSongOrderAction : ITriggerAction, ITriggerBase
         {
             BardRotationEntry.QT.SetQt("对齐旅神", false);
             BardRotationEntry.QT.SetQt("强对齐", false);
-            LogHelper.Print("时间轴设置","特殊歌轴顺序，将禁用强对齐和对齐旅神");
+            LogHelper.Print("时间轴设置", "特殊歌轴顺序，将禁用强对齐和对齐旅神");
         }
         return true;
     }

@@ -1,18 +1,18 @@
-using System.Numerics;
-using System.Text.RegularExpressions;
-using Wotou.Bard.Setting;
-using Wotou.Bard.Data;
 using AEAssist;
 using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.CombatRoutine.View.JobView;
-using AEAssist.MemoryApi;
 using AEAssist.Extension;
 using AEAssist.Helper;
+using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.JobGauge.Enums;
 using Dalamud.Game.Command;
 using Dalamud.Plugin.Ipc.Exceptions;
 using ECommons.DalamudServices;
+using System.Numerics;
+using System.Text.RegularExpressions;
+using Wotou.Bard.Data;
+using Wotou.Bard.Setting;
 using Wotou.Bard.Utility;
 using Wotou.Common;
 
@@ -33,17 +33,17 @@ public class BardRotationEventHandler : IRotationEventHandler
         if (instanceTargetPosition == null) return;
         const float offset = 1f;
         var targetPosition = (Vector3)instanceTargetPosition;
-            
+
         // Core.Resolve<MemApiMove>().MoveToTarget(targetPosition);
         // ChatHelper.SendMessage($"/vnav moveto {targetPosition.X} {targetPosition.Y} {targetPosition.Z}");
         var navMoveTo = Svc.PluginInterface.GetIpcSubscriber<List<Vector3>, bool, object>("vnavmesh.Path.MoveTo");
         navMoveTo?.InvokeAction([targetPosition], false);
         var currentPos = Core.Me.Position;
-            
+
         float dx = targetPosition.X - currentPos.X;
         float dz = targetPosition.Z - currentPos.Z;
         float distance = MathF.Sqrt(dx * dx + dz * dz);
-            
+
         if (distance > offset)
         {
             //Core.Resolve<MemApiMove>().MoveToTarget(targetPosition);
@@ -57,33 +57,33 @@ public class BardRotationEventHandler : IRotationEventHandler
             BardBattleData.Instance.TargetPosition = null; // 清除目标位置
         }
     }
-    
+
     public async Task OnPreCombat()
     {
         BardRotationEntry.UpdateWardensPaeanPanel();
         SmartUseHighPrioritySlot();
         CancelMoving();
-        
+
         if (!BardUtil.IsSongOrderNormal())
         {
             BardRotationEntry.QT.SetQt("对齐旅神", false);
             BardRotationEntry.QT.SetQt("强对齐", false);
         }
-        
+
         if (BardSettings.Instance.IsDailyMode)
         {
             BardRotationEntry.QT.SetQt("强对齐", false);
             BardRotationEntry.QT.SetQt("对齐旅神", false);
             BardRotationEntry.QT.SetQt("攒碎心箭", false);
             BardRotationEntry.QT.SetQt(QTKey.SmartAoeTarget, true);
-            
-            if (BardSettings.Instance.EnableAutoPeloton && 
+
+            if (BardSettings.Instance.EnableAutoPeloton &&
                 Core.Me.IsMoving() &&
-                !Core.Me.InCombat() && 
+                !Core.Me.InCombat() &&
                 !BardDefinesData.Spells.Peloton.RecentlyUsed(5000))
             {
-                if ((!Core.Me.HasAura(BardDefinesData.Buffs.Peloton) || 
-                     !Core.Me.HasMyAuraWithTimeleft(BardDefinesData.Buffs.Peloton, 4000)) && 
+                if ((!Core.Me.HasAura(BardDefinesData.Buffs.Peloton) ||
+                     !Core.Me.HasMyAuraWithTimeleft(BardDefinesData.Buffs.Peloton, 4000)) &&
                     !Core.Me.InCombat() && Core.Me.IsMoving())
                 {
                     if (_randomTime == 0 || TimeHelper.Now() > _randomTime)
@@ -102,23 +102,23 @@ public class BardRotationEventHandler : IRotationEventHandler
         CancelMoving();
         //BardRotationEntry.QT.Reset();
         BardBattleData.Instance = new BardBattleData();
-        
+
         // 重置碎心箭保留层数
-        BardSettings.Instance.HeartBreakSaveStack = 0; 
-        
+        BardSettings.Instance.HeartBreakSaveStack = 0;
+
         _lastSpell = null;
         _lastCastTime = DateTime.MinValue;
         _randomTime = 0;
-        
+
         if (BardSettings.Instance.ResetSongOrder)
             BardUtil.ResetSongOrderCustom();
-        
+
         if (!BardUtil.IsSongOrderNormal())
         {
             BardRotationEntry.QT.SetQt("对齐旅神", false);
             BardRotationEntry.QT.SetQt("强对齐", false);
         }
-        
+
         // 重置 QT 值
         foreach (var def in BardQtHotkeyRegistry.Qts)
         {
@@ -129,7 +129,7 @@ public class BardRotationEventHandler : IRotationEventHandler
             // 这里按需触发回调，让逻辑实时生效
             BardRotationEntry.QT.SetQt(def.Key, v);
         }
-        
+
         if (BardSettings.Instance.IsDailyMode)
         {
             BardRotationEntry.QT.SetQt("强对齐", false);
@@ -153,25 +153,25 @@ public class BardRotationEventHandler : IRotationEventHandler
 
         if (BardSongSwitchUtil.CanSwitchFromNone())
         {
-            if (BardBattleData.Instance.LastSong == BardSettings.Instance.FirstSong && 
+            if (BardBattleData.Instance.LastSong == BardSettings.Instance.FirstSong &&
                 BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).GetSpell().IsReadyWithCanCast())
             {
                 await BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).GetSpell().Cast();
                 return;
             }
-            if (BardBattleData.Instance.LastSong == BardSettings.Instance.SecondSong && 
+            if (BardBattleData.Instance.LastSong == BardSettings.Instance.SecondSong &&
                 BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).GetSpell().IsReadyWithCanCast())
             {
                 await BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).GetSpell().Cast();
                 return;
             }
-            if (BardBattleData.Instance.LastSong == BardSettings.Instance.ThirdSong && 
+            if (BardBattleData.Instance.LastSong == BardSettings.Instance.ThirdSong &&
                 BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).GetSpell().IsReadyWithCanCast())
             {
                 await BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).GetSpell().Cast();
                 return;
             }
-            
+
             if (BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).GetSpell().IsReadyWithCanCast())
             {
                 await BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).GetSpell().Cast();
@@ -188,21 +188,21 @@ public class BardRotationEventHandler : IRotationEventHandler
                 return;
             }
         }
-        
-        if (PartyHelper.CastableParty.Any(characterAgent => 
+
+        if (PartyHelper.CastableParty.Any(characterAgent =>
                 (characterAgent.HasAura(1896U) && BardSettings.Instance.NaturesMinneWithRecitation) ||  //秘策
                 (characterAgent.HasAura(2611U) && BardSettings.Instance.NaturesMinneWithZoe) ||         //活化
                 (characterAgent.HasAura(1892U) && BardSettings.Instance.NaturesMinneWithNeutralSect)) &&   //中间学派
             BardDefinesData.Spells.NaturesMinne.IsUnlockWithCDCheck() &&
             BardRotationEntry.QT.GetQt(QTKey.NatureMinne))
             await BardDefinesData.Spells.NaturesMinne.GetSpell().Cast();
-        
+
         await Task.CompletedTask;
     }
 
     public void OnSpellCastSuccess(Slot slot, Spell spell)
     {
-       
+
     }
 
     public void AfterSpell(Slot slot, Spell spell)
@@ -212,11 +212,11 @@ public class BardRotationEventHandler : IRotationEventHandler
         if (spell.Id == BardDefinesData.Spells.ApexArrow && BardUtil.HasNoPartyBuff())
             BardBattleData.Instance.HasUseApexArrowInCurrentNonBurstingPeriod = true;
         if (BardBattleData.Instance.TotalStopTime > 0 &&
-            (spell.Id == Core.Resolve<MemApiSpell>().CheckActionChange(BardDefinesData.Spells.BurstShot)|| 
-             spell.Id == Core.Resolve<MemApiSpell>().CheckActionChange(BardDefinesData.Spells.RefulgentArrow)||
-             spell.Id == Core.Resolve<MemApiSpell>().CheckActionChange(BardDefinesData.Spells.Ladonsbite)||
+            (spell.Id == Core.Resolve<MemApiSpell>().CheckActionChange(BardDefinesData.Spells.BurstShot) ||
+             spell.Id == Core.Resolve<MemApiSpell>().CheckActionChange(BardDefinesData.Spells.RefulgentArrow) ||
+             spell.Id == Core.Resolve<MemApiSpell>().CheckActionChange(BardDefinesData.Spells.Ladonsbite) ||
              spell.Id == Core.Resolve<MemApiSpell>().CheckActionChange(BardDefinesData.Spells.Shadowbite)))
-            BardBattleData.Instance.GcdCountDown --;
+            BardBattleData.Instance.GcdCountDown--;
         // 没有记录到第一个120秒的buff，就记录下来
         if (!BardBattleData.Instance.HasFirst120SBuff)
             switch (spell.Id)
@@ -275,93 +275,81 @@ public class BardRotationEventHandler : IRotationEventHandler
                     BardBattleData.Instance.Third120SBuffId = BardDefinesData.Buffs.RadiantFinale;
                     break;
             }
-        
-        
+
+
         BardBattleData.Instance.LastSong = spell.Id switch
         {
-            BardDefinesData.Spells.TheWanderersMinuet => Song.Wanderer,
-            BardDefinesData.Spells.MagesBallad => Song.Mage,
-            BardDefinesData.Spells.ArmysPaeon => Song.Army,
+            BardDefinesData.Spells.TheWanderersMinuet => Song.WanderersMinuet,
+            BardDefinesData.Spells.MagesBallad => Song.MagesBallad,
+            BardDefinesData.Spells.ArmysPaeon => Song.ArmysPaeon,
             _ => BardBattleData.Instance.LastSong
         };
-        
+
         if (spell.Id == BardDefinesData.Spells.TheWanderersMinuet ||
             spell.Id == BardDefinesData.Spells.MagesBallad ||
             spell.Id == BardDefinesData.Spells.ArmysPaeon)
             BardBattleData.Instance.LastSongTime = AI.Instance.BattleData.CurrBattleTimeInMs;
-        
+
         if (spell.Id == BardDefinesData.Spells.RagingStrikes)
             BardBattleData.Instance.HasUseIronJawsInCurrentBursting = false;
-        
+
         if (spell.Id == BardDefinesData.Spells.BattleVoice)
-            BardUtil.LogDebug("GcdCooldown 3: ",GCDHelper.GetGCDCooldown().ToString());
-        
-        var nowUtc   = DateTime.UtcNow;
+            BardUtil.LogDebug("GcdCooldown 3: ", GCDHelper.GetGCDCooldown().ToString());
+
+        var nowUtc = DateTime.UtcNow;
         var battleMs = AI.Instance.BattleData.CurrBattleTimeInMs;
-        var inWindow = _lastSpell != null 
-                       && _lastCastTime != DateTime.MinValue 
-                       && _lastSpell.IsAbility() 
-                       && spell.IsAbility() 
-                       && Core.Me.InCombat() 
-                       && battleMs > 0 
+        var inWindow = _lastSpell != null
+                       && _lastCastTime != DateTime.MinValue
+                       && _lastSpell.IsAbility()
+                       && spell.IsAbility()
+                       && Core.Me.InCombat()
+                       && battleMs > 0
                        && spell.Id != BardDefinesData.Spells.EmpyrealArrow
-                       && (_lastSpell.Id != BardDefinesData.Spells.HeartBreak || spell.Id != BardDefinesData.Spells.HeartBreak) 
-                       && BardSettings.Instance.IsDailyMode == false 
+                       && (_lastSpell.Id != BardDefinesData.Spells.HeartBreak || spell.Id != BardDefinesData.Spells.HeartBreak)
+                       && BardSettings.Instance.IsDailyMode == false
                        && !BardBattleData.Instance.EnableThreeOGcd
-                       && (BardDefinesData.Spells.BattleVoice.GetSpell().Cooldown.TotalSeconds < 10 || BardDefinesData.Spells.BattleVoice.GetSpell().Cooldown.TotalSeconds > 100) 
+                       && (BardDefinesData.Spells.BattleVoice.GetSpell().Cooldown.TotalSeconds < 10 || BardDefinesData.Spells.BattleVoice.GetSpell().Cooldown.TotalSeconds > 100)
                        && (BardDefinesData.Spells.RagingStrikes.GetSpell().Cooldown.TotalSeconds < 10 || BardDefinesData.Spells.RagingStrikes.GetSpell().Cooldown.TotalSeconds > 100)
                        && (BardDefinesData.Spells.RadiantFinale.GetSpell().Cooldown.TotalSeconds < 10 || BardDefinesData.Spells.RadiantFinale.GetSpell().Cooldown.TotalSeconds > 100);
-        
+
         if (inWindow)
             BardBattleData.Instance.EnableThreeOGcd = !((nowUtc - _lastCastTime).TotalMilliseconds > 620);
-        
-        _lastSpell    = spell;
+
+        _lastSpell = spell;
         _lastCastTime = nowUtc;
-        
+
     }
 
     public void OnBattleUpdate(int currTimeInMs)
     {
         SmartUseHighPrioritySlot();
         HandleMovingToTarget();
-        
+
         if (!BardUtil.IsSongOrderNormal())
         {
             BardRotationEntry.QT.SetQt("对齐旅神", false);
             BardRotationEntry.QT.SetQt("强对齐", false);
         }
 
-        if (LowVipRestrictor.IsLowVip() 
+        if (LowVipRestrictor.IsLowVip()
             && BardSettings.Instance.IsDailyMode == false
             && (SettingMgr.GetSetting<GeneralSettings>().OptimizeGcd == false
-                || BardBattleData.Instance.EnableThreeOGcd == false 
-                || SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3
-                || SettingMgr.GetSetting<GeneralSettings>().Ping > 10 
-                || SettingMgr.GetSetting<GeneralSettings>().Ping < 5
-                || SettingMgr.GetSetting<GeneralSettings>().MaxAbilityTimesInGcd != 2)
+                || BardBattleData.Instance.EnableThreeOGcd == false
+                || SettingMgr.GetSetting<GeneralSettings>().Ping > 10
+                || SettingMgr.GetSetting<GeneralSettings>().Ping < 5)
             )
         {
             if (SettingMgr.GetSetting<GeneralSettings>().OptimizeGcd == false
-                || SettingMgr.GetSetting<GeneralSettings>().Ping > 10 
+                || SettingMgr.GetSetting<GeneralSettings>().Ping > 10
                 || SettingMgr.GetSetting<GeneralSettings>().Ping < 5)
             {
-                ChatHelper.Print.ErrorMessage("[警告] 请开启“优化 GCD 偏移”，并将数值设为 5 到 10（含 5 和 10） <se.2>");
+                Core.Resolve<MemApiChatMessage>().PrintPluginErrorMessage("[警告] 请开启“优化 GCD 偏移”，并将数值设为 5 到 10（含 5 和 10） <se.2>");
                 ChatHelper.SendMessage("/e [警告] 请开启“优化 GCD 偏移”，并将数值设为 5 到 10（含 5 和 10） <se.2>");
-            }
-            if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3)
-            {
-                ChatHelper.Print.ErrorMessage("[警告] 请关闭全局能力技能不卡 GCD <se.2>");
-                ChatHelper.SendMessage("/e [警告] 请关闭全局能力技能不卡 GCD <se.2>");
             }
             if (BardBattleData.Instance.EnableThreeOGcd == false)
             {
-                ChatHelper.Print.ErrorMessage("[警告] 请开启 FuckAnimation 三插设置，并且检查网络延迟 <se.2>");
+                Core.Resolve<MemApiChatMessage>().PrintPluginErrorMessage("[警告] 请开启 FuckAnimation 三插设置，并且检查网络延迟 <se.2>");
                 ChatHelper.SendMessage("/e [警告] 请开启 FuckAnimation 三插设置，并且检查网络延迟 <se.2>");
-            }
-            if (SettingMgr.GetSetting<GeneralSettings>().MaxAbilityTimesInGcd != 2)
-            {
-                ChatHelper.Print.ErrorMessage("[警告] 请在 AE-ACR设置中修改 Gcd 内最大能力技数量为 2 <se.2>");
-                ChatHelper.SendMessage("/e [警告] 请在 AE-ACR设置中修改 Gcd 内最大能力技数量为 2 <se.2>");
             }
         }
     }
@@ -370,29 +358,23 @@ public class BardRotationEventHandler : IRotationEventHandler
     {
         try
         {
-            if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3)
-            {
-                Core.Resolve<MemApiChatMessage>()
-                    .Toast2("欢迎使用窝头的诗人ACR\n请关闭全局能力技能不卡GCD\n打开此设置会导致本ACR产生能力技插入问题", 1, 5000);
-                ChatHelper.Print.ErrorMessage("[警告] 你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
-            }
-            else if (BardSettings.Instance.WelcomeVoice)
-                Core.Resolve<MemApiChatMessage>()
-                    .Toast2("欢迎使用窝头的诗人ACR", 1, 5000);
-        } catch (MissingFieldException ex)
+            if (BardSettings.Instance.WelcomeVoice)
+                Core.Resolve<MemApiChatMessage>().Toast2("欢迎使用窝头的诗人ACR", 1, 5000);
+        }
+        catch (MissingFieldException ex)
         {
             Core.Resolve<MemApiChatMessage>()
                 .Toast2("欢迎使用窝头的诗人ACR\n请关闭全局能力技能不卡GCD\n打开此设置会导致本ACR产生能力技插入问题", 1, 5000);
             LogHelper.PrintError("警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
-            ChatHelper.Print.ErrorMessage("[警告] 你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
+            Core.Resolve<MemApiChatMessage>().PrintPluginErrorMessage("[警告] 你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
         }
         if (BardSettings.Instance.WelcomeVoice)
             ChatHelper.SendMessage("/pdr tts 你好，欢迎你使用窝头诗人");
         if (SettingMgr.GetSetting<GeneralSettings>().OptimizeGcd == false
-            || SettingMgr.GetSetting<GeneralSettings>().Ping > 10 
+            || SettingMgr.GetSetting<GeneralSettings>().Ping > 10
             || SettingMgr.GetSetting<GeneralSettings>().Ping < 5)
         {
-            ChatHelper.Print.ErrorMessage("[警告] 建议开启“优化 GCD 偏移”，并将数值设为 5 到 10（含 5 和 10）");
+            Core.Resolve<MemApiChatMessage>().PrintPluginErrorMessage("[警告] 建议开启“优化 GCD 偏移”，并将数值设为 5 到 10（含 5 和 10）");
         }
         try
         {
@@ -402,7 +384,7 @@ public class BardRotationEventHandler : IRotationEventHandler
         {
             LogHelper.PrintError($"时间轴更新失败: {ex.Message}");
         }
-        
+
         try
         {
             Svc.Commands.RemoveHandler("/Wotou_BRD");
@@ -410,7 +392,7 @@ public class BardRotationEventHandler : IRotationEventHandler
         catch (Exception) { }
         Svc.Commands.AddHandler("/Wotou_BRD", new CommandInfo(BardCommandHandler));
     }
-    
+
     private void BardCommandHandler(string command, string args)
     {
         if (string.IsNullOrWhiteSpace(args))
@@ -418,7 +400,7 @@ public class BardRotationEventHandler : IRotationEventHandler
             LogHelper.Print("Wotou_BRD 命令无效，请提供参数。");
             return;
         }
-        
+
         // 将参数转换为小写，以实现不区分大小写的匹配
         var lowerArgs = args.Trim().ToLower();
 
@@ -455,109 +437,109 @@ public class BardRotationEventHandler : IRotationEventHandler
                 ChatHelper.SendMessage("你好！这是一条测试消息！");
                 break;
             case var move when move.StartsWith("moveto", StringComparison.OrdinalIgnoreCase):
-            {
-                // 匹配格式 moveTo (x,y,z) 或 moveTo(x,y,z)（可带空格）
-                var match = Regex.Match(move, @"moveto\s*\(\s*(-?\d+(\.\d+)?)\s*,\s*(-?\d+(\.\d+)?)\s*,\s*(-?\d+(\.\d+)?)\s*\)(?:\s+delay\s+(\d+))?", RegexOptions.IgnoreCase);
-
-                if (match.Success)
                 {
-                    if (!VNavAvailable()) return;
-                    
-                    float x = float.Parse(match.Groups[1].Value);
-                    float y = float.Parse(match.Groups[3].Value);
-                    float z = float.Parse(match.Groups[5].Value);
-                    
-                    var delay = 0;
-                    if (match.Groups[7].Success)
-                        delay = int.Parse(match.Groups[7].Value);
-                    
-                    Vector3 target = new Vector3(x, y, z);
+                    // 匹配格式 moveTo (x,y,z) 或 moveTo(x,y,z)（可带空格）
+                    var match = Regex.Match(move, @"moveto\s*\(\s*(-?\d+(\.\d+)?)\s*,\s*(-?\d+(\.\d+)?)\s*,\s*(-?\d+(\.\d+)?)\s*\)(?:\s+delay\s+(\d+))?", RegexOptions.IgnoreCase);
 
-                    _ = Task.Run(async () =>
+                    if (match.Success)
                     {
-                        LogHelper.Print($"延迟 {delay}ms 后移动到坐标: ({x}, {y}, {z})");
+                        if (!VNavAvailable()) return;
 
-                        if (delay > 0)
-                            await Task.Delay(delay);
+                        float x = float.Parse(match.Groups[1].Value);
+                        float y = float.Parse(match.Groups[3].Value);
+                        float z = float.Parse(match.Groups[5].Value);
 
-                        BardBattleData.Instance.TargetPosition = target;
-                        //ChatHelper.SendMessage($"/vnav moveto {x} {y} {z}");
-                        var navMoveTo = Svc.PluginInterface.GetIpcSubscriber<List<Vector3>, bool, object>("vnavmesh.Path.MoveTo");
-                        navMoveTo?.InvokeAction([target], false);
-                        //Core.Resolve<MemApiMove>().MoveToTarget(target);
-                    });
-                }
-                else
-                {
-                    LogHelper.PrintError("坐标格式错误，正确格式示例：/Wotou_BRD moveTo (100.5, 0, 92.8)");
-                }
+                        var delay = 0;
+                        if (match.Groups[7].Success)
+                            delay = int.Parse(match.Groups[7].Value);
 
-                break;
-            }
-            
-            case var follow when follow.StartsWith("follow", StringComparison.OrdinalIgnoreCase):
-            {
-                // 匹配格式：follow ID for 3000 或 follow ID for 3000 delay 1500
-                var match = Regex.Match(args, @"^follow\s+(\d+)\s+for\s+(\d+)(?:\s+delay\s+(\d+))?$", RegexOptions.IgnoreCase);
+                        Vector3 target = new Vector3(x, y, z);
 
-                if (match.Success)
-                {
-                    if (!VNavAvailable()) return;
-                    
-                    if (!uint.TryParse(match.Groups[1].Value, out uint entityId))
-                    {
-                        LogHelper.PrintError("无法解析 EntityId！");
-                        break;
-                    }
-
-                    int duration = int.Parse(match.Groups[2].Value);
-                    int delay = match.Groups[3].Success ? int.Parse(match.Groups[3].Value) : 0;
-                    
-                    BardBattleData.Instance.FollowingTarget = PartyHelper.Party.FirstOrDefault(p => p.EntityId == entityId);
-                    if (BardBattleData.Instance.FollowingTarget == null)
-                    {
-                        LogHelper.PrintError($"找不到 ID 为 {entityId} 的小队成员！");
-                        break;
-                    }
-
-                    LogHelper.Print($"将在 {delay} 毫秒后开始跟随 {entityId}，持续 {duration} 毫秒。");
-
-                    _ = Task.Run(async () =>
-                    {
-                        if (delay > 0)
-                            await Task.Delay(delay);
-
-                        var startTime = DateTime.UtcNow;
-                        while ((DateTime.UtcNow - startTime).TotalMilliseconds < duration)
+                        _ = Task.Run(async () =>
                         {
-                            if (BardBattleData.Instance.FollowingTarget == null || BardBattleData.Instance.FollowingTarget.IsDead)
-                            {
-                                LogHelper.Print($"跟随目标 {entityId} 不存在或者已被清除，停止跟随。");
-                                break;
-                            }
-                            // Core.Resolve<MemApiMove>().MoveToTarget(BardBattleData.Instance.FollowingTarget.Position);
-                            //ChatHelper.SendMessage($"/vnav moveto {BardBattleData.Instance.FollowingTarget.Position.X} {BardBattleData.Instance.FollowingTarget.Position.Y} {BardBattleData.Instance.FollowingTarget.Position.Z}");
+                            LogHelper.Print($"延迟 {delay}ms 后移动到坐标: ({x}, {y}, {z})");
+
+                            if (delay > 0)
+                                await Task.Delay(delay);
+
+                            BardBattleData.Instance.TargetPosition = target;
+                            //ChatHelper.SendMessage($"/vnav moveto {x} {y} {z}");
                             var navMoveTo = Svc.PluginInterface.GetIpcSubscriber<List<Vector3>, bool, object>("vnavmesh.Path.MoveTo");
-                            navMoveTo.InvokeAction([BardBattleData.Instance.FollowingTarget.Position], false);
+                            navMoveTo?.InvokeAction([target], false);
+                            //Core.Resolve<MemApiMove>().MoveToTarget(target);
+                        });
+                    }
+                    else
+                    {
+                        LogHelper.PrintError("坐标格式错误，正确格式示例：/Wotou_BRD moveTo (100.5, 0, 92.8)");
+                    }
+
+                    break;
+                }
+
+            case var follow when follow.StartsWith("follow", StringComparison.OrdinalIgnoreCase):
+                {
+                    // 匹配格式：follow ID for 3000 或 follow ID for 3000 delay 1500
+                    var match = Regex.Match(args, @"^follow\s+(\d+)\s+for\s+(\d+)(?:\s+delay\s+(\d+))?$", RegexOptions.IgnoreCase);
+
+                    if (match.Success)
+                    {
+                        if (!VNavAvailable()) return;
+
+                        if (!uint.TryParse(match.Groups[1].Value, out uint entityId))
+                        {
+                            LogHelper.PrintError("无法解析 EntityId！");
+                            break;
                         }
 
-                        LogHelper.Print($"已停止跟随 {entityId}。");
-                    });
-                }
-                else
-                {
-                    LogHelper.PrintError("格式错误，示例：/Wotou_BRD follow 266637666 for 3000 delay 1500");
-                }
+                        int duration = int.Parse(match.Groups[2].Value);
+                        int delay = match.Groups[3].Success ? int.Parse(match.Groups[3].Value) : 0;
 
-                break;
-            }
+                        BardBattleData.Instance.FollowingTarget = PartyHelper.Party.FirstOrDefault(p => p.EntityId == entityId);
+                        if (BardBattleData.Instance.FollowingTarget == null)
+                        {
+                            LogHelper.PrintError($"找不到 ID 为 {entityId} 的小队成员！");
+                            break;
+                        }
+
+                        LogHelper.Print($"将在 {delay} 毫秒后开始跟随 {entityId}，持续 {duration} 毫秒。");
+
+                        _ = Task.Run(async () =>
+                        {
+                            if (delay > 0)
+                                await Task.Delay(delay);
+
+                            var startTime = DateTime.UtcNow;
+                            while ((DateTime.UtcNow - startTime).TotalMilliseconds < duration)
+                            {
+                                if (BardBattleData.Instance.FollowingTarget == null || BardBattleData.Instance.FollowingTarget.IsDead)
+                                {
+                                    LogHelper.Print($"跟随目标 {entityId} 不存在或者已被清除，停止跟随。");
+                                    break;
+                                }
+                                // Core.Resolve<MemApiMove>().MoveToTarget(BardBattleData.Instance.FollowingTarget.Position);
+                                //ChatHelper.SendMessage($"/vnav moveto {BardBattleData.Instance.FollowingTarget.Position.X} {BardBattleData.Instance.FollowingTarget.Position.Y} {BardBattleData.Instance.FollowingTarget.Position.Z}");
+                                var navMoveTo = Svc.PluginInterface.GetIpcSubscriber<List<Vector3>, bool, object>("vnavmesh.Path.MoveTo");
+                                navMoveTo.InvokeAction([BardBattleData.Instance.FollowingTarget.Position], false);
+                            }
+
+                            LogHelper.Print($"已停止跟随 {entityId}。");
+                        });
+                    }
+                    else
+                    {
+                        LogHelper.PrintError("格式错误，示例：/Wotou_BRD follow 266637666 for 3000 delay 1500");
+                    }
+
+                    break;
+                }
 
             default:
                 ChatHelper.SendMessage($"未知参数: {args}");
                 break;
         }
     }
-    
+
     private void ExecuteHotkey(IHotkeyResolver? resolver)
     {
         if (resolver == null)
@@ -575,7 +557,7 @@ public class BardRotationEventHandler : IRotationEventHandler
             LogHelper.Print("无法执行该快捷键命令，可能条件不满足或技能不可用。");
         }
     }
-    
+
     private void ToggleQtSetting(string qtKey)
     {
         bool currentValue = BardRotationEntry.QT.GetQt(qtKey);
@@ -583,7 +565,7 @@ public class BardRotationEventHandler : IRotationEventHandler
 
         LogHelper.Print($"QT \"{qtKey}\" 已设置为 {(!currentValue).ToString().ToLower()}。");
     }
-    
+
     public void OnExitRotation()
     {
         Svc.Commands.RemoveHandler("/Wotou_BRD");
@@ -593,29 +575,29 @@ public class BardRotationEventHandler : IRotationEventHandler
     {
         BardRotationEntry.UpdateWardensPaeanPanel();
     }
-    
+
     private void SmartUseHighPrioritySlot()
     {
-        if (Core.Resolve<MemApiCondition>().IsInCombat() && 
+        if (Core.Resolve<MemApiCondition>().IsInCombat() &&
             Core.Me.GetCurrTarget() != null &&
             Core.Me.GetCurrTarget().CanAttack())
             BardBattleData.Instance.HotkeyUseHighPrioritySlot = true;
         else
             BardBattleData.Instance.HotkeyUseHighPrioritySlot = false;
     }
-    
+
     private void CancelMoving()
     {
         if (!VNavAvailable()) return;
         // Core.Resolve<MemApiMove>().CancelMove();
         var navStop = Svc.PluginInterface.GetIpcSubscriber<object>("vnavmesh.Path.Stop");
-        if (Core.Resolve<MemApiDuty>().IsBoundByDuty() && 
+        if (Core.Resolve<MemApiDuty>().IsBoundByDuty() &&
             Core.Resolve<MemApiZoneInfo>().GetCurrTerrId() == 1238)
             navStop?.InvokeAction();
         BardBattleData.Instance.TargetPosition = null;
         BardBattleData.Instance.FollowingTarget = null;
     }
-    
+
     private bool VNavAvailable()
     {
         var plist = Svc.PluginInterface.InstalledPlugins;
@@ -636,9 +618,9 @@ public class BardRotationEventHandler : IRotationEventHandler
             if (!isReady)
                 return false;
         }
-        catch (IpcNotReadyError)        { return false; } // 提供方未就绪（加载/切图中）
-        catch                           { return false; } // 其他异常一律视为不可用
+        catch (IpcNotReadyError) { return false; } // 提供方未就绪（加载/切图中）
+        catch { return false; } // 其他异常一律视为不可用
         return true;
     }
-    
+
 }

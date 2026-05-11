@@ -6,7 +6,7 @@ using ECommons.DalamudServices;
 
 namespace ScriptTest;
 
-public class 鱼有线: ITriggerScript
+public class 鱼有线 : ITriggerScript
 {
     public bool Check(ScriptEnv scriptEnv, ITriggerCondParams condParams)
     {
@@ -17,9 +17,9 @@ public class 鱼有线: ITriggerScript
             .Where(c => c.DistanceToPlayer() < maxDistance && c.IsEnemy())
             .ToArray()
             .OrderBy(c => c.DistanceToPlayer());
-        
+
         var 无目标鱼 = enemies.FirstOrDefault(c => c.DataId == 18346 && c.TargetObject == null);
-        
+
         return 无目标鱼 == null;
     }
 }

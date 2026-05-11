@@ -18,7 +18,7 @@ public class BardSettings
     private static string path;
     public static void Build(string settingPath)
     {
-        path = Path.Combine(settingPath,nameof(BardSettings) + ".json");
+        path = Path.Combine(settingPath, nameof(BardSettings) + ".json");
         if (!File.Exists(path))
         {
             Instance = new BardSettings();
@@ -43,17 +43,17 @@ public class BardSettings
         File.WriteAllText(path, JsonHelper.ToJson(this));
     }
     #endregion
-    
+
     public float WandererSongDuration = 42.6f; // 第一首歌的持续时间
     public float MageSongDuration = 39.2f; // 第二首歌的持续时间
     public float ArmySongDuration = 39f; // 第三首歌的持续时间
-    
-    public Song FirstSong = Song.Wanderer; // 第一首歌
-    public Song SecondSong = Song.Mage; // 第二首歌
-    public Song ThirdSong = Song.Army; // 第三首歌
-    
+
+    public Song FirstSong = Song.WanderersMinuet; // 第一首歌
+    public Song SecondSong = Song.MagesBallad; // 第二首歌
+    public Song ThirdSong = Song.ArmysPaeon; // 第三首歌
+
     public bool ResetSongOrder = true; // 是否重置歌曲顺序
-    public List<Song> SongOrderOnReset = new() { Song.Wanderer, Song.Mage, Song.Army };
+    public List<Song> SongOrderOnReset = new() { Song.WanderersMinuet, Song.MagesBallad, Song.ArmysPaeon };
 
     public bool GambleTripleApex = false; // 是否赌两分钟三次绝峰
     public bool UsePotionInOpener = false; // 是否在开场使用药水
@@ -68,35 +68,35 @@ public class BardSettings
     public int WandererBeforeGcdTime = 600; //非起手的贤者歌在下个GCD有多久使用（毫秒）
     public int PotionBeforeGcdTime = 700; // 爆发药水的动画持续时间（毫秒）
     public int GcdAnimationTime = 600; //GCD动画锁时间
-    //public int EmpyrealArrowNotBeforeGcdTime = 500; // 九天连箭最晚在下个GCD前多久使用（毫秒）
-    
+                                       //public int EmpyrealArrowNotBeforeGcdTime = 500; // 九天连箭最晚在下个GCD前多久使用（毫秒）
+
     public bool NaturesMinneWithRecitation = true; // 大地神对齐秘策
     public bool NaturesMinneWithZoe = true; // 大地神对齐活化
     public bool NaturesMinneWithNeutralSect = true; // 大地神对齐中间学派
 
     public bool IsDailyMode = false; //false 表示高难模式，true 表示日随模式
     public bool ApplyDotOnTrashMobs = false; // 是否在小怪身上使用DOT
-    public bool EnableAutoPeloton  = true; // 是否在自动使用速行
-    
+    public bool EnableAutoPeloton = true; // 是否在自动使用速行
+
     public bool ImitateGreenPlayer = false; // 是否模仿绿玩
- 
+
     public bool ShowWardensPaeanPanel = true; // 是否显示光阴神面板
     public int WardensPaeanPanelIconSize = 47; // 光阴神面板图标大小
     public bool IsWardensPanelLocked = false; // 是否锁定光阴神面板位置
 
-    
+
     public bool IsReadInfoWindow08 = false;
-    
+
     public bool IsOpenCommandWindow = true; // 是否开启指令窗口
-    
+
     public Dictionary<string, bool> UserDefinedQtValues = new(); // 用户自定义QT值
 
     public List<string> QwertyList = [];
-    
+
     public string UnlockPassword = ""; // 解锁密码
-    
+
     public Dictionary<string, bool> SelectedTimeLinesForUpdate = new();
-    
+
     /// <summary>
     /// 初始化用户自定义的 QT 值。如果没有自定义值，则使用默认值。
     /// </summary>
@@ -110,7 +110,7 @@ public class BardSettings
             }
         }
     }
-    
+
     public JobViewSave JobViewSave = new JobViewSave()
     {
         MainColor = new(0f, 0.3012f, 0.2306f, 1f),

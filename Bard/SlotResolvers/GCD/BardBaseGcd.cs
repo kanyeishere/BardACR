@@ -59,7 +59,7 @@ public class BardBaseGcd : ISlotResolver
                                    BardRotationEntry.QT.GetQt("对齐旅神") &&
                                    BardRotationEntry.QT.GetQt("强对齐") &&
                                    BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow) &&
-                                   Core.Resolve<JobApi_Bard>().ActiveSong == Song.Army &&
+                                   Core.Resolve<JobApi_Bard>().ActiveSong == Song.ArmysPaeon &&
                                    futureFirstBuffCooldown < 2200 + 2020 * 3 + gcdAnimationTime &&
                                    futureEmpyrealArrowCooldown >= 2200 * 2 + 2080 + gcdAnimationTime &&
                                    futureEmpyrealArrowCooldown < 2200 * 2 + 2080 * 2 + gcdAnimationTime;
@@ -91,7 +91,7 @@ public class BardBaseGcd : ISlotResolver
             BardRotationEntry.QT.GetQt("对齐旅神") && 
             BardRotationEntry.QT.GetQt("强对齐") &&
             BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow) &&
-            Core.Resolve<JobApi_Bard>().ActiveSong == Song.Army &&
+            Core.Resolve<JobApi_Bard>().ActiveSong == Song.ArmysPaeon &&
             BardBattleData.Instance.First120SBuffSpellId.GetSpell().Cooldown.TotalMilliseconds <
             2200 + 2020 * 3  + gcdAnimationTime )
         {

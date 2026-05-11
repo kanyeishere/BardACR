@@ -1,5 +1,3 @@
-using System.Globalization;
-using System.Numerics;
 using AEAssist;
 using AEAssist.CombatRoutine;
 using AEAssist.Extension;
@@ -18,7 +16,7 @@ public static class BardUtil
     private const uint RadiantFinaleBuff = BardDefinesData.Buffs.RadiantFinale;
     private const uint HawkEyeBuff = BardDefinesData.Buffs.HawksEye;
     private const uint BarrageBuff = BardDefinesData.Buffs.Barrage;
-    
+
     private const uint BattleVoice = BardDefinesData.Spells.BattleVoice;
     private const uint RagingStrikes = BardDefinesData.Spells.RagingStrikes;
     private const uint RadiantFinale = BardDefinesData.Spells.RadiantFinale;
@@ -26,72 +24,72 @@ public static class BardUtil
     private const uint RefulgentArrow = BardDefinesData.Spells.RefulgentArrow;
     private const uint Ladonsbite = BardDefinesData.Spells.Ladonsbite;
     private const uint Shadowbite = BardDefinesData.Spells.Shadowbite;
-    
+
     private static bool IsRadiantFinaleConditionMet()
     {
         // 检查技能是否已解锁：如果未解锁，直接返回true。如果已解锁，检查是否有Radiant Finale的Buff效果
         return !RadiantFinale.IsLevelEnough() || Core.Me.HasLocalPlayerAura(RadiantFinaleBuff);
     }
-    
+
     private static bool IsBattleVoiceConditionMet()
     {
         return !BattleVoice.IsLevelEnough() || Core.Me.HasAura(BattleVoiceBuff);
     }
-    
+
     private static bool IsRagingStrikesConditionMet()
     {
         return !RagingStrikes.IsLevelEnough() || Core.Me.HasAura(RagingStrikesBuff);
     }
-    
+
     public static bool HasAllPartyBuff()
     {
         return IsBattleVoiceConditionMet() && IsRagingStrikesConditionMet() && IsRadiantFinaleConditionMet();
     }
-    
+
     public static bool HasAnyPartyBuff()
     {
         return Core.Me.HasAura(BattleVoiceBuff) || Core.Me.HasAura(RagingStrikesBuff) || Core.Me.HasAura(RadiantFinaleBuff);
     }
-    
+
     public static bool HasNoPartyBuff()
     {
         return !Core.Me.HasAura(BattleVoiceBuff) && !Core.Me.HasAura(RagingStrikesBuff) && !Core.Me.HasAura(RadiantFinaleBuff);
     }
-    
+
     public static bool PartyBuffWillBeReadyIn(int ms)
     {
         return BattleVoice.GetSpell().Cooldown.TotalMilliseconds <= ms && RagingStrikes.GetSpell().Cooldown.TotalMilliseconds <= ms;
     }
-    
+
     public static Song GetSongBySpell(uint song)
     {
         return song switch
         {
-            BardDefinesData.Spells.TheWanderersMinuet => Song.Wanderer,
-            BardDefinesData.Spells.MagesBallad => Song.Mage,
-            BardDefinesData.Spells.ArmysPaeon => Song.Army,
+            BardDefinesData.Spells.TheWanderersMinuet => Song.WanderersMinuet,
+            BardDefinesData.Spells.MagesBallad => Song.MagesBallad,
+            BardDefinesData.Spells.ArmysPaeon => Song.ArmysPaeon,
             _ => Song.None
         };
     }
-    
+
     public static uint GetSpellBySong(Song song)
     {
         return song switch
         {
-            Song.Wanderer => BardDefinesData.Spells.TheWanderersMinuet,
-            Song.Mage => BardDefinesData.Spells.MagesBallad,
-            Song.Army => BardDefinesData.Spells.ArmysPaeon,
+            Song.WanderersMinuet => BardDefinesData.Spells.TheWanderersMinuet,
+            Song.MagesBallad => BardDefinesData.Spells.MagesBallad,
+            Song.ArmysPaeon => BardDefinesData.Spells.ArmysPaeon,
             _ => 0
         };
     }
-    
+
     public static float GetSongDuration(Song song)
     {
         return song switch
         {
-            Song.Wanderer => BardSettings.Instance.WandererSongDuration,
-            Song.Mage => BardSettings.Instance.MageSongDuration,
-            Song.Army => BardSettings.Instance.ArmySongDuration,
+            Song.WanderersMinuet => BardSettings.Instance.WandererSongDuration,
+            Song.MagesBallad => BardSettings.Instance.MageSongDuration,
+            Song.ArmysPaeon => BardSettings.Instance.ArmySongDuration,
             _ => 0
         };
     }
@@ -99,11 +97,11 @@ public static class BardUtil
     public static void LogDebug(string title, string message)
     {
         if (BardRotationEntry.QT.GetQt("Debug"))
-            LogHelper.Print(title, message); 
+            LogHelper.Print(title, message);
     }
-    
-    public static bool IsSongOrderNormal() => BardSettings.Instance.FirstSong == Song.Wanderer && BardSettings.Instance.SecondSong == Song.Mage && BardSettings.Instance.ThirdSong == Song.Army;
-    
+
+    public static bool IsSongOrderNormal() => BardSettings.Instance.FirstSong == Song.WanderersMinuet && BardSettings.Instance.SecondSong == Song.MagesBallad && BardSettings.Instance.ThirdSong == Song.ArmysPaeon;
+
     public static Spell GetBaseGcd()
     {
         if (Core.Me.HasAura(BarrageBuff))
@@ -131,26 +129,26 @@ public static class BardUtil
             return GetSmartAoeSpell(Ladonsbite, 2, angle: 90);
         return Core.Resolve<MemApiSpell>().CheckActionChange(BurstShot).GetSpell();
     }
-    
+
     public static Spell GetSmartAoeSpell(uint spellId, int minTargetCount = 1, float maxDistance = 25, float? angle = null)
     {
         if (!BardRotationEntry.QT.GetQt(QTKey.SmartAoeTarget))
             return Core.Resolve<MemApiSpell>().CheckActionChange(spellId).GetSpell();
 
-        var target = angle != null ? 
-            TargetHelper.GetMostCanTargetObjects(spellId, minTargetCount, angle.Value) : 
+        var target = angle != null ?
+            TargetHelper.GetMostCanTargetObjects(spellId, minTargetCount, angle.Value) :
             TargetHelper.GetMostCanTargetObjects(spellId, minTargetCount);
         if (target != null && target.IsValid() && target.DistanceToPlayer() <= maxDistance)
             return Core.Resolve<MemApiSpell>().CheckActionChange(spellId).GetSpell(target);
 
         return Core.Resolve<MemApiSpell>().CheckActionChange(spellId).GetSpell();
     }
-    
+
     public static void ResetSongOrder()
     {
         BardSongSettingsManager.Instance.ResetOrder();
     }
-    
+
     public static void ResetSongOrderCustom()
     {
         BardSettings.Instance.FirstSong = BardSettings.Instance.SongOrderOnReset[0];

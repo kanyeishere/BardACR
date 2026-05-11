@@ -1,20 +1,18 @@
-using System.Diagnostics;
-using System.Numerics;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using AEAssist;
 using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.CombatRoutine.Module.Opener;
 using AEAssist.CombatRoutine.View.JobView;
-using AEAssist.CombatRoutine.View.JobView.HotkeyResolver;
 using AEAssist.Extension;
 using AEAssist.GUI;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Game.ClientState.JobGauge.Enums;
 using Dalamud.Interface;
-using Dalamud.Bindings.ImGui;
+using System.Diagnostics;
+using System.Numerics;
+using System.Runtime.CompilerServices;
 using Wotou.Bard.Data;
 using Wotou.Bard.Opener;
 using Wotou.Bard.Sequence;
@@ -30,18 +28,18 @@ namespace Wotou.Bard;
 public class BardRotationEntry : IRotationEntry
 {
     public static JobViewWindow QT { get; private set; }
-    
+
     private bool _showCustomOpenerWindow = false;
     private string _customOpenerSearch = "";
-    
+
     public static HotkeyWindow? WardensPaeanPanel { get; set; }
 
     public string AuthorName { get; set; } = "Wotou";
-    
+
     private const string UpdateLog = "更新日志 0104" +
                                      "\n- 添加70-80级起手" +
                                      "\n- 添加70-80级高难特化循环";
-    
+
     public Rotation Build(string settingFolder)
     {
         BardDefinesData.InitializeDictionary();
@@ -54,7 +52,7 @@ public class BardRotationEntry : IRotationEntry
             MinLevel = 1,
             MaxLevel = 100,
             Description = "诗人ACR\n" + UpdateLog,
-                          
+
         };
         // 添加死后爆发
         rot.AddSlotSequences(new BurstingAfterDeathSequence());
@@ -171,12 +169,12 @@ public class BardRotationEntry : IRotationEntry
         // JobViewSave是AE底层提供的QT设置存档类 在你自己的设置里定义即可
         // 第二个参数是你设置文件的Save类 第三个参数是QT窗口标题
         QT = new JobViewWindow(BardSettings.Instance.JobViewSave, BardSettings.Instance.Save, "Wotou Bard 诗人");
-        
+
         var myJobViewSave = new JobViewSave();
         myJobViewSave.ShowHotkey = BardSettings.Instance.ShowWardensPaeanPanel;
         myJobViewSave.QtHotkeySize = new Vector2(BardSettings.Instance.WardensPaeanPanelIconSize, BardSettings.Instance.WardensPaeanPanelIconSize);
         WardensPaeanPanel = new HotkeyWindow(myJobViewSave, "WardensPaeanPanel");
-        
+
         QT.SetUpdateAction(OnUIUpdate); // 设置QT中的Update回调 不需要就不设置
 
         //添加QT分页 第一个参数是分页标题 第二个是分页里的内容
@@ -194,7 +192,7 @@ public class BardRotationEntry : IRotationEntry
             QT.SetQtToolTip(def.Description);
         }
 
-        if(BardSettings.Instance.JobViewSave.QtUnVisibleList.Count == 0 )
+        if (BardSettings.Instance.JobViewSave.QtUnVisibleList.Count == 0)
         {
             BardSettings.Instance.JobViewSave.QtUnVisibleList.Add("Debug");
             BardSettings.Instance.JobViewSave.QtUnVisibleList.Add(QTKey.EmpyrealArrow);
@@ -225,7 +223,7 @@ public class BardRotationEntry : IRotationEntry
         if (BardSettings.Instance.IsOpenCommandWindow)
             BardCommandWindow.Draw();
     }
-    
+
     public static void UpdateWardensPaeanPanel()
     {
         PartyHelper.UpdateAllies();
@@ -233,10 +231,10 @@ public class BardRotationEntry : IRotationEntry
         for (var i = 0; i < PartyHelper.Party.Count; i++)
         {
             var index = i;
-            WardensPaeanPanel?.AddHotkey("[" + i  +"]净化: " + PartyHelper.Party[i].Name, new WardensPaeanHotkeyResolver(index));
+            WardensPaeanPanel?.AddHotkey("[" + i + "]净化: " + PartyHelper.Party[i].Name, new WardensPaeanHotkeyResolver(index));
         }
     }
-    
+
     private void DrawModeButton(string label, bool isDailyMode, Action onClickAction)
     {
         // 保存初始状态
@@ -244,7 +242,7 @@ public class BardRotationEntry : IRotationEntry
         bool isSelected = (initialIsDailyMode == isDailyMode);
 
         // 根据初始状态决定是否 PushStyleColor
-        if (isSelected) 
+        if (isSelected)
             ImGui.PushStyleColor(ImGuiCol.Button, BardSettings.Instance.JobViewSave.MainColor);
 
         // 绘制按钮，并记录是否被点击
@@ -258,7 +256,7 @@ public class BardRotationEntry : IRotationEntry
         if (buttonClicked)
             onClickAction?.Invoke();
     }
-    
+
     public void DrawQtDefaults(JobViewWindow jobViewWindow)
     {
         ImGui.Text("在这里设置 Qt 的默认值：");
@@ -302,7 +300,7 @@ public class BardRotationEntry : IRotationEntry
     {
         ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0.0f, 0.0f, 0.0f, 0.0f));
         ImGui.PushStyleColor(ImGuiCol.Border, new Vector4(0.4314f, 0.6667f, 0.5569f, 1));
-        
+
         if (ImGui.CollapsingHeader("   重要说明"))
         {
             ImGui.Text("诗人ACR\n适配技速2.48-2.50\n请在 FuckAnimationLock 中开启三插");
@@ -323,7 +321,7 @@ public class BardRotationEntry : IRotationEntry
             ImGui.SameLine();
             if (ImGui.Button("反馈问题"))
             {
-                string url = "https://discord.com/channels/1191648233454313482/1296269368224911461";  
+                string url = "https://discord.com/channels/1191648233454313482/1296269368224911461";
                 try
                 {
                     Process.Start(new ProcessStartInfo
@@ -386,13 +384,13 @@ public class BardRotationEntry : IRotationEntry
                     // 同步 Value，与 BardSettings.Instance 保持一致
                     switch (setting.Song)
                     {
-                        case Song.Wanderer:
+                        case Song.WanderersMinuet:
                             setting.Value = BardSettings.Instance.WandererSongDuration;
                             break;
-                        case Song.Mage:
+                        case Song.MagesBallad:
                             setting.Value = BardSettings.Instance.MageSongDuration;
                             break;
-                        case Song.Army:
+                        case Song.ArmysPaeon:
                             setting.Value = BardSettings.Instance.ArmySongDuration;
                             break;
                     }
@@ -413,13 +411,13 @@ public class BardRotationEntry : IRotationEntry
                     uint color;
                     switch (setting.Song)
                     {
-                        case Song.Wanderer: // 绿色
-                            color = ImGui.ColorConvertFloat4ToU32(new Vector4(0.3f,0.9f,0.35f, 1.0f));
+                        case Song.WanderersMinuet: // 绿色
+                            color = ImGui.ColorConvertFloat4ToU32(new Vector4(0.3f, 0.9f, 0.35f, 1.0f));
                             break;
-                        case Song.Army: // 黄色
+                        case Song.ArmysPaeon: // 黄色
                             color = ImGui.ColorConvertFloat4ToU32(new Vector4(0.88f, 0.55f, 0.03f, 1.0f));
                             break;
-                        case Song.Mage: // 蓝色
+                        case Song.MagesBallad: // 蓝色
                             color = ImGui.ColorConvertFloat4ToU32(new Vector4(0.31f, 0.33f, 0.89f, 1.0f));
                             break;
                         default: // 默认白色
@@ -444,7 +442,7 @@ public class BardRotationEntry : IRotationEntry
                     ImGui.PushID(i); // 使用索引作为 ID
                     float globalFontSize = UiBuilder.DefaultFontSizePx;   // Get the global font size in pixels
                     float globalFontScale = ImGui.GetIO().FontGlobalScale;
-                    float widthForNextItem = globalFontSize * globalFontScale * 6 + 20;  
+                    float widthForNextItem = globalFontSize * globalFontScale * 6 + 20;
                     ImGui.SetNextItemWidth(widthForNextItem);
 
                     if (ImGui.InputFloat("", ref setting.Value, 0.1f))
@@ -453,13 +451,13 @@ public class BardRotationEntry : IRotationEntry
                         // 更新 BardSettings.Instance 中的值
                         switch (setting.Song)
                         {
-                            case Song.Wanderer:
+                            case Song.WanderersMinuet:
                                 BardSettings.Instance.WandererSongDuration = setting.Value;
                                 break;
-                            case Song.Mage:
+                            case Song.MagesBallad:
                                 BardSettings.Instance.MageSongDuration = setting.Value;
                                 break;
-                            case Song.Army:
+                            case Song.ArmysPaeon:
                                 BardSettings.Instance.ArmySongDuration = setting.Value;
                                 break;
                         }
@@ -490,7 +488,8 @@ public class BardRotationEntry : IRotationEntry
                         var payload = ImGui.AcceptDragDropPayload("DND_SONG_SETTING",
                             ImGuiDragDropFlags.AcceptNoDrawDefaultRect);
 
-                        if (!payload.Equals(default(ImGuiPayloadPtr)) && payload.Data != null && payload.DataSize >= sizeof(int))                        {
+                        if (!payload.Equals(default(ImGuiPayloadPtr)) && payload.Data != null && payload.DataSize >= sizeof(int))
+                        {
                             // 从 payload 中获取 moveFrom 的值
                             moveFrom = *(int*)payload.Data;
                             moveTo = i; // 记录目标位置
@@ -499,7 +498,7 @@ public class BardRotationEntry : IRotationEntry
                             if (moveFrom != -1 && moveTo != -1 && moveFrom != moveTo)
                             {
                                 var draggedSetting = songSettings[moveFrom];
-                                songSettings.RemoveAt(moveFrom);    
+                                songSettings.RemoveAt(moveFrom);
                                 songSettings.Insert(moveTo, draggedSetting);
 
                                 // 更新 BardSettings.Instance 的歌曲顺序
@@ -521,7 +520,7 @@ public class BardRotationEntry : IRotationEntry
                                         LogHelper.Print("第二首：" + BardSettings.Instance.SecondSong);
                                         LogHelper.Print("第三首：" + BardSettings.Instance.ThirdSong);
                                     }
-                                } 
+                                }
                                 else
                                 {
                                     LogHelper.Print("正常歌轴顺序，可以启用强对齐和对齐旅神");
@@ -631,7 +630,7 @@ public class BardRotationEntry : IRotationEntry
                 }
                 ImGui.EndCombo();
             }
-            
+
             ImGui.Checkbox("战斗开始时重置顺序：", ref BardSettings.Instance.ResetSongOrder);
             var songOrder = BardSettings.Instance.SongOrderOnReset;
 
@@ -640,27 +639,27 @@ public class BardRotationEntry : IRotationEntry
                 var song = songOrder[i];
                 string name = song switch
                 {
-                    Song.Wanderer => "旅神",
-                    Song.Mage => "贤者",
-                    Song.Army => "军神",
+                    Song.WanderersMinuet => "旅神",
+                    Song.MagesBallad => "贤者",
+                    Song.ArmysPaeon => "军神",
                     _ => song.ToString()
                 };
 
                 uint color = song switch
                 {
-                    Song.Wanderer => // 绿色
+                    Song.WanderersMinuet => // 绿色
                         ImGui.ColorConvertFloat4ToU32(new Vector4(0.3f, 0.9f, 0.35f, 1.0f)),
-                    Song.Army => // 黄色
+                    Song.ArmysPaeon => // 黄色
                         ImGui.ColorConvertFloat4ToU32(new Vector4(0.88f, 0.55f, 0.03f, 1.0f)),
-                    Song.Mage => // 蓝色
+                    Song.MagesBallad => // 蓝色
                         ImGui.ColorConvertFloat4ToU32(new Vector4(0.31f, 0.33f, 0.89f, 1.0f)),
                     _ => ImGui.ColorConvertFloat4ToU32(new Vector4(1f, 1f, 1f, 1f))
                 };
-                
-                float squareSize =  ImGui.GetFontSize() - 9; 
+
+                float squareSize = ImGui.GetFontSize() - 9;
                 Vector2 cursorPos = ImGui.GetCursorScreenPos(); // 当前光标屏幕位置
                 float squareY = cursorPos.Y + (ImGui.GetFontSize() - squareSize) / 2f; // 居中对齐
-                
+
                 // 绘制小圆角方块
                 ImGui.GetWindowDrawList().AddRectFilled(
                     new Vector2(cursorPos.X, squareY),
@@ -668,14 +667,14 @@ public class BardRotationEntry : IRotationEntry
                     color,
                     squareSize / 2f
                 );
-                
+
                 // 在颜色方块后面留出空隙
                 ImGui.SetCursorScreenPos(new Vector2(cursorPos.X + squareSize + 6f, cursorPos.Y));
 
                 // 用Selectable作为拖拽源（必须在源内定义SetPayload）
                 if (ImGui.Selectable($"{name}##song_{i}", false, ImGuiSelectableFlags.AllowDoubleClick, new Vector2(ImGui.GetFontSize() * 2, ImGui.GetFontSize())))
                 { }
-                
+
                 if (ImGui.IsItemHovered())
                 {
                     ImGui.BeginTooltip();
@@ -732,7 +731,7 @@ public class BardRotationEntry : IRotationEntry
                 {
                     Song.Wanderer => "旅神",
                     Song.Mage => "贤者",
-                    Song.Army => "军神",
+                    Song.ArmysPaeon => "军神",
                     _ => song.ToString()
                 };
 
@@ -752,7 +751,7 @@ public class BardRotationEntry : IRotationEntry
                         (BardSettings.Instance.SongOrderOnReset[i + 1], BardSettings.Instance.SongOrderOnReset[i]);
                 }
             }*/
-            
+
 
             ImGui.Separator();
             var opener = "";
@@ -794,7 +793,7 @@ public class BardRotationEntry : IRotationEntry
                     BardSettings.Instance.Opener = 5;
                 ImGui.EndCombo();
             }
-            
+
             if (BardSettings.Instance.Opener == 5)
             {
                 if (ImGui.Button("编辑自定义起手序列"))
@@ -834,7 +833,7 @@ public class BardRotationEntry : IRotationEntry
             ImGui.Text("是否播放欢迎语音 - 依赖插件");
             ImGui.SameLine();
             var dailyRoutinesLink = new Hyperlink("Daily Routines", "https://github.com/AtmoOmen/DalamudPlugins");
-            dailyRoutinesLink.Render();      
+            dailyRoutinesLink.Render();
             ImGui.Separator();
             if (ImGui.Button("保存设置"))
                 BardSettings.Instance.Save();
@@ -877,7 +876,7 @@ public class BardRotationEntry : IRotationEntry
                 BardSettings.Instance.Save();
             }
         }
-        
+
         ImGui.Separator();
         if (ImGui.CollapsingHeader("   时间轴更新"))
         {
@@ -934,7 +933,7 @@ public class BardRotationEntry : IRotationEntry
 
     private string searchQuery = "";
     private Dictionary<string, uint> matchingSkills = new Dictionary<string, uint>();
-    
+
     public void DrawQtDev(JobViewWindow jobViewWindow)
     {
         Vector3 vector3 = Core.Resolve<MemApiMove>().MousePos();
@@ -990,7 +989,7 @@ public class BardRotationEntry : IRotationEntry
         ImGui.Separator();
         ImGui.PopStyleColor(2);
     }
-    
+
     private void DrawCustomOpenerWindow()
     {
         if (!_showCustomOpenerWindow)

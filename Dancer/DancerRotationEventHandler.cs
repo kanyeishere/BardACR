@@ -6,11 +6,10 @@ using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.JobApi;
 using AEAssist.MemoryApi;
-using Wotou.Dancer.Data;
-using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.Command;
 using ECommons.DalamudServices;
 using Wotou.Common;
+using Wotou.Dancer.Data;
 using Wotou.Dancer.Setting;
 using Wotou.Dancer.Utility;
 
@@ -61,62 +60,50 @@ namespace Wotou.Dancer
             if (spell.Id == DancerDefinesData.Spells.TechnicalStep)
                 DancerBattleData.Instance.TechnicalStepCount++;
             if (spell.Id == DancerDefinesData.Spells.DanceOfTheDawn)
-                DancerBattleData.Instance.DanceOfTheDawnCount ++;
-            var nowUtc   = DateTime.UtcNow;
+                DancerBattleData.Instance.DanceOfTheDawnCount++;
+            var nowUtc = DateTime.UtcNow;
             var battleMs = AI.Instance.BattleData.CurrBattleTimeInMs;
-            var inWindow = _lastSpell != null 
-                           && _lastCastTime != DateTime.MinValue 
-                           && _lastSpell.IsAbility() 
-                           && spell.IsAbility() 
-                           && Core.Me.InCombat() 
-                           && battleMs > 0 
+            var inWindow = _lastSpell != null
+                           && _lastCastTime != DateTime.MinValue
+                           && _lastSpell.IsAbility()
+                           && spell.IsAbility()
+                           && Core.Me.InCombat()
+                           && battleMs > 0
                            && DancerSettings.Instance.IsDailyMode == false
                            && !DancerBattleData.Instance.EnableThreeOGcd
                            && (DancerDefinesData.Spells.TechnicalStep.GetSpell().Cooldown.TotalSeconds < 10 || DancerDefinesData.Spells.TechnicalStep.GetSpell().Cooldown.TotalSeconds > 100)
                            && (DancerDefinesData.Spells.Devilment.GetSpell().Cooldown.TotalSeconds < 10 || DancerDefinesData.Spells.Devilment.GetSpell().Cooldown.TotalSeconds > 100);
-            
+
             if (inWindow)
                 DancerBattleData.Instance.EnableThreeOGcd = !((nowUtc - _lastCastTime).TotalMilliseconds > 620);
-            
-            _lastSpell    = spell;
+
+            _lastSpell = spell;
             _lastCastTime = nowUtc;
         }
 
         public void OnBattleUpdate(int currTimeInMs)
         {
             SmartUseHighPrioritySlot();
-            
-            if (LowVipRestrictor.IsLowVip() 
+
+            if (LowVipRestrictor.IsLowVip()
                 && DancerSettings.Instance.IsDailyMode == false
                 && (SettingMgr.GetSetting<GeneralSettings>().OptimizeGcd == false
-                    || DancerBattleData.Instance.EnableThreeOGcd == false 
-                    || SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3
-                    || SettingMgr.GetSetting<GeneralSettings>().Ping > 10 
-                    || SettingMgr.GetSetting<GeneralSettings>().Ping < 5
-                    || SettingMgr.GetSetting<GeneralSettings>().MaxAbilityTimesInGcd != 2)
+                    || DancerBattleData.Instance.EnableThreeOGcd == false
+                    || SettingMgr.GetSetting<GeneralSettings>().Ping > 10
+                    || SettingMgr.GetSetting<GeneralSettings>().Ping < 5)
                 )
             {
                 if (SettingMgr.GetSetting<GeneralSettings>().OptimizeGcd == false
-                    || SettingMgr.GetSetting<GeneralSettings>().Ping > 10 
+                    || SettingMgr.GetSetting<GeneralSettings>().Ping > 10
                     || SettingMgr.GetSetting<GeneralSettings>().Ping < 5)
                 {
-                    ChatHelper.Print.ErrorMessage("[警告] 请开启“优化 GCD 偏移”，并将数值设为 5 到 10（含 5 和 10） <se.2>");
+                    Core.Resolve<MemApiChatMessage>().PrintPluginErrorMessage("[警告] 请开启“优化 GCD 偏移”，并将数值设为 5 到 10（含 5 和 10） <se.2>");
                     ChatHelper.SendMessage("/e [警告] 请开启“优化 GCD 偏移”，并将数值设为 5 到 10（含 5 和 10） <se.2>");
-                }
-                if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3)
-                {
-                    ChatHelper.Print.ErrorMessage("[警告] 请关闭全局能力技能不卡 GCD <se.2>");
-                    ChatHelper.SendMessage("/e [警告] 请关闭全局能力技能不卡 GCD <se.2>");
                 }
                 if (DancerBattleData.Instance.EnableThreeOGcd == false)
                 {
-                    ChatHelper.Print.ErrorMessage("[警告] 请开启 FuckAnimation 三插设置，并且检查网络延迟 <se.2>");
+                    Core.Resolve<MemApiChatMessage>().PrintPluginErrorMessage("[警告] 请开启 FuckAnimation 三插设置，并且检查网络延迟 <se.2>");
                     ChatHelper.SendMessage("/e [警告] 请开启 FuckAnimation 三插设置，并且检查网络延迟 <se.2>");
-                }
-                if (SettingMgr.GetSetting<GeneralSettings>().MaxAbilityTimesInGcd != 2)
-                {
-                    ChatHelper.Print.ErrorMessage("[警告] 请在 AE-ACR设置中修改 Gcd 内最大能力技数量为 2 <se.2>");
-                    ChatHelper.SendMessage("/e [警告] 请在 AE-ACR设置中修改 Gcd 内最大能力技数量为 2 <se.2>");
                 }
             }
             if (DancerBattleData.Instance.LastWarningTime == 0)
@@ -125,15 +112,15 @@ namespace Wotou.Dancer
             var standardStepSpell = Core.Resolve<MemApiSpell>().CheckActionChange(DancerDefinesData.Spells.StandardStep).GetSpell();
             var technicalStepSpell = DancerDefinesData.Spells.TechnicalStep.GetSpell();
             var target = Core.Me.GetCurrTarget();
-            if (((standardStepSpell.Cooldown.TotalMilliseconds < 5000 && 
+            if (((standardStepSpell.Cooldown.TotalMilliseconds < 5000 &&
                   standardStepSpell.IsUnlock() &&
                   DancerRotationEntry.QT.GetQt(QTKey.StandardStep)) ||
                  (technicalStepSpell.Cooldown.TotalMilliseconds < 5000 &&
                   technicalStepSpell.IsUnlock() &&
                   DancerRotationEntry.QT.GetQt(QTKey.TechnicalStep))) &&
-                target != null && 
+                target != null &&
                 Core.Me.Distance(target) > 15 &&
-                DancerSettings.Instance.DanceDistanceWarning 
+                DancerSettings.Instance.DanceDistanceWarning
                 &&
                 currTimeInMs - DancerBattleData.Instance.LastWarningTime >= 10000
                 ) // 10秒内不重复提醒
@@ -148,29 +135,23 @@ namespace Wotou.Dancer
         {
             try
             {
-                if (SettingMgr.GetSetting<GeneralSettings>().NoClipGCD3)
-                {
-                    Core.Resolve<MemApiChatMessage>()
-                        .Toast2("欢迎使用窝头的舞者ACR\n请关闭全局能力技能不卡GCD\n打开此设置会导致本ACR产生能力技插入问题", 1, 5000);
-                    LogHelper.PrintError("警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
-                }
-                else if (DancerSettings.Instance.WelcomeVoice)
-                    Core.Resolve<MemApiChatMessage>()
-                        .Toast2("欢迎使用窝头的舞者ACR", 1, 5000);
-            } catch (MissingFieldException ex)
+                if (DancerSettings.Instance.WelcomeVoice)
+                    Core.Resolve<MemApiChatMessage>().Toast2("欢迎使用窝头的舞者ACR", 1, 5000);
+            }
+            catch (MissingFieldException ex)
             {
                 Core.Resolve<MemApiChatMessage>()
                     .Toast2("欢迎使用窝头的舞者ACR\n请关闭全局能力技能不卡GCD\n打开此设置会导致本ACR产生能力技插入问题", 1, 5000);
                 LogHelper.PrintError("警告，你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
-                ChatHelper.Print.ErrorMessage("[警告] 你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
+                Core.Resolve<MemApiChatMessage>().PrintPluginErrorMessage("[警告] 你开启了全局能力技能不卡GCD，请进入 AE悬浮图标->ACR->首页->设置->基础设置->能力技 中关闭 <se.1>");
             }
             if (DancerSettings.Instance.WelcomeVoice)
                 ChatHelper.SendMessage("/pdr tts 你好，欢迎你使用窝头舞者");
             if (SettingMgr.GetSetting<GeneralSettings>().OptimizeGcd == false
-                || SettingMgr.GetSetting<GeneralSettings>().Ping > 10 
+                || SettingMgr.GetSetting<GeneralSettings>().Ping > 10
                 || SettingMgr.GetSetting<GeneralSettings>().Ping < 5)
             {
-                ChatHelper.Print.ErrorMessage("[警告] 建议开启“优化 GCD 偏移”，并将数值设为 5 到 10（含 5 和 10）");
+                Core.Resolve<MemApiChatMessage>().PrintPluginErrorMessage("[警告] 建议开启“优化 GCD 偏移”，并将数值设为 5 到 10（含 5 和 10）");
             }
             try
             {
@@ -180,7 +161,7 @@ namespace Wotou.Dancer
             {
                 LogHelper.PrintError($"时间轴更新失败: {ex.Message}");
             }
-            
+
             try
             {
                 Svc.Commands.RemoveHandler("/Wotou_DNC");
@@ -188,7 +169,7 @@ namespace Wotou.Dancer
             catch (Exception) { }
             Svc.Commands.AddHandler("/Wotou_DNC", new CommandInfo(DancerCommandHandler));
         }
-        
+
         public void OnExitRotation()
         {
             Svc.Commands.RemoveHandler("/Wotou_DNC");
@@ -227,8 +208,8 @@ namespace Wotou.Dancer
 
         private static async void AutoDancePartner()
         {
-            if (!Core.Me.HasLocalPlayerAura(DancerDefinesData.Buffs.ClosedPosition) && 
-                PartyHelper.Party.Count > 1 && 
+            if (!Core.Me.HasLocalPlayerAura(DancerDefinesData.Buffs.ClosedPosition) &&
+                PartyHelper.Party.Count > 1 &&
                 // Core.Resolve<MemApiDuty>().InMission &&
                 !Core.Resolve<MemApiDuty>().IsOver &&
                 DancerDefinesData.Spells.ClosedPosition.IsUnlockWithCDCheck())
@@ -245,8 +226,9 @@ namespace Wotou.Dancer
                         targetPlayer = player;
                     }
                 }
-                if (!targetPlayer.IsDead) {
-                    await new Spell(DancerDefinesData.Spells.ClosedPosition,targetPlayer).Cast();
+                if (!targetPlayer.IsDead)
+                {
+                    await new Spell(DancerDefinesData.Spells.ClosedPosition, targetPlayer).Cast();
                 }
             }
         }
@@ -255,11 +237,11 @@ namespace Wotou.Dancer
         {
             DancerRotationEntry.UpdateDancerPartnerPanel();
             SmartUseHighPrioritySlot();
-            
+
             if (DancerSettings.Instance.IsDailyMode)
             {
                 DancerRotationEntry.QT.SetQt(QTKey.SmartAoeTarget, true);
-                
+
                 if (Core.Resolve<JobApi_Dancer>().IsDancing && DancerSettings.Instance.EnableAutoDancing)
                 {
                     if (Core.Me.HasLocalPlayerAura(DancerDefinesData.Buffs.StandardStep))
@@ -287,7 +269,7 @@ namespace Wotou.Dancer
 
                     }
                 }
-                
+
                 if (DancerSettings.Instance.EnableAutoDancing && Core.Resolve<MemApiDuty>().IsBoundByDuty())
                 {
                     var nearbyEnemies = TargetHelper.GetNearbyEnemyCount(30);
@@ -296,15 +278,15 @@ namespace Wotou.Dancer
                         await DancerDefinesData.Spells.StandardStep.GetSpell().Cast();
                     }
                 }
-                
-                if (DancerSettings.Instance.EnableAutoPeloton && 
-                    !Core.Resolve<JobApi_Dancer>().IsDancing && 
-                    !Core.Me.InCombat() && 
-                    Core.Me.IsMoving() && 
+
+                if (DancerSettings.Instance.EnableAutoPeloton &&
+                    !Core.Resolve<JobApi_Dancer>().IsDancing &&
+                    !Core.Me.InCombat() &&
+                    Core.Me.IsMoving() &&
                     !DancerDefinesData.Spells.Peloton.RecentlyUsed(5000))
                 {
-                    if ((!Core.Me.HasAura(DancerDefinesData.Buffs.Peloton) || 
-                         !Core.Me.HasMyAuraWithTimeleft(DancerDefinesData.Buffs.Peloton, 4000)) && 
+                    if ((!Core.Me.HasAura(DancerDefinesData.Buffs.Peloton) ||
+                         !Core.Me.HasMyAuraWithTimeleft(DancerDefinesData.Buffs.Peloton, 4000)) &&
                         !Core.Me.InCombat() && Core.Me.IsMoving())
                     {
                         if (_randomTime == 0 || TimeHelper.Now() > _randomTime)
@@ -313,7 +295,7 @@ namespace Wotou.Dancer
                     else
                         _randomTime = TimeHelper.Now() + RandomHelper.RandomInt(1000, 2000);
                 }
-                
+
                 if (DancerSettings.Instance.EnableAutoDancePartner)
                 {
                     AutoDancePartner();
@@ -333,14 +315,14 @@ namespace Wotou.Dancer
             DancerRotationEntry.UpdateDancerPartnerPanel();
             DancerBattleData.Instance = new DancerBattleData();
             //DancerRotationEntry.QT.Reset();
-            
+
             //重置扇舞保留层数
             DancerSettings.Instance.FanDanceSaveStack = 3;
-            
+
             _randomTime = 0;
             _lastSpell = null;
             _lastCastTime = DateTime.MinValue;
-            
+
             // 根据用户的自定义设置或默认值，重置所有 QT
             foreach (var def in DancerQtHotkeyRegistry.Qts) // [CHANGED]
             {
@@ -365,7 +347,7 @@ namespace Wotou.Dancer
         {
             DancerRotationEntry.UpdateDancerPartnerPanel();
         }
-        
+
         private void DancerCommandHandler(string command, string args)
         {
             if (string.IsNullOrWhiteSpace(args))
@@ -402,7 +384,7 @@ namespace Wotou.Dancer
 
             ChatHelper.SendMessage($"未知参数: {args}");
         }
-        
+
         private void ExecuteHotkey(IHotkeyResolver? resolver)
         {
             if (resolver == null)
@@ -420,7 +402,7 @@ namespace Wotou.Dancer
                 LogHelper.Print("无法执行该快捷键命令，可能条件不满足或技能不可用。");
             }
         }
-        
+
         private void ToggleQtSetting(string qtKey)
         {
             bool currentValue = DancerRotationEntry.QT.GetQt(qtKey);
@@ -431,7 +413,7 @@ namespace Wotou.Dancer
 
         private void SmartUseHighPrioritySlot()
         {
-            if (Core.Resolve<MemApiCondition>().IsInCombat() && 
+            if (Core.Resolve<MemApiCondition>().IsInCombat() &&
                 Core.Me.GetCurrTarget() != null &&
                 Core.Me.GetCurrTarget().CanAttack())
                 DancerBattleData.Instance.HotkeyUseHighPrioritySlot = true;
