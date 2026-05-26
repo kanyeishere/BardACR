@@ -1043,7 +1043,10 @@ public class BardRotationEntry : IRotationEntry
         ImGui.Separator();
         if (ImGui.Button("+ 添加技能"))
         {
-            var defaultSkill = skillOptions.Count > 0 ? skillOptions[0].Id : 0u;
+            var preferredSkills = string.IsNullOrWhiteSpace(_customOpenerSearch)
+                ? skillOptions
+                : skillOptions.Where(skill => skill.DisplayName.Contains(_customOpenerSearch, StringComparison.OrdinalIgnoreCase)).ToList();
+            var defaultSkill = preferredSkills.Count > 0 ? preferredSkills[0].Id : (skillOptions.Count > 0 ? skillOptions[0].Id : 0u);
             current.Skills.Add(defaultSkill);
             updated = true;
         }

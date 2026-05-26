@@ -106,7 +106,10 @@ public class BardTriggerActionOpener : ITriggerAction
         ImGui.Separator();
         if (ImGui.SmallButton("+ 添加技能##trigger"))
         {
-            var defaultSkill = skillOptions.Count > 0 ? skillOptions[0].Id : 0u;
+            var preferredSkills = string.IsNullOrWhiteSpace(_search)
+                ? skillOptions
+                : skillOptions.Where(skill => skill.DisplayName.Contains(_search, StringComparison.OrdinalIgnoreCase)).ToList();
+            var defaultSkill = preferredSkills.Count > 0 ? preferredSkills[0].Id : (skillOptions.Count > 0 ? skillOptions[0].Id : 0u);
             presetRef.Skills.Add(defaultSkill);
         }
         ImGui.SameLine();
