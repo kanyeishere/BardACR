@@ -12,6 +12,11 @@ namespace Wotou.Bard.Setting;
 /// </summary>
 public class BardSettings
 {
+    public class CustomOpenerPreset
+    {
+        public string Name = "自定义起手";
+        public List<uint> Skills = new();
+    }
     public static BardSettings Instance;
 
     #region 标准模板代码 可以直接复制后改掉类名即可
@@ -61,7 +66,9 @@ public class BardSettings
     public int OpenerTime = 300; // 起手提前多少时间 （毫秒）
     public float HeartBreakSaveStack = 0f;     //碎心箭保留层数
     public bool WelcomeVoice = true; // 是否开启欢迎声音
-    public List<uint> CustomOpenerSkills = new(); // 自定义起手技能列表
+    public List<uint> CustomOpenerSkills = new(); // 兼容旧版本：自定义起手技能列表
+    public List<CustomOpenerPreset> CustomOpeners = new(); // 自定义起手预设列表
+    public int SelectedCustomOpenerIndex = 0; // 当前选中的自定义起手预设
 
     public int UseBattleVoiceBeforeGcdTimeInMs = 1350; //战斗之声和光明神在下个GCD前多久使用（毫秒）
     public int RagingStrikeBeforeGcdTime = 600; //猛者强击在下个GCD前多久使用（毫秒）
@@ -102,6 +109,16 @@ public class BardSettings
     /// </summary>
     public void InitializeQtValues()
     {
+        if (CustomOpeners.Count == 0)
+        {
+            CustomOpeners.Add(new CustomOpenerPreset
+            {
+                Name = "自定义起手1",
+                Skills = CustomOpenerSkills.Count > 0 ? new List<uint>(CustomOpenerSkills) : new List<uint>()
+            });
+        }
+        SelectedCustomOpenerIndex = Math.Clamp(SelectedCustomOpenerIndex, 0, CustomOpeners.Count - 1);
+
         foreach (var def in BardQtHotkeyRegistry.Qts)
         {
             if (!UserDefinedQtValues.ContainsKey(def.Key))
