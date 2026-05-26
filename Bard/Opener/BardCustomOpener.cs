@@ -14,7 +14,10 @@ public class BardCustomOpener : IOpener
 
     public BardCustomOpener()
     {
-        _skills = new List<uint>(BardSettings.Instance.CustomOpenerSkills);
+        var idx = Math.Clamp(BardSettings.Instance.SelectedCustomOpenerIndex, 0, BardSettings.Instance.CustomOpeners.Count - 1);
+        _skills = BardSettings.Instance.CustomOpeners.Count > 0
+            ? new List<uint>(BardSettings.Instance.CustomOpeners[idx].Skills)
+            : new List<uint>(BardSettings.Instance.CustomOpenerSkills);
         Sequence = BuildSequence(_skills);
     }
 
