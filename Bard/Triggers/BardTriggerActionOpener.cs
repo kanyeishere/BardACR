@@ -1,0 +1,129 @@
+using AEAssist.CombatRoutine.Trigger;
+using Dalamud.Bindings.ImGui;
+using Wotou.Bard.Data;
+using Wotou.Bard.Setting;
+
+namespace Wotou.Bard.Triggers;
+
+public class BardTriggerActionOpener : ITriggerAction
+{
+    public string DisplayName { get; } = "Bard/起手设置(含自定义编辑)";
+    public string Remark { get; set; } = "";
+
+    public int Opener;
+    public int SelectedCustomOpenerIndex;
+    private string _search = "";
+
+    public BardTriggerActionOpener()
+    {
+        Opener = BardSettings.Instance.Opener;
+        SelectedCustomOpenerIndex = BardSettings.Instance.SelectedCustomOpenerIndex;
+    }
+
+    public bool Draw()
+    {
+        string[] options =
+        [
+            "90-100级 3G团辅起手",
+            "90-100级 2G团辅起手",
+            "100级伊甸 3G团辅起手",
+            "70-80级 3G团辅起手",
+            "70级神兵 5G团辅起手",
+            "自定义起手"
+        ];
+
+        ImGui.Combo("起手选择", ref Opener, options, options.Length);
+
+        if (Opener == 5)
+            DrawCustomOpenerEditor();
+
+        return true;
+    }
+
+    public bool Handle()
+    {
+        BardSettings.Instance.Opener = Opener;
+        BardSettings.Instance.SelectedCustomOpenerIndex = Math.Clamp(SelectedCustomOpenerIndex, 0, Math.Max(0, BardSettings.Instance.CustomOpeners.Count - 1));
+        BardSettings.Instance.Save();
+        return true;
+    }
+
+    private void DrawCustomOpenerEditor()
+    {
+        var allSkills = BardDefinesData.SkillDictionary.OrderBy(skill => skill.Key).ToList();
+        if (BardSettings.Instance.CustomOpeners.Count == 0)
+            BardSettings.Instance.CustomOpeners.Add(new BardSettings.CustomOpenerPreset { Name = "自定义起手1" });
+
+        if (SelectedCustomOpenerIndex < 0 || SelectedCustomOpenerIndex >= BardSettings.Instance.CustomOpeners.Count)
+            SelectedCustomOpenerIndex = 0;
+
+        ImGui.Separator();
+        if (ImGui.SmallButton("+ 新增预设##trigger"))
+        {
+            BardSettings.Instance.CustomOpeners.Add(new BardSettings.CustomOpenerPreset
+            {
+                Name = $"自定义起手{BardSettings.Instance.CustomOpeners.Count + 1}"
+            });
+            SelectedCustomOpenerIndex = BardSettings.Instance.CustomOpeners.Count - 1;
+        }
+
+        var names = BardSettings.Instance.CustomOpeners.Select((preset, idx) =>
+            string.IsNullOrWhiteSpace(preset.Name) ? $"自定义起手{idx + 1}" : preset.Name).ToArray();
+        ImGui.Combo("自定义起手预设", ref SelectedCustomOpenerIndex, names, names.Length);
+
+        var presetRef = BardSettings.Instance.CustomOpeners[SelectedCustomOpenerIndex];
+        ImGui.InputText("预设名称", ref presetRef.Name, 64);
+        ImGui.SameLine();
+        if (ImGui.SmallButton("删除当前预设##trigger") && BardSettings.Instance.CustomOpeners.Count > 1)
+        {
+            BardSettings.Instance.CustomOpeners.RemoveAt(SelectedCustomOpenerIndex);
+            SelectedCustomOpenerIndex = Math.Clamp(SelectedCustomOpenerIndex, 0, BardSettings.Instance.CustomOpeners.Count - 1);
+            return;
+        }
+
+        ImGui.Separator();
+        if (ImGui.SmallButton("+ 添加技能##trigger"))
+        {
+            var defaultSkill = allSkills.Count > 0 ? allSkills[0].Value : 0u;
+            presetRef.Skills.Add(defaultSkill);
+        }
+        ImGui.SameLine();
+        ImGui.Text("搜索：");
+        ImGui.SameLine();
+        ImGui.SetNextItemWidth(220);
+        ImGui.InputText("##TriggerCustomOpenerSearch", ref _search, 100);
+
+        var filteredSkills = string.IsNullOrWhiteSpace(_search)
+            ? allSkills
+            : allSkills.Where(skill => skill.Key.Contains(_search, StringComparison.OrdinalIgnoreCase)).ToList();
+
+        for (var i = 0; i < presetRef.Skills.Count; i++)
+        {
+            var currentId = presetRef.Skills[i];
+            var current = allSkills.FirstOrDefault(skill => skill.Value == currentId);
+            var label = string.IsNullOrWhiteSpace(current.Key) ? $"未知技能({currentId})" : current.Key;
+
+            ImGui.PushID($"trigger_skill_{i}");
+            ImGui.SetNextItemWidth(300);
+            if (ImGui.BeginCombo("##skill", label))
+            {
+                foreach (var skill in filteredSkills)
+                {
+                    var isSelected = currentId == skill.Value;
+                    if (ImGui.Selectable(skill.Key, isSelected)) presetRef.Skills[i] = skill.Value;
+                    if (isSelected) ImGui.SetItemDefaultFocus();
+                }
+                ImGui.EndCombo();
+            }
+            ImGui.SameLine();
+            if (ImGui.SmallButton("删除"))
+            {
+                presetRef.Skills.RemoveAt(i);
+                ImGui.PopID();
+                i--;
+                continue;
+            }
+            ImGui.PopID();
+        }
+    }
+}
