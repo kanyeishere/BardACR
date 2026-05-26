@@ -72,6 +72,7 @@ public class BardRotationEntry : IRotationEntry
         rot.AddTriggerAction(new BardTriggerActionToggleDailyMode());
         rot.AddTriggerAction(new BardTriggerActionResetSongOrder());
         rot.AddTriggerAction(new BardTriggerActionPotionMode());
+        rot.AddTriggerAction(new BardTriggerActionOpener());
 
         // 添加时间轴控制
         rot.AddTriggerCondition(new BardSongTimerCondition());
@@ -796,9 +797,7 @@ public class BardRotationEntry : IRotationEntry
 
             if (BardSettings.Instance.Opener == 5)
             {
-                if (ImGui.Button("编辑自定义起手序列"))
-                    _showCustomOpenerWindow = true;
-                DrawCustomOpenerWindow();
+                DrawCustomOpenerEditor();
             }
 
             /*
@@ -990,93 +989,139 @@ public class BardRotationEntry : IRotationEntry
         ImGui.PopStyleColor(2);
     }
 
-    private void DrawCustomOpenerWindow()
+    public void DrawCustomOpenerEditor()
     {
-        if (!_showCustomOpenerWindow)
-            return;
+        var allSkills = BardDefinesData.SkillDictionary.OrderBy(skill => skill.Key).ToList();
+        var skillOptions = BuildSkillOptions(allSkills);
+        var updated = false;
 
-        var open = _showCustomOpenerWindow;
-        if (ImGui.Begin("自定义起手", ref open, ImGuiWindowFlags.AlwaysAutoResize))
+        if (BardSettings.Instance.CustomOpeners.Count == 0)
         {
-            var allSkills = BardDefinesData.SkillDictionary
-                .OrderBy(skill => skill.Key)
-                .ToList();
-            var updated = false;
-
-            if (BardSettings.Instance.CustomOpenerSkills.Count == 0)
-            {
-                var defaultSkill = allSkills.Count > 0 ? allSkills[0].Value : 0u;
-                BardSettings.Instance.CustomOpenerSkills.Add(defaultSkill);
-                updated = true;
-            }
-
-            if (ImGui.Button("+ 添加技能"))
-            {
-                var defaultSkill = allSkills.Count > 0 ? allSkills[0].Value : 0u;
-                BardSettings.Instance.CustomOpenerSkills.Add(defaultSkill);
-                updated = true;
-            }
-            ImGui.SameLine();
-            ImGui.Text("搜索技能：");
-            ImGui.SameLine();
-            ImGui.SetNextItemWidth(160);
-            ImGui.InputText("##CustomOpenerSearch", ref _customOpenerSearch, 100);
-
-            ImGui.Separator();
-
-            var lastIndex = BardSettings.Instance.CustomOpenerSkills.Count - 1;
-            for (var i = 0; i < BardSettings.Instance.CustomOpenerSkills.Count; i++)
-            {
-                var skillId = BardSettings.Instance.CustomOpenerSkills[i];
-                var filteredSkills = allSkills;
-                if (i == lastIndex && !string.IsNullOrWhiteSpace(_customOpenerSearch))
-                {
-                    filteredSkills = allSkills
-                        .Where(skill => skill.Key.Contains(_customOpenerSearch, StringComparison.OrdinalIgnoreCase))
-                        .ToList();
-                }
-
-                var currentSkill = allSkills.FirstOrDefault(skill => skill.Value == skillId);
-                var currentLabel = string.IsNullOrEmpty(currentSkill.Key)
-                    ? $"未知技能({skillId})"
-                    : currentSkill.Key;
-
-                ImGui.PushID(i);
-                ImGui.SetNextItemWidth(260);
-                if (ImGui.BeginCombo("##CustomOpenerSkill", currentLabel))
-                {
-                    foreach (var skill in filteredSkills)
-                    {
-                        var isSelected = skill.Value == skillId;
-                        if (ImGui.Selectable(skill.Key, isSelected))
-                        {
-                            BardSettings.Instance.CustomOpenerSkills[i] = skill.Value;
-                            updated = true;
-                        }
-                        if (isSelected)
-                            ImGui.SetItemDefaultFocus();
-                    }
-                    ImGui.EndCombo();
-                }
-
-                ImGui.SameLine();
-                if (ImGui.SmallButton("删除"))
-                {
-                    BardSettings.Instance.CustomOpenerSkills.RemoveAt(i);
-                    updated = true;
-                    ImGui.PopID();
-                    i--;
-                    continue;
-                }
-
-                ImGui.PopID();
-            }
-
-            if (updated)
-                BardSettings.Instance.Save();
+            BardSettings.Instance.CustomOpeners.Add(new BardSettings.CustomOpenerPreset { Name = "自定义起手1" });
+            BardSettings.Instance.SelectedCustomOpenerIndex = 0;
+            updated = true;
         }
 
-        ImGui.End();
-        _showCustomOpenerWindow = open;
+        ImGui.Text("自定义起手预设：");
+        ImGui.SameLine();
+        if (ImGui.SmallButton("+ 新增预设"))
+        {
+            BardSettings.Instance.CustomOpeners.Add(new BardSettings.CustomOpenerPreset
+            {
+                Name = $"自定义起手{BardSettings.Instance.CustomOpeners.Count + 1}"
+            });
+            BardSettings.Instance.SelectedCustomOpenerIndex = BardSettings.Instance.CustomOpeners.Count - 1;
+            updated = true;
+        }
+
+        for (var i = 0; i < BardSettings.Instance.CustomOpeners.Count; i++)
+        {
+            ImGui.PushID($"preset_{i}");
+            var selected = BardSettings.Instance.SelectedCustomOpenerIndex == i;
+            if (ImGui.RadioButton($"##select_{i}", selected))
+            {
+                BardSettings.Instance.SelectedCustomOpenerIndex = i;
+                updated = true;
+            }
+            ImGui.SameLine();
+            var preset = BardSettings.Instance.CustomOpeners[i];
+            ImGui.SetNextItemWidth(180);
+            if (ImGui.InputText("##preset_name", ref preset.Name, 64)) updated = true;
+            ImGui.SameLine();
+            if (ImGui.SmallButton("删除预设") && BardSettings.Instance.CustomOpeners.Count > 1)
+            {
+                BardSettings.Instance.CustomOpeners.RemoveAt(i);
+                BardSettings.Instance.SelectedCustomOpenerIndex = Math.Clamp(BardSettings.Instance.SelectedCustomOpenerIndex, 0, BardSettings.Instance.CustomOpeners.Count - 1);
+                updated = true;
+                ImGui.PopID();
+                break;
+            }
+            ImGui.PopID();
+        }
+
+        var current = BardSettings.Instance.CustomOpeners[Math.Clamp(BardSettings.Instance.SelectedCustomOpenerIndex, 0, BardSettings.Instance.CustomOpeners.Count - 1)];
+        ImGui.Separator();
+        if (ImGui.Button("+ 添加技能"))
+        {
+            var defaultSkill = skillOptions.Count > 0 ? skillOptions[0].Id : 0u;
+            current.Skills.Add(defaultSkill);
+            updated = true;
+        }
+
+        ImGui.SameLine();
+        ImGui.Text("搜索技能：");
+        ImGui.SameLine();
+        ImGui.SetNextItemWidth(200);
+        ImGui.InputText("##CustomOpenerSearch", ref _customOpenerSearch, 100);
+
+        var filteredSkills = string.IsNullOrWhiteSpace(_customOpenerSearch)
+            ? skillOptions
+            : skillOptions.Where(skill => skill.DisplayName.Contains(_customOpenerSearch, StringComparison.OrdinalIgnoreCase)).ToList();
+
+        ImGui.Separator();
+        for (var i = 0; i < current.Skills.Count; i++)
+        {
+            var skillId = current.Skills[i];
+            var currentLabel = GetPreferredSkillName(skillId);
+
+            ImGui.PushID($"skill_{i}");
+            ImGui.Text($"#{i + 1}");
+            ImGui.SameLine();
+            ImGui.SetNextItemWidth(280);
+            if (ImGui.BeginCombo("##CustomOpenerSkill", currentLabel))
+            {
+                foreach (var skill in filteredSkills)
+                {
+                    var isSelected = skill.Id == skillId;
+                    if (ImGui.Selectable(skill.DisplayName, isSelected))
+                    {
+                        current.Skills[i] = skill.Id;
+                        updated = true;
+                    }
+                    if (isSelected) ImGui.SetItemDefaultFocus();
+                }
+                ImGui.EndCombo();
+            }
+
+            ImGui.SameLine();
+            if (ImGui.SmallButton("删除"))
+            {
+                current.Skills.RemoveAt(i);
+                updated = true;
+                ImGui.PopID();
+                i--;
+                continue;
+            }
+            ImGui.PopID();
+        }
+
+        if (updated)
+            BardSettings.Instance.Save();
+    }
+
+    private static string GetPreferredSkillName(uint skillId)
+    {
+        var chinese = BardDefinesData.SkillDictionary
+            .Where(kv => kv.Value == skillId && ContainsChinese(kv.Key))
+            .Select(kv => kv.Key)
+            .FirstOrDefault();
+        if (!string.IsNullOrWhiteSpace(chinese)) return chinese;
+
+        var any = BardDefinesData.SkillDictionary.FirstOrDefault(kv => kv.Value == skillId).Key;
+        return string.IsNullOrWhiteSpace(any) ? $"未知技能({skillId})" : any;
+    }
+
+    private static List<(uint Id, string DisplayName)> BuildSkillOptions(List<KeyValuePair<string, uint>> allSkills)
+    {
+        return allSkills
+            .GroupBy(kv => kv.Value)
+            .Select(g => (Id: g.Key, DisplayName: g.Select(x => x.Key).FirstOrDefault(ContainsChinese) ?? g.First().Key))
+            .OrderBy(x => x.DisplayName)
+            .ToList();
+    }
+
+    private static bool ContainsChinese(string text)
+    {
+        return text.Any(ch => ch >= 0x4E00 && ch <= 0x9FFF);
     }
 }
