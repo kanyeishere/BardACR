@@ -992,7 +992,6 @@ public class BardRotationEntry : IRotationEntry
     public void DrawCustomOpenerEditor()
     {
         var allSkills = BardDefinesData.SkillDictionary.OrderBy(skill => skill.Key).ToList();
-        var skillOptions = BuildSkillOptions(allSkills);
         var updated = false;
 
         if (BardSettings.Instance.CustomOpeners.Count == 0)
@@ -1043,7 +1042,7 @@ public class BardRotationEntry : IRotationEntry
         ImGui.Separator();
         if (ImGui.Button("+ 添加技能"))
         {
-            var defaultSkill = skillOptions.Count > 0 ? skillOptions[0].Id : 0u;
+            var defaultSkill = allSkills.Count > 0 ? allSkills[0].Value : 0u;
             current.Skills.Add(defaultSkill);
             updated = true;
         }
@@ -1055,14 +1054,15 @@ public class BardRotationEntry : IRotationEntry
         ImGui.InputText("##CustomOpenerSearch", ref _customOpenerSearch, 100);
 
         var filteredSkills = string.IsNullOrWhiteSpace(_customOpenerSearch)
-            ? skillOptions
-            : skillOptions.Where(skill => skill.DisplayName.Contains(_customOpenerSearch, StringComparison.OrdinalIgnoreCase)).ToList();
+            ? allSkills
+            : allSkills.Where(skill => skill.Key.Contains(_customOpenerSearch, StringComparison.OrdinalIgnoreCase)).ToList();
 
         ImGui.Separator();
         for (var i = 0; i < current.Skills.Count; i++)
         {
             var skillId = current.Skills[i];
-            var currentLabel = GetPreferredSkillName(skillId);
+            var currentSkill = allSkills.FirstOrDefault(skill => skill.Value == skillId);
+            var currentLabel = string.IsNullOrEmpty(currentSkill.Key) ? $"未知技能({skillId})" : currentSkill.Key;
 
             ImGui.PushID($"skill_{i}");
             ImGui.Text($"#{i + 1}");
@@ -1072,10 +1072,10 @@ public class BardRotationEntry : IRotationEntry
             {
                 foreach (var skill in filteredSkills)
                 {
-                    var isSelected = skill.Id == skillId;
-                    if (ImGui.Selectable(skill.DisplayName, isSelected))
+                    var isSelected = skill.Value == skillId;
+                    if (ImGui.Selectable(skill.Key, isSelected))
                     {
-                        current.Skills[i] = skill.Id;
+                        current.Skills[i] = skill.Value;
                         updated = true;
                     }
                     if (isSelected) ImGui.SetItemDefaultFocus();
@@ -1097,31 +1097,5 @@ public class BardRotationEntry : IRotationEntry
 
         if (updated)
             BardSettings.Instance.Save();
-    }
-
-    private static string GetPreferredSkillName(uint skillId)
-    {
-        var chinese = BardDefinesData.SkillDictionary
-            .Where(kv => kv.Value == skillId && ContainsChinese(kv.Key))
-            .Select(kv => kv.Key)
-            .FirstOrDefault();
-        if (!string.IsNullOrWhiteSpace(chinese)) return chinese;
-
-        var any = BardDefinesData.SkillDictionary.FirstOrDefault(kv => kv.Value == skillId).Key;
-        return string.IsNullOrWhiteSpace(any) ? $"未知技能({skillId})" : any;
-    }
-
-    private static List<(uint Id, string DisplayName)> BuildSkillOptions(List<KeyValuePair<string, uint>> allSkills)
-    {
-        return allSkills
-            .GroupBy(kv => kv.Value)
-            .Select(g => (Id: g.Key, DisplayName: g.Select(x => x.Key).FirstOrDefault(ContainsChinese) ?? g.First().Key))
-            .OrderBy(x => x.DisplayName)
-            .ToList();
-    }
-
-    private static bool ContainsChinese(string text)
-    {
-        return text.Any(ch => ch >= 0x4E00 && ch <= 0x9FFF);
     }
 }

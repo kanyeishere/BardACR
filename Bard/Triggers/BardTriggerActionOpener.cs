@@ -42,16 +42,6 @@ public class BardTriggerActionOpener : ITriggerAction
 
     public bool Handle()
     {
-        if (Opener == 5 && BardSettings.Instance.CustomOpeners.Count > 0)
-        {
-            var idx = Math.Clamp(SelectedCustomOpenerIndex, 0, BardSettings.Instance.CustomOpeners.Count - 1);
-            var currentSkills = BardSettings.Instance.CustomOpeners[idx].Skills;
-            var duplicateIndex = FindSamePresetIndex(currentSkills, idx);
-            if (duplicateIndex >= 0)
-                idx = duplicateIndex;
-            SelectedCustomOpenerIndex = idx;
-        }
-
         BardSettings.Instance.Opener = Opener;
         BardSettings.Instance.SelectedCustomOpenerIndex = Math.Clamp(SelectedCustomOpenerIndex, 0, Math.Max(0, BardSettings.Instance.CustomOpeners.Count - 1));
         BardSettings.Instance.Save();
@@ -61,7 +51,6 @@ public class BardTriggerActionOpener : ITriggerAction
     private void DrawCustomOpenerEditor()
     {
         var allSkills = BardDefinesData.SkillDictionary.OrderBy(skill => skill.Key).ToList();
-        var skillOptions = BuildSkillOptions(allSkills);
         if (BardSettings.Instance.CustomOpeners.Count == 0)
             BardSettings.Instance.CustomOpeners.Add(new BardSettings.CustomOpenerPreset { Name = "自定义起手1" });
 
@@ -71,21 +60,11 @@ public class BardTriggerActionOpener : ITriggerAction
         ImGui.Separator();
         if (ImGui.SmallButton("+ 新增预设##trigger"))
         {
-            var newSkills = new List<uint>();
-            var sameIndex = FindSamePresetIndex(newSkills, -1);
-            if (sameIndex >= 0)
+            BardSettings.Instance.CustomOpeners.Add(new BardSettings.CustomOpenerPreset
             {
-                SelectedCustomOpenerIndex = sameIndex;
-            }
-            else
-            {
-                BardSettings.Instance.CustomOpeners.Add(new BardSettings.CustomOpenerPreset
-                {
-                    Name = $"自定义起手{BardSettings.Instance.CustomOpeners.Count + 1}",
-                    Skills = newSkills
-                });
-                SelectedCustomOpenerIndex = BardSettings.Instance.CustomOpeners.Count - 1;
-            }
+                Name = $"自定义起手{BardSettings.Instance.CustomOpeners.Count + 1}"
+            });
+            SelectedCustomOpenerIndex = BardSettings.Instance.CustomOpeners.Count - 1;
         }
 
         var names = BardSettings.Instance.CustomOpeners.Select((preset, idx) =>
@@ -105,7 +84,7 @@ public class BardTriggerActionOpener : ITriggerAction
         ImGui.Separator();
         if (ImGui.SmallButton("+ 添加技能##trigger"))
         {
-            var defaultSkill = skillOptions.Count > 0 ? skillOptions[0].Id : 0u;
+            var defaultSkill = allSkills.Count > 0 ? allSkills[0].Value : 0u;
             presetRef.Skills.Add(defaultSkill);
         }
         ImGui.SameLine();
@@ -115,13 +94,14 @@ public class BardTriggerActionOpener : ITriggerAction
         ImGui.InputText("##TriggerCustomOpenerSearch", ref _search, 100);
 
         var filteredSkills = string.IsNullOrWhiteSpace(_search)
-            ? skillOptions
-            : skillOptions.Where(skill => skill.DisplayName.Contains(_search, StringComparison.OrdinalIgnoreCase)).ToList();
+            ? allSkills
+            : allSkills.Where(skill => skill.Key.Contains(_search, StringComparison.OrdinalIgnoreCase)).ToList();
 
         for (var i = 0; i < presetRef.Skills.Count; i++)
         {
             var currentId = presetRef.Skills[i];
-            var label = GetPreferredSkillName(currentId);
+            var current = allSkills.FirstOrDefault(skill => skill.Value == currentId);
+            var label = string.IsNullOrWhiteSpace(current.Key) ? $"未知技能({currentId})" : current.Key;
 
             ImGui.PushID($"trigger_skill_{i}");
             ImGui.SetNextItemWidth(300);
@@ -129,8 +109,8 @@ public class BardTriggerActionOpener : ITriggerAction
             {
                 foreach (var skill in filteredSkills)
                 {
-                    var isSelected = currentId == skill.Id;
-                    if (ImGui.Selectable(skill.DisplayName, isSelected)) presetRef.Skills[i] = skill.Id;
+                    var isSelected = currentId == skill.Value;
+                    if (ImGui.Selectable(skill.Key, isSelected)) presetRef.Skills[i] = skill.Value;
                     if (isSelected) ImGui.SetItemDefaultFocus();
                 }
                 ImGui.EndCombo();
@@ -145,54 +125,5 @@ public class BardTriggerActionOpener : ITriggerAction
             }
             ImGui.PopID();
         }
-
-    }
-
-    private int FindSamePresetIndex(List<uint> skills, int excludeIndex)
-    {
-        for (var i = 0; i < BardSettings.Instance.CustomOpeners.Count; i++)
-        {
-            if (i == excludeIndex) continue;
-            var target = BardSettings.Instance.CustomOpeners[i].Skills;
-            if (target.Count != skills.Count) continue;
-
-            var same = true;
-            for (var j = 0; j < skills.Count; j++)
-            {
-                if (target[j] != skills[j])
-                {
-                    same = false;
-                    break;
-                }
-            }
-            if (same) return i;
-        }
-        return -1;
-    }
-
-    private string GetPreferredSkillName(uint skillId)
-    {
-        var chinese = BardDefinesData.SkillDictionary
-            .Where(kv => kv.Value == skillId && ContainsChinese(kv.Key))
-            .Select(kv => kv.Key)
-            .FirstOrDefault();
-        if (!string.IsNullOrWhiteSpace(chinese)) return chinese;
-
-        var any = BardDefinesData.SkillDictionary.FirstOrDefault(kv => kv.Value == skillId).Key;
-        return string.IsNullOrWhiteSpace(any) ? $"未知技能({skillId})" : any;
-    }
-
-    private List<(uint Id, string DisplayName)> BuildSkillOptions(List<KeyValuePair<string, uint>> allSkills)
-    {
-        return allSkills
-            .GroupBy(kv => kv.Value)
-            .Select(g => (Id: g.Key, DisplayName: g.Select(x => x.Key).FirstOrDefault(ContainsChinese) ?? g.First().Key))
-            .OrderBy(x => x.DisplayName)
-            .ToList();
-    }
-
-    private static bool ContainsChinese(string text)
-    {
-        return text.Any(ch => ch >= 0x4E00 && ch <= 0x9FFF);
     }
 }
