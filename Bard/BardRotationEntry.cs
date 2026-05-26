@@ -992,6 +992,7 @@ public class BardRotationEntry : IRotationEntry
     public void DrawCustomOpenerEditor()
     {
         var allSkills = BardDefinesData.SkillDictionary.OrderBy(skill => skill.Key).ToList();
+        var skillOptions = BardSkillDisplayHelper.BuildSkillOptions(allSkills);
         var updated = false;
 
         if (BardSettings.Instance.CustomOpeners.Count == 0)
@@ -1042,7 +1043,7 @@ public class BardRotationEntry : IRotationEntry
         ImGui.Separator();
         if (ImGui.Button("+ 添加技能"))
         {
-            var defaultSkill = allSkills.Count > 0 ? allSkills[0].Value : 0u;
+            var defaultSkill = skillOptions.Count > 0 ? skillOptions[0].Id : 0u;
             current.Skills.Add(defaultSkill);
             updated = true;
         }
@@ -1054,15 +1055,14 @@ public class BardRotationEntry : IRotationEntry
         ImGui.InputText("##CustomOpenerSearch", ref _customOpenerSearch, 100);
 
         var filteredSkills = string.IsNullOrWhiteSpace(_customOpenerSearch)
-            ? allSkills
-            : allSkills.Where(skill => skill.Key.Contains(_customOpenerSearch, StringComparison.OrdinalIgnoreCase)).ToList();
+            ? skillOptions
+            : skillOptions.Where(skill => skill.DisplayName.Contains(_customOpenerSearch, StringComparison.OrdinalIgnoreCase)).ToList();
 
         ImGui.Separator();
         for (var i = 0; i < current.Skills.Count; i++)
         {
             var skillId = current.Skills[i];
-            var currentSkill = allSkills.FirstOrDefault(skill => skill.Value == skillId);
-            var currentLabel = string.IsNullOrEmpty(currentSkill.Key) ? $"未知技能({skillId})" : currentSkill.Key;
+            var currentLabel = BardSkillDisplayHelper.GetPreferredSkillName(skillId);
 
             ImGui.PushID($"skill_{i}");
             ImGui.Text($"#{i + 1}");
@@ -1072,10 +1072,10 @@ public class BardRotationEntry : IRotationEntry
             {
                 foreach (var skill in filteredSkills)
                 {
-                    var isSelected = skill.Value == skillId;
-                    if (ImGui.Selectable(skill.Key, isSelected))
+                    var isSelected = skill.Id == skillId;
+                    if (ImGui.Selectable(skill.DisplayName, isSelected))
                     {
-                        current.Skills[i] = skill.Value;
+                        current.Skills[i] = skill.Id;
                         updated = true;
                     }
                     if (isSelected) ImGui.SetItemDefaultFocus();
@@ -1098,4 +1098,5 @@ public class BardRotationEntry : IRotationEntry
         if (updated)
             BardSettings.Instance.Save();
     }
+
 }

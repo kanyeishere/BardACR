@@ -2,6 +2,7 @@ using AEAssist.CombatRoutine.Trigger;
 using Dalamud.Bindings.ImGui;
 using Wotou.Bard.Data;
 using Wotou.Bard.Setting;
+using Wotou.Bard.Utility;
 
 namespace Wotou.Bard.Triggers;
 
@@ -42,6 +43,16 @@ public class BardTriggerActionOpener : ITriggerAction
 
     public bool Handle()
     {
+        if (Opener == 5 && BardSettings.Instance.CustomOpeners.Count > 0)
+        {
+            var idx = Math.Clamp(SelectedCustomOpenerIndex, 0, BardSettings.Instance.CustomOpeners.Count - 1);
+            var currentSkills = BardSettings.Instance.CustomOpeners[idx].Skills;
+            var duplicateIndex = FindSamePresetIndex(currentSkills, idx);
+            if (duplicateIndex >= 0)
+                idx = duplicateIndex;
+            SelectedCustomOpenerIndex = idx;
+        }
+
         BardSettings.Instance.Opener = Opener;
         BardSettings.Instance.SelectedCustomOpenerIndex = Math.Clamp(SelectedCustomOpenerIndex, 0, Math.Max(0, BardSettings.Instance.CustomOpeners.Count - 1));
         BardSettings.Instance.Save();
@@ -51,6 +62,7 @@ public class BardTriggerActionOpener : ITriggerAction
     private void DrawCustomOpenerEditor()
     {
         var allSkills = BardDefinesData.SkillDictionary.OrderBy(skill => skill.Key).ToList();
+        var skillOptions = BardSkillDisplayHelper.BuildSkillOptions(allSkills);
         if (BardSettings.Instance.CustomOpeners.Count == 0)
             BardSettings.Instance.CustomOpeners.Add(new BardSettings.CustomOpenerPreset { Name = "自定义起手1" });
 
@@ -60,11 +72,21 @@ public class BardTriggerActionOpener : ITriggerAction
         ImGui.Separator();
         if (ImGui.SmallButton("+ 新增预设##trigger"))
         {
-            BardSettings.Instance.CustomOpeners.Add(new BardSettings.CustomOpenerPreset
+            var newSkills = new List<uint>();
+            var sameIndex = FindSamePresetIndex(newSkills, -1);
+            if (sameIndex >= 0)
             {
-                Name = $"自定义起手{BardSettings.Instance.CustomOpeners.Count + 1}"
-            });
-            SelectedCustomOpenerIndex = BardSettings.Instance.CustomOpeners.Count - 1;
+                SelectedCustomOpenerIndex = sameIndex;
+            }
+            else
+            {
+                BardSettings.Instance.CustomOpeners.Add(new BardSettings.CustomOpenerPreset
+                {
+                    Name = $"自定义起手{BardSettings.Instance.CustomOpeners.Count + 1}",
+                    Skills = newSkills
+                });
+                SelectedCustomOpenerIndex = BardSettings.Instance.CustomOpeners.Count - 1;
+            }
         }
 
         var names = BardSettings.Instance.CustomOpeners.Select((preset, idx) =>
@@ -84,7 +106,7 @@ public class BardTriggerActionOpener : ITriggerAction
         ImGui.Separator();
         if (ImGui.SmallButton("+ 添加技能##trigger"))
         {
-            var defaultSkill = allSkills.Count > 0 ? allSkills[0].Value : 0u;
+            var defaultSkill = skillOptions.Count > 0 ? skillOptions[0].Id : 0u;
             presetRef.Skills.Add(defaultSkill);
         }
         ImGui.SameLine();
@@ -94,14 +116,13 @@ public class BardTriggerActionOpener : ITriggerAction
         ImGui.InputText("##TriggerCustomOpenerSearch", ref _search, 100);
 
         var filteredSkills = string.IsNullOrWhiteSpace(_search)
-            ? allSkills
-            : allSkills.Where(skill => skill.Key.Contains(_search, StringComparison.OrdinalIgnoreCase)).ToList();
+            ? skillOptions
+            : skillOptions.Where(skill => skill.DisplayName.Contains(_search, StringComparison.OrdinalIgnoreCase)).ToList();
 
         for (var i = 0; i < presetRef.Skills.Count; i++)
         {
             var currentId = presetRef.Skills[i];
-            var current = allSkills.FirstOrDefault(skill => skill.Value == currentId);
-            var label = string.IsNullOrWhiteSpace(current.Key) ? $"未知技能({currentId})" : current.Key;
+            var label = BardSkillDisplayHelper.GetPreferredSkillName(currentId);
 
             ImGui.PushID($"trigger_skill_{i}");
             ImGui.SetNextItemWidth(300);
@@ -109,8 +130,8 @@ public class BardTriggerActionOpener : ITriggerAction
             {
                 foreach (var skill in filteredSkills)
                 {
-                    var isSelected = currentId == skill.Value;
-                    if (ImGui.Selectable(skill.Key, isSelected)) presetRef.Skills[i] = skill.Value;
+                    var isSelected = currentId == skill.Id;
+                    if (ImGui.Selectable(skill.DisplayName, isSelected)) presetRef.Skills[i] = skill.Id;
                     if (isSelected) ImGui.SetItemDefaultFocus();
                 }
                 ImGui.EndCombo();
@@ -125,5 +146,29 @@ public class BardTriggerActionOpener : ITriggerAction
             }
             ImGui.PopID();
         }
+
     }
+
+    private int FindSamePresetIndex(List<uint> skills, int excludeIndex)
+    {
+        for (var i = 0; i < BardSettings.Instance.CustomOpeners.Count; i++)
+        {
+            if (i == excludeIndex) continue;
+            var target = BardSettings.Instance.CustomOpeners[i].Skills;
+            if (target.Count != skills.Count) continue;
+
+            var same = true;
+            for (var j = 0; j < skills.Count; j++)
+            {
+                if (target[j] != skills[j])
+                {
+                    same = false;
+                    break;
+                }
+            }
+            if (same) return i;
+        }
+        return -1;
+    }
+
 }
