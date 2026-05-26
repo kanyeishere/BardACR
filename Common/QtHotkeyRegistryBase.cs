@@ -1,5 +1,5 @@
 using System.Reflection;
-using AEAssist.CombatRoutine.View.JobView.HotkeyResolver;
+using AEAssist.CombatRoutine.View.JobView;
 
 namespace Wotou.Common;
 

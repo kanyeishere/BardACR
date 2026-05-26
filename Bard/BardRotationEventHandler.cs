@@ -376,14 +376,6 @@ public class BardRotationEventHandler : IRotationEventHandler
         {
             Core.Resolve<MemApiChatMessage>().PrintPluginErrorMessage("[警告] 建议开启“优化 GCD 偏移”，并将数值设为 5 到 10（含 5 和 10）");
         }
-        try
-        {
-            await TimeLineUpdater.UpdateFiles("https://raw.githubusercontent.com/kanyeishere/ACR-Timeline/refs/heads/main/Wotou-BardMaster.json", BardSettings.Instance.SelectedTimeLinesForUpdate);
-        }
-        catch (Exception ex)
-        {
-            LogHelper.PrintError($"时间轴更新失败: {ex.Message}");
-        }
 
         try
         {
