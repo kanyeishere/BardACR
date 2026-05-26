@@ -32,6 +32,7 @@ public class DancerRotationEntry : IRotationEntry
     public static HotkeyWindow? DancePartnerPanel { get; set; }
     
     public static HotkeyWindow? EnAvantPanel { get; set; }
+
     
     public string AuthorName { get; set; } = "Wotou";
     
@@ -145,56 +146,23 @@ public class DancerRotationEntry : IRotationEntry
         // JobViewSave是AE底层提供的QT设置存档类 在你自己的设置里定义即可
         // 第二个参数是你设置文件的Save类 第三个参数是QT窗口标题
         QT = new JobViewWindow(DancerSettings.Instance.JobViewSave, DancerSettings.Instance.Save, "Wotou");
-        
-        var myJobViewSave = new JobViewSave();
-        myJobViewSave.ShowHotkey = DancerSettings.Instance.ShowDancePartnerPanel;
-        myJobViewSave.QtHotkeySize = new Vector2(DancerSettings.Instance.DancePartnerPanelIconSize, DancerSettings.Instance.DancePartnerPanelIconSize);
-        DancePartnerPanel = new HotkeyWindow(myJobViewSave, "Custom DNC HotkeyWindow");
-        
-        var enAvantJobViewSave = new JobViewSave();
-        enAvantJobViewSave.ShowHotkey = DancerSettings.Instance.ShowEnAvantPanel;
-        enAvantJobViewSave.ShowHotkey = false;
-        enAvantJobViewSave.QtHotkeySize = new Vector2(DancerSettings.Instance.EnAvantPanelIconSize, DancerSettings.Instance.EnAvantPanelIconSize);
-        EnAvantPanel = new HotkeyWindow(enAvantJobViewSave, "Custom DNC En Avant HotkeyWindow");
+        EnsureDancePartnerPanel();
+        EnsureEnAvantPanel();
 
         // 创建 JobViewWindow 并传递回调
         //var QT2 = new JobViewWindow(DancerSettings.Instance.JobViewSave, DancerSettings.Instance.Save, "Wotou");
 
         // 为 JobViewWindow 设置 UpdateAction 来渲染 HotkeyWindow2
         QT.SetUpdateAction(() =>
-        {   
+        {
+            EnsureDancePartnerPanel();
             UpdateDancerPartnerPanel();
-            var viewSave = new JobViewSave();
-            viewSave.QtHotkeySize = new Vector2(DancerSettings.Instance.DancePartnerPanelIconSize, DancerSettings.Instance.DancePartnerPanelIconSize);
-            viewSave.ShowHotkey = DancerSettings.Instance.ShowDancePartnerPanel;
-            viewSave.LockWindow = DancerSettings.Instance.isDancePartnerPanelLocked;
-            DancePartnerPanel.DrawHotkeyWindow(new QtStyle(DancerSettings.Instance.JobViewSave));
-            DancePartnerPanel = new HotkeyWindow(viewSave, "Custom DNC HotkeyWindow");
-            DancePartnerPanel.HotkeyLineCount = 1;
-            
-            
-            EnAvantPanel.AddHotkey("前冲步 - 左上", new EnAvantHotkeyResolver(225f * MathF.PI / 180f)); // ⬉ 西北 (45° → 225°)
-            EnAvantPanel.AddHotkey("前冲步 - 上", new EnAvantHotkeyResolver(180f * MathF.PI / 180f));  // ⬆ 北 (0° → 180°)
-            EnAvantPanel.AddHotkey("前冲步 - 右上", new EnAvantHotkeyResolver(135f * MathF.PI / 180f)); // ⬈ 东北 (315° → 135°)
+            DancePartnerPanel?.DrawHotkeyWindow(new QtStyle(DancerSettings.Instance.JobViewSave));
 
-            EnAvantPanel.AddHotkey("前冲步 - 左", new EnAvantHotkeyResolver(270f * MathF.PI / 180f));  // ⬅ 西 (90° → 270°)
-            EnAvantPanel.AddHotkey("前冲步 - 人物面向", new MyNormalSpellHotKeyResolver(DancerDefinesData.Spells.EnAvant, SpellTargetType.Self));
-            EnAvantPanel.AddHotkey("前冲步 - 右", new EnAvantHotkeyResolver(90f * MathF.PI / 180f));   // ➡ 东 (270° → 90°)
+            EnsureEnAvantPanel();
+            UpdateEnAvantPanel();
+            EnAvantPanel?.DrawHotkeyWindow(new QtStyle(DancerSettings.Instance.JobViewSave));
 
-            EnAvantPanel.AddHotkey("前冲步 - 左下", new EnAvantHotkeyResolver(315f * MathF.PI / 180f)); // ⬋ 西南 (135° → 315°)
-            EnAvantPanel.AddHotkey("前冲步 - 下", new EnAvantHotkeyResolver(0f * MathF.PI / 180f));    // ⬇ 南 (180° → 0°)
-            EnAvantPanel.AddHotkey("前冲步 - 右下", new EnAvantHotkeyResolver(45f * MathF.PI / 180f));  // ⬊ 东南 (225° → 45°)
-
-            
-            var enAvantViewSave = new JobViewSave();
-            enAvantViewSave.QtHotkeySize = new Vector2(DancerSettings.Instance.EnAvantPanelIconSize, DancerSettings.Instance.EnAvantPanelIconSize);
-            enAvantViewSave.ShowHotkey = DancerSettings.Instance.ShowEnAvantPanel;
-            enAvantViewSave.ShowHotkey = false;
-            enAvantViewSave.LockWindow = DancerSettings.Instance.isEnAvantPanelLocked;
-            EnAvantPanel.DrawHotkeyWindow(new QtStyle(DancerSettings.Instance.JobViewSave));
-            EnAvantPanel = new HotkeyWindow(enAvantViewSave, "Custom DNC En Avant HotkeyWindow");
-            EnAvantPanel.HotkeyLineCount = 3;
-            
             if (!DancerSettings.Instance.IsReadInfoWindow08)
                 InfoWindow.Draw();
             if (DancerSettings.Instance.IsOpenCommandWindow)
@@ -221,6 +189,45 @@ public class DancerRotationEntry : IRotationEntry
         foreach (var hk in DancerQtHotkeyRegistry.Hotkeys) QT.AddHotkey(hk.LabelZh, hk.Factory());
     }
     
+
+    private static void EnsureDancePartnerPanel()
+    {
+        var settings = DancerSettings.Instance;
+        var viewSave = new JobViewSave
+        {
+            QtHotkeySize = new Vector2(settings.DancePartnerPanelIconSize, settings.DancePartnerPanelIconSize),
+            ShowHotkey = settings.ShowDancePartnerPanel,
+            LockWindow = settings.isDancePartnerPanelLocked
+        };
+
+        DancePartnerPanel = new HotkeyWindow(viewSave, "Custom DNC HotkeyWindow") { HotkeyLineCount = 1 };
+    }
+
+    private static void EnsureEnAvantPanel()
+    {
+        var settings = DancerSettings.Instance;
+        var viewSave = new JobViewSave
+        {
+            QtHotkeySize = new Vector2(settings.EnAvantPanelIconSize, settings.EnAvantPanelIconSize),
+            ShowHotkey = false,
+            LockWindow = settings.isEnAvantPanelLocked
+        };
+
+        EnAvantPanel = new HotkeyWindow(viewSave, "Custom DNC En Avant HotkeyWindow") { HotkeyLineCount = 3 };
+    }
+
+    private static void UpdateEnAvantPanel()
+    {
+        EnAvantPanel?.AddHotkey("前冲步 - 左上", new EnAvantHotkeyResolver(225f * MathF.PI / 180f));
+        EnAvantPanel?.AddHotkey("前冲步 - 上", new EnAvantHotkeyResolver(180f * MathF.PI / 180f));
+        EnAvantPanel?.AddHotkey("前冲步 - 右上", new EnAvantHotkeyResolver(135f * MathF.PI / 180f));
+        EnAvantPanel?.AddHotkey("前冲步 - 左", new EnAvantHotkeyResolver(270f * MathF.PI / 180f));
+        EnAvantPanel?.AddHotkey("前冲步 - 人物面向", new MyNormalSpellHotKeyResolver(DancerDefinesData.Spells.EnAvant, SpellTargetType.Self));
+        EnAvantPanel?.AddHotkey("前冲步 - 右", new EnAvantHotkeyResolver(90f * MathF.PI / 180f));
+        EnAvantPanel?.AddHotkey("前冲步 - 左下", new EnAvantHotkeyResolver(315f * MathF.PI / 180f));
+        EnAvantPanel?.AddHotkey("前冲步 - 下", new EnAvantHotkeyResolver(0f * MathF.PI / 180f));
+        EnAvantPanel?.AddHotkey("前冲步 - 右下", new EnAvantHotkeyResolver(45f * MathF.PI / 180f));
+    }
     public static void UpdateDancerPartnerPanel()
     {
         PartyHelper.UpdateAllies();

@@ -34,6 +34,7 @@ public class BardRotationEntry : IRotationEntry
 
     public static HotkeyWindow? WardensPaeanPanel { get; set; }
 
+
     public string AuthorName { get; set; } = "Wotou";
 
     private const string UpdateLog = "更新日志 0104" +
@@ -171,10 +172,7 @@ public class BardRotationEntry : IRotationEntry
         // 第二个参数是你设置文件的Save类 第三个参数是QT窗口标题
         QT = new JobViewWindow(BardSettings.Instance.JobViewSave, BardSettings.Instance.Save, "Wotou Bard 诗人");
 
-        var myJobViewSave = new JobViewSave();
-        myJobViewSave.ShowHotkey = BardSettings.Instance.ShowWardensPaeanPanel;
-        myJobViewSave.QtHotkeySize = new Vector2(BardSettings.Instance.WardensPaeanPanelIconSize, BardSettings.Instance.WardensPaeanPanelIconSize);
-        WardensPaeanPanel = new HotkeyWindow(myJobViewSave, "WardensPaeanPanel");
+        EnsureWardensPaeanPanel();
 
         QT.SetUpdateAction(OnUIUpdate); // 设置QT中的Update回调 不需要就不设置
 
@@ -211,20 +209,31 @@ public class BardRotationEntry : IRotationEntry
 
     public void OnUIUpdate()
     {
+        EnsureWardensPaeanPanel();
         UpdateWardensPaeanPanel();
-        var myJobViewSave = new JobViewSave();
-        myJobViewSave.ShowHotkey = BardSettings.Instance.ShowWardensPaeanPanel;
-        myJobViewSave.QtHotkeySize = new Vector2(BardSettings.Instance.WardensPaeanPanelIconSize, BardSettings.Instance.WardensPaeanPanelIconSize);
-        myJobViewSave.LockWindow = BardSettings.Instance.IsWardensPanelLocked;
         WardensPaeanPanel?.DrawHotkeyWindow(new QtStyle(BardSettings.Instance.JobViewSave));
-        WardensPaeanPanel = new HotkeyWindow(myJobViewSave, "WardensPaeanPanel");
-        WardensPaeanPanel.HotkeyLineCount = 1;
         if (!BardSettings.Instance.IsReadInfoWindow08)
             InfoWindow.Draw();
         if (BardSettings.Instance.IsOpenCommandWindow)
             BardCommandWindow.Draw();
     }
 
+
+    private static void EnsureWardensPaeanPanel()
+    {
+        var settings = BardSettings.Instance;
+        var save = new JobViewSave
+        {
+            ShowHotkey = settings.ShowWardensPaeanPanel,
+            QtHotkeySize = new Vector2(settings.WardensPaeanPanelIconSize, settings.WardensPaeanPanelIconSize),
+            LockWindow = settings.IsWardensPanelLocked
+        };
+
+        WardensPaeanPanel = new HotkeyWindow(save, "WardensPaeanPanel")
+        {
+            HotkeyLineCount = 1
+        };
+    }
     public static void UpdateWardensPaeanPanel()
     {
         PartyHelper.UpdateAllies();
