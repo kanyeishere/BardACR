@@ -131,7 +131,13 @@ public class DancerRotationEntry : IRotationEntry
 
     private static IOpener GetOpener(uint level)
     {
-        return new DNCStdOpener100();
+        return DancerSettings.Instance.SelectedOpenerType switch
+        {
+            1 => new DNCSimpleOpener100(),
+            2 => new DNCCustomOpener100(),
+            3 => null,
+            _ => new DNCStdOpener100(),
+        };
     }
     
     public IRotationUI GetRotationUI()
@@ -315,6 +321,21 @@ public class DancerRotationEntry : IRotationEntry
                 ImGui.Checkbox("自动舞伴（FA专用）", ref DancerSettings.Instance.EnableAutoDancePartnerInFullAutoMode);
             }
             
+            ImGui.Separator();
+            string[] openerOptions = ["标准起手", "简化起手", "自定义起手", "禁用起手"];
+            ImGui.Combo("起手方案", ref DancerSettings.Instance.SelectedOpenerType, openerOptions, openerOptions.Length);
+            if (DancerSettings.Instance.SelectedOpenerType == 2)
+            {
+                ImGui.Separator();
+                ImGui.Checkbox("自定义起手使用倒计时小舞", ref DancerSettings.Instance.CustomOpenerUseStandardStepCountdown);
+                ImGui.Checkbox("自定义起手允许起手吃药", ref DancerSettings.Instance.CustomOpenerUsePotion);
+
+                string[] finalActionOptions = ["双小舞收尾", "直接大舞"];
+                ImGui.Combo("自定义倒计时最后动作", ref DancerSettings.Instance.CustomOpenerFinalActionType, finalActionOptions, finalActionOptions.Length);
+
+                string[] firstGcdOptions = ["大舞", "百花", "小舞"];
+                ImGui.Combo("自定义起手首个GCD", ref DancerSettings.Instance.CustomOpenerFirstGcdActionType, firstGcdOptions, firstGcdOptions.Length);
+            }
             ImGui.Separator();
             UiHelper.RightInputInt("倒计时提前使用小舞", ref DancerSettings.Instance.OpenerStandardStepTime, 6500, 15000, "(毫秒)");
             ImGui.Separator();

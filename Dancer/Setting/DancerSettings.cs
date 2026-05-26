@@ -59,6 +59,11 @@ public class DancerSettings
 
     public int OpenerTime = 300; // 起手提前多少时间 （毫秒）
     public int OpenerStandardStepTime = 15000; // 起手标准舞时间
+    public int SelectedOpenerType = 0; // 0=标准起手,1=简化起手,2=自定义起手,3=禁用起手
+    public bool CustomOpenerUseStandardStepCountdown = true; // 自定义起手是否使用倒计时小舞
+    public bool CustomOpenerUsePotion = true; // 自定义起手是否允许起手吃药
+    public int CustomOpenerFinalActionType = 0; // 0=双小舞收尾,1=大舞
+    public int CustomOpenerFirstGcdActionType = 0; // 0=大舞,1=百花,2=小舞
     public int StandardStepCdTolerance = 1000; // 标准舞CD容差
     public int SaberDanceEspritThreshold = 70; //剑舞阈值
     public int TillanaEspritThreshold = 20; //提拉纳阈值
