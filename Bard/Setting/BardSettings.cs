@@ -2,7 +2,6 @@
 using AEAssist.Helper;
 using AEAssist.IO;
 using Dalamud.Game.ClientState.JobGauge.Enums;
-using Wotou.Common;
 
 namespace Wotou.Bard.Setting;
 
@@ -120,7 +119,13 @@ public class BardSettings
         }
         SelectedCustomOpenerIndex = Math.Clamp(SelectedCustomOpenerIndex, 0, CustomOpeners.Count - 1);
 
-        SettingsDefaults.EnsureQtDefaults(UserDefinedQtValues, BardQtHotkeyRegistry.Qts);
+        foreach (var def in BardQtHotkeyRegistry.Qts)
+        {
+            if (!UserDefinedQtValues.ContainsKey(def.Key))
+            {
+                UserDefinedQtValues[def.Key] = def.Default; // 只写默认值
+            }
+        }
     }
 
     public JobViewSave JobViewSave = new JobViewSave()
