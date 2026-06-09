@@ -75,6 +75,7 @@ public class BardRotationEntry : IRotationEntry
         rot.AddTriggerAction(new BardTriggerActionPotionMode());
         rot.AddTriggerAction(new BardTriggerActionOpener());
         rot.AddTriggerAction(new BardTriggerActionImitateGreenPlayer());
+        rot.AddTriggerAction(new BardTriggerActionTripleWeaveForDM());
 
         // 添加时间轴控制
         rot.AddTriggerCondition(new BardSongTimerCondition());
@@ -815,6 +816,11 @@ public class BardRotationEntry : IRotationEntry
             if (BardSettings.Instance.Opener == 5)
             {
                 DrawCustomOpenerEditor();
+            }
+
+            if (BardSettings.Instance.Opener == 6)
+            {
+                ImGui.Checkbox("旅神+双团辅三插", ref BardSettings.Instance.EnableTripleWeaveForDM);
             }
 
             /*
