@@ -20,20 +20,44 @@ public class BardTriggerActionOpener : ITriggerAction
         Opener = BardSettings.Instance.Opener;
         SelectedCustomOpenerIndex = BardSettings.Instance.SelectedCustomOpenerIndex;
     }
+    
+    private static readonly (string Label, int Value)[] OpenerOptions =
+    [
+        ("90-100级 3G团辅起手", 0),
+        ("90-100级 2G团辅起手", 1),
+        ("100级伊甸 3G团辅起手", 2),
+        ("100级DM 1G团辅起手", 6),
+        ("70-80级 3G团辅起手", 3),
+        ("70级神兵 5G团辅起手", 4),
+        ("自定义起手", 5)
+    ];
+
+    private static string GetOpenerLabel(int opener)
+    {
+        foreach (var option in OpenerOptions)
+        {
+            if (option.Value == opener)
+                return option.Label;
+        }
+
+        return OpenerOptions[0].Label;
+    }
 
     public bool Draw()
     {
-        string[] options =
-        [
-            "90-100级 3G团辅起手",
-            "90-100级 2G团辅起手",
-            "100级伊甸 3G团辅起手",
-            "70-80级 3G团辅起手",
-            "70级神兵 5G团辅起手",
-            "自定义起手"
-        ];
+        var currentLabel = GetOpenerLabel(Opener);
+        if (ImGui.BeginCombo("起手选择", currentLabel))
+        {
+            foreach (var option in OpenerOptions)
+            {
+                var selected = Opener == option.Value;
+                if (ImGui.Selectable(option.Label, selected))
+                    Opener = option.Value;
+                if (selected) ImGui.SetItemDefaultFocus();
+            }
+            ImGui.EndCombo();
+        }
 
-        ImGui.Combo("起手选择", ref Opener, options, options.Length);
 
         if (Opener == 5)
             DrawCustomOpenerEditor();

@@ -802,14 +802,14 @@ public class BardRotationEntry : IRotationEntry
                     BardSettings.Instance.Opener = 1;
                 if (ImGui.Selectable("100级伊甸 3G团辅起手"))
                     BardSettings.Instance.Opener = 2;
+                if (ImGui.Selectable("100级DM 1G团辅起手"))
+                    BardSettings.Instance.Opener = 6;
                 if (ImGui.Selectable("70-80级 3G团辅起手"))
                     BardSettings.Instance.Opener = 3;
                 if (ImGui.Selectable("70级神兵 5G团辅起手"))
                     BardSettings.Instance.Opener = 4;
                 if (ImGui.Selectable("自定义起手"))
                     BardSettings.Instance.Opener = 5;
-                if (ImGui.Selectable("100级DM 1G团辅起手"))
-                    BardSettings.Instance.Opener = 6;
                 ImGui.EndCombo();
             }
 
