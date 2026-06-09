@@ -5,7 +5,7 @@ using Wotou.Bard.Setting;
 
 namespace Wotou.Bard.SlotResolvers.Ability;
 
-public class BardTripleWeaveHW : ISlotResolver
+public class BardTripleWeaveDM : ISlotResolver
 {
     private const uint WanderersMinuet = BardDefinesData.Spells.TheWanderersMinuet;
     private const uint BattleVoice = BardDefinesData.Spells.BattleVoice;

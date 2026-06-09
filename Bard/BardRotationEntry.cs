@@ -789,7 +789,7 @@ public class BardRotationEntry : IRotationEntry
                     opener = "自定义起手";
                     break;
                 case 6:
-                    opener = "100级HM 1G团辅起手";
+                    opener = "100级DM 1G团辅起手";
                     break;
             }
 
@@ -807,7 +807,7 @@ public class BardRotationEntry : IRotationEntry
                     BardSettings.Instance.Opener = 4;
                 if (ImGui.Selectable("自定义起手"))
                     BardSettings.Instance.Opener = 5;
-                if (ImGui.Selectable("100级HM 1G团辅起手"))
+                if (ImGui.Selectable("100级DM 1G团辅起手"))
                     BardSettings.Instance.Opener = 6;
                 ImGui.EndCombo();
             }
