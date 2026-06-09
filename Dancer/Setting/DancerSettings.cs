@@ -1,6 +1,7 @@
 ﻿using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.Helper;
 using AEAssist.IO;
+using Wotou.Common;
 
 namespace Wotou.Dancer.Setting;
 
@@ -9,6 +10,12 @@ namespace Wotou.Dancer.Setting;
 /// 如果一些开关需要在战斗中调整 或者提供给时间轴操作 那就用QT
 /// 非开关类型的配置都放配置里 比如诗人绝峰能量配置
 /// </summary>
+public enum DancerOpenerType
+{
+    StandardStep,
+    TechnicalStep
+}
+
 public class DancerSettings
 {
     public static DancerSettings Instance;
@@ -57,8 +64,10 @@ public class DancerSettings
     public string DancePartnerMacroText =
         "/p <t> 欧尼酱， <t> 欧尼酱 <se.2>\n/p 阔咧[闭式舞姿]跌酷烈跌\n/p 要是 啊呐哒のCP西哒啦 发飙西奈哟呐\n/p pr...pr...哦依稀！~\n/p <t> 欧尼酱 一托库叽 [尝一口治疗之华尔兹]\n/p [倒吸气]<t> 欧尼酱~~ <se.7>\n/p 昂呐哒のCP莫西知道昂呐哒跟瓦大喜做[舞伴]\n/p 吃醋西奈哟呐~~\n/p <t> 欧尼酱[伶俐]给瓦大吸<se.6>\n/p 啊呐哒のCP莫西知道了不会揍瓦大喜吧~~\n/p 阔哇一呐~啊呐哒のCP 不像瓦大喜\n/p 塔哒[防守之桑巴]<t> 欧尼酱";
 
-    public int OpenerTime = 300; // 起手提前多少时间 （毫秒）
+    public DancerOpenerType OpenerType = DancerOpenerType.StandardStep; // 起手类型
+    public int OpenerTime = 300; // 开战前使用舞步结束的提前时间 （毫秒）
     public int OpenerStandardStepTime = 15000; // 起手标准舞时间
+    public int OpenerTechnicalStepTime = 7300; // 起手技巧舞时间
     public int StandardStepCdTolerance = 1000; // 标准舞CD容差
     public int SaberDanceEspritThreshold = 70; //剑舞阈值
     public int TillanaEspritThreshold = 20; //提拉纳阈值
@@ -93,13 +102,7 @@ public class DancerSettings
     /// </summary>
     public void InitializeQtValues()
     {
-        foreach (var def in DancerQtHotkeyRegistry.Qts)
-        {
-            if (!UserDefinedQtValues.ContainsKey(def.Key))
-            {
-                UserDefinedQtValues[def.Key] = def.Default; // 只写默认值
-            }
-        }
+        SettingsDefaults.EnsureQtDefaults(UserDefinedQtValues, DancerQtHotkeyRegistry.Qts);
     }
     
     public JobViewSave JobViewSave = new JobViewSave()
