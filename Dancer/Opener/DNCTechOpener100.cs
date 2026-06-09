@@ -65,7 +65,7 @@ namespace Wotou.Dancer.Opener
         private static void Step0(Slot slot)
         {
             slot.Add(DancerDefinesData.Spells.Devilment.GetSpell());
-            slot.Add(DancerDefinesData.Spells.Fountainfall.GetSpell());
+            slot.Add(DancerDefinesData.Spells.Cascade.GetSpell());
             slot.Add(DancerDefinesData.Spells.Flourish.GetSpell());
         }
     }
