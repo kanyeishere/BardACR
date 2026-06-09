@@ -347,7 +347,7 @@ public class DancerRotationEntry : IRotationEntry
             DrawOpenerTypeButton("大舞起手", DancerOpenerType.TechnicalStep);
             ImGui.Separator();
             if (DancerSettings.Instance.OpenerType == DancerOpenerType.StandardStep)
-                UiHelper.RightInputInt("倒计时提前使用小舞", ref DancerSettings.Instance.OpenerStandardStepTime, 6500, 15000, "(毫秒)");
+                UiHelper.RightInputInt("倒计时提前使用小舞", ref DancerSettings.Instance.OpenerStandardStepTime, 5500, 15000, "(毫秒)");
             else
                 UiHelper.RightInputInt("倒计时提前使用大舞", ref DancerSettings.Instance.OpenerTechnicalStepTime, 6500, 15000, "(毫秒)");
             ImGui.Separator();
