@@ -76,6 +76,7 @@ public class BardSettings
     public int PotionBeforeGcdTime = 700; // 爆发药水的动画持续时间（毫秒）
     public int GcdAnimationTime = 600; //GCD动画锁时间
                                        //public int EmpyrealArrowNotBeforeGcdTime = 500; // 九天连箭最晚在下个GCD前多久使用（毫秒）
+    public int GcdTimeAfterBuff = 650; // 从团辅释放到生效的时间（毫秒）
 
     public bool NaturesMinneWithRecitation = true; // 大地神对齐秘策
     public bool NaturesMinneWithZoe = true; // 大地神对齐活化
@@ -84,6 +85,8 @@ public class BardSettings
     public bool IsDailyMode = false; //false 表示高难模式，true 表示日随模式
     public bool ApplyDotOnTrashMobs = false; // 是否在小怪身上使用DOT
     public bool EnableAutoPeloton = true; // 是否在自动使用速行
+
+    public bool EnableTripleWeaveForDM = true;
 
     public bool ImitateGreenPlayer = false; // 是否模仿绿玩
 

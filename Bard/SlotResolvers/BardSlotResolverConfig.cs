@@ -35,6 +35,7 @@ public static class BardSlotResolverConfig
             new SlotResolverData(new BardSongMaxAbility(), SlotMode.OffGcd),
             new SlotResolverData(new BardPotionAbility(), SlotMode.OffGcd),
             new SlotResolverData(new BardRagingStrikesAbility(), SlotMode.OffGcd),
+            new SlotResolverData(new BardTripleWeaveDM(), SlotMode.OffGcd),
             new SlotResolverData(new BardBattleVoiceAndRadiantFinaleAbility(), SlotMode.OffGcd),
             new SlotResolverData(new BardPitchPerfectMaxAbility(), SlotMode.OffGcd),
             new SlotResolverData(new BardHeartBreakMaxChargeAbility(), SlotMode.OffGcd),

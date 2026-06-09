@@ -74,6 +74,7 @@ public class BardRotationEntry : IRotationEntry
         rot.AddTriggerAction(new BardTriggerActionResetSongOrder());
         rot.AddTriggerAction(new BardTriggerActionPotionMode());
         rot.AddTriggerAction(new BardTriggerActionOpener());
+        rot.AddTriggerAction(new BardTriggerActionImitateGreenPlayer());
 
         // 添加时间轴控制
         rot.AddTriggerCondition(new BardSongTimerCondition());
@@ -120,6 +121,8 @@ public class BardRotationEntry : IRotationEntry
                 return new Bard5GOpener70();
             case 5:
                 return new BardCustomOpener();
+            case 6:
+                return new Bard1GOpener100();
         }
         return new Bard3GOpener100();
     }
@@ -785,6 +788,9 @@ public class BardRotationEntry : IRotationEntry
                 case 5:
                     opener = "自定义起手";
                     break;
+                case 6:
+                    opener = "100级DM 1G团辅起手";
+                    break;
             }
 
             if (ImGui.BeginCombo("起手选择", opener))
@@ -801,6 +807,8 @@ public class BardRotationEntry : IRotationEntry
                     BardSettings.Instance.Opener = 4;
                 if (ImGui.Selectable("自定义起手"))
                     BardSettings.Instance.Opener = 5;
+                if (ImGui.Selectable("100级DM 1G团辅起手"))
+                    BardSettings.Instance.Opener = 6;
                 ImGui.EndCombo();
             }
 
@@ -862,6 +870,8 @@ public class BardRotationEntry : IRotationEntry
                 ref BardSettings.Instance.EmpyrealArrowNotBeforeGcdTime, 0, 2000, "(毫秒)");*/
             UiHelper.RightInputInt("GCD动画锁时间",
                 ref BardSettings.Instance.GcdAnimationTime, 300, 1000, "(毫秒)");
+            UiHelper.RightInputInt("从团辅释放到生效的时间",
+                ref BardSettings.Instance.GcdTimeAfterBuff, 300, 1000, "(毫秒)");
             ImGui.Separator();
             ImGui.Checkbox("显示快速光阴神面板", ref BardSettings.Instance.ShowWardensPaeanPanel);
             ImGuiHelper.LeftInputInt("光阴神面板图标大小", ref BardSettings.Instance.WardensPaeanPanelIconSize, 10, 80);
