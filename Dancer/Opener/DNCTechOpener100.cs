@@ -64,7 +64,6 @@ namespace Wotou.Dancer.Opener
 
         private static void Step0(Slot slot)
         {
-            slot.Add(DancerDefinesData.Spells.Devilment.GetSpell());
         }
     }
 }
