@@ -19,10 +19,10 @@ namespace Wotou.Bard.Triggers
 
         public bool Draw()
         {
-            ImGui.Checkbox("战斗开始时重置顺序", ref EnableReset);
+            ImGui.Checkbox("战斗开始时，将歌曲顺序重置", ref EnableReset);
 
             ImGui.Separator();
-            ImGui.Text("拖动图标设置顺序：");
+            ImGui.Text("拖动图标，设置歌曲重置的顺序：");
             ImGui.NewLine();
 
             for (var i = 0; i < SongOrder.Count; i++)

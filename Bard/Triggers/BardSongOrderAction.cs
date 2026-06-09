@@ -29,6 +29,7 @@ public class BardSongOrderAction : ITriggerAction, ITriggerBase
 
     public bool Draw()
     {
+        ImGui.TextColored(new Vector4(1, 0.7f, 0, 1), "当前歌曲顺序（运行到此节点时立即生效）");
         ImGui.Text("这个数值修改之后不会自动重置");
         ImGui.Text("如果要改的话建议战斗开始时加一个重置回默认的触发器");
 
