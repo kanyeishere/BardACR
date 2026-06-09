@@ -67,7 +67,7 @@ public class DancerSettings
     public DancerOpenerType OpenerType = DancerOpenerType.StandardStep; // 起手类型
     public int OpenerTime = 300; // 开战前使用舞步结束的提前时间 （毫秒）
     public int OpenerStandardStepTime = 15000; // 起手标准舞时间
-    public int OpenerTechnicalStepTime = 7300; // 起手技巧舞时间
+    public int OpenerTechnicalStepTime = 6300; // 起手技巧舞时间
     public int StandardStepCdTolerance = 1000; // 标准舞CD容差
     public int SaberDanceEspritThreshold = 70; //剑舞阈值
     public int TillanaEspritThreshold = 20; //提拉纳阈值
