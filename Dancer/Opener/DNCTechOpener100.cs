@@ -53,10 +53,10 @@ namespace Wotou.Dancer.Opener
         public void InitCountDown(CountDownHandler countDownHandler)
         {
             countDownHandler.AddAction(DancerSettings.Instance.OpenerTechnicalStepTime, DancerDefinesData.Spells.TechnicalStep);
-            countDownHandler.AddAction(DancerSettings.Instance.OpenerTechnicalStepTime - 1000, DancerUtil.GetStep);
+            countDownHandler.AddAction(DancerSettings.Instance.OpenerTechnicalStepTime - 1500, DancerUtil.GetStep);
             countDownHandler.AddAction(DancerSettings.Instance.OpenerTechnicalStepTime - 2500, DancerUtil.GetStep);
-            countDownHandler.AddAction(DancerSettings.Instance.OpenerTechnicalStepTime - 4000, DancerUtil.GetStep);
-            countDownHandler.AddAction(DancerSettings.Instance.OpenerTechnicalStepTime - 5500, DancerUtil.GetStep);
+            countDownHandler.AddAction(DancerSettings.Instance.OpenerTechnicalStepTime - 3500, DancerUtil.GetStep);
+            countDownHandler.AddAction(DancerSettings.Instance.OpenerTechnicalStepTime - 4500, DancerUtil.GetStep);
             if (DancerRotationEntry.QT.GetQt(QTKey.UsePotion) && DancerSettings.Instance.UsePotionInOpener)
                 countDownHandler.AddPotionAction(1000);
             countDownHandler.AddAction(DancerSettings.Instance.OpenerTime, DancerDefinesData.Spells.QuadrupleTechnicalFinish);
