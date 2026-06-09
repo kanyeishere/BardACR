@@ -42,7 +42,7 @@ public class BardBaseGcd : ISlotResolver
             return -1;
         
         // 团辅技能使用后不足 580ms
-        if (BattleVoice.RecentlyUsed(580) || RadiantFinale.RecentlyUsed(580))
+        if (BattleVoice.RecentlyUsed(BardSettings.Instance.GcdTimeAfterBuff) || RadiantFinale.RecentlyUsed(BardSettings.Instance.GcdTimeAfterBuff))
             return -2;
         
         // 新版强对齐
