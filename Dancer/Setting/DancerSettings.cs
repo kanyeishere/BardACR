@@ -1,6 +1,7 @@
 ﻿using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.Helper;
 using AEAssist.IO;
+using Wotou.Common;
 
 namespace Wotou.Dancer.Setting;
 
@@ -101,13 +102,7 @@ public class DancerSettings
     /// </summary>
     public void InitializeQtValues()
     {
-        foreach (var def in DancerQtHotkeyRegistry.Qts)
-        {
-            if (!UserDefinedQtValues.ContainsKey(def.Key))
-            {
-                UserDefinedQtValues[def.Key] = def.Default; // 只写默认值
-            }
-        }
+        SettingsDefaults.EnsureQtDefaults(UserDefinedQtValues, DancerQtHotkeyRegistry.Qts);
     }
     
     public JobViewSave JobViewSave = new JobViewSave()

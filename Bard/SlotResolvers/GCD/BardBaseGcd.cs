@@ -20,6 +20,7 @@ public class BardBaseGcd : ISlotResolver
     private const uint Shadowbite = BardDefinesData.Spells.Shadowbite;
     private const uint EmpyrealArrow = BardDefinesData.Spells.EmpyrealArrow;
     private const uint RadiantFinale = BardDefinesData.Spells.RadiantFinale;
+    private const uint BattleVoice = BardDefinesData.Spells.BattleVoice;
     
     private const uint HawkEyeBuff = BardDefinesData.Buffs.HawksEye;
     private const uint BarrageBuff = BardDefinesData.Buffs.Barrage;
@@ -39,6 +40,10 @@ public class BardBaseGcd : ISlotResolver
             BardRotationEntry.QT.GetQt(QTKey.EmpyrealArrow) &&
             !BardSettings.Instance.IsDailyMode)
             return -1;
+        
+        // 团辅技能使用后不足 580ms
+        if (BattleVoice.RecentlyUsed(580) || RadiantFinale.RecentlyUsed(580))
+            return -2;
         
         // 新版强对齐
         if (GCDHelper.GetGCDDuration() > 2100) //军神结束后重置
