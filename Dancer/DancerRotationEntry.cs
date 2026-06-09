@@ -131,7 +131,9 @@ public class DancerRotationEntry : IRotationEntry
 
     private static IOpener GetOpener(uint level)
     {
-        return new DNCStdOpener100();
+        return DancerSettings.Instance.OpenerType == DancerOpenerType.TechnicalStep
+            ? new DNCTechOpener100()
+            : new DNCStdOpener100();
     }
     
     public IRotationUI GetRotationUI()
@@ -253,6 +255,22 @@ public class DancerRotationEntry : IRotationEntry
             DancerSettings.Instance.IsDailyMode = isDailyMode;
     }
     
+
+    private void DrawOpenerTypeButton(string label, DancerOpenerType openerType)
+    {
+        bool isSelected = DancerSettings.Instance.OpenerType == openerType;
+        if (isSelected)
+            ImGui.PushStyleColor(ImGuiCol.Button, DancerSettings.Instance.JobViewSave.MainColor);
+
+        bool buttonClicked = ImGui.Button(label);
+
+        if (isSelected)
+            ImGui.PopStyleColor();
+
+        if (buttonClicked)
+            DancerSettings.Instance.OpenerType = openerType;
+    }
+
     public void DrawGeneral(JobViewWindow jobViewWindow)
     {
         ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0.0f, 0.0f, 0.0f, 0.0f));
@@ -316,9 +334,17 @@ public class DancerRotationEntry : IRotationEntry
             }
             
             ImGui.Separator();
-            UiHelper.RightInputInt("倒计时提前使用小舞", ref DancerSettings.Instance.OpenerStandardStepTime, 6500, 15000, "(毫秒)");
+            ImGui.Text("当前起手：" + (DancerSettings.Instance.OpenerType == DancerOpenerType.TechnicalStep ? "大舞起手" : "小舞起手"));
+            DrawOpenerTypeButton("小舞起手", DancerOpenerType.StandardStep);
+            ImGui.SameLine();
+            DrawOpenerTypeButton("大舞起手", DancerOpenerType.TechnicalStep);
             ImGui.Separator();
-            UiHelper.RightInputInt("倒计时提前使用起手", ref DancerSettings.Instance.OpenerTime, 0, 1000, "(毫秒)");
+            if (DancerSettings.Instance.OpenerType == DancerOpenerType.StandardStep)
+                UiHelper.RightInputInt("倒计时提前使用小舞", ref DancerSettings.Instance.OpenerStandardStepTime, 6500, 15000, "(毫秒)");
+            else
+                UiHelper.RightInputInt("倒计时提前使用大舞", ref DancerSettings.Instance.OpenerTechnicalStepTime, 6500, 15000, "(毫秒)");
+            ImGui.Separator();
+            UiHelper.RightInputInt("开战前使用舞步结束", ref DancerSettings.Instance.OpenerTime, 0, 1000, "(毫秒)");
             ImGui.Separator();
             UiHelper.RightInputInt("非爆发期使用剑舞", ref DancerSettings.Instance.SaberDanceEspritThreshold, 50, 100,"大于等于", 5);
             ImGui.Separator();
