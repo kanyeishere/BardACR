@@ -1,11 +1,13 @@
+using AEAssist;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Helper;
+using AEAssist.MemoryApi;
 using Wotou.Bard.Data;
 using Wotou.Bard.Setting;
 
 namespace Wotou.Bard.SlotResolvers.Ability;
 
-public class BardTripleWeaveDM : ISlotResolver
+public class BardDMTripleWeaveAbility : ISlotResolver
 {
     private const uint WanderersMinuet = BardDefinesData.Spells.TheWanderersMinuet;
     private const uint BattleVoice = BardDefinesData.Spells.BattleVoice;
@@ -19,6 +21,8 @@ public class BardTripleWeaveDM : ISlotResolver
             return -2;
         if (BattleVoice.GetSpell().Cooldown.TotalSeconds > 800)
             return -3;
+        if (Core.Resolve<MemApiZoneInfo>().GetCurrTerrId() != 1363) // DM Map ID
+            return -4;
         return 1;
     }
 
