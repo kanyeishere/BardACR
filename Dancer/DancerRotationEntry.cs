@@ -94,6 +94,7 @@ public class DancerRotationEntry : IRotationEntry
         rot.SetRotationEventHandler(new DancerRotationEventHandler());
         rot.AddOpener(GetOpener);
         rot.AddTriggerAction(new DancerTriggerActionNewQt());
+        rot.AddTriggerAction(new DancerTriggerActionOpener());
         rot.AddTriggerAction(new DancerTriggerActionQt());
         rot.AddTriggerAction(new DancerEspritSaveAction());
         rot.AddTriggerAction(new DancerTriggerActionEspritThreshold());
