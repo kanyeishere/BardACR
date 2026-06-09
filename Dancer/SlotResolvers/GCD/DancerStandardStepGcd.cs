@@ -13,6 +13,7 @@ public class DancerStandardStepGcd : ISlotResolver
 {
     private const uint StandardStep = DancerDefinesData.Spells.StandardStep;
     private const uint FinishingMove = DancerDefinesData.Spells.FinishingMove;
+    private const uint Flourish = DancerDefinesData.Spells.Flourish;
     
     private const uint FinishingMoveReady = DancerDefinesData.Buffs.FinishingMoveReady;
     private const uint Devilment = DancerDefinesData.Buffs.Devilment;
@@ -38,6 +39,13 @@ public class DancerStandardStepGcd : ISlotResolver
         if (Core.Me.HasAura(Devilment) &&
             !Core.Me.HasMyAuraWithTimeleft(Devilment, 3700) && 
             Core.Me.Level == 90)
+            return -1;
+
+        if (Core.Me.HasAura(Devilment) && 
+            Core.Me.HasAura(TechnicalFinish) && 
+            Flourish.GetSpell().IsReadyWithCanCast() &&
+            !Core.Me.HasAura(FinishingMoveReady) &&
+            AI.Instance.BattleData.CurrBattleTimeInMs < 9000)
             return -1;
         
         if (StandardStep.GetSpell().Cooldown.TotalMilliseconds <= DancerSettings.Instance.StandardStepCdTolerance)
