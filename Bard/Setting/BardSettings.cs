@@ -86,7 +86,7 @@ public class BardSettings
     public bool ApplyDotOnTrashMobs = false; // 是否在小怪身上使用DOT
     public bool EnableAutoPeloton = true; // 是否在自动使用速行
 
-    public bool EnableTripleWeaveForDM = true;
+    public bool EnableTripleWeaveForDM = false;
 
     public bool ImitateGreenPlayer = false; // 是否模仿绿玩
 
