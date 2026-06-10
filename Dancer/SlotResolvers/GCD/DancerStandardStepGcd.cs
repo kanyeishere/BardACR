@@ -41,11 +41,11 @@ public class DancerStandardStepGcd : ISlotResolver
             Core.Me.Level == 90)
             return -1;
 
-        if (Core.Me.HasAura(Devilment) && 
-            Core.Me.HasAura(TechnicalFinish) && 
-            Flourish.GetSpell().IsReadyWithCanCast() &&
+        if (Core.Me.HasAura(TechnicalFinish) && 
+            Core.Me.HasMyAuraWithTimeleft(TechnicalFinish, 12000) &&
+            Flourish.GetSpell().Cooldown.TotalMilliseconds <= 10000 &&
             !Core.Me.HasAura(FinishingMoveReady) &&
-            AI.Instance.BattleData.CurrBattleTimeInMs < 9000)
+            Core.Me.Level >= 96)
             return -1;
         
         if (StandardStep.GetSpell().Cooldown.TotalMilliseconds <= DancerSettings.Instance.StandardStepCdTolerance)

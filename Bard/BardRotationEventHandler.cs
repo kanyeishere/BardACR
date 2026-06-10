@@ -313,7 +313,7 @@ public class BardRotationEventHandler : IRotationEventHandler
                        && (BardDefinesData.Spells.RadiantFinale.GetSpell().Cooldown.TotalSeconds < 10 || BardDefinesData.Spells.RadiantFinale.GetSpell().Cooldown.TotalSeconds > 100);
 
         if (inWindow)
-            BardBattleData.Instance.EnableThreeOGcd = !((nowUtc - _lastCastTime).TotalMilliseconds > 620);
+            BardBattleData.Instance.EnableThreeOGcd = !((nowUtc - _lastCastTime).TotalMilliseconds > 625);
 
         _lastSpell = spell;
         _lastCastTime = nowUtc;

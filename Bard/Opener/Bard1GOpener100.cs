@@ -106,8 +106,8 @@ public class Bard1GOpener100 : IOpener
     if (BardRotationEntry.QT.GetQt("爆发药") && BardSettings.Instance.UsePotionInOpener)
     {
       slot.Add(Spell.CreatePotion());
-      slot.Add(RagingStrikes.GetSpell());
       slot.Add(GetHeartBreakSpell());
+      slot.Add(RagingStrikes.GetSpell());
       return;
     }
     slot.Add(GetHeartBreakSpell());
