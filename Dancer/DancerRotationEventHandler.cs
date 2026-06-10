@@ -75,7 +75,7 @@ namespace Wotou.Dancer
                            && (DancerDefinesData.Spells.Devilment.GetSpell().Cooldown.TotalSeconds < 10 || DancerDefinesData.Spells.Devilment.GetSpell().Cooldown.TotalSeconds > 100);
 
             if (inWindow)
-                DancerBattleData.Instance.EnableThreeOGcd = !((nowUtc - _lastCastTime).TotalMilliseconds > 620);
+                DancerBattleData.Instance.EnableThreeOGcd = !((nowUtc - _lastCastTime).TotalMilliseconds > 625);
 
             _lastSpell = spell;
             _lastCastTime = nowUtc;
