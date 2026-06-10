@@ -42,8 +42,8 @@ public class DancerStandardStepGcd : ISlotResolver
             return -1;
 
         if (Core.Me.HasAura(TechnicalFinish) && 
-            Core.Me.HasMyAuraWithTimeleft(TechnicalFinish, 12000) &&
-            Flourish.GetSpell().Cooldown.TotalMilliseconds <= 10000 &&
+            Core.Resolve<MemApiBuff>().GetAuraTimeleft(Core.Me,TechnicalFinish, true) - Flourish.GetSpell().Cooldown.TotalMilliseconds > 6000 &&
+            DancerRotationEntry.QT.GetQt(QTKey.Flourish) &&
             !Core.Me.HasAura(FinishingMoveReady) &&
             Core.Me.Level >= 96)
             return -1;
