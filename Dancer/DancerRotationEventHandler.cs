@@ -261,6 +261,11 @@ namespace Wotou.Dancer
 
                     }
                 }
+                
+                if (DancerSettings.Instance.EnableAutoDancePartner)
+                {
+                    AutoDancePartner();
+                }
 
                 if (DancerSettings.Instance.EnableAutoDancing && Core.Resolve<MemApiDuty>().IsBoundByDuty())
                 {
@@ -286,11 +291,6 @@ namespace Wotou.Dancer
                     }
                     else
                         _randomTime = TimeHelper.Now() + RandomHelper.RandomInt(1000, 2000);
-                }
-
-                if (DancerSettings.Instance.EnableAutoDancePartner)
-                {
-                    AutoDancePartner();
                 }
             }
 
