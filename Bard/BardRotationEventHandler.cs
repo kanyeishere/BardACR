@@ -26,7 +26,7 @@ public class BardRotationEventHandler : IRotationEventHandler
     private long _randomTime = 0;
     private Spell? _lastSpell = null;
     private DateTime _lastCastTime = DateTime.MinValue;
-    //private long _lastMoveCommandTime = 0;
+    
     private void HandleMovingToTarget()
     {
         if (!VNavAvailable()) return;
