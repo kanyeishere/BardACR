@@ -26,6 +26,7 @@ public class BardRotationEventHandler : IRotationEventHandler
     private long _randomTime = 0;
     private Spell? _lastSpell = null;
     private DateTime _lastCastTime = DateTime.MinValue;
+    private long _lastMoveCommandTime = 0;
     private void HandleMovingToTarget()
     {
         if (!VNavAvailable()) return;
@@ -34,8 +35,15 @@ public class BardRotationEventHandler : IRotationEventHandler
         const float offset = 1f;
         var targetPosition = (Vector3)instanceTargetPosition;
 
+        var now = TimeHelper.Now();
+        if (now - _lastMoveCommandTime < 500)
+            return;
+
+        _lastMoveCommandTime = now;
+        
         // Core.Resolve<MemApiMove>().MoveToTarget(targetPosition);
         // ChatHelper.SendMessage($"/vnav moveto {targetPosition.X} {targetPosition.Y} {targetPosition.Z}");
+        
         var navMoveTo = Svc.PluginInterface.GetIpcSubscriber<List<Vector3>, bool, object>("vnavmesh.Path.MoveTo");
         navMoveTo?.InvokeAction([targetPosition], false);
         var currentPos = Core.Me.Position;
