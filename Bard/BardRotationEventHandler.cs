@@ -64,6 +64,8 @@ public class BardRotationEventHandler : IRotationEventHandler
         SmartUseHighPrioritySlot();
         CancelMoving();
 
+        BardSettings.Instance.EnableTripleWeaveForDM = BardSettings.Instance.Opener == 6; // 100级DM 1G团辅起手
+
         if (!BardUtil.IsSongOrderNormal())
         {
             BardRotationEntry.QT.SetQt("对齐旅神", false);
