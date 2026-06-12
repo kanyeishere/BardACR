@@ -23,6 +23,10 @@ public class BardDMTripleWeaveAbility : ISlotResolver
             return -3;
         if (Core.Resolve<MemApiZoneInfo>().GetCurrTerrId() != 1363) // DM Map ID
             return -4;
+        if (!BardRotationEntry.QT.GetQt("爆发"))
+            return -5;
+        if (!BardRotationEntry.QT.GetQt("唱歌"))
+            return -6;
         return 1;
     }
 
