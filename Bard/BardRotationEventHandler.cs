@@ -63,6 +63,9 @@ public class BardRotationEventHandler : IRotationEventHandler
         BardRotationEntry.UpdateWardensPaeanPanel();
         SmartUseHighPrioritySlot();
         CancelMoving();
+        
+        if (Core.Resolve<MemApiZoneInfo>().GetCurrTerrId() == 1363)
+            BardSettings.Instance.EnableTripleWeaveForDM = BardSettings.Instance.Opener == 6; // 100级DM 1G团辅起手
 
         BardSettings.Instance.EnableTripleWeaveForDM = BardSettings.Instance.Opener == 6; // 100级DM 1G团辅起手
 
