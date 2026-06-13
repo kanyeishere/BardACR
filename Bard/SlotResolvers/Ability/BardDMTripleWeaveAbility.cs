@@ -19,7 +19,7 @@ public class BardDMTripleWeaveAbility : ISlotResolver
             return -1;
         if (!WanderersMinuet.GetSpell().IsReadyWithCanCast())
             return -2;
-        if (BattleVoice.GetSpell().Cooldown.TotalSeconds > 800)
+        if (BattleVoice.GetSpell().Cooldown.TotalSeconds > 550)
             return -3;
         if (Core.Resolve<MemApiZoneInfo>().GetCurrTerrId() != 1363) // DM Map ID
             return -4;

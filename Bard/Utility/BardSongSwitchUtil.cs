@@ -1,4 +1,5 @@
 using AEAssist;
+using AEAssist.CombatRoutine.Module;
 using AEAssist.Helper;
 using AEAssist.JobApi;
 using Dalamud.Game.ClientState.JobGauge.Enums;
@@ -36,6 +37,7 @@ public static class BardSongSwitchUtil
     {
         return Core.Resolve<JobApi_Bard>().ActiveSong == Song.None &&
                BardRotationEntry.QT.GetQt(QTKey.Song) &&
+               AI.Instance.BattleData.CurrBattleTimeInMs > 1000 &&
                (BardUtil.GetSpellBySong(BardSettings.Instance.FirstSong).GetSpell().IsReadyWithCanCast() ||
                 BardUtil.GetSpellBySong(BardSettings.Instance.SecondSong).GetSpell().IsReadyWithCanCast() ||
                 BardUtil.GetSpellBySong(BardSettings.Instance.ThirdSong).GetSpell().IsReadyWithCanCast());
